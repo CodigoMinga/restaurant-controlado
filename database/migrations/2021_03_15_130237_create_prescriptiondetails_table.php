@@ -17,7 +17,10 @@ class CreatePrescriptiondetailsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->bigInteger('item_id')->unsigned();
-            $table->foreign('item_id')->references('id')->on('products')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+            $table->foreign('item_id')->references('id')->on('items')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+
+            $table->bigInteger('prescription_id')->unsigned();
+            $table->foreign('prescription_id')->references('id')->on('prescriptions')->onUpdate('RESTRICT')->onDelete('RESTRICT');
             $table->decimal('quantity')->default(0);
         });
     }
