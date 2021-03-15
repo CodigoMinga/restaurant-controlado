@@ -1,0 +1,33 @@
+body{
+    background-color: blue;
+    font-family: 'Poppins', sans-serif;
+}
+
+#sidebar{
+    display: block;
+    position:fixed;
+    height: 100vh;
+    width: 300px;
+    background-color: #F4123D;
+    float:left
+}
+#main{
+    display: block;
+    height: 100vh;
+    width: 100%;
+    padding-left:300px;
+    background-color: #151316;
+    float:left;
+    color:white;
+}
+
+.info-bar p{
+    margin:0;
+    font-weight: 600;
+}
+
+.logo-circle{
+    border-radius: 50%;
+    width: 100%;
+    padding:2rem;
+}
