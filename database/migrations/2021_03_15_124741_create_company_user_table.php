@@ -16,6 +16,14 @@ class CreateCompanyUserTable extends Migration
         Schema::create('company_user', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+
+
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+
+            $table->bigInteger('company_id')->unsigned();
+            $table->foreign('company_id')->references('id')->on('companies')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+
         });
     }
 
