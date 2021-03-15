@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Orderdetail[] $orderdetails
  * @property Prescription[] $prescriptions
  */
-class Product extends Model
+class product extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
