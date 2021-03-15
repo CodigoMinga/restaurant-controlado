@@ -6,18 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property integer $id
- * @property integer $company_id
  * @property string $created_at
  * @property string $updated_at
  * @property string $name
  * @property string $description
  * @property int $price
  * @property boolean $enabled
- * @property Company $company
  * @property Orderdetail[] $orderdetails
  * @property Prescription[] $prescriptions
  */
-class product extends Model
+class Product extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
@@ -29,15 +27,7 @@ class product extends Model
     /**
      * @var array
      */
-    protected $fillable = ['company_id', 'created_at', 'updated_at', 'name', 'description', 'price', 'enabled'];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function company()
-    {
-        return $this->belongsTo('App\Company');
-    }
+    protected $fillable = ['created_at', 'updated_at', 'name', 'description', 'price', 'enabled'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
