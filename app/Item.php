@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $stock
  * @property Company $company
  * @property Measureunit $measureunit
+ * @property Prescriptiondetail[] $prescriptiondetails
  */
 class Item extends Model
 {
@@ -44,5 +45,13 @@ class Item extends Model
     public function measureunit()
     {
         return $this->belongsTo('App\Measureunit');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function prescriptiondetails()
+    {
+        return $this->hasMany('App\Prescriptiondetail');
     }
 }
