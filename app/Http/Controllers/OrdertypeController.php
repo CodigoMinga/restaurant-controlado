@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Deliverytype;
+use App\Ordertype;
 use Illuminate\Http\Request;
 
-class DeliverytypeController extends Controller
+class OrdertypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class DeliverytypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Deliverytype  $deliverytype
+     * @param  \App\Ordertype  $ordertype
      * @return \Illuminate\Http\Response
      */
-    public function show(Deliverytype $deliverytype)
+    public function show(Ordertype $ordertype)
     {
         //
     }
@@ -52,10 +52,10 @@ class DeliverytypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Deliverytype  $deliverytype
+     * @param  \App\Ordertype  $ordertype
      * @return \Illuminate\Http\Response
      */
-    public function edit(Deliverytype $deliverytype)
+    public function edit(Ordertype $ordertype)
     {
         //
     }
@@ -64,10 +64,10 @@ class DeliverytypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Deliverytype  $deliverytype
+     * @param  \App\Ordertype  $ordertype
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Deliverytype $deliverytype)
+    public function update(Request $request, Ordertype $ordertype)
     {
         //
     }
@@ -75,10 +75,10 @@ class DeliverytypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Deliverytype  $deliverytype
+     * @param  \App\Ordertype  $ordertype
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Deliverytype $deliverytype)
+    public function destroy(Ordertype $ordertype)
     {
         //
     }

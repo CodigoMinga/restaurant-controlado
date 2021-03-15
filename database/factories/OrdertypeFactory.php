@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Deliverytype;
+use App\Ordertype;
 use Faker\Generator as Faker;
 
-$factory->define(Deliverytype::class, function (Faker $faker) {
+$factory->define(Ordertype::class, function (Faker $faker) {
     return [
         //
     ];

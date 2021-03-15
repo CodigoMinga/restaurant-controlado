@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDeliverytypesTable extends Migration
+class CreateOrdertypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateDeliverytypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('deliverytypes', function (Blueprint $table) {
+        Schema::create('ordertypes', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('name');
+            $table->longText('description')->nullable();
         });
     }
 
@@ -26,6 +28,6 @@ class CreateDeliverytypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('deliverytypes');
+        Schema::dropIfExists('ordertypes');
     }
 }

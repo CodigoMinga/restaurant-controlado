@@ -21,6 +21,10 @@ class CreateProductsTable extends Migration
             $table->integer('price');
             $table->boolean('enabled');
 
+            $table->bigInteger('company_id')->unsigned();
+            $table->foreign('company_id')->references('id')->on('companies')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+
+
         });
     }
 
