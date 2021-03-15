@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property string $description
  * @property Product $product
+ * @property Prescriptiondetail[] $prescriptiondetails
  */
 class Prescription extends Model
 {
@@ -32,5 +33,13 @@ class Prescription extends Model
     public function product()
     {
         return $this->belongsTo('App\Product');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function prescriptiondetails()
+    {
+        return $this->hasMany('App\Prescriptiondetail');
     }
 }
