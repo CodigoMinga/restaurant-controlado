@@ -16,9 +16,18 @@
     <nav>
 
     </nav>
-    <div id="sidebar">
+    <div id="sidebar" align="center">
+        <div id="sidebar-toggle">
+            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" style="height: 9rem;"
+            viewBox="0 0 85 299.8" style="enable-background:new 0 0 85 299.8;" xml:space="preserve">
+            <style type="text/css">
+                .st0{fill:#F4123D;}
+            </style>
+            <path class="st0" d="M85,149.8c-0.1-18.9-6.7-31.7-27.8-52.8C4.9,44.7,0,0,0,0v149.8v0.3v149.8c0,0,4.9-44.7,57.2-97  c21.1-21,27.7-33.9,27.8-52.8V149.8z"/>
+            </svg>
+        </div>
         <img src="{{url('/img/logo.jpg')}}" class="logo-circle">
-        <div class="info-bar p-2 mb-3">
+        <div class="info-bar mb-3">
             <p>DELIXIUS RESTOBAR</p>
             <p>RUT: 77.012.555-3</p>
             <p>DARUICHRODRIGUEZ SPA</p>
@@ -61,5 +70,14 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+    <script>
+        var sidebar         = document.getElementById('sidebar');
+        var sidebarToggle   = document.getElementById('sidebar-toggle');
+
+        sidebarToggle.addEventListener('click', function (event) {
+            sidebar.classList.toggle('active');
+            this.classList.toggle('active')
+        }, false);
+    </script>
 </body>
 </html>
