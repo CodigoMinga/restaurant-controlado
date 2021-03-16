@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $enabled
  * @property Company $company
  * @property Orderdetail[] $orderdetails
- * @property Prescriptiondetail[] $prescriptiondetails
  * @property Prescription[] $prescriptions
  */
 class Product extends Model
@@ -46,14 +45,6 @@ class Product extends Model
     public function orderdetails()
     {
         return $this->hasMany('App\Orderdetail');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function prescriptiondetails()
-    {
-        return $this->hasMany('App\Prescriptiondetail', 'item_id');
     }
 
     /**
