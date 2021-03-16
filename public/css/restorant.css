@@ -1,5 +1,5 @@
 body{
-    background-color: blue;
+    background-color: #151316;
     font-family: 'Poppins', sans-serif;
 }
 
@@ -12,7 +12,55 @@ body{
     float:left;
     left:0px;
     transition: left 0.8s;
+    z-index: 30;
 }
+
+#sidebar-toggle{
+    width: 2.5rem;
+    height: 9rem;
+    display: none;
+    position:absolute;
+    color:white;
+    left:300px;
+    top:calc(50vh - 4.5rem);
+    cursor:pointer;
+}
+
+#sidebar-toggle::after{
+    content: '';
+    top:calc(50% - 8px);
+    left:0.7rem;
+    position:absolute;
+    display: block;
+    width: 1.2rem;
+    height: 1px;
+    border-bottom: 5px solid white;
+    transform: rotate(45deg);
+    transition: width 0.4s,top 0.4s;
+}
+
+#sidebar-toggle::before{
+    content: '';
+    bottom:calc(50% - 8px);
+    left:0.7rem;
+    position:absolute;
+    display: block;
+    width: 1.2rem;
+    height: 1px;
+    border-top: 5px solid white;
+    transform: rotate(-45deg);
+    transition: width 0.4s,bottom 0.4s;
+}
+
+#sidebar-toggle.active::before{
+    bottom:calc(50% - 3px);
+    width: 1.5rem;
+}
+#sidebar-toggle.active::after{
+    top:calc(50% - 3px);
+    width: 1.5rem;
+}
+
 #main{
     display: block;
     height: 100vh;
@@ -23,6 +71,7 @@ body{
     color:white;
     transition: padding-left 0.8s;
 }
+
 .info-bar{
     text-align: center;
 }
@@ -73,6 +122,7 @@ body{
     padding: 1rem;
     margin: 0.8rem;
     text-align: center;
+    cursor:pointer;
 }
 .categoria:hover{
     margin: 0.4rem 0.8rem 1.2rem 0.8rem;
@@ -94,7 +144,8 @@ body{
     position: relative;
     height: 8rem;
     overflow: hidden;
-    transition: color 0.4s
+    transition: color 0.4s;
+    cursor:pointer;
 }
 .producto .nombre{
     font-size: 1.2rem;
@@ -141,9 +192,21 @@ body{
 
 @media only screen and (max-width: 930px) {
     #main{
-        padding-left:0px;
+        padding-left:30px;
     }
     #sidebar{
-        left:-300px;
+        left:-295px;
+    }
+    #sidebar.active{
+        left:0px;
+    }
+    #sidebar-toggle{
+        display: block;
+    }
+
+    .logo-circle{
+        border-radius: 50%;
+        width: 50%;
+        padding:1rem;
     }
   }
