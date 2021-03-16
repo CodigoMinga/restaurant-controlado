@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Item;
-use Company;
-use Measureunit;
+use App\Producttype;
 use Illuminate\Http\Request;
 
-class ItemController extends Controller
+class ProducttypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -43,10 +41,10 @@ class ItemController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Item  $item
+     * @param  \App\Producttype  $producttype
      * @return \Illuminate\Http\Response
      */
-    public function show(Item $item)
+    public function show(Producttype $producttype)
     {
         //
     }
@@ -54,10 +52,10 @@ class ItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Item  $item
+     * @param  \App\Producttype  $producttype
      * @return \Illuminate\Http\Response
      */
-    public function edit(Item $item)
+    public function edit(Producttype $producttype)
     {
         //
     }
@@ -66,10 +64,10 @@ class ItemController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Item  $item
+     * @param  \App\Producttype  $producttype
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Item $item)
+    public function update(Request $request, Producttype $producttype)
     {
         //
     }
@@ -77,24 +75,11 @@ class ItemController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Item  $item
+     * @param  \App\Producttype  $producttype
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Item $item)
+    public function destroy(Producttype $producttype)
     {
         //
-    }
-    public function add(){
-
-        $companys = Company::all();
-        $measureunits = Measureunit::all();
-        return view('items.add',compact('companys, measureunits'));
-    }
-
-    public function addProcess(Request $request){
-       
-        Item::create($request->all());
-
-        return redirect()->route('items.add');
     }
 }

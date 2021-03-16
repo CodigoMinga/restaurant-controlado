@@ -17,7 +17,7 @@ class CreateCompaniesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
-            $table->boolean('enabled')->defaul(1);
+            $table->boolean('enabled')->default(1);
 
 
         });
