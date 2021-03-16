@@ -19,8 +19,10 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->longText('description')->nullable();
             $table->integer('price');
-            $table->boolean('enabled');
+            $table->boolean('enabled')->default(1);
 
+            $table->bigInteger('producttype_id')->unsigned();
+            $table->foreign('producttype_id')->references('id')->on('producttypes')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 
 
         });

@@ -20,7 +20,7 @@ class CreateProducttypesTable extends Migration
             $table->string('name');
             $table->longText('description')->nullable();
 
-            $table->boolean('enabled');
+            $table->boolean('enabled')->default(1);
 
             $table->bigInteger('company_id')->unsigned();
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('RESTRICT')->onDelete('RESTRICT');
