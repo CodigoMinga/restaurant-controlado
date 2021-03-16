@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('templates.maincontainer');
 });
+Route::get('/app/items', function () {
+    return view('items.add');
+});
+//Route::get('/app/items/add'.'ItemController@add');
+//Route::post('/app/items/add/process'.'ItemController@addProcess');
