@@ -19,5 +19,8 @@ Route::get('/', function () {
 Route::get('/app/items', function () {
     return view('items.add');
 });
+Route::get('/app/types', function () {
+    return view('producttypes.add');
+});
 //Route::get('/app/items/add'.'ItemController@add');
 //Route::post('/app/items/add/process'.'ItemController@addProcess');

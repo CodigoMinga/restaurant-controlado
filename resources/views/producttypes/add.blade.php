@@ -40,6 +40,11 @@
                 <span class="fa fa-tag form-control-feedback"></span>
             </div>
             
+            <div class="form-group has-feedback ">
+                <input required type="text" class="form-control" placeholder="Descripción" name="description" value="">
+                <span class="fa fa-tag form-control-feedback"></span>
+            </div>
+            
             <button type="submit" class="btn btn-danger"><i class="fa fa-check"></i>Guardar</button>
             
         </form>
