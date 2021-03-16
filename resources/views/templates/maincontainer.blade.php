@@ -18,14 +18,44 @@
     </nav>
     <div id="sidebar">
         <img src="{{url('/img/logo.jpg')}}" class="logo-circle">
-        <div class="info-bar p-2">
+        <div class="info-bar p-2 mb-3">
             <p>DELIXIUS RESTOBAR</p>
             <p>RUT: 77.012.555-3</p>
             <p>DARUICHRODRIGUEZ SPA</p>
         </div>
+        <div>
+            <a class="sidebar-button">
+                <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i> Sectores
+            </a>
+        </div>
     </div>
     <div id="main">
-        hola
+        <div class="d-flex flex-column h-100">
+            <div class="p-4">
+                <h1><i class="material-icons" style="font-size:2.51rem;vertical-align:-0.5rem">bookmarks</i> Categorias</h1>
+            </div>
+            <div class="d-flex flex-row justify-content-around flex-wrap p-4" id="categoria-container">
+                @for ($i = 0; $i < 50; $i++)
+                <div class="categoria">
+                    Categoria {{$i}}
+                </div>
+                @endfor
+            </div>
+            <div class="d-flex flex-row justify-content-between p-4">
+                <h1><i class="material-icons" style="font-size:2.51rem;vertical-align:-0.5rem">fastfood</i> Productos</h1>
+            </div>
+            <div class="d-flex flex-row justify-content-around flex-wrap p-4" id="producto-container">
+                @for ($i = 0; $i < 50; $i++)
+                <div class="producto">
+                    <div class="informacion">
+                        <div class="nombre">Producto {{$i}}</div>
+                        <div class="precio">$5.000</div>
+                    </div>
+                    <img src="{{url('/img/sushi.jpg')}}" alt="">
+                </div>
+                @endfor
+            </div>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
