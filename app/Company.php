@@ -16,11 +16,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property Product[] $products
  * @property Table[] $tables
  */
-class company extends Model
+class Company extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'integer';
