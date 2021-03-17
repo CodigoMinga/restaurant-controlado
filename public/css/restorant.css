@@ -72,6 +72,11 @@ body{
     transition: padding-left 0.8s;
 }
 
+h1 .material-icons{
+    font-size:2.51rem;
+    vertical-align:-0.5rem;
+}
+
 .info-bar{
     text-align: center;
 }
@@ -128,7 +133,6 @@ body{
     margin: 0.4rem 0.8rem 1.2rem 0.8rem;
     color: #F4123D;
 }
-
 
 .producto{
     width: 330px;
@@ -189,6 +193,26 @@ body{
     overflow-y: scroll;
     flex-grow: 1;
 }
+.cm-form-icon{
+    position: relative;
+}
+.cm-form-icon input{
+    background-color: rgba(0,0,0,0);
+    border-width: 3px;
+    border-style: solid;
+    border-color:white;
+    border-radius: 5rem;
+    outline: none;
+    color:white;
+    font-size: 1.2rem;
+    padding: 0.5rem 0.8rem 0.5rem 2.5rem;
+}
+.cm-form-icon i{
+    position: absolute;
+    padding: 0.5rem;
+    left:0px;
+    font-size: 2rem;
+}
 
 @media only screen and (max-width: 930px) {
     #main{
@@ -208,5 +232,13 @@ body{
         border-radius: 50%;
         width: 50%;
         padding:1rem;
+    }
+
+    h1{
+        font-size: 1.8rem;
+    }
+    h1 .material-icons{
+        font-size: 1.8rem;
+        vertical-align:-0.2rem;
     }
   }
