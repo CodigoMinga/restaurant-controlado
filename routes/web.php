@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('templates.maincontainer');
+    return view('templates.categorias');
 });
-Route::get('/app/items', function () {
+Route::get('/items/add', function () {
     return view('items.add');
 });
-Route::get('/app/types', function () {
+Route::get('/producttypes/add', function () {
     return view('producttypes.add');
 });
 //Route::get('/app/items/add'.'ItemController@add');

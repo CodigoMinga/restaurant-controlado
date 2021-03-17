@@ -14,16 +14,24 @@ body{
     transition: left 0.8s;
     z-index: 30;
 }
-
+#sidebar-content{
+    display: block;
+    position:relative;
+    height: 100vh;
+    width: 300px;
+    background-color: #F4123D;
+    z-index: 40;
+}
 #sidebar-toggle{
     width: 2.5rem;
     height: 9rem;
-    display: none;
     position:absolute;
     color:white;
-    left:300px;
-    top:calc(50vh - 4.5rem);
+    left:0px;
+    top:-9rem;
     cursor:pointer;
+    transition: left 0.1s,top 0.6s;
+    z-index:35;
 }
 
 #sidebar-toggle::after{
@@ -99,8 +107,15 @@ h1 .material-icons{
     transition: background-color 0.4s;
 }
 
+.sidebar-button.active{
+    text-decoration: none;
+    background-color: white!important;
+    color:#F4123D!important;
+}
+
 .sidebar-button i{
-    margin-right: 0.5rem;
+    margin-right: 0.8rem;
+    margin-left: 0.5rem;
 }
 
 .sidebar-button:hover{
@@ -111,7 +126,7 @@ h1 .material-icons{
 
 .logo-circle{
     border-radius: 50%;
-    width: 100%;
+    width: 80%;
     padding:2rem;
 }
 
@@ -226,6 +241,8 @@ h1 .material-icons{
     }
     #sidebar-toggle{
         display: block;
+        left:300px;
+        top:calc(50vh - 4.5rem);
     }
 
     .logo-circle{
