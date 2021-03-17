@@ -62,4 +62,23 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\UserRole');
     }
+
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+
+    public function hasRole($role)
+    {
+        //verifica que sea un array, si es un array hace una busqueda del array
+        if (is_array($role)) {
+            return null !== $this->roles()->whereIn('name', $role)->first();
+        }else{
+            return null !== $this->roles()->where('name', $role)->first();
+        }
+    }
+
+
 }
