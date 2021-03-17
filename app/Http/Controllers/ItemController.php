@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Item;
+use Company;
+use Measureunit;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
@@ -81,5 +83,18 @@ class ItemController extends Controller
     public function destroy(Item $item)
     {
         //
+    }
+    public function add(){
+
+        $companys = Company::all();
+        $measureunits = Measureunit::all();
+        return view('items.add',compact('companys, measureunits'));
+    }
+
+    public function addProcess(Request $request){
+       
+        Item::create($request->all());
+
+        return redirect()->route('items.add');
     }
 }

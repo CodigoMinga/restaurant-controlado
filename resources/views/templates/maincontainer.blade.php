@@ -17,6 +17,25 @@
 
     </nav>
     <div id="sidebar" align="center">
+        <div id="sidebar-content">
+            <img src="{{url('/img/logo.jpg')}}" class="logo-circle">
+            <div class="info-bar mb-3">
+                <p>DELIXIUS RESTOBAR</p>
+                <p>RUT: 77.012.555-3</p>
+                <p>DARUICHRODRIGUEZ SPA</p>
+            </div>
+            <div>
+                <a class="sidebar-button {{(request()->is('/')) ? 'active' : '' }}" href="{{ url('/') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Sectores
+                </a>
+                <a class="sidebar-button {{(request()->is('producttypes/add')) ? 'active' : '' }}" href="{{ url('/producttypes/add') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Producto
+                </a>
+                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('/items/add') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Categoria
+                </a>
+            </div>
+        </div>
         <div id="sidebar-toggle">
             <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" style="height: 9rem;"
             viewBox="0 0 85 299.8" style="enable-background:new 0 0 85 299.8;" xml:space="preserve">
@@ -26,45 +45,9 @@
             <path class="st0" d="M85,149.8c-0.1-18.9-6.7-31.7-27.8-52.8C4.9,44.7,0,0,0,0v149.8v0.3v149.8c0,0,4.9-44.7,57.2-97  c21.1-21,27.7-33.9,27.8-52.8V149.8z"/>
             </svg>
         </div>
-        <img src="{{url('/img/logo.jpg')}}" class="logo-circle">
-        <div class="info-bar mb-3">
-            <p>DELIXIUS RESTOBAR</p>
-            <p>RUT: 77.012.555-3</p>
-            <p>DARUICHRODRIGUEZ SPA</p>
-        </div>
-        <div>
-            <a class="sidebar-button">
-                <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i> Sectores
-            </a>
-        </div>
     </div>
     <div id="main">
-        <div class="d-flex flex-column h-100">
-            <div class="p-4">
-                <h1><i class="material-icons" style="font-size:2.51rem;vertical-align:-0.5rem">bookmarks</i> Categorias</h1>
-            </div>
-            <div class="d-flex flex-row justify-content-around flex-wrap p-4" id="categoria-container">
-                @for ($i = 0; $i < 50; $i++)
-                <div class="categoria">
-                    Categoria {{$i}}
-                </div>
-                @endfor
-            </div>
-            <div class="d-flex flex-row justify-content-between p-4">
-                <h1><i class="material-icons" style="font-size:2.51rem;vertical-align:-0.5rem">fastfood</i> Productos</h1>
-            </div>
-            <div class="d-flex flex-row justify-content-around flex-wrap p-4" id="producto-container">
-                @for ($i = 0; $i < 50; $i++)
-                <div class="producto">
-                    <div class="informacion">
-                        <div class="nombre">Producto {{$i}}</div>
-                        <div class="precio">$5.000</div>
-                    </div>
-                    <img src="{{url('/img/sushi.jpg')}}" alt="">
-                </div>
-                @endfor
-            </div>
-        </div>
+        @yield('content')
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
