@@ -22,5 +22,8 @@ Route::get('/items/add', function () {
 Route::get('/producttypes/add', function () {
     return view('producttypes.add');
 });
+Route::get('/login/', function(){
+    return view('login.login');
+});
 //Route::get('/app/items/add'.'ItemController@add');
 //Route::post('/app/items/add/process'.'ItemController@addProcess');
