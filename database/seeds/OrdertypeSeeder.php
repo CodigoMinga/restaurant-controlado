@@ -12,7 +12,7 @@ class OrdertypeSeeder extends Seeder
     public function run()
     {
         Ordertype::create(['name'=>'Consumo en local']);
-        Ordertype::create(['name'=>'Entrega']);
+        Ordertype::create(['name'=>'Entrega a domicilio']);
         Ordertype::create(['name'=>'Retiro en local']);
     }
 }
