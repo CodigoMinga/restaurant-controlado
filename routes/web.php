@@ -25,6 +25,10 @@ route::get('/app/producttypes/add','ProducttypeController@add')->name('productty
 route::post('/app/producttypes/add/process','ProducttypeController@addProcess');
 route::get('app/producttypes/getdata','ProducttypeController@getdata')->name('producttypes.getdata');
 route::get('app/producttypes/list','ProducttypeController@list')->name('producttypes.list');
+route::get('app/producttypes/{producttype_id}','ProducttypeController@details')->name('producttypes.details');
+route::post('app/producttypes/{producttype_id}/edit/process','ProducttypeController@editprocess')->name('producttypes.editprocess');
+route::get('app/producttypes/{producttype_id}/delete','ProducttypeController@delete')->name('producttypes.delete');
+
 
 
 
