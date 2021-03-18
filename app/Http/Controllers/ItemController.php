@@ -91,7 +91,7 @@ class ItemController extends Controller
         $prescriptiondetails = Prescriptiondetail::all();
         $measureunits = Measureunit::all();
         $companys = Company::all();
-        return view('items.add',compact('$prescriptiondetails, $measureunits, $companiys'));
+        return view('items.add',compact('prescriptiondetails', 'measureunits', 'companiys'));
     }
 
     public function addProcess( Request $request){

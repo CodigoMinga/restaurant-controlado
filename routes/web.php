@@ -21,8 +21,10 @@ Route::get('/', function () {
 route::get('/app/items/add','ItemController@add');
 route::post('/app/items/add/process','ItemController@addProcess');
 
-route::get('/app/producttypes/add','ProducttypeController@add');
+route::get('/app/producttypes/add','ProducttypeController@add')->name('producttypes.add');
 route::post('/app/producttypes/add/process','ProducttypeController@addProcess');
+route::get('app/producttypes/getdata','ProducttypeController@getdata')->name('producttypes.getdata');
+route::get('app/producttypes/list','ProducttypeController@list')->name('producttypes.list');
 
 
 
