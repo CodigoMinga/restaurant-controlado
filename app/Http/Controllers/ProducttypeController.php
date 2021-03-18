@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Producttype;
+use App\Company;
+use App\Orderdetail;
 use Illuminate\Http\Request;
 
 class ProducttypeController extends Controller
@@ -81,5 +83,17 @@ class ProducttypeController extends Controller
     public function destroy(Producttype $producttype)
     {
         //
+    }
+    public function add(){
+
+        $companys = Company::all();
+        $orderdetails = Orderdetail::all();
+        return view('producttypes.add',compact('companys, orderdetails'));
+    }
+    public function addProcess($companys, $orderdetails, Request $request){
+        
+        Producttype::create($request->all());
+
+        return redirect()->route('items.add');
     }
 }

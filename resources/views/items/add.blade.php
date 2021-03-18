@@ -2,7 +2,7 @@
 
 @section('content')
     <h2 class="pt-5 pl-5 page-header">
-        <i class="fa fa-pencil"></i> Agregar Producto
+        <i class="fa fa-pencil"></i> Agregar Insumos
     </h2>
     <form method="post" class="pt-5 pl-5 col-7" action="{{url('app/items/add/process')}}" id="form">
         {{csrf_field()}}
