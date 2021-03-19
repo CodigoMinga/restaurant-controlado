@@ -115,14 +115,14 @@ class ProducttypeController extends Controller
         return DataTables::of($producttype)->make(true);
 }
 
-public function details($producttype_id)
+    public function details($producttype_id)
 {
     return view('producttypes.details', [
         'producttype' => Producttype::find($producttype_id)
     ]);
 }
 
-public function editprocess($producttype_id, Request $request)
+    public function editprocess($producttype_id, Request $request)
 {
     //busca la orden en la base de datos con el id que se le pasa desde la URL
     $producttype = Producttype::findOrFail($producttype_id);
@@ -132,7 +132,7 @@ public function editprocess($producttype_id, Request $request)
     return redirect()->route('producttypes.list')->with('success', 'Categoria editada correctamente');
 }
 
-public function delete($producttype_id)
+    public function delete($producttype_id)
 {
     $producttype = producttype::findOrFail($producttype_id);
     $producttype->delete();

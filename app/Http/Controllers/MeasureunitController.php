@@ -103,4 +103,28 @@ class MeasureunitController extends Controller
 
         ]);
     }
+
+    public function details($measureunit_id)
+    {
+        return view('measureunits.details', [
+            'measureunit' => Measureunit::find($measureunit_id)
+        ]);
+    }
+    
+        public function editprocess($measureunit_id, Request $request)
+    {
+        //busca la orden en la base de datos con el id que se le pasa desde la URL
+        $measureunit = Measureunit::findOrFail($measureunit_id);
+    
+        $measureunit->update($request->all());
+    
+        return redirect()->route('measureunits.list')->with('success', 'Unidad de Medida editada correctamente');
+    }
+    
+        public function delete($measureunit_id)
+    {
+        $measureunit = Measureunit::findOrFail($measureunit_id);
+        $measureunit->delete();
+        return redirect()->route('measureunits.list')->with('success', 'Unidad de Medida eliminada correctamente');
+    }
 }

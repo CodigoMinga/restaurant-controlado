@@ -20,6 +20,9 @@ Route::get('/', function () {
 route::get('/app/measureunits/add','MeasureunitController@add')->name('measureunits.add');
 route::post('/app/measureunits/add/process','MeasureunitController@addProcess');
 route::get('app/measureunits/list','MeasureunitController@list')->name('measureunits.list');
+route::get('app/measureunits/{measureunit_id}','MeasureunitController@details')->name('measureunits.details');
+route::post('app/measureunits/{measureunit_id}/edit/process','MeasureunitController@editprocess')->name('measureunits.editprocess');
+route::get('app/measureunits/{measureunit_id}/delete','MeasureunitController@delete')->name('measureunitvs.delete');
 
 //Insumos
 route::get('/app/items/add','ItemController@add');

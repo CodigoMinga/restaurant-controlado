@@ -21,7 +21,7 @@
 
             <ul class="list-group">
                 @forelse($measureunits as $measureunit)
-                <li class="list-group-item"><a href="{{ route('producttypes.details', $measureunit) }}">{{ $measureunit->name }}</a></li>
+                <li class="list-group-item"><a href="{{ route('measureunits.details', $measureunit) }}">{{ $measureunit->name }}</a></li>
              
                 @empty
                 <li>No hay Unidades de Medida para mostrar</li>

@@ -5,7 +5,7 @@
  <div class="box pl-3 pt-3 col-7">
         <div class="box-body">
             <h2 class="page-header">
-                <i class="fa fa-list"></i> Detalles del Usuario<b></b>
+                <i class="fa fa-list"></i> Detalles del Categoria<b></b>
             </h2>
             <form method="post" action="{{url('app/producttypes/'.$producttype->id.'/edit/process')}}">
                 {{csrf_field()}}
