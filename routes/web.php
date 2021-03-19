@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('templates.categorias');
 });
+Route::get('/login',function(){
+    return view('login.login');
+});
 
 
 route::get('/app/items/add','ItemController@add');
