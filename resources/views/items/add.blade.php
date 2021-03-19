@@ -11,7 +11,7 @@
             @forelse($companys as $company)
             <option value="{{ $company->id }}">{{ $company->name }}</option>
             @empty
-            <li>Aun no hay locales</li>
+            <li>Aun no hay Empresas</li>
             @endforelse
         </select>
         <div class="form-group has-feedback ">
@@ -25,6 +25,15 @@
         <div class="form-group has-feedback">
             <input required type="text" class="form-control" placeholder="Stock" name="stock" value="">
             <span class="fa fa-id-card form-control-feedback"></span>
+           
+            <label for="measureunit_id">Unidad de Media:</label>
+        <select name="measureunit_id" id="measureunit_id">
+            @forelse($measureunits as $measureunit)
+            <option value="{{ $measureunit->id }}">{{ $measureunit->name }}</option>
+            @empty
+            <li>Aun no hay unidades de medida</li>
+            @endforelse
+        </select>
         </div>
         <button type="submit" class="btn btn-danger"><i class="fa fa-check"></i>Guardar</button>
         
