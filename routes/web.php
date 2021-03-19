@@ -16,10 +16,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('templates.categorias');
 });
+//Unidades de Medida
+route::get('/app/measureunits/add','MeasureunitController@add')->name('measureunits.add');
+route::post('/app/measureunits/add/process','MeasureunitController@addProcess');
+route::get('app/measureunits/list','MeasureunitController@list')->name('measureunits.list');
 
 //Insumos
 route::get('/app/items/add','ItemController@add');
 route::post('/app/items/add/process','ItemController@addProcess');
+
 //categorias
 route::get('/app/producttypes/add','ProducttypeController@add')->name('producttypes.add');
 route::post('/app/producttypes/add/process','ProducttypeController@addProcess');

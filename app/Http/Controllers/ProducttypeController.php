@@ -97,7 +97,7 @@ class ProducttypeController extends Controller
         Producttype::create($request->all());
         
    
-        return redirect()->route('producttypes.add')->with('success', 'Categoria Creada correctamente');
+        return redirect()->route('producttypes.list')->with('success', 'Categoria Creada correctamente');
     }
 
     public function list(){

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Measureunit;
+use App\Company;
 use Illuminate\Http\Request;
 
 class MeasureunitController extends Controller
@@ -81,5 +82,25 @@ class MeasureunitController extends Controller
     public function destroy(Measureunit $measureunit)
     {
         //
+    }
+
+    public function add(){
+        
+        $companys = Company::all();
+        return view('measureunits.add', compact('companys'));
+    }
+   
+    public function addProcess(Request $request){
+        
+        Measureunit::create($request->all());
+        return redirect()->route('measureunits.add')->with('success', 'Unidad de medida Creada correctamente');
+    }
+
+    public function list(){
+
+        return view('measureunits.list', [
+            'measureunits' => Measureunit::latest()->paginate()
+
+        ]);
     }
 }
