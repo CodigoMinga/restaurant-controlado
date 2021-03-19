@@ -109,8 +109,9 @@ color:#fff;
 font-size:50px;
 border-radius: 60%;
 width: 80%;
-padding: 1rem;
-line-height: 130px;
+padding: 0.7rem;
+line-height: 120px;
+
 }
 
 #login form span.fa {
@@ -178,21 +179,39 @@ fieldset{
 <div class="main">
     
     
-    <div class="container">
-<center>
-<div class="middle">
-      <div id="login">
-        <br>
-        <br>
-        <form action="javascript:void(0);" method="get">
+<div class="container">
 
+
+<div class="middle">
+  
+  
+      <div id="login">
+        <h3 style="color:white; text-align:center">Inicie Sesion</h3>
+        <br>
+        @if ($message = Session::get('error'))
+        <div class="alert alert-danger alert-block">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <strong>{{ $message }}</strong>
+      </div>
+@endif
+@if (count($errors) > 0)
+  <div class="alert alert-danger">
+      <ul>
+          @foreach($errors->all() as $error)
+              <li>{{$error}}</li>
+          @endforeach
+      </ul>
+  </div>
+@endif
+        <form action="javascript:void(0);" method="get">
+          {{csrf_field()}}
           <fieldset class="clearfix">
 
             <p ><span class="fa fa-envelope"></span><input type="text"  Placeholder="Correo" required></p> 
             <p><span class="fa fa-lock"></span><input type="password"  Placeholder="Contraseña" required></p> 
             
-             <div>
-             <span style="width:50%; text-align:center;  display: inline-block;"><input type="submit" value="Ingresar"></span>
+             <div style="text-align: center">
+             <span style="width:50%; text-align:center; display: inline-block;"><input type="submit" value="Ingresar"></span>
             </div>
 
           </fieldset>
@@ -208,7 +227,7 @@ fieldset{
       </div>
       
       </div>
-</center>
+
     </div>
 
 </div>
