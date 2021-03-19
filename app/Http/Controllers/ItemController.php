@@ -91,13 +91,13 @@ class ItemController extends Controller
         $prescriptiondetails = Prescriptiondetail::all();
         $measureunits = Measureunit::all();
         $companys = Company::all();
-        return view('items.add',compact('prescriptiondetails', 'measureunits', 'companiys'));
+        return view('items.add',compact('prescriptiondetails', 'measureunits', 'companys'));
     }
 
     public function addProcess( Request $request){
        
         Item::create($request->all());
 
-        return redirect()->route('items.add');
+        return redirect()->route('items.add')->with('success', 'Categoria Creada correctamente');
     }
 }
