@@ -29,10 +29,10 @@
                 <a class="sidebar-button {{(request()->is('/')) ? 'active' : '' }}" href="{{ url('/') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Sectores
                 </a>
-                <a class="sidebar-button {{(request()->is('producttypes/add')) ? 'active' : '' }}" href="{{ url('/producttypes/add') }}">
+                <a class="sidebar-button {{(request()->is('producttypes/add')) ? 'active' : '' }}" href="{{ url('/app/items/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Producto
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('/items/add') }}">
+                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/producttypes/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Categoria
 
                 </a>
