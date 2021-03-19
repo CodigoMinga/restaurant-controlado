@@ -23,6 +23,9 @@ route::get('app/measureunits/list','MeasureunitController@list')->name('measureu
 route::get('app/measureunits/{measureunit_id}','MeasureunitController@details')->name('measureunits.details');
 route::post('app/measureunits/{measureunit_id}/edit/process','MeasureunitController@editprocess')->name('measureunits.editprocess');
 route::get('app/measureunits/{measureunit_id}/delete','MeasureunitController@delete')->name('measureunitvs.delete');
+Route::get('/login',function(){
+    return view('login.login');
+});
 
 //Insumos
 route::get('/app/items/add','ItemController@add');
