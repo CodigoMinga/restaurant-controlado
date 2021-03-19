@@ -24,7 +24,7 @@
                 <li class="list-group-item"><a href="{{ route('producttypes.details', $producttype) }}">{{ $producttype->name }}</a></li>
              
                 @empty
-                <li>No hay ordenes para mostrar</li>
+                <li>No hay Categorias para mostrar</li>
                 @endforelse
                 {{ $producttypes->links() }}
             </ul>
