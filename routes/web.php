@@ -19,8 +19,16 @@ Route::get('/', function () {
 Route::get('/login',function(){
     return view('login.login');
 });
-
-
+Route::get('/add',function(){
+    return view('products.add');
+});
+//rutas productos
+Route:: get('/app/products/list','ProductController@list');
+Route:: get('/app/products/add','ProductController@add');
+Route:: post('/app/products/add/process','ProductController@addProcess');
+Route:: get('/app/products/getdata','ProductController@getdata');
+Route:: get('/app/products/{product_id}','ProductController@details');
+//rutas items
 route::get('/app/items/add','ItemController@add');
 route::post('/app/items/add/process','ItemController@addProcess');
 
