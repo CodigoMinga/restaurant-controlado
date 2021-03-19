@@ -12,11 +12,21 @@ class TableSeeder extends Seeder
      */
     public function run()
     {
+        /*Codigo Minga*/
         Table::create(['name'=>'Entrega a domicilio','company_id'=>1,'ordertype_id' => 2]);
         Table::create(['name'=>'Retiro en Local','company_id'=>1,'ordertype_id' => 3]);
         Table::create(['name'=>'Mesa 3','company_id'=>1]);
         Table::create(['name'=>'Mesa 4','company_id'=>1]);
         Table::create(['name'=>'Mesa 5','company_id'=>1]);
         Table::create(['name'=>'Mesa 6','company_id'=>1]);
+
+        /*Delixius*/
+
+        Table::create(['name'=>'Entrega a domicilio','company_id'=>2,'ordertype_id' => 2]);
+        Table::create(['name'=>'Retiro en Local','company_id'=>2,'ordertype_id' => 3]);
+        Table::create(['name'=>'Mesa 3','company_id'=>2]);
+        Table::create(['name'=>'Mesa 4','company_id'=>2]);
+        Table::create(['name'=>'Mesa 5','company_id'=>2]);
+        Table::create(['name'=>'Mesa 6','company_id'=>2]);
     }
 }
