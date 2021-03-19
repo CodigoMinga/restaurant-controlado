@@ -22,8 +22,9 @@ class CreateOrdersTable extends Migration
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 
 
-            $table->bigInteger('ordertype_id')->unsigned();
-            $table->foreign('ordertype_id')->references('id')->on('ordertypes')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+
+            $table->bigInteger('table_id')->unsigned()->nullable();
+            $table->foreign('table_id')->references('id')->on('tables')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 
         });
     }

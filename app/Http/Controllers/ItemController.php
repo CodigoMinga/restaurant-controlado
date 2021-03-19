@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Item;
+use App\Company;
+use App\Measureunit;
+use App\Prescriptiondetail;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
@@ -81,5 +84,20 @@ class ItemController extends Controller
     public function destroy(Item $item)
     {
         //
+    }
+    public function add(){
+
+       
+        $prescriptiondetails = Prescriptiondetail::all();
+        $measureunits = Measureunit::all();
+        $companys = Company::all();
+        return view('items.add',compact('prescriptiondetails', 'measureunits', 'companiys'));
+    }
+
+    public function addProcess( Request $request){
+       
+        Item::create($request->all());
+
+        return redirect()->route('items.add');
     }
 }
