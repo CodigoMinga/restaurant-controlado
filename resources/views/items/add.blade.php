@@ -23,7 +23,7 @@
             <span class="fa fa-tags form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
-            <input required type="text" class="form-control" placeholder="Stock" name="stock" value="">
+            <input required type="decimal" class="form-control" placeholder="Stock" name="stock" value="">
             <span class="fa fa-id-card form-control-feedback"></span>
            
             <label for="measureunit_id">Unidad de Media:</label>

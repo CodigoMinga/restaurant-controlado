@@ -35,7 +35,10 @@
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Categoria
                 </a>
                 <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/measureunits/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Unidades de Medida
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Medida
+                </a>
+                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/items/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Insumos
                 </a>
             </div>
         </div>
