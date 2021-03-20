@@ -40,11 +40,13 @@ class SalesHelper extends Controller
 
         $empresa = $order->company->id;
 
-        $orderdetail = $order->details;
+        $orderdetails = $order->orderdetails;
+
+
         $detalle = [];
         $total = 0;
         $ct = 0 ;
-        foreach($orderdetail as $detail) {
+        foreach($orderdetails as $detail) {
             $ct = $ct + 1;
             array_push($detalle, [
                 "NroLinDet" => $ct,
@@ -69,8 +71,10 @@ class SalesHelper extends Controller
         $paramsArr['dte']['Encabezado']['Emisor'] = $emisor;
         $paramsArr['dte']['Encabezado']['Receptor'] = ["RUTRecep" => "66666666-6"];
         $totales = [
-            "MntTotal" => $total,
-            "VlrPagar" => $total
+            "MntTotal" => $total ,
+            "VlrPagar" => $total ,
+            "IVA" => round($total - ($total  / 1.19)),
+            "MntNeto" => round(($total  / 1.19))
         ];
         $paramsArr['dte']['Encabezado']['Totales'] = $totales;
         $paramsArr['dte']['Detalle'] = $detalle;
@@ -92,25 +96,31 @@ class SalesHelper extends Controller
             CURLOPT_POSTFIELDS => json_encode($paramsArr),
             CURLOPT_HTTPHEADER => [
                 "apikey: " . $apiKey,
-                "Idempotency-Key: " . $order->id,
+                "Idempotency-Key: " . rand(10, 99999999),
             ],
         ]);
         $response = curl_exec($curl);
         $err = curl_error($curl);
 
+        $response = json_decode($response);
+        $err = json_decode($err);
+
+
         curl_close($curl);
 
-        $paramsArr['adicionales_empresa'] = $empresa->toArray();
-        $paramsArr['adicionales_datos_empresa'] = $empresa->datos_empresa->toArray();
+        $paramsArr['adicionales_empresa'] = "prueba de texto adicional";
+        $paramsArr['adicionales_datos_empresa'] = "prueba de texto adicional2";
+
+        //return json_encode($paramsArr,JSON_UNESCAPED_SLASHES);
         if ($err) {
             return [
                 'response' => $err,
-                'request' => json_encode($paramsArr)
+                'request' => $paramsArr
             ];
         } else {
             return [
                 'response' => $response,
-                'request' => json_encode($paramsArr)
+                'request' => $paramsArr
             ];
         }
     }

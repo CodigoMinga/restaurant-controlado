@@ -56,6 +56,8 @@ route::get('app/producttypes/{producttype_id}','ProducttypeController@details')-
 route::post('app/producttypes/{producttype_id}/edit/process','ProducttypeController@editprocess')->name('producttypes.editprocess');
 route::get('app/producttypes/{producttype_id}/delete','ProducttypeController@delete')->name('producttypes.delete');
 
+//rutas ajax
+route::get('/ajax/generateInvoice/{order_id}','SalesHelper@generateInvoice');
 
 
 
