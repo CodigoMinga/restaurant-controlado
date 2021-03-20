@@ -28,8 +28,13 @@ Route::get('/login',function(){
 });
 
 //Insumos
-route::get('/app/items/add','ItemController@add');
+route::get('/app/items/add','ItemController@add')->name('items.add');
 route::post('/app/items/add/process','ItemController@addProcess');
+route::get('app/items/getdata','ItemController@getdata')->name('producttypes.getdata');
+route::get('app/items/list','ItemController@list')->name('items.list');
+route::get('app/items/{item_id}','ItemController@details')->name('items.details');
+route::post('app/items/{item_id}/edit/process','ItemController@editprocess')->name('items.editprocess');
+route::get('app/items/{item_id}/delete','ItemController@delete')->name('items.delete');
 
 //categorias
 route::get('/app/producttypes/add','ProducttypeController@add')->name('producttypes.add');
