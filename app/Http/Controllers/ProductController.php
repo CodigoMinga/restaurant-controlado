@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
-
+use App\Company;
+use App\Orderdetail;
 class ProductController extends Controller
 {
     /**
@@ -82,4 +83,42 @@ class ProductController extends Controller
     {
         //
     }
+    public function add(){
+
+        $companys = Company::all();
+        $orderdetails = Orderdetail::all();
+        return view('products.add',compact('companys', 'orderdetails'));
+    }
+    public function getdata(){
+       
+        $product = Product::all();
+
+        return DataTables::of($product)->make(true);
+}
+    public function list(){
+
+        return view('products.list', [
+            'products' => Product::latest()->paginate()
+
+        ]);
+    }
+    public function addProcess(Request $request){
+        
+        Product::create($request->all());
+        
+   
+        return redirect()->route('products.add')->with('success', 'Producto Creado correctamente');
+    }
+    public function details($product_id)
+{
+    return view('products.details', [
+        'product' => Product::find($product_id)
+    ]);
+}
+public function delete($product_id)
+{
+    $product = product::findOrFail($product_id);
+    $product->delete();
+    return redirect()->route('products.list')->with('success', 'Producto eliminado correctamente');
+}
 }
