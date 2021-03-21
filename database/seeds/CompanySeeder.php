@@ -13,6 +13,7 @@ class CompanySeeder extends Seeder
      */
     public function run()
     {
+        Company::create(['name'=>'CodigoMinga Bar']);
         Company::create(['name'=>'Delixius']);
     }
 }

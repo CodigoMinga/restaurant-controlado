@@ -10,6 +10,7 @@
     <link href="{{url('/css/restorant.css')}}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    
     <title>Restaurant Controlado</title>
 </head>
 <body>
@@ -28,11 +29,22 @@
                 <a class="sidebar-button {{(request()->is('/')) ? 'active' : '' }}" href="{{ url('/') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Sectores
                 </a>
-                <a class="sidebar-button {{(request()->is('producttypes/add')) ? 'active' : '' }}" href="{{ url('/producttypes/add') }}">
+                <a class="sidebar-button {{(request()->is('products/add')) ? 'active' : '' }}" href="{{ url('/app/products/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Producto
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('/items/add') }}">
+                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/producttypes/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Categoria
+
+                </a>
+                <a class="sidebar-button {{(request()->is('login')) ? 'active' : '' }}" href="{{ url('/login') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Login
+                    
+                </a>
+                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/measureunits/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Medida
+                </a>
+                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/items/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Insumos
                 </a>
             </div>
         </div>

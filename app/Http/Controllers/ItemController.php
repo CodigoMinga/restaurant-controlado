@@ -91,13 +91,52 @@ class ItemController extends Controller
         $prescriptiondetails = Prescriptiondetail::all();
         $measureunits = Measureunit::all();
         $companys = Company::all();
-        return view('items.add',compact('$prescriptiondetails, $measureunits, $companiys'));
+        return view('items.add',compact('prescriptiondetails', 'measureunits', 'companys'));
     }
 
     public function addProcess( Request $request){
        
         Item::create($request->all());
 
-        return redirect()->route('items.add');
+        return redirect()->route('items.add')->with('success', 'Insumo Creada correctamente');
     }
+
+    public function list(){
+
+        return view('items.list', [
+            'items' => Item::latest()->paginate()
+
+        ]);
+    }
+
+    public function getdata(){
+       
+        $item = Item::all();
+
+        return DataTables::of($item)->make(true);
+}
+
+    public function details($item_id)
+{
+    return view('items.details', [
+        'item' => Item::find($item_id)
+    ]);
+}
+
+    public function editprocess($item_id, Request $request)
+{
+    //busca la orden en la base de datos con el id que se le pasa desde la URL
+    $item = Item::findOrFail($item_id);
+
+    $item->update($request->all());
+
+    return redirect()->route('item.list')->with('success', 'Insumo editada correctamente');
+}
+
+    public function delete($item_id)
+{
+    $item = Item::findOrFail($item_id);
+    $item->delete();
+    return redirect()->route('item.list')->with('success', 'Insumo eliminada correctamente');
+}
 }

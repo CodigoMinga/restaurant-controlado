@@ -21,8 +21,6 @@ class CreateOrderdetailsTable extends Migration
             $table->bigInteger('product_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 
-            $table->bigInteger('producttype_id')->unsigned();
-            $table->foreign('producttype_id')->references('id')->on('producttypes')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 
 
             $table->integer('quantity');

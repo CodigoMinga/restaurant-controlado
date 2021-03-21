@@ -84,16 +84,58 @@ class ProducttypeController extends Controller
     {
         //
     }
+   
     public function add(){
 
         $companys = Company::all();
         $orderdetails = Orderdetail::all();
-        return view('producttypes.add',compact('companys, orderdetails'));
+        return view('producttypes.add',compact('companys', 'orderdetails'));
     }
-    public function addProcess($companys, $orderdetails, Request $request){
+   
+    public function addProcess(Request $request){
         
         Producttype::create($request->all());
-
-        return redirect()->route('items.add');
+        
+   
+        return redirect()->route('producttypes.list')->with('success', 'Categoria Creada correctamente');
     }
+
+    public function list(){
+
+        return view('producttypes.list', [
+            'producttypes' => Producttype::latest()->paginate()
+
+        ]);
+    }
+
+    public function getdata(){
+       
+        $producttype = Producttype::all();
+
+        return DataTables::of($producttype)->make(true);
+}
+
+    public function details($producttype_id)
+{
+    return view('producttypes.details', [
+        'producttype' => Producttype::find($producttype_id)
+    ]);
+}
+
+    public function editprocess($producttype_id, Request $request)
+{
+    //busca la orden en la base de datos con el id que se le pasa desde la URL
+    $producttype = Producttype::findOrFail($producttype_id);
+
+    $producttype->update($request->all());
+
+    return redirect()->route('producttypes.list')->with('success', 'Categoria editada correctamente');
+}
+
+    public function delete($producttype_id)
+{
+    $producttype = Producttype::findOrFail($producttype_id);
+    $producttype->delete();
+    return redirect()->route('producttypes.list')->with('success', 'Categoria eliminada correctamente');
+}
 }

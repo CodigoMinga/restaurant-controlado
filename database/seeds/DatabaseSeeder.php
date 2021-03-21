@@ -19,5 +19,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(OrdertypeSeeder::class);
         $this->call(TableSeeder::class);
+
+        $this->call(OrderSeeder::class);
     }
 }
