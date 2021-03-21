@@ -149,6 +149,30 @@ h1 .material-icons{
     color: #F4123D;
 }
 
+
+.mesa{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    
+    width: 330px;
+    border-width: 3px;
+    border-style: solid;
+    text-decoration: none;
+    color:white;
+    font-weight: 600;
+    font-size: 1.5rem;
+    padding: 1rem;
+    margin: 0.8rem;
+    text-align: center;
+    cursor:pointer;
+}
+
+.mesa img{
+    width:80px;
+    padding:10px; 
+}
+
 .producto{
     width: 330px;
     border-width: 3px;
@@ -200,14 +224,6 @@ h1 .material-icons{
     transition: height 0.4s,width 0.4s,top 0.4s,right 0.4s;
 }
 
-#categoria-container{
-    overflow-y: scroll;
-    flex-grow: 1;
-}
-#producto-container{
-    overflow-y: scroll;
-    flex-grow: 1;
-}
 .cm-form-icon{
     position: relative;
 }
@@ -227,6 +243,16 @@ h1 .material-icons{
     padding: 0.5rem;
     left:0px;
     font-size: 2rem;
+}
+.scrollselection{
+    overflow-y: scroll;
+    flex-grow: 1;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
 }
 
 @media only screen and (max-width: 930px) {

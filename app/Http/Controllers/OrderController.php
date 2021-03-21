@@ -3,18 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Table;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $tables = Table::all();        
+        return view('main.tableselection', compact('tables'));
     }
 
     /**
