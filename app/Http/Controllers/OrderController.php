@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Orderdetail;
 use App\Table;
+use App\Producttype;
+use App\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -14,69 +17,43 @@ class OrderController extends Controller
         return view('main.tableselection', compact('tables'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function productselection($table_id)
     {
-        //
+        $table = Table::findOrFail($table_id);
+        $producttypes = Producttype::where('company_id',$table->company_id)->get();
+        return view('main.productselection', compact('table','producttypes'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function productattach(Request $request)
     {
-        //
+        $input = $request->all();
+
+        $table = Table::findOrFail($input['table_id']);
+        $product = Product::findOrFail($input['product_id']);
+
+        $order = Order::where('table_id',$table->id)->first();
+        if(!isset($order)){
+            $order = new Order();
+            $order->table_id = $table->id;
+            $order->company_id = $table->company_id;
+            $order->number = 3;
+            $order->save();
+        }
+
+        $orderdetail = new Orderdetail();
+        $orderdetail->product_id    = $product->id;
+        $orderdetail->order_id      = $order->id;
+        $orderdetail->quantity      = $input['quantity'];
+        $orderdetail->unit_ammount  = $product->price;
+        $orderdetail->total_ammount = intval($input['quantity']) * intval($product->price);
+        $orderdetail->save();
+
+        return $orderdetail;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Order $order)
-    {
-        //
+    public function orderdetails($order_id){
+        $order = Order::findOrFail($order_id);
+        return view('main.orderdetails', compact('order'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Order $order)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Order $order)
-    {
-        //
-    }
 }
