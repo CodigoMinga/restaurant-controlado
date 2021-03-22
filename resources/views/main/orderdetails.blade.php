@@ -43,7 +43,7 @@
                     <p class="m-0" align="right">Total</p>
                 </th>
                 <td>
-                    suma
+                    {{$order->Total}}
                 </td>
             </tr>
         </tfoot>

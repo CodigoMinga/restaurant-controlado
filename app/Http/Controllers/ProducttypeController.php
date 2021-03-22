@@ -102,10 +102,8 @@ class ProducttypeController extends Controller
 
     public function list(){
 
-        return view('producttypes.list', [
-            'producttypes' => Producttype::latest()->paginate()
-
-        ]);
+        $producttypes = Producttype::all();
+        return view('producttypes.list',compact('producttypes'));
     }
 
     public function getdata(){

@@ -52,4 +52,14 @@ class Order extends Model
     {
         return $this->hasMany('App\Orderdetail');
     }
+
+    
+
+    public function getTotalAttribute(){
+        $total=0;
+        foreach ($this->orderdetails as $key => $orderdetail) {
+            $total=$total+$orderdetail->total_ammount;
+        }
+        return $total;
+    }
 }
