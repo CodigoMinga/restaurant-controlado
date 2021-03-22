@@ -106,7 +106,7 @@
             this.classList.toggle('active')
         }, false);
 
-        $('.toast').toast({delay:1000});
+        //$('.toast').toast({delay:1000});
     </script>
 </body>
 </html>
