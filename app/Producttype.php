@@ -44,4 +44,10 @@ class Producttype extends Model
     {
         return $this->hasMany('App\Orderdetail');
     }
+
+    
+    public function product()
+    {
+        return $this->hasMany('App\Product');
+    }
 }
