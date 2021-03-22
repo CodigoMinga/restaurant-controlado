@@ -35,7 +35,7 @@
             @endforelse
         </select>
 
-
+                <br>
                 <button type="submit" class="btn btn-danger "><i class="fa fa-check"></i>Editar Insumo</button>
                 <div class="row">
                     <div class="col-xs-12 pl-3 pt-3"><a  href="{{ url('/') }}/app/items/{{$item->id}}/delete" class="btn btn-warning"><i class="fa fa-edit"></i>Eliminar Insumo</a></div>
