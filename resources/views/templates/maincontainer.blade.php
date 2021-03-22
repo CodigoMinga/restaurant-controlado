@@ -32,6 +32,9 @@
                 <a class="sidebar-button {{(request()->is('/')) ? 'active' : '' }}" href="{{ url('/') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Sectores
                 </a>
+                
+                @yield('info')
+
                 <a class="sidebar-button {{(request()->is('products/add')) ? 'active' : '' }}" href="{{ url('/app/products/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Producto
                 </a>
@@ -64,7 +67,20 @@
     <div id="main">
         @yield('content')
     </div>
-    <div aria-live="polite" aria-atomic="true" style="position: fixed; min-height: 200px;top:0px;">
+    <div aria-live="polite" aria-atomic="true" style="position: fixed; min-height: 200px;top:0px;right:0px;">
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id='toast-agregar'>
+            <div class="toast-header ">
+            <i class="rounded mr-2 material-icons bg-success text-white">done</i>
+            <strong class="mr-auto">Agregado</strong>
+            <small class="text-muted">cerrar</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="toast-body">
+                ...
+            </div>
+        </div>
         <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
             <i class="rounded mr-2 material-icons">alert</i>
@@ -89,6 +105,8 @@
             sidebar.classList.toggle('active');
             this.classList.toggle('active')
         }, false);
+
+        $('.toast').toast({delay:1000});
     </script>
 </body>
 </html>
