@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Measureunit;
 
 class MeasureunitSeeder extends Seeder
 {
@@ -11,6 +12,10 @@ class MeasureunitSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Measureunit::create(['name'=>'Gramos']);
+        Measureunit::create(['name'=>'Kilogramo']);
+        Measureunit::create(['name'=>'Litros']);
+        Measureunit::create(['name'=>'Unidad']);
+        Measureunit::create(['name'=>'Mililitros']);
     }
 }
