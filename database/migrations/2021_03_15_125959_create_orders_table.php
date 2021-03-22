@@ -28,6 +28,8 @@ class CreateOrdersTable extends Migration
 
             $table->bigInteger('number');
 
+            $table->boolean('closed')->default(0);
+
         });
     }
 
