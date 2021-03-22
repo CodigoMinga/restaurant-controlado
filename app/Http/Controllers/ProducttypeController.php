@@ -134,7 +134,7 @@ class ProducttypeController extends Controller
 
     public function delete($producttype_id)
 {
-    $producttype = producttype::findOrFail($producttype_id);
+    $producttype = Producttype::findOrFail($producttype_id);
     $producttype->delete();
     return redirect()->route('producttypes.list')->with('success', 'Categoria eliminada correctamente');
 }

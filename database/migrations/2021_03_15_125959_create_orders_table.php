@@ -26,6 +26,8 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('table_id')->unsigned()->nullable();
             $table->foreign('table_id')->references('id')->on('tables')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 
+            $table->bigInteger('number');
+
         });
     }
 

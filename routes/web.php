@@ -13,9 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('templates.categorias');
-});
+Route::get('/', 'OrderController@index');
+Route::get('/table/{table_id}', 'OrderController@productselection');
+Route::post('/productattach', 'OrderController@productattach');
+Route::get('/orderdetails/{order_id}', 'OrderController@orderdetails');
 //Unidades de Medida
 route::get('/app/measureunits/add','MeasureunitController@add')->name('measureunits.add');
 route::post('/app/measureunits/add/process','MeasureunitController@addProcess');
@@ -28,8 +29,24 @@ Route::get('/login',function(){
 });
 
 //Insumos
+route::get('/app/items/add','ItemController@add')->name('items.add');
+Route::get('/add',function(){
+    return view('products.add');
+});
+//rutas productos
+Route:: get('/app/products/list','ProductController@list');
+Route:: get('/app/products/add','ProductController@add');
+Route:: post('/app/products/add/process','ProductController@addProcess');
+Route:: get('/app/products/getdata','ProductController@getdata');
+Route:: get('/app/products/{product_id}','ProductController@details');
+//rutas items
 route::get('/app/items/add','ItemController@add');
 route::post('/app/items/add/process','ItemController@addProcess');
+route::get('app/items/getdata','ItemController@getdata')->name('producttypes.getdata');
+route::get('app/items/list','ItemController@list')->name('items.list');
+route::get('app/items/{item_id}','ItemController@details')->name('items.details');
+route::post('app/items/{item_id}/edit/process','ItemController@editprocess')->name('items.editprocess');
+route::get('app/items/{item_id}/delete','ItemController@delete')->name('items.delete');
 
 //categorias
 route::get('/app/producttypes/add','ProducttypeController@add')->name('producttypes.add');
@@ -40,6 +57,8 @@ route::get('app/producttypes/{producttype_id}','ProducttypeController@details')-
 route::post('app/producttypes/{producttype_id}/edit/process','ProducttypeController@editprocess')->name('producttypes.editprocess');
 route::get('app/producttypes/{producttype_id}/delete','ProducttypeController@delete')->name('producttypes.delete');
 
+//rutas ajax
+route::get('/ajax/generateInvoice/{order_id}','SalesHelper@generateInvoice');
 
 
 
