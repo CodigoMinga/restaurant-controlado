@@ -29,7 +29,7 @@ Route::get('/login',function(){
 });
 
 //Insumos
-route::get('/app/items/add','ItemController@add')->name('items.add');
+
 Route::get('/add',function(){
     return view('products.add');
 });
@@ -40,11 +40,11 @@ Route:: post('/app/products/add/process','ProductController@addProcess');
 Route:: get('/app/products/getdata','ProductController@getdata');
 Route:: get('/app/products/{product_id}','ProductController@details');
 //rutas items
-route::get('/app/items/add','ItemController@add');
+route::get('/app/items/add','ItemController@add')->name('items.add');
 route::post('/app/items/add/process','ItemController@addProcess');
-route::get('app/items/getdata','ItemController@getdata')->name('producttypes.getdata');
+route::get('app/items/getdata','ItemController@getdata')->name('items.getdata');
 route::get('app/items/list','ItemController@list')->name('items.list');
-route::get('app/items/{item_id}','ItemController@details')->name('items.details');
+route::get('app/items/{item_id}/details','ItemController@details')->name('items.details');
 route::post('app/items/{item_id}/edit/process','ItemController@editprocess')->name('items.editprocess');
 route::get('app/items/{item_id}/delete','ItemController@delete')->name('items.delete');
 

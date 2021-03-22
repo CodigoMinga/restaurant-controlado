@@ -98,11 +98,10 @@ class ItemController extends Controller
        
         Item::create($request->all());
 
-        return redirect()->route('items.add')->with('success', 'Insumo Creada correctamente');
+        return redirect()->route('items.list')->with('success', 'Insumo Creado Correctamente');
     }
 
     public function list(){
-
         return view('items.list', [
             'items' => Item::latest()->paginate()
 
@@ -116,8 +115,7 @@ class ItemController extends Controller
         return DataTables::of($item)->make(true);
 }
 
-    public function details($item_id)
-{
+    public function details($item_id){
     return view('items.details', [
         'item' => Item::find($item_id)
     ]);
