@@ -13,9 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('templates.categorias');
-});
+Route::get('/', 'OrderController@index');
+Route::get('/table/{table_id}', 'OrderController@productselection');
+Route::post('/productattach', 'OrderController@productattach');
+Route::get('/orderdetails/{order_id}', 'OrderController@orderdetails');
 //Unidades de Medida
 route::get('/app/measureunits/add','MeasureunitController@add')->name('measureunits.add');
 route::post('/app/measureunits/add/process','MeasureunitController@addProcess');
