@@ -26,7 +26,7 @@ class Order extends Model
     /**
      * @var array
      */
-    protected $fillable = ['company_id', 'ordertype_id', 'created_at', 'updated_at','closed'];
+    protected $fillable = ['company_id', 'ordertype_id', 'created_at', 'updated_at','closed','enabled'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
