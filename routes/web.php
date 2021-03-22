@@ -33,6 +33,19 @@ route::get('/app/items/add','ItemController@add')->name('items.add');
 Route::get('/add',function(){
     return view('products.add');
 });
+//login
+Route::get('/app/login','MainController@login');
+Route::post('/app/checklogin','MainController@checkLogin');
+Route::get('/app/register', 'MainController@register');
+Route::post('/app/register/process', 'MainController@registerProcess');
+Route::get('/app/login/passwordlost', 'MainController@passwordLost');
+Route::post('/app/login/passwordlost/process', 'MainController@passwordLostProcess');
+Route::get('/app/resetpassword/{user_id}/token/{token}', 'MainController@passwordRessetToken');
+Route::post('/app/resetpassword/{user_id}/token/{token}/process', 'MainController@passwordRessetTokenProcess');
+Route::get('/app/home', 'HomeController@index');
+//Cambio de clave
+Route::get('/app/password/{user_id}/change', 'MainController@passwordChange');
+Route::post('/app/password/{user_id}/change/process', 'MainController@passwordChangeProcess');
 //rutas productos
 Route:: get('/app/products/list','ProductController@list');
 Route:: get('/app/products/add','ProductController@add');
