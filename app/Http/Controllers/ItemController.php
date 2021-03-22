@@ -116,9 +116,10 @@ class ItemController extends Controller
 }
 
     public function details($item_id){
+    $measureunits = Measureunit::all();
     return view('items.details', [
         'item' => Item::find($item_id)
-    ]);
+    ],compact('measureunits'));
 }
 
     public function editprocess($item_id, Request $request)
@@ -128,13 +129,13 @@ class ItemController extends Controller
 
     $item->update($request->all());
 
-    return redirect()->route('item.list')->with('success', 'Insumo editada correctamente');
+    return redirect()->route('items.list')->with('success', 'Insumo editada correctamente');
 }
 
     public function delete($item_id)
 {
     $item = Item::findOrFail($item_id);
     $item->delete();
-    return redirect()->route('item.list')->with('success', 'Insumo eliminada correctamente');
+    return redirect()->route('items.list')->with('success', 'Insumo eliminada correctamente');
 }
 }
