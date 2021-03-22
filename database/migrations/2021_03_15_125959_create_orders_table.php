@@ -31,6 +31,9 @@ class CreateOrdersTable extends Migration
             $table->boolean('closed')->default(0);
             $table->boolean('enabled')->default(1);
 
+            $table->bigInteger('internal_id')->default(1);
+
+
         });
     }
 
