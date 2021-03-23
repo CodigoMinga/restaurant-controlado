@@ -203,12 +203,12 @@ fieldset{
       </ul>
   </div>
 @endif
-        <form action="javascript:void(0);" method="get">
+        <form action="{{url('/app/checklogin')}}" method="post">
           {{csrf_field()}}
           <fieldset class="clearfix">
 
-            <p ><span class="fa fa-envelope"></span><input type="text"  Placeholder="Correo" required></p> 
-            <p><span class="fa fa-lock"></span><input type="password"  Placeholder="Contraseña" required></p> 
+            <p ><span class="fa fa-envelope"></span><input type="text"  Placeholder="Email" name="email" required></p> 
+            <p><span class="fa fa-lock"></span><input type="password"  Placeholder="Password" name="password" required></p> 
             
              <div style="text-align: center">
              <span style="width:50%; text-align:center; display: inline-block;"><input type="submit" value="Ingresar"></span>
@@ -227,7 +227,13 @@ fieldset{
       </div>
       
       </div>
+      <br>
+      <h6 style="text-align: center">Restaurant-controlado.cl<br/>
+        <b> <a href="https://www.codigominga.cl">Desarrollo: www.codigominga.cl</a></b>
 
+        <br/><br/>
+        <b> <a href="{{url('/app/login/passwordlost')}}">Recuperar Contraseña</a></b>
+      </h6>
     </div>
 
 </div>

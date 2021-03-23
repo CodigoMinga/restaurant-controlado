@@ -4,25 +4,26 @@
 
 <form method="post" class="pt-5 pl-5 col-7" action="{{url('app/products/add/process')}}" id="form">
   {{csrf_field()}}
-  <label for="company_id">Empresa:</label>
-          <select name="company_id" id="company_id">
-              @forelse($companys as $company)
-              <option value="{{ $company->id }}">{{ $company->name }}</option>
-              @empty
-              <li>Aun no hay locales</li>
-              @endforelse
-          </select>
+ 
+        <label for="producttype_id">Categoria:</label>
+        <select name="producttype_id" id="producttype_id">
+            @forelse($producttypes as $producttype)
+            <option value="{{ $producttype->id }}">{{ $producttype->name }}</option>
+            @empty
+            <li>Aun no hay Categorias</li>
+            @endforelse
+        </select>
 <div class="mb-3">
     <label for="formGroupExampleInput" class="form-label">Producto</label>
-    <input type="text" class="form-control" id="name" placeholder="Nombre producto">
+    <input type="text" class="form-control" placeholder="Nombre producto" name="name" id="name">
   </div>
   <div class="mb-3">
     <label for="formGroupExampleInput" class="form-label">Descripción</label>
-    <input type="text" class="form-control" id="description" placeholder="Descripción">
+    <input type="text" class="form-control" placeholder="Descripción" name="description" id="description">
   </div>
   <div class="mb-3">
     <label for="formGroupExampleInput2" class="form-label">Precio</label>
-    <input type="text" class="form-control" id="price" placeholder="Precio">
+    <input type="text" class="form-control"  placeholder="Precio" name="price" id="price">
     
   </div>
   <label for="product">Estado:</label>
