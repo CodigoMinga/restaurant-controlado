@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Company;
 use App\Order;
+use Illuminate\Http\Response;
 
 
 class SalesHelper extends Controller
@@ -24,104 +25,124 @@ class SalesHelper extends Controller
      */
     public function generateInvoice($order_id){
 
-        $order = Order::findOrFail($order_id);
-        $paramsArr = [];
-        $paramsArr['response'] = self::RESPONSES;
-        $paramsArr['dte'] = [];
-        $idDoc = [
-            'TipoDTE' => self::BOLETA_ELECTRONICA,
-            'Folio' => $order->id,
-            'FchEmis' => date('Y-m-d'),
-            'IndServicio' => self::BOLETA_VENTA_SERVICIO
-        ];
 
-        $paramsArr['dte']['Encabezado'] = [];
-        $paramsArr['dte']['Encabezado']['IdDoc'] = $idDoc;
+        //busca si existe la orden en la DB
+        $order = Order::find($order_id);
 
-        $empresa = $order->company->id;
-
-        $orderdetails = $order->orderdetails;
+        if(isset($order)){
 
 
-        $detalle = [];
-        $total = 0;
-        $ct = 0 ;
-        foreach($orderdetails as $detail) {
-            $ct = $ct + 1;
-            array_push($detalle, [
-                "NroLinDet" => $ct,
-                "NmbItem" => $detail->product->id,
-                "QtyItem" => $detail->quantity,
-                "PrcItem" => $detail->unit_ammount,
-                "MontoItem" => $detail->total_ammount
+
+            $paramsArr = [];
+            $paramsArr['response'] = self::RESPONSES;
+            $paramsArr['dte'] = [];
+            $idDoc = [
+                'TipoDTE' => self::BOLETA_ELECTRONICA,
+                'Folio' => $order->id,
+                'FchEmis' => date('Y-m-d'),
+                'IndServicio' => self::BOLETA_VENTA_SERVICIO
+            ];
+
+            $paramsArr['dte']['Encabezado'] = [];
+            $paramsArr['dte']['Encabezado']['IdDoc'] = $idDoc;
+
+            $empresa = $order->company->id;
+
+            $orderdetails = $order->orderdetails;
+
+
+            $detalle = [];
+            $total = 0;
+            $ct = 0 ;
+            foreach($orderdetails as $detail) {
+                $ct = $ct + 1;
+                array_push($detalle, [
+                    "NroLinDet" => $ct,
+                    "NmbItem" => $detail->product->name,
+                    "QtyItem" => $detail->quantity,
+                    "PrcItem" => $detail->unit_ammount,
+                    "MontoItem" => $detail->total_ammount
+                ]);
+                $total += $detail->total_ammount;
+            }
+
+
+            $emisor = [
+                'RUTEmisor' => $order->company->rut,
+                'RznSocEmisor' => $order->company->razon_social,
+                "GiroEmisor" =>  $order->company->giro,
+                "DirOrigen" =>  $order->company->direccion,
+                "CmnaOrigen" =>  $order->company->comuna
+            ];
+
+
+            $paramsArr['dte']['Encabezado']['Emisor'] = $emisor;
+            $paramsArr['dte']['Encabezado']['Receptor'] = ["RUTRecep" => "66666666-6"];
+            $totales = [
+                "MntTotal" => $total ,
+                "VlrPagar" => $total ,
+                "IVA" => round($total - ($total  / 1.19)),
+                "MntNeto" => round(($total  / 1.19))
+            ];
+            $paramsArr['dte']['Encabezado']['Totales'] = $totales;
+            $paramsArr['dte']['Detalle'] = $detalle;
+
+            $curl = curl_init();
+
+            if (app()->environment('production')){
+                $url = self::URL_PRODUCCION;
+                $apiKey = $order->company->api_key_openfactura;
+            }else{
+                $url = self::URL_DESARROLLO;
+                $apiKey = self::API_KEY_DESARROLLO;
+            }
+
+
+            curl_setopt_array($curl, [
+                CURLOPT_URL => $url . "v2/dte/document"  ,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => false,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => json_encode($paramsArr),
+                CURLOPT_HTTPHEADER => [
+                    "apikey: " . $apiKey
+                ],
             ]);
-            $total += $detail->total_ammount;
-        }
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            $response = json_decode($response);
+            $err = json_decode($err);
 
 
-        $emisor = [
-            'RUTEmisor' => "76795561-8",
-            'RznSocEmisor' => "HAULMER SPA",
-            "GiroEmisor" => "VENTA AL POR MENOR EN EMPRESAS DE VENTA A DISTANCIA VÍA INTERNET; COMERCIO ELEC",
-            "DirOrigen" => "ARTURO PRAT 527   CURICO",
-            "CmnaOrigen" => "Curicó",
-        ];
+            curl_close($curl);
 
+            $paramsArr['adicionales_empresa'] = "prueba de texto adicional";
+            $paramsArr['adicionales_datos_empresa'] = "prueba de texto adicional2";
 
-        $paramsArr['dte']['Encabezado']['Emisor'] = $emisor;
-        $paramsArr['dte']['Encabezado']['Receptor'] = ["RUTRecep" => "66666666-6"];
-        $totales = [
-            "MntTotal" => $total ,
-            "VlrPagar" => $total ,
-            "IVA" => round($total - ($total  / 1.19)),
-            "MntNeto" => round(($total  / 1.19))
-        ];
-        $paramsArr['dte']['Encabezado']['Totales'] = $totales;
-        $paramsArr['dte']['Detalle'] = $detalle;
+            //return json_encode($paramsArr,JSON_UNESCAPED_SLASHES);
+            if ($err) {
+                return new Response([
+                    'response' => $err,
+                    'request' => $paramsArr
+                ], 400);
+            } else {
+                return new Response([
+                    'response' => $response,
+                    'request' => $paramsArr
+                ], 201);
+            }
 
-        $curl = curl_init();
+        }else{
+            return new Response([
+                'response' => "Error la orden enviada no existe en la DB",
+                'request' => ""
+            ], 400);
 
-
-        $url = self::URL_DESARROLLO;
-        $apiKey = self::API_KEY_DESARROLLO;
-        curl_setopt_array($curl, [
-            CURLOPT_URL => $url . "v2/dte/document"  ,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => false,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => json_encode($paramsArr),
-            CURLOPT_HTTPHEADER => [
-                "apikey: " . $apiKey,
-                "Idempotency-Key: " . rand(10, 99999999),
-            ],
-        ]);
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-
-        $response = json_decode($response);
-        $err = json_decode($err);
-
-
-        curl_close($curl);
-
-        $paramsArr['adicionales_empresa'] = "prueba de texto adicional";
-        $paramsArr['adicionales_datos_empresa'] = "prueba de texto adicional2";
-
-        //return json_encode($paramsArr,JSON_UNESCAPED_SLASHES);
-        if ($err) {
-            return [
-                'response' => $err,
-                'request' => $paramsArr
-            ];
-        } else {
-            return [
-                'response' => $response,
-                'request' => $paramsArr
-            ];
         }
     }
 }

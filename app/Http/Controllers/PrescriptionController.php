@@ -85,16 +85,14 @@ class PrescriptionController extends Controller
     }
 
 
-    public function add(){
-
+    public function add($product_id){
+        $product = Product::findOrFail($product_id);
         $products = Product::all();
         return view('prescriptions.add',compact('products'));
     }
 
-    public function addProcess( Request $request){
-       
-        Prescription::create($request->all());
-
+    public function addProcess( Request $request,$product_id){
+        Prescription::create($request->all()  + ['product_id' => $product_id]);
         return redirect()->route('prescriptions.list')->with('success', 'Reseta Creada Correctamente');
     }
 
@@ -106,7 +104,7 @@ class PrescriptionController extends Controller
     }
 
     public function getdata(){
-       
+
         $prescription = Prescription::all();
 
         return DataTables::of($prescription)->make(true);
@@ -124,12 +122,12 @@ class PrescriptionController extends Controller
 
     $prescription->update($request->all());
 
-    return redirect()->route('prescriptions.list')->with('success', 'Reseta editada correctamente');
+    return redirect()->route('prescriptions.list')->with('success', 'Receta editada correctamente');
 }
 
     public function delete($item_id){
     $prescription = Prescription::findOrFail($prescription_id);
     $prescription->delete();
-    return redirect()->route('prescriptions.list')->with('success', 'Reseta eliminada correctamente');
+    return redirect()->route('prescriptions.list')->with('success', 'Receta eliminada correctamente');
 }
 }
