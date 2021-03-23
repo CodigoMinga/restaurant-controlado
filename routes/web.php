@@ -71,7 +71,14 @@ route::get('app/producttypes/list','ProducttypeController@list')->name('productt
 route::get('app/producttypes/{producttype_id}','ProducttypeController@details')->name('producttypes.details');
 route::post('app/producttypes/{producttype_id}/edit/process','ProducttypeController@editprocess')->name('producttypes.editprocess');
 route::get('app/producttypes/{producttype_id}/delete','ProducttypeController@delete')->name('producttypes.delete');
-
+//rutas compañias
+route::get('/app/companys/add','CompanyController@add')->name('companys.add');
+route::post('/app/companys/add/process','CompanyController@addProcess');
+route::get('/app/companys/getdata','CompanyController@getdata');
+route::get('/app/companys/list','CompanyController@list');
+route::get('/app/companys/{company_id}/details','CompanyController@details');
+route::post('/app/companys/{company_id}/edita/process','CompanyController@editprocess');
+route::get('/app/companys/{company_id}/delete','CompanyController@delete');
 //rutas ajax
 route::get('/ajax/generateInvoice/{order_id}','SalesHelper@generateInvoice');
 
