@@ -47,11 +47,13 @@ Route::get('/app/home', 'HomeController@index');
 Route::get('/app/password/{user_id}/change', 'MainController@passwordChange');
 Route::post('/app/password/{user_id}/change/process', 'MainController@passwordChangeProcess');
 //rutas productos
-Route:: get('/app/products/list','ProductController@list');
-Route:: get('/app/products/add','ProductController@add');
+Route:: get('/app/products/list','ProductController@list')->name('products.list');
+Route:: get('/app/products/add','ProductController@add')->name('products.add');
 Route:: post('/app/products/add/process','ProductController@addProcess');
 Route:: get('/app/products/getdata','ProductController@getdata');
 Route:: get('/app/products/{product_id}','ProductController@details');
+Route:: post('/app/products/{product_id}/edit/process','ProductController@editprocess');
+Route:: get('/app/products/{product_id}/delete','ProductController@delete');
 //rutas items
 route::get('/app/items/add','ItemController@add')->name('items.add');
 route::post('/app/items/add/process','ItemController@addProcess');

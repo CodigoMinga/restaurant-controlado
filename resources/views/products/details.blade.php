@@ -2,7 +2,7 @@
 
 @section('content')
 
- <div class="box pl-3 pt-3">
+    <div class="box pl-3 pt-3">
         <div class="box-body">
             <h2 class="page-header">
                 <i class="fa fa-list"></i> Detalles del Producto<b></b>
