@@ -6,6 +6,7 @@ use App\Product;
 use Illuminate\Http\Request;
 use App\Company;
 use App\Orderdetail;
+use App\Producttype;
 class ProductController extends Controller
 {
     /**
@@ -85,9 +86,10 @@ class ProductController extends Controller
     }
     public function add(){
 
-        $companys = Company::all();
         $orderdetails = Orderdetail::all();
-        return view('products.add',compact('companys', 'orderdetails'));
+        $producttypes = Producttype::all();
+        return view('products.add',compact('producttypes', 'orderdetails'));
+        
     }
     public function getdata(){
        
@@ -105,7 +107,6 @@ class ProductController extends Controller
     public function addProcess(Request $request){
         
         Product::create($request->all());
-        
    
         return redirect()->route('products.add')->with('success', 'Producto Creado correctamente');
     }
