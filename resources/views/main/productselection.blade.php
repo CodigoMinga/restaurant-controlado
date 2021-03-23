@@ -1,5 +1,12 @@
 @extends('templates.maincontainer')
 
+@section('info')
+    <div>
+        <h6>{{$table->name}}</h6>
+        <h6>{{$order ? $order->Total : 0}}</h6>
+    </div>    
+@endsection
+
 @section('content')
     <div class="d-flex flex-column h-100">
         <div class="p-4">
@@ -40,7 +47,7 @@
             <form id="productattach-form" method="POST" action="{{url('/')}}/productattach">
                 {{csrf_field()}}
                 <div class="modal-header">
-                <h5 class="modal-title" id="ModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="ModalLabel">...</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -48,6 +55,7 @@
                 <div class="modal-body">
                     <input type="hidden" name='table_id' value={{$table->id}}>
                     <input type="hidden" name='product_id' value=0 id="product_id">
+                    <input type="hidden" name='product_name' value='' id="product_name">
                     <input type="number" min=1 name='quantity' required>
                 </div>
                 <div class="modal-footer">
@@ -65,6 +73,7 @@
                 var product = JSON.parse($(this).attr( "obj" ));
                 $('#ModalLabel').html(product.name);
                 $('#product_id').val(product.id);
+                $('#product_name').val(product.name);
                 $('#protuct-modal').modal('show');
             });
 
@@ -72,7 +81,6 @@
                 e.preventDefault();
                 var formData = new FormData(productattachForm);
                 var activate = document.activeElement.id;
-
                 $.ajax({
                     url: "{{url('/')}}/productattach",
                     type: "POST",
@@ -84,9 +92,10 @@
                     if(typeof(data)=='object'){
                         if(data.id){
                             if(activate=="a-orden"){
-                                window.location.href = "{{url('/')}}/orderdetails/" + data.order_id;
+                                window.location.href = "{{url('/')}}/orderdetails/" + data.id;
                             }else{
-                                //hacer algo con la informacion que llega
+                                $('#toast-agregar .toast-body').eq(0).html(formData.get('product_name'));
+                                $('#toast-agregar').toast('show');
                             }
                         }
                         $('#protuct-modal').modal('hide');

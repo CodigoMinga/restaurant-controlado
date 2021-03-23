@@ -13,12 +13,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property Company $company
  * @property Ordertype $ordertype
  * @property Orderdetail[] $orderdetails
+ * @property integer $internal_id
  */
 class Order extends Model
 {
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'integer';
@@ -26,7 +27,7 @@ class Order extends Model
     /**
      * @var array
      */
-    protected $fillable = ['company_id', 'ordertype_id', 'created_at', 'updated_at'];
+    protected $fillable = ['company_id', 'ordertype_id', 'created_at', 'updated_at','closed','enabled','internal_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -50,5 +51,15 @@ class Order extends Model
     public function orderdetails()
     {
         return $this->hasMany('App\Orderdetail');
+    }
+
+    
+
+    public function getTotalAttribute(){
+        $total=0;
+        foreach ($this->orderdetails as $key => $orderdetail) {
+            $total=$total+$orderdetail->total_ammount;
+        }
+        return $total;
     }
 }
