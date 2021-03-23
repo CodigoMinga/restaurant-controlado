@@ -74,8 +74,10 @@ route::get('app/producttypes/{producttype_id}/delete','ProducttypeController@del
 route::get('/ajax/generateInvoice/{order_id}','SalesHelper@generateInvoice');
 
 //Rutas resetas o Prescriptions
-route::get('/app/prescriptions/add','PrescriptionController@add')->name('prescriptions.add');
-route::post('/app/prescriptions/add/process','PrescriptionController@addProcess');
+//route::get('/app/prescriptions/add','PrescriptionController@add')->name('prescriptions.add');
+//route::post('/app/prescriptions/add/process','PrescriptionController@addProcess');
+Route::get('/app/products/{product_id}/prescriptions/add','PrescriptionController@add')->name('prescriptions.add');
+Route::post('/app/products/{product_id}/prescriptions/add/process','PrescriptionController@prescriptions.addProcess');
 /*route::get('app/prescriptions/getdata','PrescriptionController@getdata')->name('prescriptions.getdata');
 route::get('app/prescriptions/list','PrescriptionController@list')->name('prescriptions.list');
 route::get('app/prescriptions/{prescription_id}/details','PrescriptionController@details')->name('prescriptions.details');
