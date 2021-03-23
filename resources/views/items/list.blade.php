@@ -26,7 +26,7 @@
                 @empty
                 <li>No hay Insumos para mostrar</li>
                 @endforelse
-                {{ $item->links() }}
+                {{ $items->links() }}
             </ul>
         </div>
     </div>

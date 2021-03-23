@@ -29,10 +29,23 @@ Route::get('/login',function(){
 });
 
 //Insumos
-route::get('/app/items/add','ItemController@add')->name('items.add');
+
 Route::get('/add',function(){
     return view('products.add');
 });
+//login
+Route::get('/app/login','MainController@login');
+Route::post('/app/checklogin','MainController@checkLogin');
+Route::get('/app/register', 'MainController@register');
+Route::post('/app/register/process', 'MainController@registerProcess');
+Route::get('/app/login/passwordlost', 'MainController@passwordLost');
+Route::post('/app/login/passwordlost/process', 'MainController@passwordLostProcess');
+Route::get('/app/resetpassword/{user_id}/token/{token}', 'MainController@passwordRessetToken');
+Route::post('/app/resetpassword/{user_id}/token/{token}/process', 'MainController@passwordRessetTokenProcess');
+Route::get('/app/home', 'HomeController@index');
+//Cambio de clave
+Route::get('/app/password/{user_id}/change', 'MainController@passwordChange');
+Route::post('/app/password/{user_id}/change/process', 'MainController@passwordChangeProcess');
 //rutas productos
 Route:: get('/app/products/list','ProductController@list');
 Route:: get('/app/products/add','ProductController@add');
@@ -40,11 +53,11 @@ Route:: post('/app/products/add/process','ProductController@addProcess');
 Route:: get('/app/products/getdata','ProductController@getdata');
 Route:: get('/app/products/{product_id}','ProductController@details');
 //rutas items
-route::get('/app/items/add','ItemController@add');
+route::get('/app/items/add','ItemController@add')->name('items.add');
 route::post('/app/items/add/process','ItemController@addProcess');
-route::get('app/items/getdata','ItemController@getdata')->name('producttypes.getdata');
+route::get('app/items/getdata','ItemController@getdata')->name('items.getdata');
 route::get('app/items/list','ItemController@list')->name('items.list');
-route::get('app/items/{item_id}','ItemController@details')->name('items.details');
+route::get('app/items/{item_id}/details','ItemController@details')->name('items.details');
 route::post('app/items/{item_id}/edit/process','ItemController@editprocess')->name('items.editprocess');
 route::get('app/items/{item_id}/delete','ItemController@delete')->name('items.delete');
 
@@ -59,6 +72,17 @@ route::get('app/producttypes/{producttype_id}/delete','ProducttypeController@del
 
 //rutas ajax
 route::get('/ajax/generateInvoice/{order_id}','SalesHelper@generateInvoice');
+
+//Rutas resetas o Prescriptions
+route::get('/app/prescriptions/add','PrescriptionController@add')->name('prescriptions.add');
+route::post('/app/prescriptions/add/process','PrescriptionController@addProcess');
+/*route::get('app/prescriptions/getdata','PrescriptionController@getdata')->name('prescriptions.getdata');
+route::get('app/prescriptions/list','PrescriptionController@list')->name('prescriptions.list');
+route::get('app/prescriptions/{prescription_id}/details','PrescriptionController@details')->name('prescriptions.details');
+route::post('app/prescriptions/{prescription_id}/edit/process','PrescriptionController@editprocess')->name('prescriptions.editprocess');
+route::get('app/prescriptions/{prescription_id}/delete','PrescriptionController@delete')->name('prescriptions.delete');
+*/
+
 
 
 
