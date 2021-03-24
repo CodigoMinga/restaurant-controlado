@@ -11,13 +11,13 @@
     <div class="pl-3 pr-3">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <h1>Lista de Productos</h1>
-                <a  href="{{ url('/') }}/app/products/add" class="btn btn-danger">Agregar Producto</a>
+                <h1>Lista de Compañias</h1>
+                <a  href="{{ url('/') }}/app/companys/add" class="btn btn-danger">Agregar Compañia</a>
             </div>
             <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
                 <thead>
                     <tr>
-                        <th>Productos</th>
+                        <th>Compañias</th>
                         <th>Acción</th>
                     </tr>
                 </thead>
@@ -33,7 +33,7 @@
         $(document).ready(function() {
             $('#tabla').DataTable({
                 responsive: true,
-                "data": {!! json_encode($products->toArray()) !!},
+                "data": {!! json_encode($companys->toArray()) !!},
                 "columns": [
                     { "data": "name","width":"90%"},
                     { data: "id", render : function ( data, type, row, meta ) {

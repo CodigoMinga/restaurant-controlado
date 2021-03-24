@@ -27,7 +27,7 @@ class Product extends Model
     /**
      * @var array
      */
-    protected $fillable = ['created_at', 'updated_at', 'name', 'description', 'price', 'enabled'];
+    protected $fillable = ['producttype_id','created_at', 'updated_at', 'name', 'description', 'price', 'enabled'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
