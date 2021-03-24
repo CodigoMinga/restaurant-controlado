@@ -77,10 +77,15 @@ route::get('app/producttypes/{producttype_id}/delete','ProducttypeController@del
 route::get('/app/companys/add','CompanyController@add')->name('companys.add');
 route::post('/app/companys/add/process','CompanyController@addProcess');
 route::get('/app/companys/getdata','CompanyController@getdata');
-route::get('/app/companys/list','CompanyController@list');
-route::get('/app/companys/{company_id}/details','CompanyController@details');
-route::post('/app/companys/{company_id}/edita/process','CompanyController@editprocess');
+route::get('/app/companys/list','CompanyController@list')->name('companys.list');
+route::get('/app/companys/{company_id}','CompanyController@details');
+route::post('/app/companys/{company_id}/edit/process','CompanyController@editprocess');
 route::get('/app/companys/{company_id}/delete','CompanyController@delete');
+//rutas Usuarios
+route::get('/app/users/list','RoleController@list')->name('users.list');
+route::get('/app/users/getdata','RoleController@getdata');
+route::post('/app/users/{user_id}/edit/process','RoleController@editprocess');
+route::get('/app/users/{user_id}','RoleController@details');
 //rutas ajax
 route::get('/ajax/generateInvoice/{order_id}','SalesHelper@generateInvoice');
 
