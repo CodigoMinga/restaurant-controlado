@@ -2,10 +2,10 @@
 
 @section('content')
     <h2 class="pt-5 pl-5 page-header">
-        <i class="fa fa-pencil"></i> Agregar Receta <spanvalue="{{ $product->id }}">{{ $product->name }}</span>
+        <i class="fa fa-pencil"></i> Agregar Receta a <span value="{{ $product->id }}">{{ $product->name }}</span>
     </h2>
     
-    <form method="post" class="pt-5 pl-5 col-7" action="{{url('app/prescriptions/add/process')}}" id="form">
+    <form method="post" class="pt-5 pl-5 col-7" action="{{url('/app/products/'.$product->id.'/prescriptions/add/process')}}" id="form">
         {{csrf_field()}}
              
         <div class="form-group has-feedback ">
