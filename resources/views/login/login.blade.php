@@ -228,12 +228,13 @@ fieldset{
       
       </div>
       <br>
-      <h6 style="text-align: center">Restaurant-controlado.cl<br/>
-        <b> <a href="https://www.codigominga.cl">Desarrollo: www.codigominga.cl</a></b>
+      <div style="text-align: center">
+        <h6><b> <a href="https://www.codigominga.cl">Desarrollo: www.codigominga.cl</a></b>
 
         <br/><br/>
         <b> <a href="{{url('/app/login/passwordlost')}}">Recuperar Contraseña</a></b>
       </h6>
+      </div>
     </div>
 
 </div>

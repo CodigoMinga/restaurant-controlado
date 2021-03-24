@@ -15,7 +15,7 @@
         </select>
 <div class="mb-3">
     <label for="formGroupExampleInput" class="form-label">Producto</label>
-    <input type="text" class="form-control" placeholder="Nombre producto" name="name" id="name">
+    <input type="text" class="form-control" placeholder="Nombre producto" name="name" id="name" required>
   </div>
   <div class="mb-3">
     <label for="formGroupExampleInput" class="form-label">Descripción</label>
@@ -23,7 +23,7 @@
   </div>
   <div class="mb-3">
     <label for="formGroupExampleInput2" class="form-label">Precio</label>
-    <input type="text" class="form-control"  placeholder="Precio" name="price" id="price">
+    <input type="text" class="form-control"  placeholder="Precio" name="price" id="price" required>
     
   </div>
   <label for="product">Estado:</label>
