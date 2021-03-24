@@ -7,7 +7,7 @@
         </div>
         <div class="scrollselection p-4">
             @foreach ($tables as $table)
-                <a class="mesa" href="{{url('/')}}/table/{{$table->id}}">
+                <a class="mesa" href="{{url('/')}}/tableorder/{{$table->id}}">
                     @if($table->ordertype_id==1)
                     <img src="{{url('/img/icons/mesa.svg')}}" alt="">   
                     @elseif($table->ordertype_id==2)

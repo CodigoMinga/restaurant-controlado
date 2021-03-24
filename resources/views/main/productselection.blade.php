@@ -2,7 +2,7 @@
 
 @section('info')
     <div>
-        <h6>{{$table->name}}</h6>
+        <h6>{{$order->table->name}}</h6>
         <h6>{{$order ? $order->Total : 0}}</h6>
     </div>    
 @endsection
@@ -53,7 +53,7 @@
                 </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name='table_id' value={{$table->id}}>
+                    <input type="hidden" name='order_id' value={{$order->id}}>
                     <input type="hidden" name='product_id' value=0 id="product_id">
                     <input type="hidden" name='product_name' value='' id="product_name">
                     <input type="number" min=1 name='quantity' required>

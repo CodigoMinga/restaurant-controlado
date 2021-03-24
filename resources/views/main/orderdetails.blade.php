@@ -49,5 +49,8 @@
                 </tr>
             </tfoot>
         </table>
+        <a href="{{url('/productselection/'.$order->id)}}" class="btn btn-success btn-lg">
+            Agregar
+        </a>
     </div>
 @stop

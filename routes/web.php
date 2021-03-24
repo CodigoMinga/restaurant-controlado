@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'OrderController@index');
-Route::get('/table/{table_id}', 'OrderController@productselection');
+Route::get('/tableorder/{table_id}',        'OrderController@tableorder');
+Route::get('/orderstart/{table_id}',        'OrderController@orderstart');
+Route::get('/productselection/{order_id}',  'OrderController@productselection');
 Route::post('/productattach', 'OrderController@productattach');
 Route::get('/orderdetails/{order_id}', 'OrderController@orderdetails');
 //Unidades de Medida

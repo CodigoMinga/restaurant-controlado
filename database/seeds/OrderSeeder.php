@@ -18,7 +18,7 @@ class OrderSeeder extends Seeder
 
         $order->company_id = 1;
         $order->table_id = 1;
-        $order->number = 1;
+        $order->internal_id = 1;
         $order->save();
 
         $orderdetail = new Orderdetail();
@@ -46,14 +46,11 @@ class OrderSeeder extends Seeder
         $orderdetail->total_ammount = 6000;
         $orderdetail->save();
 
-
-
-
-
+        /*-------------------------------------*/
         $order = new Order;
         $order->company_id = 1;
         $order->table_id = 2;
-        $order->number = 1;
+        $order->internal_id = 2;
         $order->save();
 
         $orderdetail = new Orderdetail();
@@ -63,9 +60,5 @@ class OrderSeeder extends Seeder
         $orderdetail->unit_ammount = 3000;
         $orderdetail->total_ammount = 3000;
         $orderdetail->save();
-
-
-
-
     }
 }
