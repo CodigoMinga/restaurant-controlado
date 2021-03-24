@@ -28,7 +28,7 @@ class Company extends Model
     /**
      * @var array
      */
-    protected $fillable = ['created_at', 'updated_at', 'name', 'enabled'];
+    protected $fillable = ['created_at', 'updated_at', 'name', 'rut', 'razon_social', 'giro', 'direccion', 'comuna', 'api_key_openfactura','enabled'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

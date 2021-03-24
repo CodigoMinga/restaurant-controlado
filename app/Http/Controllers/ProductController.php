@@ -99,22 +99,29 @@ class ProductController extends Controller
 }
     public function list(){
 
-        return view('products.list', [
-            'products' => Product::latest()->paginate()
-
-        ]);
+        $products = Product::all();
+        return view('products.list',compact('products'));
     }
     public function addProcess(Request $request){
         
         Product::create($request->all());
    
-        return redirect()->route('products.add')->with('success', 'Producto Creado correctamente');
+        return redirect()->route('products.list')->with('success', 'Producto Creado correctamente');
     }
     public function details($product_id)
 {
     return view('products.details', [
         'product' => Product::find($product_id)
     ]);
+}
+public function editprocess($product_id, Request $request)
+{
+    //busca la orden en la base de datos con el id que se le pasa desde la URL
+    $product = Product::findOrFail($product_id);
+
+    $product->update($request->all());
+
+    return redirect()->route('products.list')->with('success', 'Producto editado correctamente');
 }
 public function delete($product_id)
 {
