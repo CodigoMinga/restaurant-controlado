@@ -122,12 +122,12 @@ class PrescriptionController extends Controller
 
     $prescription->update($request->all());
 
-    return redirect()->route('prescriptions.list')->with('success', 'Reseta editada correctamente');
+    return redirect()->route('prescriptions.list')->with('success', 'Receta editada correctamente');
 }
 
     public function delete($item_id){
     $prescription = Prescription::findOrFail($prescription_id);
     $prescription->delete();
-    return redirect()->route('prescriptions.list')->with('success', 'Reseta eliminada correctamente');
+    return redirect()->route('prescriptions.list')->with('success', 'Receta eliminada correctamente');
 }
 }

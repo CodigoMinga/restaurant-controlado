@@ -8,23 +8,24 @@
 </style>
 
 @section('content')
-    <div class="pl-3 pr-3">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1>Lista de Categorias</h1>
-                <a  href="{{ url('/') }}/app/producttypes/add" class="btn btn-danger"><i class="fa fa-plus"></i>Crear Categoria</a>
-            </div>
-            <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
-                <thead>
-                    <tr>
-                        <th>Categoria</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+    <div class="container pt-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>Lista de Categorias</h1>
+            <a  href="{{ url('/') }}/app/producttypes/add" class="btn btn-success">
+                <i class="material-icons">add</i>
+                Agregar Categoria
+            </a>
         </div>
+        <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
+            <thead>
+                <tr>
+                    <th>Categoria</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.18/af-2.3.3/fc-3.2.5/fh-3.1.4/sc-2.0.0/datatables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
@@ -36,8 +37,8 @@
                 "data": {!! json_encode($producttypes->toArray()) !!},
                 "columns": [
                     { "data": "name","width":"90%"},
-                    { data: "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-success material-icons" href="{{ url("/")}}/app/products/'+data+'" target="_blank">play_arrow</a>';
+                    { "data": "id", render : function ( data, type, row, meta ) {
+                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/products/'+data+'" target="_blank">description</a>';
                     },"width":"1%"},
                 ],
                 language: {

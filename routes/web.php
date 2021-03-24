@@ -92,7 +92,7 @@ route::get('app/prescriptions/list','PrescriptionController@list')->name('prescr
 route::get('app/prescriptions/{prescription_id}/details','PrescriptionController@details')->name('prescriptions.details');
 route::post('app/prescriptions/{prescription_id}/edit/process','PrescriptionController@editprocess')->name('prescriptions.editprocess');
 route::get('app/prescriptions/{prescription_id}/delete','PrescriptionController@delete')->name('prescriptions.delete');
-*/
+
 
 
 

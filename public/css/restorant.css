@@ -260,6 +260,10 @@ h1 .material-icons{
     align-content: flex-start;
 }
 
+.btn .material-icons{
+    vertical-align: -0.4rem;
+}
+
 @media only screen and (max-width: 930px) {
     #main{
         padding-left:30px;
