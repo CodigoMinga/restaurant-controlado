@@ -47,11 +47,13 @@ Route::get('/app/home', 'HomeController@index');
 Route::get('/app/password/{user_id}/change', 'MainController@passwordChange');
 Route::post('/app/password/{user_id}/change/process', 'MainController@passwordChangeProcess');
 //rutas productos
-Route:: get('/app/products/list','ProductController@list');
-Route:: get('/app/products/add','ProductController@add');
+Route:: get('/app/products/list','ProductController@list')->name('products.list');
+Route:: get('/app/products/add','ProductController@add')->name('products.add');
 Route:: post('/app/products/add/process','ProductController@addProcess');
 Route:: get('/app/products/getdata','ProductController@getdata');
 Route:: get('/app/products/{product_id}','ProductController@details');
+Route:: post('/app/products/{product_id}/edit/process','ProductController@editprocess');
+Route:: get('/app/products/{product_id}/delete','ProductController@delete');
 //rutas items
 route::get('/app/items/add','ItemController@add')->name('items.add');
 route::post('/app/items/add/process','ItemController@addProcess');
@@ -69,7 +71,14 @@ route::get('app/producttypes/list','ProducttypeController@list')->name('productt
 route::get('app/producttypes/{producttype_id}','ProducttypeController@details')->name('producttypes.details');
 route::post('app/producttypes/{producttype_id}/edit/process','ProducttypeController@editprocess')->name('producttypes.editprocess');
 route::get('app/producttypes/{producttype_id}/delete','ProducttypeController@delete')->name('producttypes.delete');
-
+//rutas compañias
+route::get('/app/companys/add','CompanyController@add')->name('companys.add');
+route::post('/app/companys/add/process','CompanyController@addProcess');
+route::get('/app/companys/getdata','CompanyController@getdata');
+route::get('/app/companys/list','CompanyController@list');
+route::get('/app/companys/{company_id}/details','CompanyController@details');
+route::post('/app/companys/{company_id}/edita/process','CompanyController@editprocess');
+route::get('/app/companys/{company_id}/delete','CompanyController@delete');
 //rutas ajax
 route::get('/ajax/generateInvoice/{order_id}','SalesHelper@generateInvoice');
 
@@ -83,7 +92,7 @@ route::get('app/prescriptions/list','PrescriptionController@list')->name('prescr
 route::get('app/prescriptions/{prescription_id}/details','PrescriptionController@details')->name('prescriptions.details');
 route::post('app/prescriptions/{prescription_id}/edit/process','PrescriptionController@editprocess')->name('prescriptions.editprocess');
 route::get('app/prescriptions/{prescription_id}/delete','PrescriptionController@delete')->name('prescriptions.delete');
-*/
+
 
 
 
