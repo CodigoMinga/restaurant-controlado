@@ -87,13 +87,12 @@ class PrescriptionController extends Controller
 
     public function add($product_id){
         $product = Product::findOrFail($product_id);
-        $products = Product::all();
-        return view('prescriptions.add',compact('products'));
+        return view('prescriptions.add', compact('product'));
     }
 
     public function addProcess( Request $request,$product_id){
         Prescription::create($request->all()  + ['product_id' => $product_id]);
-        return redirect()->route('prescriptions.list')->with('success', 'Reseta Creada Correctamente');
+        return redirect()->route('products.list')->with('success', 'Reseta Creada Correctamente');
     }
 
     public function list(){
@@ -111,9 +110,10 @@ class PrescriptionController extends Controller
 }
 
     public function details($prescription_id){
+        $product = Product::all();    
     return view('prescriptions.details', [
         'prescription' => Prescription::find($prescription_id)
-    ]);
+    ],compact('product'));
 }
 
     public function editprocess($prescription_id, Request $request){
