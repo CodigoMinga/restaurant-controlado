@@ -58,6 +58,9 @@
                 <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/companys/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Compañias
                 </a>
+                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/users/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Usuarios
+                </a>
             </div>
         </div>
         <div id="sidebar-toggle">

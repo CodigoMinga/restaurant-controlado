@@ -79,6 +79,11 @@ route::get('/app/companys/list','CompanyController@list')->name('companys.list')
 route::get('/app/companys/{company_id}','CompanyController@details');
 route::post('/app/companys/{company_id}/edit/process','CompanyController@editprocess');
 route::get('/app/companys/{company_id}/delete','CompanyController@delete');
+//rutas Usuarios
+route::get('/app/users/list','RoleController@list')->name('users.list');
+route::get('/app/users/getdata','RoleController@getdata');
+route::post('/app/users/{user_id}/edit/process','RoleController@editprocess');
+route::get('/app/users/{user_id}','RoleController@details');
 //rutas ajax
 route::get('/ajax/generateInvoice/{order_id}','SalesHelper@generateInvoice');
 
