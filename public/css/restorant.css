@@ -173,9 +173,19 @@ h1 .material-icons{
     cursor:pointer;
 }
 
-.mesa img{
+.mesa svg{
     width:80px;
-    padding:10px; 
+    height:80px;
+    padding:10px;
+    fill:white;
+}
+
+.mesa:hover{
+    color:rgb(39, 39, 190);
+    text-decoration: none;
+}
+.mesa:hover svg{
+    fill:rgb(39, 39, 190);
 }
 
 .producto{

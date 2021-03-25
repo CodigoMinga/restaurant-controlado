@@ -6,6 +6,9 @@
     <div>
         <h6>{{$order->table->name}}</h6>
         <h6>{{$order ? $order->Total : 0}}</h6>
+        <a href="{{url('/tableorder/'.$order->id)}}" class="btn btn-light">
+            ORDEN
+        </a>
     </div>    
 @endsection
 
@@ -30,7 +33,7 @@
                 <div class="d-flex flex-row justify-content-between p-4 flex-wrap">
                     <h1><i class="material-icons">fastfood</i> Productos</h1>
                     <div class="cm-form-icon">
-                        <input type="text">
+                        <input type="text" id="buscar">
                         <i class="material-icons">search</i>
                     </div>
                 </div>
@@ -87,6 +90,19 @@
                 $('#product_id').val(product.id);
                 $('#product_name').val(product.name);
                 $('#protuct-modal').modal('show');
+            });
+
+            $('#buscar').keyup(function(){
+                $('.categoria.active').removeClass("active");
+                var buscar = $(this).val();                
+                productos.forEach(producto => {
+                    var product = JSON.parse(producto.getAttribute( "obj" ));
+                    if(product.name.toUpperCase().includes(buscar.toUpperCase())){
+                        producto.style.display='flex';
+                    }else{
+                        producto.style.display="none";
+                    }
+                });
             });
 
             
