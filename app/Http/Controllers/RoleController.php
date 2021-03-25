@@ -114,4 +114,5 @@ public function addProcess(Request $request){
     User::create($request->all());
     return redirect()->route('users.list')->with('success', 'Usuario Creado correctamente');
 }
+
 }

@@ -88,6 +88,9 @@ Route::group(['middleware' => ['auth']], function() {
     route::get('/app/users/getdata','RoleController@getdata');
     route::post('/app/users/{user_id}/edit/process','RoleController@editprocess');
     route::get('/app/users/{user_id}','RoleController@details');
+        //Cambio de clave
+    Route::get('/app/password/{user_id}/passwordchange', 'MainController@passwordChange');
+    Route::post('/app/password/{user_id}/passwordchange/process', 'MainController@passwordChangeProcess');
     
     //RECETA
     Route::get('/app/products/{product_id}/prescriptions/add','PrescriptionController@add')->name('prescriptions.add');
