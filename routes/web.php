@@ -82,6 +82,8 @@ Route::group(['middleware' => ['auth']], function() {
     route::get('/app/companys/{company_id}/delete',         'CompanyController@delete');
 
     //USUARIOS
+    route::get('/app/users/add','RoleController@add')->name('users.add');
+    route::post('/app/users/add/process','RoleController@addProcess');
     route::get('/app/users/list','RoleController@list')->name('users.list');
     route::get('/app/users/getdata','RoleController@getdata');
     route::post('/app/users/{user_id}/edit/process','RoleController@editprocess');
