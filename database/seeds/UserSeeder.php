@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\User;
 use App\Role;
+use App\Company;
 
 class UserSeeder extends Seeder
 {
@@ -14,13 +15,18 @@ class UserSeeder extends Seeder
     public function run()
     {
         $roles  = Role::where('name', 'superadmin')->first();
+        
+        $codigominga    = Company::where('name','CodigoMinga Bar')->first();
+        $delixius       = Company::where('name','Delixius')->first();
+
         $user = new User;
         $user->name = 'Osvaldo';
         $user->email = 'osvaldo.alvarado.dev@gmail.com';
         $user->password = bcrypt('password');
         $user->save();
-        $user->roles()->attach($roles);
 
+        $user->roles()->attach($roles);
+        $user->companies()->attach($codigominga);
 
         $user = new User;
         $user->name = 'Nikotine';
@@ -28,6 +34,7 @@ class UserSeeder extends Seeder
         $user->password = bcrypt('password');
         $user->save();
         $user->roles()->attach($roles);
+        $user->companies()->attach($codigominga);
 
         $user = new User;
         $user->name = 'programador';
@@ -35,6 +42,7 @@ class UserSeeder extends Seeder
         $user->password = bcrypt('000000');
         $user->save();
         $user->roles()->attach($roles);
+        $user->companies()->attach($codigominga);
 
         $user = new User;
         $user->name = 'Sebastian';
@@ -42,6 +50,7 @@ class UserSeeder extends Seeder
         $user->password = bcrypt('password');
         $user->save();
         $user->roles()->attach($roles);
+        $user->companies()->attach($delixius);
 
         $user = new User;
         $user->name = 'Suki';
@@ -49,6 +58,6 @@ class UserSeeder extends Seeder
         $user->password = bcrypt('password');
         $user->save();
         $user->roles()->attach($roles);
-
+        $user->companies()->attach($delixius);
     }
 }
