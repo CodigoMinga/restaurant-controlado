@@ -23,6 +23,14 @@
                 <i class="material-icons">clear</i>
                 Eliminar Producto
             </a>
+            <a  href="{{ url('/') }}/app/products/{{$product->id}}/prescriptions/add" class="btn btn-warning">
+                <i class="material-icons">clear</i>
+                Agregar Receta
+            </a>
+            <a  href="{{ url('/') }}/app/products/{{$product->id}}/prescriptions/details" class="btn btn-info">
+                <i class="material-icons">clear</i>
+                Detalles de Receta
+            </a>
         </form>
 
     </div>
