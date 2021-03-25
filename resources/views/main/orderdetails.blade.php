@@ -47,6 +47,22 @@
                         {{$order->Total}}
                     </td>
                 </tr>
+                <tr>
+                    <th colspan="3" >
+                        <p class="m-0" align="right">IVA</p>
+                    </th>
+                    <td>
+                        {{$order->Total*0.19}}
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="3" >
+                        <p class="m-0" align="right">A pagar</p>
+                    </th>
+                    <td>
+                        {{$order->Total*1.19}}
+                    </td>
+                </tr>
             </tfoot>
         </table>
         <a href="{{url('/productselection/'.$order->id)}}" class="btn btn-success btn-lg">

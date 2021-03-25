@@ -106,7 +106,8 @@
             });
 
             
-            $('.categoria').click(function(){                
+            $('.categoria').click(function(){     
+                $('#buscar').val('');           
                 var producttype = JSON.parse($(this).attr( "obj" ));
                 $('.categoria.active').removeClass("active");
                 $(this).addClass("active");
