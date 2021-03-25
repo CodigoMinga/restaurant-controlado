@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Order;
 use App\Orderdetail;
 use App\Table;
@@ -12,9 +13,10 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function tables()
     {
-        $tables = Table::all();
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+        $tables = Table::whereIn('company_id',$companies_id)->get();
         return view('main.tableselection', compact('tables'));
     }
 
@@ -45,6 +47,11 @@ class OrderController extends Controller
             }
             $order->save();
         }
+        return view('main.orderdetails', compact('order'));
+    }
+    
+    public function orderdetails($order_id){
+        $order = Order::findOrFail($order_id);
         return view('main.orderdetails', compact('order'));
     }
 

@@ -5,7 +5,7 @@
         <div class="p-3 pl-4">
             <h1><i class="material-icons">layers</i> Selectores</h1>
         </div>
-        <div class="scrollselection p-4">
+        <div class="scrollselection pl-4 pr-4">
             @foreach ($tables as $table)
                 <a class="mesa" href="{{url('/')}}/tableorder/{{$table->id}}">
                     @if($table->ordertype_id==1)

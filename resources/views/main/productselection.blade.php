@@ -1,5 +1,7 @@
 @extends('templates.maincontainer')
 
+<style></style>
+
 @section('info')
     <div>
         <h6>{{$order->table->name}}</h6>
@@ -8,36 +10,44 @@
 @endsection
 
 @section('content')
-    <div class="d-flex flex-column h-100">
-        <div class="p-4">
-            <h1><i class="material-icons">bookmarks</i> Categorias</h1>
-        </div>
-        <div class="d-flex flex-row justify-content-around flex-wrap p-4" id="categoria-container">
-            @foreach ($producttypes as $producttype)
-                <div class="categoria">
-                    {{$producttype->name}}
+    <div class="h-100">
+        <div class="h-50">
+            <div class="scrollcontainer">
+                <div class="p-4">
+                    <h1><i class="material-icons">bookmarks</i> Categorias</h1>
                 </div>
-            @endforeach
-        </div>
-        <div class="d-flex flex-row justify-content-between p-4 flex-wrap">
-            <h1><i class="material-icons">fastfood</i> Productos</h1>
-            <div class="cm-form-icon">
-                <input type="text">
-                <i class="material-icons">search</i>
+                <div class="scrollselection pl-4 pr-4" id="categoria-container">
+                    @foreach ($producttypes as $producttype)
+                        <div class="categoria" obj="{{$producttype}}">
+                            {{$producttype->name}}
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
-        <div class="d-flex flex-row justify-content-around flex-wrap p-4" id="producto-container">
-            @foreach ($producttypes as $producttype)
-                @foreach ($producttype->product as $product)
-                <div class="producto" obj="{{$product}}">
-                    <div class="informacion">
-                        <div class="nombre">{{$product->name}}</div>
-                        <div class="precio">${{$product->price}}</div>
+        <div class="h-50">
+            <div class="scrollcontainer">
+                <div class="d-flex flex-row justify-content-between p-4 flex-wrap">
+                    <h1><i class="material-icons">fastfood</i> Productos</h1>
+                    <div class="cm-form-icon">
+                        <input type="text">
+                        <i class="material-icons">search</i>
                     </div>
-                    <img src="{{url('/img/sushi.jpg')}}" alt="">
                 </div>
-                @endforeach
-            @endforeach
+                <div class="scrollselection pl-4 pr-4" id="producto-container">
+                    @foreach ($producttypes as $producttype)
+                        @foreach ($producttype->product as $product)
+                        <div class="producto" obj="{{$product}}">
+                            <div class="informacion">
+                                <div class="nombre">{{$product->name}}</div>
+                                <div class="precio">${{$product->price}}</div>
+                            </div>
+                            <img src="{{url('/img/sushi.jpg')}}" alt="">
+                        </div>
+                        @endforeach
+                    @endforeach
+                </div>
+            </div>
         </div>
     </div>
     <!-- Modal -->
@@ -68,6 +78,8 @@
     </div>
     <script>
         var productattachForm = document.getElementById('productattach-form');
+        var productos = document.querySelectorAll(".producto");
+
         $(document).ready(function(){
             $('.producto').click(function(){
                 var product = JSON.parse($(this).attr( "obj" ));
@@ -75,6 +87,22 @@
                 $('#product_id').val(product.id);
                 $('#product_name').val(product.name);
                 $('#protuct-modal').modal('show');
+            });
+
+            
+            $('.categoria').click(function(){                
+                var producttype = JSON.parse($(this).attr( "obj" ));
+                $('.categoria.active').removeClass("active");
+                $(this).addClass("active");
+
+                productos.forEach(producto => {
+                    var product = JSON.parse(producto.getAttribute( "obj" ));
+                    if(product.producttype_id==producttype.id){
+                        producto.style.display='flex';
+                    }else{
+                        producto.style.display="none";
+                    }
+                });
             });
 
             $('#productattach-form').on('submit', function(e){
