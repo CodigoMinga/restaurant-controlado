@@ -27,33 +27,28 @@ class Order extends Model
     /**
      * @var array
      */
-    protected $fillable = ['company_id', 'ordertype_id', 'created_at', 'updated_at','closed','enabled','internal_id'];
+    protected $fillable = ['company_id', 'ordertype_id', 'table_id', 'created_at', 'updated_at','closed','enabled','internal_id'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+
     public function company()
     {
         return $this->belongsTo('App\Company');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+    public function table()
+    {
+        return $this->belongsTo('App\Table');
+    }
+
     public function ordertype()
     {
         return $this->belongsTo('App\Ordertype');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function orderdetails()
     {
         return $this->hasMany('App\Orderdetail');
     }
-
-    
 
     public function getTotalAttribute(){
         $total=0;
