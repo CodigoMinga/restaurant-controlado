@@ -1,15 +1,15 @@
 @extends('templates.maincontainer')
 
 @section('content')
-<div class="box pt-5 pl-5">
+<div class="pt-5 pl-5">
 
 
-        <div class="box-body">
-            <h2 class="page-header">
-              <i class="fa fa-star"></i> Lista de Unidades de Medida
+        <div>
+            <h2>
+            Lista de Unidades de Medida
          </h2>
                 <div>
-                 <a  href="{{ url('/') }}/app/measureunits/add" class="btn btn-danger"><i class="fa fa-plus"></i>Crear Nueva Unidad de Medida</a>
+                 <a  href="{{ url('/') }}/app/measureunits/add" class="btn btn-danger">Crear Nueva Unidad de Medida</a>
               </div>       
       </div>
 </div>
