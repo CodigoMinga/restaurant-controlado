@@ -1,11 +1,7 @@
 body{
     background-color: #151316;
     font-family: 'Poppins', sans-serif;
-    min-height: 100vh;
-}
-html{
-    
-    min-height: 100vh;
+    min-height: 100%;
 }
 
 #sidebar{
@@ -32,7 +28,7 @@ html{
     height: 9rem;
     position:absolute;
     color:white;
-    left:0px;
+    left:-1px;
     top:-9rem;
     cursor:pointer;
     transition: left 0.1s,top 0.6s;
@@ -154,6 +150,10 @@ h1 .material-icons{
     color: #F4123D;
 }
 
+.categoria.active{
+    margin: 0.4rem 0.8rem 1.2rem 0.8rem;
+    color: #F4123D;
+}
 
 .mesa{
     display: flex;
@@ -173,9 +173,19 @@ h1 .material-icons{
     cursor:pointer;
 }
 
-.mesa img{
+.mesa svg{
     width:80px;
-    padding:10px; 
+    height:80px;
+    padding:10px;
+    fill:white;
+}
+
+.mesa:hover{
+    color:rgb(39, 39, 190);
+    text-decoration: none;
+}
+.mesa:hover svg{
+    fill:rgb(39, 39, 190);
 }
 
 .producto{
@@ -249,16 +259,33 @@ h1 .material-icons{
     left:0px;
     font-size: 2rem;
 }
+
+
+.scrollcontainer{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+}
+
 .scrollselection{
-    overflow-y: scroll;
     flex-grow: 1;
+    overflow-y: scroll;
     display:flex;
     flex-direction: row;
-    justify-content: space-between;
     flex-wrap: wrap;
+    justify-content:space-around;
     align-items: flex-start;
     align-content: flex-start;
 }
+
+#categoria-container{
+    min-height: 30%;
+}
+
+#producto-container{
+    min-height: 45%;
+}
+
 
 .btn .material-icons{
     vertical-align: -0.4rem;
@@ -276,7 +303,7 @@ h1 .material-icons{
     }
     #sidebar-toggle{
         display: block;
-        left:300px;
+        left:299px;
         top:calc(50vh - 4.5rem);
     }
 
@@ -293,7 +320,12 @@ h1 .material-icons{
         font-size: 1.8rem;
         vertical-align:-0.2rem;
     }
-  }
+    
+    .scrollselection{
+        min-height: 25vh;
+    }
+
+}
 .simple-login-container{
     width:300px;
     max-width:100%;

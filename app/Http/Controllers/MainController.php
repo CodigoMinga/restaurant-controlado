@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Hash;
+use App\User;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -9,7 +10,11 @@ use Auth;
 class MainController extends Controller
 {
     public function login(){
-        return view('login.login');
+        if(Auth::user()){
+            return redirect(url('/tables'));
+        }else{
+            return view('login.login');
+        }
     }
 
     public function checkLogin(Request $request){
@@ -26,27 +31,27 @@ class MainController extends Controller
 
         if(Auth::attempt(['email' => $user_data['email'], 'password' => $user_data['password'], 'enabled' => 1])){
             $message="[Login] Successfully El usuario ". Auth::user()->email." a iniciado sesión correctamente";
-
-
-
-
-            return redirect('/');
+            return redirect('/tables');
         }
-        else{
 
+        else{
             return back()->with('error','Error en las credenciales');
         }
+
     }
+
     function logout()
     {
         Auth::logout();
         return redirect(url('/'));
     }
+
     function passwordLost(){
         return view('passwordlost');
-
     }
+
     public function passwordRessetToken($user_id,$token){
+
         $token_db = Db::table('password_resets')->where('token','=',$token)->first();
         $user = User::findOrFail($user_id);
 
@@ -55,7 +60,9 @@ class MainController extends Controller
         }else{
             return view('passwordresetform')->withErrors('El token expiro.');
         }
+
     }
+
     public function passwordRessetTokenProcess($user_id,$token,Request $request){
 
         $user = User::findOrFail($user_id);
@@ -70,9 +77,13 @@ class MainController extends Controller
         }else{
             return redirect()->back()->withErrors(['error' => 'No se pudo cambiar la contraseña']);
         }
+
     }
-    public function passwordChange(){
-        return view('users.passwordchange');
+
+    public function passwordChange($user_id){
+        //busca el usuario en la bd
+        $user = User::findOrFail($user_id);
+        return view('password.passwordchange' , compact('user'));
     }
 
     public function passwordChangeProcess($user_id, Request $request){
@@ -93,7 +104,7 @@ class MainController extends Controller
             */
 
             //return view('template.genericphoneprocess',compact('message','sucess','returnUrl'));
-            return redirect('/app/home');
+            return redirect('/tables');
         }else{
             return back()->with('noti-error','La clave antigua no corresponde')->withInput();
         }

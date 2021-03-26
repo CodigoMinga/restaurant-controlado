@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Order;
 use App\Orderdetail;
 use App\Table;
@@ -12,35 +13,31 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function tables()
     {
-        $tables = Table::all();
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+        $tables = Table::whereIn('company_id',$companies_id)->get();
         return view('main.tableselection', compact('tables'));
     }
 
-    public function productselection($table_id)
-    {
+    public function tableorder($table_id){
         $table = Table::findOrFail($table_id);
-        $producttypes = Producttype::where('company_id',$table->company_id)->get();
-        $order = Order::where('table_id',$table->id)->first();
-
-        return view('main.productselection', compact('table','producttypes','order'));
+        $order = Order::where('table_id', $table->id)->first();
+        if (!isset($order)) {
+            return view('main.orderstart', compact('table'));
+        }else{
+            return view('main.orderdetails', compact('order'));
+        }
     }
 
-    public function productattach(Request $request)
+    public function orderstart($table_id)
     {
-        $input = $request->all();
-
-        $table = Table::findOrFail($input['table_id']);
-        $product = Product::findOrFail($input['product_id']);
-
+        $table = Table::findOrFail($table_id);
         $order = Order::where('table_id', $table->id)->first();
         if (!isset($order)) {
             $order = new Order();
             $order->table_id = $table->id;
             $order->company_id = $table->company_id;
-            $order->number = 3;
-
             //Añade el numero interno de la orden, si no hay ninguna la crea como primera
             $last_order = Order::latest('internal_id')->where('company_id','=',$table->company_id)->first();
             if(isset($last_order)){
@@ -48,9 +45,29 @@ class OrderController extends Controller
             }else{
                 $order->internal_id = 1;
             }
-
             $order->save();
         }
+        return view('main.orderdetails', compact('order'));
+    }
+    
+    public function orderdetails($order_id){
+        $order = Order::findOrFail($order_id);
+        return view('main.orderdetails', compact('order'));
+    }
+
+    public function productselection($order_id)
+    {
+        $order = Order::findOrFail($order_id);
+        $producttypes = Producttype::where('company_id',$order->company_id)->get();
+        return view('main.productselection', compact('producttypes','order'));
+    }
+
+    public function productattach(Request $request)
+    {
+        $input = $request->all();
+
+        $order      = Order::findOrFail($input['order_id']);
+        $product    = Product::findOrFail($input['product_id']);
 
         $orderdetail = new Orderdetail();
         $orderdetail->product_id    = $product->id;
@@ -62,11 +79,6 @@ class OrderController extends Controller
 
         $order->Total=$order->Total;
         return $order;
-    }
-
-    public function orderdetails($order_id){
-        $order = Order::findOrFail($order_id);
-        return view('main.orderdetails', compact('order'));
     }
 
 }

@@ -23,6 +23,36 @@
                 <i class="material-icons">clear</i>
                 Eliminar Producto
             </a>
+            
+        </form>
+
+    </div>
+
+    <div class="container pt-3">
+        <h1>
+            <i class="material-icons pt-5">library_books</i>Receta de <span>{{$product->name}}</span>
+        </h1>
+        <form method="post" action="{{url('/app/products/'.$product->id.'/prescriptions/edit/process')}}">
+            {{csrf_field()}}
+            
+            <div class="form-group">
+                <label>Descripción</label>
+                <input type="text" class="form-control" name="description"  value="{{$product->description}}">
+            </div>
+
+            <button type="submit" class="btn btn-warning ">
+                <i class="material-icons">done</i>
+                Editar Receta
+            </button>
+            
+            <a  href="{{ url('/') }}/app/products/{{$product->id}}/prescriptions/add" class="btn btn-success">
+                <i class="material-icons">clear</i>
+                Agregar Receta
+            </a>
+            <a  href="{{ url('/') }}/app/products/{{$product->id}}/prescriptions/details" class="btn btn-info">
+                <i class="material-icons">clear</i>
+                Detalles de Receta
+            </a>
         </form>
 
     </div>
