@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Hash;
+use App\User;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -79,8 +80,10 @@ class MainController extends Controller
 
     }
 
-    public function passwordChange(){
-        return view('users.passwordchange');
+    public function passwordChange($user_id){
+        //busca el usuario en la bd
+        $user = User::findOrFail($user_id);
+        return view('password.passwordchange' , compact('user'));
     }
 
     public function passwordChangeProcess($user_id, Request $request){
@@ -101,7 +104,7 @@ class MainController extends Controller
             */
 
             //return view('template.genericphoneprocess',compact('message','sucess','returnUrl'));
-            return redirect('/app/home');
+            return redirect('/tables');
         }else{
             return back()->with('noti-error','La clave antigua no corresponde')->withInput();
         }

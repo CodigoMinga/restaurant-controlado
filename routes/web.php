@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/app/products/add',                         'ProductController@add')->name('products.add');
     Route::post('/app/products/add/process',                'ProductController@addProcess');
     Route::get('/app/products/{product_id}',                'ProductController@details');
+    //Route::get('/app/products/{product_id}/prescriptions/{prescriptions_id}/details', 'ProductController@details');
     Route::post('/app/products/{product_id}/edit/process',  'ProductController@editprocess');
     Route::get('/app/products/{product_id}/delete',         'ProductController@delete');
 
@@ -82,10 +83,15 @@ Route::group(['middleware' => ['auth']], function() {
     route::get('/app/companys/{company_id}/delete',         'CompanyController@delete');
 
     //USUARIOS
+    route::get('/app/users/add','RoleController@add')->name('users.add');
+    route::post('/app/users/add/process','RoleController@addProcess');
     route::get('/app/users/list','RoleController@list')->name('users.list');
     route::get('/app/users/getdata','RoleController@getdata');
     route::post('/app/users/{user_id}/edit/process','RoleController@editprocess');
     route::get('/app/users/{user_id}','RoleController@details');
+        //Cambio de clave
+    Route::get('/app/password/{user_id}/passwordchange', 'MainController@passwordChange');
+    Route::post('/app/password/{user_id}/passwordchange/process', 'MainController@passwordChangeProcess');
     
     //RECETA
     Route::get('/app/products/{product_id}/prescriptions/add','PrescriptionController@add')->name('prescriptions.add');

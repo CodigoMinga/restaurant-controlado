@@ -7,6 +7,7 @@ use App\Product;
 use Illuminate\Http\Request;
 use App\Company;
 use App\Producttype;
+use App\Prescription;
 class ProductController extends Controller
 {
     public function add(){
@@ -36,6 +37,7 @@ class ProductController extends Controller
     }
 
     public function addProcess(Request $request){
+
         Product::create($request->all());
         return redirect()->route('products.list')->with('success', 'Producto Creado correctamente');
     }
