@@ -5,7 +5,7 @@
 @section('info')
     <div>
         <h6>{{$order->table->name}}</h6>
-        <h6>{{$order ? $order->Total : 0}}</h6>
+        <h6 id="order_total">{{$order ? $order->Total : 0}}</h6>
         <a href="{{url('/tableorder/'.$order->id)}}" class="btn btn-light">
             ORDEN
         </a>
@@ -81,6 +81,7 @@
     </div>
     <script>
         var productattachForm = document.getElementById('productattach-form');
+        var order_total = document.getElementById('order_total');
         var productos = document.querySelectorAll(".producto");
 
         $(document).ready(function(){
@@ -133,9 +134,9 @@
                     processData: false,  // tell jQuery not to process the data
                     contentType: false   // tell jQuery not to set contentType
                 }).done(function( data ) {
-                    console.log(data);
                     if(typeof(data)=='object'){
                         if(data.id){
+                            order_total.innerText=data.Total;
                             if(activate=="a-orden"){
                                 window.location.href = "{{url('/')}}/orderdetails/" + data.id;
                             }else{
