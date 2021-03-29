@@ -14,6 +14,10 @@
         height: 23px;
         width:23px;
     }
+    input[type="number"]{
+        display: block;
+        width:120px;
+    }
 </style>
 @section('content')
     <div class="p-3">
@@ -118,10 +122,10 @@
                     Descuento
                 </th>
                 <td width=1>
-                    <input type="number" name="" id="" size="6">
+                    <input type="number"    size="6" value="0" id="descuento" class="dinero">
                 </td>
                 <td>
-                    <input type="number" name="" id="" size="6">
+                    <input type="text"      placeholder="Razón del descuento">
                 </td>
             </tr>
             <tr>
@@ -129,7 +133,7 @@
                     T.de Debito
                 </th>
                 <td>
-                    <input type="number" name="" id="">
+                    <input type="number"    size="6" value="0" id="debito" class="dinero">
                 </td>
             </tr>
             <tr>
@@ -137,7 +141,7 @@
                     T.de Credito
                 </th>
                 <td>
-                    <input type="number" name="" id="">
+                    <input type="number"    size="6" value="0" id="credito" class="dinero">
                 </td>
             </tr>
             <tr>
@@ -145,7 +149,7 @@
                     Efectivo
                 </th>
                 <td>
-                    <input type="number" name="" id="">
+                    <input type="number"    size="6" value="0" id="efectivo" class="dinero">
                 </td>
             </tr>
             <tr>
@@ -153,10 +157,11 @@
                     Vuelto
                 </th>
                 <td>
-                    <input type="number" name="" id="">
+                    <input type="number"    size="6" value="0" id="vuelto" readonly>
                 </td>
             </tr>
         </table>
+        <hr>
         <a href="{{url('/productselection/'.$order->id)}}" class="btn btn-success btn-lg">
             Agregar
         </a>
@@ -164,8 +169,10 @@
             Comanda
         </button>
     </div>
-    <div id="imprimir">        
-        <table style="margin-bottom:10mm;font-size:12px;width:100%">
+    <div id="imprimir">
+        <h3 style="margin-bottom:0px">ORDEN: {{$order->id}}</h3>
+        <h3 style="margin-top:0px">{{$order->table->name}}</h3>
+        <table style="margin-bottom:10mm;font-size:14px;width:100%">
             <thead>
                 <tr>
                     <th>
@@ -192,25 +199,37 @@
         <hr>
     </div>
     <script>
+        let Total=parseFloat("{{$order->Total*1.19}}");
         var imprimir = document.getElementById('imprimir');
+
+        var descuento = document.getElementById('descuento');
+        var debito = document.getElementById('debito');
+        var credito = document.getElementById('credito');
+        var efectivo = document.getElementById('efectivo');
+        var vuelto = document.getElementById('vuelto');
+
+        var dinero = document.querySelectorAll(".dinero");
         function Print()
             {
                 var mywindow = window.open('', 'PRINT', 'height=1,width=1');
 
                 mywindow.document.write('<html><head><title>Comanda</title>');
-                mywindow.document.write('<style>*{font-family:Arial, sans-serif;}</style>');
-                mywindow.document.write('</head><body>');
-                mywindow.document.write('<h3>ORDEN: {{$order->id}}</h3>');
-                mywindow.document.write('<h3>{{$order->table->name}}</h3>');
+                mywindow.document.write('<style>*{font-family:Arial, sans-serif;} @page{margin-left: 4mm;margin-right: 4mm;margin-top: 0px;margin-bottom: 0px;}</style>');
                 mywindow.document.write(imprimir.innerHTML);
                 mywindow.document.write('</body></html>');
 
                 mywindow.document.close(); // necessary for IE >= 10
                 mywindow.focus(); // necessary for IE >= 10*/
-               /* mywindow.onafterprint = function(event) {mywindow.close()};
-                mywindow.print();*/
+                mywindow.onafterprint = function(event) {mywindow.close()};
+                mywindow.print();
 
                 return true;
             }
+        dinero.forEach(input => 
+            input.onkeyup = function(){
+
+                vuelto.value= - Total + parseFloat(descuento.value) + parseFloat(debito.value) + parseFloat(credito.value) + parseFloat(efectivo.value);
+            }
+        )
     </script>
 @stop

@@ -134,7 +134,6 @@
                     processData: false,  // tell jQuery not to process the data
                     contentType: false   // tell jQuery not to set contentType
                 }).done(function( data ) {
-                    console.log(data);
                     if(typeof(data)=='object'){
                         if(data.id){
                             order_total.innerText=data.Total;
