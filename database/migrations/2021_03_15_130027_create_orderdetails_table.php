@@ -20,8 +20,8 @@ class CreateOrderdetailsTable extends Migration
             $table->foreign('order_id')->references('id')->on('orders')->onUpdate('RESTRICT')->onDelete('RESTRICT');
             $table->bigInteger('product_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('RESTRICT')->onDelete('RESTRICT');
-
-
+            
+            $table->longText('description')->nullable();
 
             $table->integer('quantity');
             $table->decimal('unit_ammount');
