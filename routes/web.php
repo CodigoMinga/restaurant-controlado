@@ -45,8 +45,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/app/products/list',                        'ProductController@list')->name('products.list');
     Route::get('/app/products/add',                         'ProductController@add')->name('products.add');
     Route::post('/app/products/add/process',                'ProductController@addProcess');
-    Route::get('/app/products/{product_id}',                'ProductController@details');
-    //Route::get('/app/products/{product_id}/prescriptions/{prescriptions_id}/details', 'ProductController@details');
+    Route::get('/app/products/{product_id}',                'ProductController@details')->name('products.details');
+    Route::get('/app/products/{product_id}/prescriptions/{prescription_id}/details', 'ProductController@details');
     Route::post('/app/products/{product_id}/edit/process',  'ProductController@editprocess');
     Route::get('/app/products/{product_id}/delete',         'ProductController@delete');
 
@@ -94,13 +94,12 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/app/password/{user_id}/passwordchange/process', 'MainController@passwordChangeProcess');
     
     //RECETA
-    Route::get('/app/products/{product_id}/prescriptions/add','PrescriptionController@add')->name('prescriptions.add');
-    Route::post('/app/products/{product_id}/prescriptions/add/process','PrescriptionController@addProcess');
-    route::get('app/prescriptions/getdata','PrescriptionController@getdata')->name('prescriptions.getdata');
-    route::get('app/prescriptions/list','PrescriptionController@list')->name('prescriptions.list');
-    route::get('/app/products/{product_id}/prescriptions/details','PrescriptionController@details')->name('prescriptions.details');
-    route::post('app/prescriptions/{prescription_id}/edit/process','PrescriptionController@editprocess')->name('prescriptions.editprocess');
-    route::get('app/prescriptions/{prescription_id}/delete','PrescriptionController@delete')->name('prescriptions.delete');
+    Route::get('/app/products/{product_id}/prescriptions/add',             'PrescriptionController@add')->name('prescriptions.add');
+    Route::post('/app/products/{product_id}/prescriptions/add/process',    'PrescriptionController@addProcess');
+    route::get('app/prescriptions/list',                                   'PrescriptionController@list')->name('prescriptions.list');
+    route::get('/app/products/{product_id}/prescriptions/details',         'PrescriptionController@details')->name('prescriptions.details');
+    route::post('app/prescriptions/{prescription_id}/edit/process',        'PrescriptionController@editprocess')->name('prescriptions.editprocess');
+    route::get('app/prescriptions/{prescription_id}/delete',               'PrescriptionController@delete')->name('prescriptions.delete');
 
 });
 
