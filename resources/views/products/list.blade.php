@@ -39,7 +39,7 @@
                 "columns": [
                     { "data": "name","width":"90%"},
                     { data: "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/products/'+data+'" target="_blank">description</a>';
+                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/products/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {
