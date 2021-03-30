@@ -44,9 +44,14 @@ class ProductController extends Controller
 
     public function details($product_id)
     {
-        return view('products.details', [
-            'product' => Product::find($product_id)
-        ]);
+        //se asigana un valor a la variable $product buscando el producto asociado a la variable.
+        $product = Product::find($product_id);
+
+
+        //prescriptions resive las recetas  que pertenescan al producto con el mismo id que el que se esta resiviendo y lo pagina.
+        $prescriptions = Prescription::where('product_id','=',$product_id)->latest()->paginate();
+
+        return view('products.details', compact('product','prescriptions'));
     }
 
     public function editprocess($product_id, Request $request)

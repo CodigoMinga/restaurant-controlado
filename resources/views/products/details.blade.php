@@ -38,13 +38,15 @@
                 Agregar Receta
             </a>
           
-    
-        @foreach($product->prescriptions as $prescription)
-            <ul>
-            <li>{{$prescription->id}}</li>
-            </ul>
+    <ul>
+        @foreach($prescriptions as $prescription)
+            
+        <li class="list-group-item"><a href="#">{{ $prescription->description}}</a></li>
+               
 
         @endforeach
 
+        {{$prescriptions->links() }}
+    </ul>
     </div>
 @stop
