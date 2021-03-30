@@ -27,7 +27,7 @@ class Order extends Model
     /**
      * @var array
      */
-    protected $fillable = ['company_id', 'ordertype_id', 'table_id', 'created_at', 'updated_at','closed','enabled','internal_id'];
+    protected $fillable = ['company_id', 'ordertype_id', 'table_id', 'user_id', 'created_at', 'updated_at','closed','enabled','internal_id'];
 
 
     public function company()
@@ -38,6 +38,11 @@ class Order extends Model
     public function table()
     {
         return $this->belongsTo('App\Table');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
 
     public function ordertype()

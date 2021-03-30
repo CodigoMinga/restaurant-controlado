@@ -36,7 +36,7 @@
                     Garzón
                 </th>
                 <td>
-                    $order->user->name
+                    {{$order->user->name}}
                 </td>
             </tr>
             <tr>
@@ -96,22 +96,6 @@
                     </th>
                     <td>
                         {{number_format($order->Total, 0, '', '.') }}
-                    </td>
-                </tr>
-                <tr>
-                    <th colspan="4" >
-                        <p class="m-0" align="right">IVA</p>
-                    </th>
-                    <td>
-                        {{number_format($order->Total*0.19, 0, '', '.') }}
-                    </td>
-                </tr>
-                <tr>
-                    <th colspan="4" >
-                        <p class="m-0" align="right">A pagar</p>
-                    </th>
-                    <td>
-                        {{number_format($order->Total*1.19, 0, '', '.') }}
                     </td>
                 </tr>
             </tfoot>

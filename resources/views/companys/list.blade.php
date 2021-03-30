@@ -37,7 +37,7 @@
                 "columns": [
                     { "data": "name","width":"90%"},
                     { data: "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-success material-icons" href="{{ url("/")}}/app/companys/'+data+'" target="_blank">description</a>';
+                        return '<a class="btn btn-success material-icons" href="{{ url("/")}}/app/companys/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {
