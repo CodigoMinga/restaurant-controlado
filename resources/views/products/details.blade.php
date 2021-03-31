@@ -30,30 +30,23 @@
 
     <div class="container pt-3">
         <h1>
-            <i class="material-icons pt-5">library_books</i>Receta de <span>{{$product->name}}</span>
+            <i class="material-icons pt-5">library_books</i>Recetas de <span>{{$product->name}}</span>
         </h1>
-        <form method="post" action="{{url('/app/products/'.$product->id.'/prescriptions/edit/process')}}">
-            {{csrf_field()}}
+          
+    <ul .class="pt-2">
+        @foreach($prescriptions as $prescription)
             
-            <div class="form-group">
-                <label>Descripción</label>
-                <input type="text" class="form-control" name="description"  value="{{$product->description}}">
-            </div>
+        <li class="list-group-item "><a href="#">{{ $prescription->description}}</a></li>
+               
 
-            <button type="submit" class="btn btn-warning ">
-                <i class="material-icons">done</i>
-                Editar Receta
-            </button>
-            
-            <a  href="{{ url('/') }}/app/products/{{$product->id}}/prescriptions/add" class="btn btn-success">
+        @endforeach
+
+        {{$prescriptions->links() }}
+    </ul>
+    <a  href="{{ url('/') }}/app/products/{{$product->id}}/prescriptions/add" class="btn btn-success">
                 <i class="material-icons">clear</i>
                 Agregar Receta
             </a>
-            <a  href="{{ url('/') }}/app/products/{{$product->id}}/prescriptions/details" class="btn btn-info">
-                <i class="material-icons">clear</i>
-                Detalles de Receta
-            </a>
-        </form>
-
     </div>
+    
 @stop

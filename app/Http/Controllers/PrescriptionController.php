@@ -18,7 +18,7 @@ class PrescriptionController extends Controller
 
     public function addProcess( Request $request,$product_id){
         Prescription::create($request->all()  + ['product_id' => $product_id]);
-        return redirect()->route('products.list')->with('success', 'Reseta Creada Correctamente');
+        return redirect()->route('products.details',$product_id)->with('success', 'Reseta Creada Correctamente');
     }
 
     public function list(){
