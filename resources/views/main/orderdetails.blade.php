@@ -36,7 +36,7 @@
                     Garzón
                 </th>
                 <td>
-                    $order->user->name
+                    {{$order->user->name}}
                 </td>
             </tr>
             <tr>
