@@ -9,5 +9,10 @@ use App\Item;
 
 class PrescriptiondetailController extends Controller
 {
-    
+    public function details($prescription_id)
+{
+    return view('prescriptiondetails.details', [
+        'prescription' => Prescription::find($prescription_id)
+    ]);
+}
 }
