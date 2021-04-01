@@ -36,7 +36,7 @@
     <ul>
         @foreach($prescriptions as $prescription)
             
-        <li class="list-group-item "><a href="{{ route('prescriptiondetails.details', $prescriptiondetail) }}">{{ $prescription->description}}</a></li>
+        <li class="list-group-item "><a href="{{ route('prescriptions.details', $prescription) }}">{{ $prescription->description}}</a></li>
                
 
         @endforeach
