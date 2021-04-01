@@ -3,18 +3,15 @@
 @section('content')
     <div class="container pt-3">
         <h1>
-            <i class="material-icons">library_books</i>Detalles del Producto
+            <i class="material-icons">library_books</i>Detalles de Receta
         </h1>
-        <form method="post" action="{{url('app/products/'.$product->id.'/edit/process')}}">
+        <form method="post" action="{{url('app/prescriptiondetails/'.$prescriptiondetail->id.'/edit/process')}}">
             {{csrf_field()}}
             <div class="form-group">
-                <label>Nombre Producto</label>
-                <input required type="text" class="form-control" name="name" value="{{$product->name}}">
+                <label>Catidad de Insumo</label>
+                <input required type="decimal" class="form-control" name="name" value="{{$product->name}}">
             </div>
-            <div class="form-group">
-                <label>Descripción</label>
-                <input type="text" class="form-control" name="description"  value="{{$product->description}}">
-            </div>
+            
             <button type="submit" class="btn btn-success ">
                 <i class="material-icons">done</i>
                 Editar Producto
@@ -36,7 +33,7 @@
     <ul>
         @foreach($prescriptions as $prescription)
             
-        <li class="list-group-item "><a href="{{ route('prescriptiondetails.details', $prescriptiondetail) }}">{{ $prescription->description}}</a></li>
+        <li class="list-group-item "><a href="#">{{ $prescription->description}}</a></li>
                
 
         @endforeach
