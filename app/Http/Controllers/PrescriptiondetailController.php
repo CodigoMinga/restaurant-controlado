@@ -10,10 +10,12 @@ use App\Item;
 class PrescriptiondetailController extends Controller
 {
     public function details($prescription_id)
-{
-    return view('prescriptiondetails.details', [
-        'prescription' => Prescription::find($prescription_id)
-    ]);
+    {
+        return view('prescriptiondetails.details', [
+            'prescription' => Prescription::find($prescription_id)
+        ]);
+    }
+
 
     public function add($prescription_id){
         $prescription = Prescription::findOrFail($prescription_id);
@@ -25,8 +27,4 @@ class PrescriptiondetailController extends Controller
         Prescriptiondetails::create($request->all()  + ['prescription_id' => $prescription_id]);
         return redirect()->route('prescriptiondetails.add',$prescription_id)->with('success', 'Reseta Creada Correctamente');
     }
-
-
-    
-}
 }
