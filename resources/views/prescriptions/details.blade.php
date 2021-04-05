@@ -19,11 +19,47 @@
                 <i class="material-icons">clear</i>
                 Eliminar Receta
             </a>
-            <a class="btn btn-success" data-toggle="modal" data-target="#prescriptiondetail-modal">
-                <i class="material-icons">clear</i>
-                Agregar Receta
-            </a>
         </form>
+
+        <div class="d-flex justify-content-between align-items-center mt-5">
+            <h1>
+                <i class="material-icons">list_alt</i>Lista de Ingredientes
+            </h1>        
+            <a class="btn btn-success" onclick="prescriptiondetailsNew({{$prescription->id}})">
+                <i class="material-icons">add</i>
+                Agregar Ingrediente
+            </a>
+        </div>
+        <table class="table table-dark table-sm">
+            <thead>
+                <tr>
+                    <th>
+                        Ingregiente
+                    </th>
+                    <th>
+                        Cant.
+                    </th>
+                    <th width="1">
+                        Ver
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="Ingredientes">
+                @foreach ($prescription->prescriptiondetails as $prescriptiondetail)
+                    <tr prescriptiondetail_id="{{$prescriptiondetail->id}}">
+                        <td>
+                            {{$prescriptiondetail->item->name}}
+                        </td>
+                        <td>
+                            {{$prescriptiondetail->quantity}} {{$prescriptiondetail->item->measureunit->name}} 
+                        </td>
+                        <td>
+                            <a onclick="prescriptiondetails({{$prescriptiondetail->id}})" class="btn btn-light material-icons">description</a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
     <!-- Modal -->
     <div class="modal fade" id="prescriptiondetail-modal" tabindex="-1" data-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true" aria-labelledby="staticBackdropLabel">
@@ -31,7 +67,7 @@
             <div class="modal-content bg-dark">
                 <form id="prescriptiondetailForm">
                     {{csrf_field()}}
-                    <input type="hidden" name='prescription_id' value={{$prescription->id}}>
+                    <input type="hidden" name='prescription_id' value=''>
                     <input type="hidden" name='id' value='3' id="prescriptiondetail_id">
                     <div class="modal-header">
                     <h5 class="modal-title" id="ModalLabel">Agregar Ingrediente</h5>
@@ -71,6 +107,7 @@
         </div>
     </div>
     <script>
+        var Ingredientes = document.getElementById('Ingredientes');
         var itemsList = document.getElementById('itemsList');
         var prescriptiondetail_id = document.getElementById('prescriptiondetail_id');
         var unidad = document.getElementById('unidad');
@@ -90,6 +127,8 @@
             itemsList.appendChild(newoption);
         });
 
+
+
         var prescriptiondetailForm = document.getElementById('prescriptiondetailForm');
         prescriptiondetailForm.onsubmit = function(e){
             var formData = new FormData(prescriptiondetailForm);
@@ -107,7 +146,13 @@
                 if(typeof(data)=='object'){
                     console.log(data);
                     if(data.id){
-                        //window.location.href = "{{url('/app/prescriptions/'.$prescription->id)}}";
+                        if(prescriptiondetail_id.value!=''){
+                            prescriptiondetailUpdate(data);
+                            toastSuccess('Ingrediente actualizado en la Receta');
+                        }else{
+                            prescriptiondetailAdd(data);
+                            toastSuccess('Ingrediente agregado a la Receta');
+                        }
                     }
                     $('#prescriptiondetail-modal').modal('hide');
                 }else{
@@ -119,6 +164,75 @@
             e.preventDefault();
             return false;
         };
+
+        function prescriptiondetails(id){
+            $.get( "{{url('/prescriptiondetails/select')}}/"+id, function( data ) {
+
+
+                prescriptiondetailForm.id.value=data.id;
+                prescriptiondetailForm.prescription_id.value=data.prescription_id;
+                prescriptiondetailForm.item_id.value=data.item_id;
+                prescriptiondetailForm.quantity.value=data.quantity;
+
+                var item = items.find(e => e.id==data.item_id);
+                var measureunit = measureunits.find(e => e.id == item.measureunit_id);
+                unidad.innerHTML=measureunit.name;
+
+                $('#prescriptiondetail-modal .modal-title').eq(0).html('Editar Ingrediente');
+                $('#prescriptiondetail-modal').modal('show');
+            });
+        }
+        
+        function prescriptiondetailsNew(prescription_id){
+            prescriptiondetailForm.prescription_id.value=prescription_id;
+            prescriptiondetailForm.id.value='';
+            prescriptiondetailForm.item_id.value='';
+            prescriptiondetailForm.quantity.value='';
+            $('#prescriptiondetail-modal .modal-title').eq(0).html('Agregar Ingrediente');
+            $('#prescriptiondetail-modal').modal('show');
+        }
+
+        function prescriptiondetailAdd(prescriptiondetail){
+            var newtr = prescriptiondetailFila(prescriptiondetail);
+            Ingredientes.appendChild(newtr);
+        }
+
+        
+        function prescriptiondetailUpdate(prescriptiondetail){
+            var filas = Array.from(Ingredientes.children);
+            filas.forEach(fila => {
+                if(fila.getAttribute('prescriptiondetail_id')==prescriptiondetail.id){
+                    Ingredientes.replaceChild(prescriptiondetailFila(prescriptiondetail), fila);
+                }
+            });
+        }
+
+        function prescriptiondetailFila(prescriptiondetail){
+            var newtr = document.createElement('tr');
+            newtr.setAttribute('prescriptiondetail_id', prescriptiondetail.id);
+
+            var newtd = document.createElement('td');
+            newtd.innerText = prescriptiondetail.item.name;
+            newtr.appendChild(newtd);
+            
+            newtd = document.createElement('td');
+            newtd.innerText = parseFloat(prescriptiondetail.quantity).toFixed(2)+" "+prescriptiondetail.item.measureunit.name;
+            newtr.appendChild(newtd);
+
+            newtd = document.createElement('td');
+
+            var newbutton = document.createElement('a');
+            newbutton.classList.add('btn');
+            newbutton.classList.add('btn-light');
+            newbutton.classList.add('material-icons');
+            newbutton.innerHTML='description';
+            newbutton.onclick = prescriptiondetails(prescriptiondetail.id);
+            newtd.appendChild(newbutton);
+
+            newtr.appendChild(newtd);
+
+            return newtr;
+        }
     </script>
 
 @stop

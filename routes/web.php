@@ -107,8 +107,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/prescriptions/create',  'PrescriptionController@create');
 
     //Detalle de Receta
-    Route::post('/prescriptiondetails/create',  'PrescriptiondetailController@create');
-    Route::post('/prescriptiondetails/update',  'PrescriptiondetailController@update');
+    Route::post('/prescriptiondetails/create',                          'PrescriptiondetailController@create');
+    Route::post('/prescriptiondetails/update',                          'PrescriptiondetailController@update');
+    Route::get('/prescriptiondetails/select/{prescriptiondetail_id}',   'PrescriptiondetailController@select');
 
 });
 

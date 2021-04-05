@@ -16,7 +16,6 @@ class PrescriptiondetailController extends Controller
         ]);
     }
 
-
     public function add($prescription_id){
         $prescription = Prescription::findOrFail($prescription_id);
         $item = Item::all();
@@ -29,8 +28,15 @@ class PrescriptiondetailController extends Controller
     }
 
     
+    public function select($prescriptiondetail_id){
+        $prescriptiondetail = Prescriptiondetail::findOrFail($prescriptiondetail_id);
+        $prescriptiondetail->item->measureunit;
+        return $prescriptiondetail;
+    }
+
     public function create(Request $request){
         $prescriptiondetail = Prescriptiondetail::create($request->all());
+        $prescriptiondetail->item->measureunit;
         return $prescriptiondetail;
     }
 
@@ -38,6 +44,7 @@ class PrescriptiondetailController extends Controller
         $prescriptiondetail = Prescriptiondetail::findOrFail($request->id);
         $prescriptiondetail->fill($request->all());
         $prescriptiondetail->save();
+        $prescriptiondetail->item->measureunit;
         return $prescriptiondetail;
     }
 }
