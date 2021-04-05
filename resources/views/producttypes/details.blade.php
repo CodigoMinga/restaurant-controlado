@@ -3,7 +3,7 @@
 @section('content')
 <div class="container pt-3">
     <h1>
-        <i class="material-icons">library_books</i>Detalles del Categoria
+        <i class="material-icons">library_books</i>Detalles de la  Categoria
     </h1>
     <form method="post" action="{{url('app/producttypes/'.$producttype->id.'/edit/process')}}">
         {{csrf_field()}}

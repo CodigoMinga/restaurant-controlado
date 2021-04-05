@@ -9,6 +9,12 @@ use App\Item;
 
 class PrescriptiondetailController extends Controller
 {
+    public function details($prescription_id)
+    {
+        return view('prescriptiondetails.details', [
+            'prescription' => Prescription::find($prescription_id)
+        ]);
+    }
 
     public function add($prescription_id){
         $prescription = Prescription::findOrFail($prescription_id);
@@ -17,10 +23,28 @@ class PrescriptiondetailController extends Controller
     }
 
     public function addProcess( Request $request,$prescription_id){
-        Prescriptiondetails::create($request->all()  + ['prescription_id' => $prescription_id]);
+        Prescriptiondetail::create($request->all()  + ['prescription_id' => $prescription_id]);
         return redirect()->route('prescriptiondetails.add',$prescription_id)->with('success', 'Reseta Creada Correctamente');
     }
 
-
     
+    public function select($prescriptiondetail_id){
+        $prescriptiondetail = Prescriptiondetail::findOrFail($prescriptiondetail_id);
+        $prescriptiondetail->item->measureunit;
+        return $prescriptiondetail;
+    }
+
+    public function create(Request $request){
+        $prescriptiondetail = Prescriptiondetail::create($request->all());
+        $prescriptiondetail->item->measureunit;
+        return $prescriptiondetail;
+    }
+
+    public function update(Request $request){
+        $prescriptiondetail = Prescriptiondetail::findOrFail($request->id);
+        $prescriptiondetail->fill($request->all());
+        $prescriptiondetail->save();
+        $prescriptiondetail->item->measureunit;
+        return $prescriptiondetail;
+    }
 }
