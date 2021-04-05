@@ -38,7 +38,7 @@
         </div> 
 
             <label for="measureunit_id">Unidad de Media:</label>
-        <select class="form-select" name="measureunit_id" id="measureunit_id">
+        <select class="form-control" name="measureunit_id" id="measureunit_id">
             @forelse($measureunits as $measureunit)
             <option value="{{ $measureunit->id }}">{{ $measureunit->name }}</option>
             @empty
