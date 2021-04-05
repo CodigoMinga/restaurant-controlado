@@ -69,7 +69,14 @@
                     <input type="hidden" name='order_id' value={{$order->id}}>
                     <input type="hidden" name='product_id' value=0 id="product_id">
                     <input type="hidden" name='product_name' value='' id="product_name">
-                    <input type="number" min=1 name='quantity' required>
+                    <div class="form-group">
+                        <label>Cantidad</label>
+                        <input type="number" min=1 name='quantity' class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cambios</label>
+                        <input type="text" name='description' class="form-control" placeholder="Sin palta">
+                    </div>
                 </div>
                 <div class="modal-footer">
                 <button type="submit" class="btn btn-success" id="a-orden">Agregar</button>

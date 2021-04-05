@@ -75,7 +75,8 @@
                             <input type="checkbox" name="" id="">
                         </td>
                         <td>
-                            {{$orderdetail->product->name}}
+                            {{$orderdetail->product->name}}<br>
+                            <small>{{$orderdetail->description}}</small>
                         </td>
                         <td align="right">
                             {{number_format($orderdetail->quantity, 0, '', '.')}}
@@ -174,7 +175,8 @@
                 @foreach ($order->orderdetails as $orderdetail)
                     <tr>
                         <td>
-                            {{$orderdetail->product->name}}
+                            {{$orderdetail->product->name}}<br>
+                            <small>{{$orderdetail->description}}</small>
                         </td>
                         <td align="right">
                             {{$orderdetail->quantity}}
