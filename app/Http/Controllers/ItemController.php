@@ -102,10 +102,8 @@ class ItemController extends Controller
     }
 
     public function list(){
-        return view('items.list', [
-            'items' => Item::latest()->paginate()
-
-        ]);
+        $items = Item::all();
+        return view('items.list', compact('items'));
     }
 
     public function getdata(){
