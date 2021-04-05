@@ -19,6 +19,7 @@ class CreateMeasureunitsTable extends Migration
 
             $table->string('name');
             $table->longText('description')->nullable();
+            $table->boolean('enabled')->default(1);
 
         });
     }

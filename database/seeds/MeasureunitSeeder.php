@@ -12,10 +12,10 @@ class MeasureunitSeeder extends Seeder
      */
     public function run()
     {
-        Measureunit::create(['name'=>'Gramos']);
-        Measureunit::create(['name'=>'Kilogramo']);
-        Measureunit::create(['name'=>'Litros']);
-        Measureunit::create(['name'=>'Unidad']);
-        Measureunit::create(['name'=>'Mililitros']);
+        Measureunit::create(['name'=>'gr','description'=>'Gramo']);
+        Measureunit::create(['name'=>'Kg','description'=>'Kilogramo']);
+        Measureunit::create(['name'=>'L','description'=>'Litro']);
+        Measureunit::create(['name'=>'Und','description'=>'Unidad']);
+        Measureunit::create(['name'=>'ml','description'=>'Mililitro']);
     }
 }

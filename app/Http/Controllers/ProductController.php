@@ -34,6 +34,9 @@ class ProductController extends Controller
         $producttypes_id    = Producttype::whereIn('company_id',$companies_id)->pluck('id')->toArray();
 
         $products = Product::whereIn('producttype_id',$producttypes_id)->get();
+        foreach ($products as $key => $product) {
+            $product->producttype;
+        }
         return view('products.list',compact('products'));
     }
 

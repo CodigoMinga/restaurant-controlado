@@ -17,14 +17,14 @@ class CreateCompaniesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
-            $table->boolean('enabled')->default(1);
-
             $table->string('rut')->nullable();
             $table->string('razon_social')->nullable();
             $table->string('giro')->nullable();
             $table->string('direccion')->nullable();
             $table->string('comuna')->nullable();
             $table->string('api_key_openfactura')->nullable();
+            
+            $table->boolean('enabled')->default(1);
         });
     }
 
