@@ -17,10 +17,9 @@ class CreatePrescriptionsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->longText('description')->nullable();
-
             $table->bigInteger('product_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('RESTRICT')->onDelete('RESTRICT');
-
+            $table->boolean('enabled')->default(1);
         });
     }
 

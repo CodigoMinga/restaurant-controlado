@@ -20,7 +20,9 @@
         <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
             <thead>
                 <tr>
+                    <th>Categoria</th>
                     <th>Productos</th>
+                    <th>Precio</th>
                     <th>Acción</th>
                 </tr>
             </thead>
@@ -37,8 +39,10 @@
                 responsive: true,
                 "data": {!! json_encode($products->toArray()) !!},
                 "columns": [
-                    { "data": "name","width":"90%"},
-                    { data: "id", render : function ( data, type, row, meta ) {
+                    { "data": "producttype.name","width":"30%"},
+                    { "data": "name","width":"60%"},
+                    { "data": "price","width":"1%"},
+                    { data: "id", render : function ( data, type, row, meta ){
                         return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/products/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],

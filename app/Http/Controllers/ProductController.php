@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Company;
 use App\Producttype;
 use App\Prescription;
+
 class ProductController extends Controller
 {
     public function add(){
@@ -33,6 +34,9 @@ class ProductController extends Controller
         $producttypes_id    = Producttype::whereIn('company_id',$companies_id)->pluck('id')->toArray();
 
         $products = Product::whereIn('producttype_id',$producttypes_id)->get();
+        foreach ($products as $key => $product) {
+            $product->producttype;
+        }
         return view('products.list',compact('products'));
     }
 
@@ -44,9 +48,14 @@ class ProductController extends Controller
 
     public function details($product_id)
     {
-        return view('products.details', [
-            'product' => Product::find($product_id)
-        ]);
+        //se asigana un valor a la variable $product buscando el producto asociado a la variable.
+        $product = Product::find($product_id);
+        $prescription = Prescription::all();
+       
+        //prescriptions resive las recetas  que pertenescan al producto con el mismo id que el que se esta resiviendo y lo pagina.
+        $prescriptions = Prescription::where('product_id','=',$product_id)->latest()->paginate();
+
+        return view('products.details', compact('product','prescriptions'));
     }
 
     public function editprocess($product_id, Request $request)
