@@ -102,6 +102,14 @@ Route::group(['middleware' => ['auth']], function() {
     route::get('app/prescriptions/{prescription_id}/delete',               'PrescriptionController@delete')->name('prescriptions.delete');
     //Detalles de Receta 
     route::get('/app/products/{product_id}/prescriptiondetails/details',         'PrescriptiondetailController@details')->name('prescriptiondetails.details');
+
+    //Receta
+    Route::post('/prescriptions/create',  'PrescriptionController@create');
+
+    //Detalle de Receta
+    Route::post('/prescriptiondetails/create',  'PrescriptiondetailController@create');
+    Route::post('/prescriptiondetails/update',  'PrescriptiondetailController@update');
+
 });
 
 //rutas ajax

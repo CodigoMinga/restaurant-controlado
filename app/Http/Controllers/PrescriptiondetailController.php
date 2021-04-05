@@ -24,7 +24,20 @@ class PrescriptiondetailController extends Controller
     }
 
     public function addProcess( Request $request,$prescription_id){
-        Prescriptiondetails::create($request->all()  + ['prescription_id' => $prescription_id]);
+        Prescriptiondetail::create($request->all()  + ['prescription_id' => $prescription_id]);
         return redirect()->route('prescriptiondetails.add',$prescription_id)->with('success', 'Reseta Creada Correctamente');
+    }
+
+    
+    public function create(Request $request){
+        $prescriptiondetail = Prescriptiondetail::create($request->all());
+        return $prescriptiondetail;
+    }
+
+    public function update(Request $request){
+        $prescriptiondetail = Prescriptiondetail::findOrFail($request->id);
+        $prescriptiondetail->fill($request->all());
+        $prescriptiondetail->save();
+        return $prescriptiondetail;
     }
 }
