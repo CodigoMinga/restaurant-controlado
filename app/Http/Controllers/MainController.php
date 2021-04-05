@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Hash;
 use App\User;
+use App\Mail\PasswordResetMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -109,5 +111,35 @@ class MainController extends Controller
             return back()->with('noti-error','La clave antigua no corresponde')->withInput();
         }
     }
+
+
+    function passwordLostProcess(Request $request){
+
+        //dd($request->email);
+        $user = User::where ('email', $request->email)->first();
+        if ( !$user ) return redirect()->back()->withErrors(['error' => 'Ingrese un correo valido']);
+
+        //create a new token to be sent to the user.
+        DB::table('password_resets')->insert([
+            'email' => $request->email,
+            'token' => Str::random(60), //change 60 to any length you want
+            'created_at' => Carbon::now()
+        ]);
+
+        $tokenData = DB::table('password_resets')
+            ->where('email', $request->email)->first();
+        $token = $tokenData->token;
+        $email = $request->email; // or $email = $tokenData->email;
+
+        $subject = "Solicitud de reinicio de contraseña";
+        $receivers = [$email];
+        $status = Mail::to($receivers)->send(new PasswordResetMail($user,$token,$subject));
+
+        $message = "Se ha enviado un correo para reestablecer contraseña";
+        return view('generic',compact('message'));
+    }
+
+
+
 
 }
