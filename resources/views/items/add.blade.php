@@ -45,6 +45,7 @@
             <li>Aun no hay unidades de medida</li>
             @endforelse
         </select>
+        <br>
         
         <button type="submit" class="btn btn-danger"><i class="fa fa-check"></i>Guardar</button>
         

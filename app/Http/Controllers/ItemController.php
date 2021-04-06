@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Item;
 use App\Company;
 use App\Measureunit;
@@ -25,7 +26,8 @@ class ItemController extends Controller
 
     public function list()
     {
-        $items = Item::all();
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+        $items = Item::whereIn('company_id',$companies_id)->get();
         return view('items.list', compact('items'));
     }
 
