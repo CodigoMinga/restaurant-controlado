@@ -23,8 +23,8 @@ Route::post('/app/register/process',            'MainController@registerProcess'
 Route::get('/app/login/passwordlost',           'MainController@passwordLost');
 Route::post('/app/login/passwordlost/process',  'MainController@passwordLostProcess');
 
-Route::get('/app/resetpassword/{user_id}/token/{token}',            'MainController@passwordRessetToken');
-Route::post('/app/resetpassword/{user_id}/token/{token}/process',   'MainController@passwordRessetTokenProcess');
+Route::get('/app/login/resetpassword/{user_id}/token/{token}',            'MainController@passwordRessetToken');
+Route::post('/app/login/resetpassword/{user_id}/token/{token}/process',   'MainController@passwordRessetTokenProcess');
 
 //ESTAS RUTAS NECESITAN ESTAR LOGUEADO
 Route::group(['middleware' => ['auth']], function() {
@@ -101,16 +101,10 @@ Route::group(['middleware' => ['auth']], function() {
     route::post('app/prescriptions/{prescription_id}/edit/process',        'PrescriptionController@editprocess')->name('prescriptions.editprocess');
     route::get('app/prescriptions/{prescription_id}/delete',               'PrescriptionController@delete')->name('prescriptions.delete');
     //Detalles de Receta 
-    route::get('/app/products/{product_id}/prescriptiondetails/details',         'PrescriptiondetailController@details')->name('prescriptiondetails.details');
-
-    //Receta
-    Route::post('/prescriptions/create',  'PrescriptionController@create');
-
-    //Detalle de Receta
-    Route::post('/prescriptiondetails/create',                          'PrescriptiondetailController@create');
-    Route::post('/prescriptiondetails/update',                          'PrescriptiondetailController@update');
-    Route::get('/prescriptiondetails/select/{prescriptiondetail_id}',   'PrescriptiondetailController@select');
-
+    route::get('/app/products/{product_id}/prescriptions/{prescription_id}/prescriptiondetails/{}',         'PrescriptiondetailController@details')->name('prescriptiondetails.details');
+    route::get('/app/products/{product_id}/prescriptiondetails/add',         'PrescriptiondetailController@add')->name('prescriptiondetails.add');
+    route::post('/app/products/{product_id}/prescriptiondetails/add/process',         'PrescriptiondetailController@addProcess')->name('prescriptiondetails.addProcess');
+    route::get('/app/products/{product_id}/prescriptiondetails/edit',         'PrescriptiondetailController@addProcess')->name('prescriptiondetails.addProcess');
 });
 
 //rutas ajax

@@ -22,7 +22,26 @@
       <label for="formGroupExampleInput2" class="form-label">Password</label>
       <input type="text" class="form-control"  placeholder="Password" name="password" id="password" required>
     </div>
-
+    <div class="form-group">
+      <label for="company_id">Compañias:</label>
+      <select name="company_id" id="company_id" class="form-control" >
+          @forelse($companies as $company)
+          <option value="{{ $company->id }}">{{ $company->name }}</option>
+          @empty
+          <li>Aun no hay Compañias</li>
+          @endforelse
+      </select>
+  </div>
+  <div class="form-group">
+    <label for="role_id">Roles:</label>
+    <select name="role_id" id="role_id" class="form-control" >
+        @forelse($roles as $role)
+        <option value="{{ $role->id }}">{{ $role->name }}</option>
+        @empty
+        <li>Aun no hay Compañias</li>
+        @endforelse
+    </select>
+</div>
     <div class="form-group">
       <label for="user">Estado:</label>
       <select name="user" id="enabled" class="form-control" >

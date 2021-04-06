@@ -33,7 +33,7 @@
       <label for="formGroupExampleInput2" class="form-label">Precio</label>
       <input type="text" class="form-control"  placeholder="Precio" name="price" id="price" required>
     </div>
-
+    
     <div class="form-group">
       <label for="product">Estado:</label>
       <select name="product" id="enabled" class="form-control" >

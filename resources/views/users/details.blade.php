@@ -16,8 +16,24 @@
                 <input type="text" class="form-control" name="email"  value="{{$user->email}}">
             </div>
             <div class="form-group">
-                <label>Password</label>
-                <input type="text" class="form-control" name="password"  value="{{$user->password}}">
+                <label for="role_id">Roles:</label>
+                <select name="role_id" id="role_id" class="form-control" >
+                    @forelse($roles as $role)
+                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                    @empty
+                    <li>Aun no hay Roles</li>
+                    @endforelse
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="company_id">Compañias:</label>
+                <select name="company_id" id="company_id" class="form-control" >
+                    @forelse($companies as $company)
+                    <option value="{{ $company->id }}">{{ $company->name }}</option>
+                    @empty
+                    <li>Aun no hay Compañias</li>
+                    @endforelse
+                </select>
             </div>
             <button type="submit" class="btn btn-success ">
                 <i class="material-icons">done</i>
