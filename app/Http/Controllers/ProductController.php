@@ -12,28 +12,27 @@ use App\Prescription;
 class ProductController extends Controller
 {
     public function add(){
-
+        //Array de las Compañias del Usuario
         $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
 
+        //Tipos de Productos que pertenecesn a las conpañias del Usuario
         $producttypes = Producttype::whereIn('company_id',$companies_id)->get();
         return view('products.add',compact('producttypes'));
     }
 
-    /* NO SE ESTA USANDO
-    public function getdata(){
-
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-
-        $products = Product::whereIn('company_id',$companies_id)->get();
-        return DataTables::of($products)->make(true);
-    }*/
-
     public function list(){
 
+        //Array de las Compañias del Usuario
         $companies_id       = Auth::user()->companies()->pluck('company_id')->toArray();
+        
+        //Tipos de Productos que pertenecesn a las conpañias del Usuario
         $producttypes_id    = Producttype::whereIn('company_id',$companies_id)->pluck('id')->toArray();
 
+        //Productos que pertenecesn a los tipos de producto de las conpañias del Usuario
         $products = Product::whereIn('producttype_id',$producttypes_id)->get();
+        foreach ($products as $key => $product) {
+            $product->producttype;
+        }
         return view('products.list',compact('products'));
     }
 

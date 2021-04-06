@@ -30,6 +30,7 @@ class CreateOrdersTable extends Migration
             $table->integer('credit_card')->unsigned()->nullable();
             $table->integer('debit_card')->unsigned()->nullable();
             $table->integer('efective')->unsigned()->nullable();
+            $table->integer('transfer')->unsigned()->nullable();
 
             $table->integer('discount')->unsigned()->nullable();
             $table->longText('discount_description')->nullable();
