@@ -2,8 +2,8 @@
 
 @section('content')
 
- <div class="box pl-3 pt-3 col-7">
-        <div class="box-body">
+ <div class="pl-3 pt-3 ">
+        <div>
             <h2 class="page-header">
                 <i class="fa fa-list"></i> Detalles de Insumos<b></b>
             </h2>
@@ -20,14 +20,25 @@
                     <label for="exampleInputEmail1">Descripión</label>
                     <input required type="text" class="form-control" name="description"  value="{{$item->description}}">
                 </div>
+
                 <div class="form-group">
                     <label for="exampleInputEmail1">Stock</label>
                     <input required type="decimal" class="form-control" name="stock"  value="{{$item->stock}}">
                 </div>
 
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Advertencia</label>
+                    <input required type="decimal" class="form-control" name="warning"  value="{{$item->warning}}">
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Alerta</label>
+                    <input required type="decimal" class="form-control" name="alert"  value="{{$item->alert}}">
+                </div>
+                
 
                 <label for="measureunit_id">Unidad de Media:</label>
-        <select name="measureunit_id" id="measureunit_id">
+        <select class="form-control" name="measureunit_id" id="measureunit_id">
             @forelse($measureunits as $measureunit)
             <option value="{{ $measureunit->id }}">{{ $measureunit->name }}</option>
             @empty

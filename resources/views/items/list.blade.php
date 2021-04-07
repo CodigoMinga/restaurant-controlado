@@ -20,6 +20,7 @@
             <thead>
                 <tr>
                     <th>Insumos</th>
+                    <th>Stock</th>
                     <th>Acción</th>
                 </tr>
             </thead>
@@ -37,6 +38,7 @@
                 "data": {!! json_encode($items->toArray()) !!},
                 "columns": [
                     { "data": "name","width":"90%"},
+                    { "data": "stock","width":"1%"},
                     { "data": "id", render : function ( data, type, row, meta ) {
                         return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/items/'+data+'/details" >description</a>';
                     },"width":"1%"},
