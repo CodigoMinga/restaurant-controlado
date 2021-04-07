@@ -101,10 +101,31 @@ Route::group(['middleware' => ['auth']], function() {
     route::post('app/prescriptions/{prescription_id}/edit/process',        'PrescriptionController@editprocess')->name('prescriptions.editprocess');
     route::get('app/prescriptions/{prescription_id}/delete',               'PrescriptionController@delete')->name('prescriptions.delete');
     //Detalles de Receta 
-    route::get('/app/products/{product_id}/prescriptions/{prescription_id}/prescriptiondetails/{}',         'PrescriptiondetailController@details')->name('prescriptiondetails.details');
-    route::get('/app/products/{product_id}/prescriptiondetails/add',         'PrescriptiondetailController@add')->name('prescriptiondetails.add');
-    route::post('/app/products/{product_id}/prescriptiondetails/add/process',         'PrescriptiondetailController@addProcess')->name('prescriptiondetails.addProcess');
-    route::get('/app/products/{product_id}/prescriptiondetails/edit',         'PrescriptiondetailController@addProcess')->name('prescriptiondetails.addProcess');
+    route::get('/app/products/{product_id}/prescriptiondetails/details',         'PrescriptiondetailController@details')->name('prescriptiondetails.details');
+
+    //Receta
+    Route::post('/prescriptions/create',  'PrescriptionController@create');
+
+    //Detalle de Receta
+    Route::post('/prescriptiondetails/create',                          'PrescriptiondetailController@create');
+    Route::post('/prescriptiondetails/update',                          'PrescriptiondetailController@update');
+    Route::get('/prescriptiondetails/select/{prescriptiondetail_id}',   'PrescriptiondetailController@select');
+
+    
+    Route::get('prueba',function(){
+        //1 Compañias a la que pertenece el usuario
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+
+        //Consultar a la tabla company_user las id de los usuarios que pertenecen a las compañias dichas
+        $users_id= DB::table('company_user')->whereIn('company_id',$companies_id)->pluck('user_id')->toArray();
+
+        //buscar los usuarios con las id obtenidas
+        $users = App\User::WhereIn('id',$users_id)->get();
+
+        //Esto es solo para mostrar
+        dd($users);
+    });
+
 });
 
 //rutas ajax
