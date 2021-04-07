@@ -111,6 +111,21 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/prescriptiondetails/update',                          'PrescriptiondetailController@update');
     Route::get('/prescriptiondetails/select/{prescriptiondetail_id}',   'PrescriptiondetailController@select');
 
+    
+    Route::get('prueba',function(){
+        //1 Compañias a la que pertenece el usuario
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+
+        //Consultar a la tabla company_user las id de los usuarios que pertenecen a las compañias dichas
+        $users_id= DB::table('company_user')->whereIn('company_id',$companies_id)->pluck('user_id')->toArray();
+
+        //buscar los usuarios con las id obtenidas
+        $users = App\User::WhereIn('id',$users_id)->get();
+
+        //Esto es solo para mostrar
+        dd($users);
+    });
+
 });
 
 //rutas ajax
