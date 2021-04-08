@@ -15,6 +15,7 @@
                 <label>Email</label>
                 <input type="text" class="form-control" name="email"  value="{{$user->email}}">
             </div>
+  
             <div class="form-group">
                 <label for="role_id">Roles:</label>
                 <select name="role_id" id="role_id" class="form-control" >
@@ -22,16 +23,6 @@
                     <option value="{{ $role->id }}">{{ $role->name }}</option>
                     @empty
                     <li>Aun no hay Roles</li>
-                    @endforelse
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="company_id">Compañias:</label>
-                <select name="company_id" id="company_id" class="form-control" >
-                    @forelse($companies as $company)
-                    <option value="{{ $company->id }}">{{ $company->name }}</option>
-                    @empty
-                    <li>Aun no hay Compañias</li>
                     @endforelse
                 </select>
             </div>

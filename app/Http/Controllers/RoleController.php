@@ -41,10 +41,10 @@ class RoleController extends Controller
 }
 public function details($user_id)
 {
-    $companies=Company::all();
+ 
     $roles = Role::all();
-
-    return view('users.details', \compact('roles', 'companies') ,[
+  
+    return view('users.details',compact('roles') ,[
         'user' => User::find($user_id)
     ]);
 }
