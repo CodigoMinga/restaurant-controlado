@@ -67,12 +67,12 @@ Route::group(['middleware' => ['auth']], function() {
     route::get('/app/measureunits/{measureunit_id}/delete',         'MeasureunitController@delete')->name('measureunitvs.delete');
 
     //ITEMS
-    route::get('/app/items/add',                    'ItemController@add')->name('items.add');
-    route::post('/app/items/add/process',           'ItemController@addProcess');
-    route::get('/app/items/list',                   'ItemController@list')->name('items.list');
-    route::get('/app/items/{item_id}/details',      'ItemController@details')->name('items.details');
-    route::post('/app/items/{item_id}/edit/process','ItemController@editprocess')->name('items.editprocess');
-    route::get('/app/items/{item_id}/delete',       'ItemController@delete')->name('items.delete');
+    route::get('/items/list',               'ItemController@list')->name('items.list');
+    route::get('/items/add',                'ItemController@add')->name('items.add');
+    route::get('/items/{item_id}',          'ItemController@details')->name('items.details');
+    route::post('/items/process',           'ItemController@process');
+    route::get('/items/{item_id}/delete',   'ItemController@delete')->name('items.delete');
+
 
     //COMPAÑIAS
     route::get('/app/companys/add',                         'CompanyController@add')->name('companys.add');
@@ -89,7 +89,7 @@ Route::group(['middleware' => ['auth']], function() {
     route::get('/app/users/getdata','RoleController@getdata');
     route::post('/app/users/{user_id}/edit/process','RoleController@editprocess');
     route::get('/app/users/{user_id}','RoleController@details');
-        //Cambio de clave
+    //Cambio de clave
     Route::get('/app/password/{user_id}/passwordchange', 'MainController@passwordChange');
     Route::post('/app/password/{user_id}/passwordchange/process', 'MainController@passwordChangeProcess');
     

@@ -111,7 +111,7 @@
                 <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/measureunits/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Medida
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/items/list') }}">
+                <a class="sidebar-button {{(request()->is('items/list')) ? 'active' : '' }}" href="{{ url('items/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Insumos
                 </a>
                 <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/companys/list') }}">
