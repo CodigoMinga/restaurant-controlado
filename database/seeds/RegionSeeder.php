@@ -40,5 +40,7 @@ class RegionSeeder extends Seeder
                 'created_at' => $now,
             ];
         }, $regions);
+        
+        \DB::table('regions')->insert($regions);
     }
 }
