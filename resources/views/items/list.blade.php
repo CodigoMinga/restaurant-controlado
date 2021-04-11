@@ -20,6 +20,7 @@
             <thead>
                 <tr>
                     <th>Insumos</th>
+                    <th>Stock</th>
                     <th>Acción</th>
                 </tr>
             </thead>
@@ -36,7 +37,10 @@
                 responsive: true,
                 "data": {!! json_encode($items->toArray()) !!},
                 "columns": [
-                    { "data": "name","width":"90%"},
+                    { "data": "name","width":"60%"},
+                    { "data": "stock", render : function ( data, type, row, meta ) {
+                        return data +" "+row.measureunit.name;
+                    },"width":"15%"},
                     { "data": "id", render : function ( data, type, row, meta ) {
                         return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/items/'+data+'/details" >description</a>';
                     },"width":"1%"},

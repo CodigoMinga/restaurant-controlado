@@ -26,6 +26,9 @@ class ItemController extends Controller
     public function list()
     {
         $items = Item::all();
+        foreach ($items as $key => $item) {
+            $item->measureunit;
+        }
         return view('items.list', compact('items'));
     }
 
