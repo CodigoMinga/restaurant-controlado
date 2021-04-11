@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use DB;
+use Hash;
 use App\User;
 use App\Role;
 use App\Company;
@@ -113,6 +114,29 @@ class UserController extends Controller
             }
 
             return redirect()->route('users.list')->with('success', 'Usuario creado correctamente');
+        }
+    }
+
+    public function passwordchange(){
+        //busca el usuario en la bd
+        $user = Auth::user();
+        return view('users.passwordchange' , compact('user'));
+    }
+
+    public function passwordchangeProcess(Request $request){
+
+        $user = Auth::user();
+        $oldpassword = $request->oldpassword;
+
+        if(Hash::check($oldpassword,$user->password)){
+            $input = $request->all();
+            $input['password'] = Hash::make($request->password);
+            $user->update($input);
+
+            $userAutentificated = Auth::loginUsingId($user->id);
+            return back()->with('success', 'Contraseña cambiada correctamente');
+        }else{
+            return back()->with('error','La clave antigua no corresponde')->withInput();
         }
     }
 }

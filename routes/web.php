@@ -29,10 +29,6 @@ Route::post('/app/resetpassword/{user_id}/token/{token}/process',   'MainControl
 //ESTAS RUTAS NECESITAN ESTAR LOGUEADO
 Route::group(['middleware' => ['auth']], function() {
 
-    //CAMBIAR CLAVE
-    Route::get('/app/password/{user_id}/change',            'MainController@passwordChange');
-    Route::post('/app/password/{user_id}/change/process',   'MainController@passwordChangeProcess');
-
     //ORDENES
     Route::get('/tables',                       'OrderController@tables');
     Route::get('/tableorder/{table_id}',        'OrderController@tableorder');
@@ -51,9 +47,12 @@ Route::group(['middleware' => ['auth']], function() {
     //USUARIOS
     route::get('/users/list',               'UserController@list')->name('users.list');
     route::get('/users/add',                'UserController@add')->name('users.add');
+    Route::get('/users/passwordchange',     'UserController@passwordchange');
     route::get('/users/{user_id}',          'UserController@details')->name('users.details');
     route::get('/users/{user_id}/delete',   'UserController@delete')->name('users.delete');
     route::post('/users/process',           'UserController@process')->name('users.process');
+    //CAMBIAR CLAVE
+    Route::post('/users/passwordchange/process','UserController@passwordchangeProcess');
 
     //PRODUCTOS
     Route::get('/app/products/list',                        'ProductController@list')->name('products.list');
