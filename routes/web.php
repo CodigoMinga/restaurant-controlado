@@ -53,6 +53,13 @@ Route::group(['middleware' => ['auth']], function() {
     route::post('/users/process',           'UserController@process')->name('users.process');
     //CAMBIAR CLAVE
     Route::post('/users/passwordchange/process','UserController@passwordchangeProcess');
+    
+    //CATEGORIAS (PRODUCTTYPES)
+    route::get('/producttypes/list',                    'ProducttypeController@list')->name('producttypes.list');
+    route::get('/producttypes/add',                     'ProducttypeController@add')->name('producttypes.add');
+    route::get('/producttypes/{producttype_id}',        'ProducttypeController@details')->name('producttypes.details');
+    route::get('/producttypes/{producttype_id}/delete', 'ProducttypeController@delete')->name('producttypes.delete');
+    route::post('/producttypes/process',                'ProducttypeController@addProcess');
 
     //PRODUCTOS
     Route::get('/products/list',                        'ProductController@list')->name('products.list');
@@ -62,14 +69,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/products/{product_id}/prescriptions/{prescription_id}/details', 'ProductController@details');
     Route::post('/products/{product_id}/edit/process',  'ProductController@editprocess');
     Route::get('/products/{product_id}/delete',         'ProductController@delete');
-
-    //CATEGORIAS (PRODUCTTYPES)
-    route::get('/producttypes/add',                                 'ProducttypeController@add')->name('producttypes.add');
-    route::post('/producttypes/add/process',                        'ProducttypeController@addProcess');
-    route::get('/producttypes/list',                                'ProducttypeController@list')->name('producttypes.list');
-    route::get('/producttypes/{producttype_id}',                    'ProducttypeController@details')->name('producttypes.details');
-    route::post('/producttypes/{producttype_id}/edit/process',      'ProducttypeController@editprocess')->name('producttypes.editprocess');
-    route::get('/producttypes/{producttype_id}/delete',             'ProducttypeController@delete')->name('producttypes.delete');
 
     //UNIDADES DE MEDIDA
     route::get('/measureunits/add',                             'MeasureunitController@add')->name('measureunits.add');
