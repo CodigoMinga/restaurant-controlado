@@ -74,9 +74,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/prescriptions/{prescription_id}/delete',   'PrescriptionController@delete');
 
     //Detalle de Receta
-    Route::post('/prescriptiondetails/create',                          'PrescriptiondetailController@create');
-    Route::post('/prescriptiondetails/update',                          'PrescriptiondetailController@update');
+    Route::post('/prescriptiondetails/store',                           'PrescriptiondetailController@store');
     Route::get('/prescriptiondetails/{prescriptiondetail_id}',          'PrescriptiondetailController@select');
+    Route::get('/prescriptiondetails/{prescriptiondetail_id}/delete',   'PrescriptiondetailController@delete');
 
     //COMPAÑIAS
     route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
