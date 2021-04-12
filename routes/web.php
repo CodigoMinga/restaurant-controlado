@@ -29,10 +29,6 @@ Route::post('/app/login/resetpassword/{user_id}/token/{token}/process',   'MainC
 //ESTAS RUTAS NECESITAN ESTAR LOGUEADO
 Route::group(['middleware' => ['auth']], function() {
 
-    //CAMBIAR CLAVE
-    Route::get('/app/password/{user_id}/change',            'MainController@passwordChange');
-    Route::post('/app/password/{user_id}/change/process',   'MainController@passwordChangeProcess');
-
     //ORDENES
     Route::get('/tables',                       'OrderController@tables');
     Route::get('/tableorder/{table_id}',        'OrderController@tableorder');
@@ -40,6 +36,23 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/productselection/{order_id}',  'OrderController@productselection');
     Route::post('/productattach',               'OrderController@productattach');
     Route::get('/orderdetails/{order_id}',      'OrderController@orderdetails');
+    
+    //ITEMS
+    route::get('/items/list',               'ItemController@list')->name('items.list');
+    route::get('/items/add',                'ItemController@add')->name('items.add');
+    route::get('/items/{item_id}',          'ItemController@details')->name('items.details');
+    route::get('/items/{item_id}/delete',   'ItemController@delete')->name('items.delete');
+    route::post('/items/process',           'ItemController@process')->name('items.process');
+    
+    //USUARIOS
+    route::get('/users/list',               'UserController@list')->name('users.list');
+    route::get('/users/add',                'UserController@add')->name('users.add');
+    Route::get('/users/passwordchange',     'UserController@passwordchange');
+    route::get('/users/{user_id}',          'UserController@details')->name('users.details');
+    route::get('/users/{user_id}/delete',   'UserController@delete')->name('users.delete');
+    route::post('/users/process',           'UserController@process')->name('users.process');
+    //CAMBIAR CLAVE
+    Route::post('/users/passwordchange/process','UserController@passwordchangeProcess');
 
     //PRODUCTOS
     Route::get('/app/products/list',                        'ProductController@list')->name('products.list');
@@ -66,14 +79,6 @@ Route::group(['middleware' => ['auth']], function() {
     route::post('/app/measureunits/{measureunit_id}/edit/process',  'MeasureunitController@editprocess')->name('measureunits.editprocess');
     route::get('/app/measureunits/{measureunit_id}/delete',         'MeasureunitController@delete')->name('measureunitvs.delete');
 
-    //ITEMS
-    route::get('/app/items/add',                    'ItemController@add')->name('items.add');
-    route::post('/app/items/add/process',           'ItemController@addProcess');
-    route::get('/app/items/list',                   'ItemController@list')->name('items.list');
-    route::get('/app/items/{item_id}/details',      'ItemController@details')->name('items.details');
-    route::post('/app/items/{item_id}/edit/process','ItemController@editprocess')->name('items.editprocess');
-    route::get('/app/items/{item_id}/delete',       'ItemController@delete')->name('items.delete');
-
     //COMPAÑIAS
     route::get('/app/companys/add',                         'CompanyController@add')->name('companys.add');
     route::post('/app/companys/add/process',                'CompanyController@addProcess');
@@ -81,17 +86,6 @@ Route::group(['middleware' => ['auth']], function() {
     route::get('/app/companys/{company_id}',                'CompanyController@details');
     route::post('/app/companys/{company_id}/edit/process',  'CompanyController@editprocess');
     route::get('/app/companys/{company_id}/delete',         'CompanyController@delete');
-
-    //USUARIOS
-    route::get('/app/users/add','RoleController@add')->name('users.add');
-    route::post('/app/users/add/process','RoleController@addProcess');
-    route::get('/app/users/list','RoleController@list')->name('users.list');
-    route::get('/app/users/getdata','RoleController@getdata');
-    route::post('/app/users/{user_id}/edit/process','RoleController@editprocess');
-    route::get('/app/users/{user_id}','RoleController@details');
-        //Cambio de clave
-    Route::get('/app/password/{user_id}/passwordchange', 'MainController@passwordChange');
-    Route::post('/app/password/{user_id}/passwordchange/process', 'MainController@passwordChangeProcess');
     
     //RECETA
     Route::get('/app/products/{product_id}/prescriptions/add',             'PrescriptionController@add')->name('prescriptions.add');

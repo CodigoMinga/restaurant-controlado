@@ -5,62 +5,57 @@ use Auth;
 use App\Item;
 use App\Company;
 use App\Measureunit;
-use App\Prescriptiondetail;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
     public function add()
     {
-        $prescriptiondetails = Prescriptiondetail::all();
         $measureunits = Measureunit::all();
-        $companys = Company::all();
-        return view('items.add', compact('prescriptiondetails', 'measureunits', 'companys'));
-    }
-
-    public function addProcess ( Request $request)
-    {
-        Item::create($request->all());
-        return redirect()->route('items.list')->with('success', 'Insumo Creado Correctamente');
-    }
-
-    public function list()
-    {
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $items = Item::whereIn('company_id',$companies_id)->get();
-        return view('items.list', compact('items'));
-    }
-
-    public function getdata()
-    {
-        $item = Item::all();
-        return DataTables::of($item)->make(true);
+        $companys = Auth::user()->companies;
+        $item = new Item;
+        return view('items.form', compact('measureunits', 'companys','item'));
     }
 
     public function details($item_id)
     {
         $measureunits = Measureunit::all();
-        return view(
-            'items.details', [
-            'item' => Item::find($item_id)
-            ], compact('measureunits')
-        );
-    }
-
-    public function editprocess($item_id, Request $request)
-    {
-        //busca la orden en la base de datos con el id que se le pasa desde la URL
-        $item = Item::findOrFail($item_id);
-
-        $item->update($request->all());
-
-        return redirect()->route('items.list')->with('success', 'Insumo editada correctamente');
+        $companys = Auth::user()->companies;
+        $item = Item::find($item_id);
+        return view('items.form', compact('measureunits', 'companys','item'));
     }
 
     public function delete($item_id)
     {
         $item = Item::findOrFail($item_id);
-        $item->delete();
+        $item->enabled=0;
+        $item->save();
         return redirect()->route('items.list')->with('success', 'Insumo eliminada correctamente');
+    }
+
+    public function process (Request $request)
+    {        
+        $id = $request->id;
+        if($id){
+            //Si encuentra el ID edita
+            $item = Item::findOrFail($id);
+            $item->update($request->all());
+            return redirect()->route('items.list')->with('success', 'Insumo editado correctamente');
+        }else{
+            //Si no, Crea un Item
+            Item::create($request->all());
+            return redirect()->route('items.list')->with('success', 'Insumo Creado Correctamente');
+        }
+    }
+
+    public function list()
+    {   
+        //Array de las Compañias del Usuario
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+        $items = Item::where('enabled',1)->whereIn('company_id',$companies_id)->get();
+        foreach ($items as $key => $item) {
+            $item->measureunit;
+        }
+        return view('items.list', compact('items'));
     }
 }

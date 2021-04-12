@@ -37,7 +37,7 @@
         </div>
         <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-error'>
             <div class="toast-header">
-            <i class="rounded mr-2 material-icons bg-danger text-white">alert</i>
+            <i class="rounded mr-2 material-icons bg-danger text-white">report</i>
             <strong class="mr-auto">Error</strong>
             <small class="text-muted">cerrar</small>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -111,17 +111,17 @@
                 <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/measureunits/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Medida
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/items/list') }}">
+                <a class="sidebar-button {{(request()->is('items/list')) ? 'active' : '' }}" href="{{ url('items/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Insumos
                 </a>
                 <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/companys/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Compañias
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/users/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Usuarios
+                <a class="sidebar-button {{(request()->is('users/list')) ? 'active' : '' }}" href="{{ url('users/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">groups</i>Usuarios
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/password/'.Auth::user()->id.'/passwordchange') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Contraseña
+                <a class="sidebar-button {{(request()->is('users/passwordchange')) ? 'active' : '' }}" href="{{ url('users/passwordchange') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">password</i>Contraseña
                 </a>
             </div>
         </div>

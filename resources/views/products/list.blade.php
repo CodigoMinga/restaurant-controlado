@@ -41,7 +41,9 @@
                 "columns": [
                     { "data": "producttype.name","width":"30%"},
                     { "data": "name","width":"60%"},
-                    { "data": "price","width":"1%"},
+                    { "data": "price", render : function ( data, type, row, meta ){
+                        return '$'+data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    },"width":"1%"},
                     { data: "id", render : function ( data, type, row, meta ){
                         return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/products/'+data+'" >description</a>';
                     },"width":"1%"},
