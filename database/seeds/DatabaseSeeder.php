@@ -23,8 +23,5 @@ class DatabaseSeeder extends Seeder
         $this->call(OrderSeeder::class);
         $this->call(MeasureunitSeeder::class);
         $this->call(ItemSeeder::class);
-
-        $this->call(RegionSeeder::class);
-        $this->call(CommuneSeeder::class);
     }
 }

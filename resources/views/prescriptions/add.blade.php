@@ -31,7 +31,7 @@
         <h1>
             <i class="material-icons">add_box</i> Agregar Receta a <span value="{{ $product->id }}">{{ $product->name }}</span>
         </h1>
-        <form method="post" action="{{url('products/'.$product->id.'/prescriptions/add/process')}}" id="form">
+        <form method="post" action="{{url('/app/products/'.$product->id.'/prescriptions/add/process')}}" id="form">
             {{csrf_field()}}
             <div class="form-group">
                 <input required type="text" class="form-control" placeholder="Descripción" name="description" value="">

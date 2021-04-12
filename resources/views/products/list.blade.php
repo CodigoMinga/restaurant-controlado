@@ -12,7 +12,7 @@
     <div class="container pt-3">
         <div class="d-flex justify-content-between align-items-center">
             <h1>Lista de Productos</h1>
-            <a  href="{{ url('products/add')}}" class="btn btn-success">
+            <a  href="{{ url('/') }}/app/products/add" class="btn btn-success">
                 <i class="material-icons">add</i>
                 Agregar Producto
             </a>
@@ -41,11 +41,9 @@
                 "columns": [
                     { "data": "producttype.name","width":"30%"},
                     { "data": "name","width":"60%"},
-                    { "data": "price", render : function ( data, type, row, meta ){
-                        return '$'+data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                    },"width":"1%"},
+                    { "data": "price","width":"1%"},
                     { data: "id", render : function ( data, type, row, meta ){
-                        return '<a class="btn btn-light material-icons" href="{{ url("products")}}/'+data+'" >description</a>';
+                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/products/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {

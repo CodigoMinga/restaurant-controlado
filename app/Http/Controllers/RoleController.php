@@ -31,13 +31,12 @@ class RoleController extends Controller
         return view('users.list' , \compact('users'));
     }
     public function editprocess($user_id, Request $request)
-    {
-        //busca la orden en la base de datos con el id que se le pasa desde la URL
-        $user = User::findOrFail($user_id);
+{
+    //busca la orden en la base de datos con el id que se le pasa desde la URL
+    $user = User::findOrFail($user_id);
 
-        $user->update($request->all());
+    $user->update($request->all());
 
-<<<<<<< HEAD
     return redirect()->route('users.list')->with('success', 'Usuario editado correctamente');
 }
 public function details($user_id)
@@ -53,19 +52,5 @@ public function addProcess(Request $request){
     User::create($request->all());
     return redirect()->route('users.list')->with('success', 'Usuario Creado correctamente');
 }
-=======
-        return redirect()->route('users.list')->with('success', 'Usuario editado correctamente');
-    }
-    public function details($user_id)
-    {
-        return view('users.details', [
-            'user' => User::find($user_id)
-        ]);
-    }
-    public function addProcess(Request $request){
-        User::create($request->all());
-        return redirect()->route('users.list')->with('success', 'Usuario Creado correctamente');
-    }
->>>>>>> roberto
 
 }

@@ -5,7 +5,7 @@
         <h1>
             <i class="material-icons">library_books</i>Detalles del Producto
         </h1>
-        <form method="post" action="{{url('products/'.$product->id.'/edit/process')}}">
+        <form method="post" action="{{url('app/products/'.$product->id.'/edit/process')}}">
             {{csrf_field()}}
             <div class="form-group">
                 <label>Nombre Producto</label>
@@ -19,7 +19,7 @@
                 <i class="material-icons">done</i>
                 Editar Producto
             </button>
-            <a  href="{{ url('products') }}/{{$product->id}}/delete" class="btn btn-danger">
+            <a  href="{{ url('/') }}/app/products/{{$product->id}}/delete" class="btn btn-danger">
                 <i class="material-icons">clear</i>
                 Eliminar Producto
             </a>
@@ -88,7 +88,7 @@
             }).done(function( data ) {
                 if(typeof(data)=='object'){
                     if(data.id){
-                        window.location.href = "{{url('products/'.$product->id)}}";
+                        window.location.href = "{{url('/app/products/'.$product->id)}}";
                     }
                     $('#protuct-modal').modal('hide');
                 }else{

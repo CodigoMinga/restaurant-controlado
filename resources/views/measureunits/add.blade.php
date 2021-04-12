@@ -5,7 +5,7 @@
         <i class="fa fa-pencil"></i> Agregar Unidad de Medida
     </h2>
     
-    <form method="post" class="pt-5 pl-5 col-7" action="{{url('measureunits/add/process')}}" id="form">
+    <form method="post" class="pt-5 pl-5 col-7" action="{{url('app/measureunits/add/process')}}" id="form">
         {{csrf_field()}}
        
         <label for="company_id">Empresa:</label>

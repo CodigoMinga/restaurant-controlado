@@ -5,7 +5,7 @@
         <h1>
             <i class="material-icons">library_books</i>Detalles de Receta
         </h1>
-        <form method="post" action="{{url('prescription/.'$prescription->id'./prescriptiondetails/'.$prescriptiondetail->id.'/edit/process')}}">
+        <form method="post" action="{{url('app/prescription/.'$prescription->id'./prescriptiondetails/'.$prescriptiondetail->id.'/edit/process')}}">
             {{csrf_field()}}
 
         
@@ -18,10 +18,15 @@
                 <i class="material-icons">done</i>
                 Editar detalle de Receta
             </button>
-            <a  href="{{ url('prescriptions') }}/{{$prescription->id}}/delete" class="btn btn-danger">
+            <a  href="{{ url('/') }}/app/prescriptions/{{$prescription->id}}/delete" class="btn btn-danger">
                 <i class="material-icons">clear</i>
                 Eliminar Detalle de Receta
             </a>
+            <a  href="{{ url('/') }}/app/prescriptions/{{$prescription->id}}/delete" class="btn btn-danger">
+                <i class="material-icons">clear</i>
+                Agregar Detalle de Receta
+            </a>
+            
         </form>
 
     </div>
