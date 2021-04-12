@@ -5,8 +5,9 @@
         <h1>
             <i class="material-icons">library_books</i>Detalles del Receta
         </h1>
-        <form method="post" action="{{url('/prescriptions/'.$prescription->id.'/update')}}">
+        <form method="post" action="{{url('/prescriptions/store')}}">
             {{csrf_field()}}
+            <input type="hidden" name="id" value="{{$prescription->id}}">
             <div class="form-group">
                 <label>Descripción</label>
                 <input type="text" class="form-control" name="description"  value="{{$prescription->description}}">
@@ -15,7 +16,7 @@
                 <i class="material-icons">done</i>
                 Editar Receta
             </button>
-            <a  href="{{url('/prescription/'.$prescription->id.'/delete')}}" class="btn btn-danger">
+            <a  href="{{url('/prescriptions/'.$prescription->id.'/delete')}}" class="btn btn-danger">
                 <i class="material-icons">clear</i>
                 Eliminar Receta
             </a>
@@ -127,8 +128,6 @@
             itemsList.appendChild(newoption);
         });
 
-
-
         var prescriptiondetailForm = document.getElementById('prescriptiondetailForm');
         prescriptiondetailForm.onsubmit = function(e){
             var formData = new FormData(prescriptiondetailForm);
@@ -166,8 +165,7 @@
         };
 
         function prescriptiondetails(id){
-            $.get( "{{url('/prescriptiondetails/select')}}/"+id, function( data ) {
-
+            $.get( "{{url('prescriptiondetails')}}/"+id, function( data ) {
 
                 prescriptiondetailForm.id.value=data.id;
                 prescriptiondetailForm.prescription_id.value=data.prescription_id;
@@ -227,6 +225,7 @@
             newbutton.classList.add('material-icons');
             newbutton.innerHTML='description';
             newbutton.onclick = prescriptiondetails(prescriptiondetail.id);
+            newbutton.setAttribute('onclick','prescriptiondetails('+prescriptiondetail.id+')'); 
             newtd.appendChild(newbutton);
 
             newtr.appendChild(newtd);

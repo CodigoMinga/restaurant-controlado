@@ -64,7 +64,9 @@
         </div>
         <ul>
             @foreach($product->prescriptions as $prescription)
-            <li><a href="{{ route('prescriptions.details', $prescription) }}">{{$prescription->description}}</a></li>
+                @if($prescription->enabled==1)
+                    <li><a href="{{url('prescriptions')}}/{{$prescription->id}}">{{$prescription->description}}</a></li>
+                @endif
             @endforeach
         </ul>
     </div>
@@ -106,7 +108,7 @@
         prescriptionForm.onsubmit = function(e){
             var formData = new FormData(prescriptionForm);
             $.ajax({
-                url: "{{url('/prescriptions/create')}}",
+                url: "{{url('/prescriptions/store')}}",
                 type: "POST",
                 data: formData,
                 processData: false,  // tell jQuery not to process the data
