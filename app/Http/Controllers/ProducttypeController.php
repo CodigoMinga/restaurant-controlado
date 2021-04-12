@@ -34,7 +34,7 @@ class ProducttypeController extends Controller
         $id = $request->id;
         if($id){
             //Si encuentra el ID edita
-            $producttype = Producttype::findOrFail($producttype_id);
+            $producttype = Producttype::findOrFail($request->id);
             $producttype->update($request->all());
             return redirect()->route('producttypes.list')->with('success', 'Categoria editada correctamente');
         }else{

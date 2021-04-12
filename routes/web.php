@@ -59,43 +59,17 @@ Route::group(['middleware' => ['auth']], function() {
     route::get('/producttypes/add',                     'ProducttypeController@add')->name('producttypes.add');
     route::get('/producttypes/{producttype_id}',        'ProducttypeController@details')->name('producttypes.details');
     route::get('/producttypes/{producttype_id}/delete', 'ProducttypeController@delete')->name('producttypes.delete');
-    route::post('/producttypes/process',                'ProducttypeController@addProcess');
+    route::post('/producttypes/process',                'ProducttypeController@process');
 
     //PRODUCTOS
     Route::get('/products/list',                        'ProductController@list')->name('products.list');
     Route::get('/products/add',                         'ProductController@add')->name('products.add');
-    Route::post('/products/add/process',                'ProductController@addProcess');
     Route::get('/products/{product_id}',                'ProductController@details')->name('products.details');
-    Route::get('/products/{product_id}/prescriptions/{prescription_id}/details', 'ProductController@details');
-    Route::post('/products/{product_id}/edit/process',  'ProductController@editprocess');
     Route::get('/products/{product_id}/delete',         'ProductController@delete');
+    Route::post('/products/process',                    'ProductController@process');
 
-    //UNIDADES DE MEDIDA
-    route::get('/measureunits/add',                             'MeasureunitController@add')->name('measureunits.add');
-    route::post('/measureunits/add/process',                    'MeasureunitController@addProcess');
-    route::get('/measureunits/list',                            'MeasureunitController@list')->name('measureunits.list');
-    route::get('/measureunits/{measureunit_id}',                'MeasureunitController@details')->name('measureunits.details');
-    route::post('/measureunits/{measureunit_id}/edit/process',  'MeasureunitController@editprocess')->name('measureunits.editprocess');
-    route::get('/measureunits/{measureunit_id}/delete',         'MeasureunitController@delete')->name('measureunitvs.delete');
-
-    //COMPAÑIAS
-    route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
-    route::post('/companys/add/process',                'CompanyController@addProcess');
-    route::get('/companys/list',                        'CompanyController@list')->name('companys.list');
-    route::get('/companys/{company_id}',                'CompanyController@details');
-    route::post('/companys/{company_id}/edit/process',  'CompanyController@editprocess');
-    route::get('/companys/{company_id}/delete',         'CompanyController@delete');
-    
-    //RECETA
-    Route::get('/products/{product_id}/prescriptions/add',             'PrescriptionController@add')->name('prescriptions.add');
-    Route::post('/products/{product_id}/prescriptions/add/process',    'PrescriptionController@addProcess');
-    route::get('/prescriptions/list',                                   'PrescriptionController@list')->name('prescriptions.list');
-    route::get('/products/{product_id}/prescriptions/details',         'PrescriptionController@details')->name('prescriptions.details');
-    route::post('/prescriptions/{prescription_id}/edit/process',        'PrescriptionController@editprocess')->name('prescriptions.editprocess');
-    route::get('/prescriptions/{prescription_id}/delete',               'PrescriptionController@delete')->name('prescriptions.delete');
-
-    //Detalles de Receta 
-    route::get('/products/{product_id}/prescriptiondetails/details',         'PrescriptiondetailController@details')->name('prescriptiondetails.details');
+    //PRODUCTOS RECETA
+    Route::get('/products/{product_id}/prescriptions/{prescription_id}/details', 'ProductController@details');
 
     //Receta
     Route::post('/prescriptions/create',  'PrescriptionController@create');
@@ -105,7 +79,16 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/prescriptiondetails/update',                          'PrescriptiondetailController@update');
     Route::get('/prescriptiondetails/select/{prescriptiondetail_id}',   'PrescriptiondetailController@select');
 
+
+    //COMPAÑIAS
+    route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
+    route::post('/companys/add/process',                'CompanyController@addProcess');
+    route::get('/companys/list',                        'CompanyController@list')->name('companys.list');
+    route::get('/companys/{company_id}',                'CompanyController@details');
+    route::post('/companys/{company_id}/edit/process',  'CompanyController@editprocess');
+    route::get('/companys/{company_id}/delete',         'CompanyController@delete');
     
+
     Route::get('prueba',function(){
         //1 Compañias a la que pertenece el usuario
         $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
