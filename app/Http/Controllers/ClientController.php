@@ -7,79 +7,39 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function delete($client_id)
     {
-        //
+        $client = client::findOrFail($client_id);
+        $client->delete();
+        return redirect()->route('clients.list')->with('success', 'Pedido eliminado correctamente');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    public function editprocess($product_id, Request $request)
+     {
+         $client = Client::findOrFail($product_id);
+         $client->update($request->all());
+         return redirect()->route('clients.list')->with('success', 'Pedido editado correctamente');
+     }
+     public function addProcess(Request $request){
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        Client::create($request->all());
+        return redirect()->route('clients.list')->with('success', 'Pedido Creado correctamente');
     }
+    public function list(){
+        $clients = Client::all();
+        return view('clients.list',compact('clients'));
+    }
+    public function add(){
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Client $client)
-    {
-        //
-    }
+        $clients = Client::all();  //se crea la variable 
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Client $client)
-    {
-        //
+        return view('clients.add'); // para luego pasarla con compact
     }
+    public function details($client_id)
+{
+    return view('clients.details', [
+        'client' => Client::find($client_id)
+    ]);
+}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Client $client)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Client $client)
-    {
-        //
-    }
 }

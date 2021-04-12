@@ -32,7 +32,13 @@ Route::group(['middleware' => ['auth']], function() {
     //CAMBIAR CLAVE
     Route::get('/app/password/{user_id}/change',            'MainController@passwordChange');
     Route::post('/app/password/{user_id}/change/process',   'MainController@passwordChangeProcess');
-
+    //CLIENTE
+    Route::get('/app/clients/list',                        'ClientController@list')->name('clients.list');
+    Route::get('/app/clients/add',                         'ClientController@add')->name('clients.add');
+    Route::post('/app/products/add/process',                'ClientController@addProcess');
+    Route::get('/app/products/{client_id}',                'ClientController@details');
+    Route::post('/app/products/{client_id}/edit/process',                'ClientController@editprocess');
+    Route::get('/app/products/{client_id}/delete',                'ClientController@delete');
     //ORDENES
     Route::get('/tables',                       'OrderController@tables');
     Route::get('/tableorder/{table_id}',        'OrderController@tableorder');
