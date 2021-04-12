@@ -81,6 +81,7 @@ class MainController extends Controller
         }
 
     }
+<<<<<<< HEAD
 
     public function passwordChange($user_id){
         //busca el usuario en la bd
@@ -142,4 +143,6 @@ class MainController extends Controller
 
 
 
+=======
+>>>>>>> roberto
 }

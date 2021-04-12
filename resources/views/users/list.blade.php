@@ -12,7 +12,7 @@
     <div class="container pt-3">
         <div class="d-flex justify-content-between align-items-center">
             <h1>Lista de Usuarios</h1>
-            <a  href="{{ url('/') }}/app/users/add" class="btn btn-success">
+            <a  href="{{ url('/users/add')}}" class="btn btn-success">
                 <i class="material-icons">add</i>
                 Agregar Usuario
             </a>
@@ -41,7 +41,7 @@
                     { "data": "name","width":"40%"},
                     { "data": "email","width":"40%"},
                     { data: "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/users/'+data+'" >description</a>';
+                        return '<a class="btn btn-light material-icons" href="{{ url("/users")}}/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {

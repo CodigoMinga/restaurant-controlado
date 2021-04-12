@@ -5,13 +5,16 @@
     #tabla_filter,#tabla_paginate{
         text-align: right;
     }
+    .alert-icon{
+        vertical-align: -6px;
+    }
 </style>
 
 @section('content')
     <div class="container pt-3">
         <div class="d-flex justify-content-between align-items-center">
             <h1>Lista de Insumos</h1>
-            <a  href="{{ url('/') }}/app/items/add" class="btn btn-success">
+            <a  href="{{url('/items/add')}}" class="btn btn-success">
                 <i class="material-icons">add</i>
                 Agregar Insumo
             </a>
@@ -37,10 +40,24 @@
                 responsive: true,
                 "data": {!! json_encode($items->toArray()) !!},
                 "columns": [
+<<<<<<< HEAD
                     { "data": "name","width":"90%"},
                     { "data": "stock","width":"1%"},
+=======
+                    { "data": "name","width":"60%"},
+                    { "data": "stock", render : function ( data, type, row, meta ) {
+                        var aux='';
+                        if(parseFloat(data)<parseFloat(row.warning)){
+                            aux=' <i class="material-icons alert-icon text-warning">report_problem</i>';
+                        }
+                        if(parseFloat(data)<parseFloat(row.alert)){
+                            aux=' <i class="material-icons alert-icon text-danger">report</i>';
+                        }
+                        return data +" "+row.measureunit.name+aux;
+                    },"width":"15%"},
+>>>>>>> roberto
                     { "data": "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/items/'+data+'/details" >description</a>';
+                        return '<a class="btn btn-light material-icons" href="{{ url("/items")}}/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {

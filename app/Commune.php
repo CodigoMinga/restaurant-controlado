@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+<<<<<<< HEAD
 /**
  * @property integer $id
  * @property integer $region_id
@@ -43,3 +44,9 @@ class Commune extends Model
         return $this->hasMany('App\User');
     }
 }
+=======
+class Commune extends Model
+{
+    //
+}
+>>>>>>> roberto
