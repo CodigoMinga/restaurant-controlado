@@ -203,7 +203,7 @@ fieldset{
       </ul>
   </div>
 @endif
-        <form action="{{url('/app/checklogin')}}" method="post">
+        <form action="{{url('checklogin')}}" method="post">
           {{csrf_field()}}
           <fieldset class="clearfix">
 
@@ -232,7 +232,7 @@ fieldset{
         <h6><b> <a href="https://www.codigominga.cl">Desarrollo: www.codigominga.cl</a></b>
 
         <br/><br/>
-        <b> <a href="{{url('/app/login/passwordlost')}}">Recuperar Contraseña</a></b>
+        <b> <a href="{{url('login/passwordlost')}}">Recuperar Contraseña</a></b>
       </h6>
       </div>
     </div>

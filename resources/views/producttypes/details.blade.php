@@ -5,7 +5,7 @@
     <h1>
         <i class="material-icons">library_books</i>Detalles de la  Categoria
     </h1>
-    <form method="post" action="{{url('app/producttypes/'.$producttype->id.'/edit/process')}}">
+    <form method="post" action="{{url('producttypes/'.$producttype->id.'/edit/process')}}">
         {{csrf_field()}}
         <div class="form-group">
             <label>Nombre </label>
@@ -19,7 +19,7 @@
             <i class="material-icons">done</i>
             Editar Categoria
         </button>
-        <a href="{{ url('/') }}/app/producttypes/{{$producttype->id}}/delete" class="btn btn-warning">
+        <a href="{{ url('producttypes') }}/{{$producttype->id}}/delete" class="btn btn-warning">
             <i class="material-icons">clear</i>
             Eliminar Categoria
         </a>

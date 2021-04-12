@@ -5,7 +5,7 @@
         <h1>
             <i class="material-icons">add_box</i>Agregar Categoria
         </h1>
-        <form method="post" action="{{url('app/producttypes/add/process')}}" id="form">
+        <form method="post" action="{{url('producttypes/add/process')}}" id="form">
             {{csrf_field()}}
             <div class="form-group">
             <label for="company_id">Empresa:</label>

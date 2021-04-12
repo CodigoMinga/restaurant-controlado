@@ -102,20 +102,20 @@
                 
                 @yield('info')
 
-                <a class="sidebar-button {{(request()->is('products/add')) ? 'active' : '' }}" href="{{ url('/app/products/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Producto
+                <a class="sidebar-button {{(request()->is('products/add')) ? 'active' : '' }}" href="{{ url('products/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">fastfood</i>Producto
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/producttypes/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Categoria
+                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('producttypes/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Categoria
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/measureunits/list') }}">
+                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('measureunits/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Medida
                 </a>
                 <a class="sidebar-button {{(request()->is('items/list')) ? 'active' : '' }}" href="{{ url('items/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Insumos
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">shopping_cart</i>Insumos
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/companys/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Compañias
+                <a class="sidebar-button {{(request()->is('companys/list')) ? 'active' : '' }}" href="{{ url('companys/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">apartment</i>Compañias
                 </a>
                 <a class="sidebar-button {{(request()->is('users/list')) ? 'active' : '' }}" href="{{ url('users/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">groups</i>Usuarios

@@ -4,7 +4,7 @@
     <h2 class="pt-5 pl-5 page-header">
         <i class="fa fa-pencil"></i> Agregar Insumos a Receta
     </h2>
-    <form method="post" class="pt-5 pl-5 col-7" action="{{url('app/prescriptions/.'$prescription->id'./prescriptiondetails/.'prescriptiondetails->id'./add/process')}}" id="form">
+    <form method="post" class="pt-5 pl-5 col-7" action="{{url('prescriptions/.'$prescription->id'./prescriptiondetails/.'prescriptiondetails->id'./add/process')}}" id="form">
         {{csrf_field()}}
         <label for="item_id">Insumo:</label>
         

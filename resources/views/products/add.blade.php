@@ -5,7 +5,7 @@
         <h1>
             <i class="material-icons">add_box</i>Agregar Producto
         </h1>
-        <form method="post" action="{{ url('app/products/add/process') }}" id="form">
+        <form method="post" action="{{ url('products/add/process') }}" id="form">
             {{ csrf_field() }}
 
             <div class="form-group">
