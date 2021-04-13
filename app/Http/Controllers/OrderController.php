@@ -88,7 +88,16 @@ class OrderController extends Controller
         $order = Order::findOrFail($order_id);
         $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
         $tables = Table::whereIn('company_id',$companies_id)->get();
-        return view('main.productselection', compact('tables','order'));
+        return view('main.changetable', compact('tables','order'));
+    }
+    
+    public function changetableProcess($order_id,$table_id)
+    {
+        $order  = Order::findOrFail($order_id);
+        $table  = Table::findOrFail($table_id);
+        $order->table_id = $table->id;
+        $order->save();
+        return redirect('/orderdetails/'.$order->id)->with('success', 'Mesa cambiada correctamente');;
     }
 
 }

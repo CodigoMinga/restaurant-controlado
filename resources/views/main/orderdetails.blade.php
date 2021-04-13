@@ -158,6 +158,9 @@
         <a href="{{url('/productselection/'.$order->id)}}" class="btn btn-success btn-lg">
             Agregar
         </a>
+        <a href="{{url('/changetable/'.$order->id)}}" class="btn btn-danger btn-lg">
+            Cambiar Mesa
+        </a>
         <button  onclick="Print()" class="btn btn-primary btn-lg">
             Comanda
         </button>
