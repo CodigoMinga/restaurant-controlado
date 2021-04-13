@@ -3,9 +3,9 @@
 @section('content')
 <div class="container pt-3">
     <h1>
-        <i class="material-icons">add_box</i>Agregar Pedido
+        <i class="material-icons">add_box</i>Agregar Cliente
     </h1>
-    <form method="post" action="{{url('app/users/add/process')}}" id="form">
+    <form method="post" action="{{url('app/clients/add/process')}}" id="form">
     {{csrf_field()}}
 
     <div class="form-group">
@@ -19,12 +19,19 @@
 
     <div class="form-group">
       <label for="formGroupExampleInput" class="form-label">Direccion</label>
-      <input type="text" class="form-control" placeholder="Direccion" name="direccion" id="direccion" required>
+      <input type="text" class="form-control" placeholder="direccion" name="address" id="address" required>
     </div>
 
+
     <div class="form-group">
-      <label for="formGroupExampleInput2" class="form-label">Comuna</label>
-      <input type="text" class="form-control"  placeholder="Comuna" name="commune" id="commune" required>
+      <label for="region_id">Region:</label>
+      <select name="region_id" id="region_id" class="form-control" >
+          @forelse($regions as $region)
+          <option value="{{ $region->id }}">{{ $region->name }}</option>
+          @empty
+          <li>Aun no hay Regiones</li>
+          @endforelse
+      </select>
     </div>
     <div class="form-group">
         <label for="commune_id">Comuna:</label>

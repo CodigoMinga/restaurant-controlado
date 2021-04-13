@@ -18,9 +18,12 @@ class CreateClientsTable extends Migration
             $table->timestamps();
             $table->bigInteger('phone');
             $table->string('name');
-            $table->string('direccion');
-            $table->bigInteger('commune_id')->unsinged();
+            $table->string('address');
+            $table->bigInteger('region_id')->unsigned();
+            $table->foreign('region_id')->references('id')->on('regions');
+            $table->bigInteger('commune_id')->unsigned();
             $table->foreign('commune_id')->references('id')->on('communes');
+
         });
     }
 

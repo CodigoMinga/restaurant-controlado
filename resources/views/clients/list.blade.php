@@ -11,10 +11,10 @@
 @section('content')
     <div class="container pt-3">
         <div class="d-flex justify-content-between align-items-center">
-            <h1>Lista de Pedidos</h1>
+            <h1>Lista de Clientes</h1>
             <a  href="{{ url('/') }}/app/clients/add" class="btn btn-success">
                 <i class="material-icons">add</i>
-                Agregar Pedido
+                Agregar Cliente
             </a>
         </div>
         <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
