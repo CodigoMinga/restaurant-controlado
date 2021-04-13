@@ -199,6 +199,12 @@ h1 .material-icons{
     fill:white;
 }
 
+.mesa img{
+    width:80px;
+    height:80px;
+    padding:5px;
+}
+
 .mesa:hover{
     color:#fbc02d ;
     text-decoration: none;

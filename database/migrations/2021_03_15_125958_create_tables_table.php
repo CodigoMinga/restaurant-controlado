@@ -18,6 +18,7 @@ class CreateTablesTable extends Migration
             $table->timestamps();
             $table->string('name');
             $table->longText('description')->nullable();
+            $table->longText('image')->nullable();
             $table->integer('number')->nullable();
             $table->boolean('enabled')->default(1);
 
