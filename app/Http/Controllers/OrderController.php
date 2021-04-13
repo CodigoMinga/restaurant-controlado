@@ -37,6 +37,7 @@ class OrderController extends Controller
         if (!isset($order)) {
             $order = new Order();
             $order->table_id = $table->id;
+            $order->user_id = Auth::user()->id;
             $order->company_id = $table->company_id;
             //Añade el numero interno de la orden, si no hay ninguna la crea como primera
             $last_order = Order::latest('internal_id')->where('company_id','=',$table->company_id)->first();
@@ -80,6 +81,14 @@ class OrderController extends Controller
 
         $order->Total=$order->Total;
         return $order;
+    }
+
+    public function changetable($order_id)
+    {
+        $order = Order::findOrFail($order_id);
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+        $tables = Table::whereIn('company_id',$companies_id)->get();
+        return view('main.productselection', compact('tables','order'));
     }
 
 }

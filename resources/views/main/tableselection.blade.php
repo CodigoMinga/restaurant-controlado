@@ -8,7 +8,7 @@
         <div class="scrollselection pl-4 pr-4">
             @foreach ($tables as $table)
                 <a class="mesa" href="{{url('/')}}/tableorder/{{$table->id}}">
-                    @if($table->ordertype_id==1)
+                    @if($table->tabletype_id==1)
                     <svg viewBox="0 0 44.999 44.999">
                         <g>
                             <path d="M42.558,23.378l2.406-10.92c0.18-0.816-0.336-1.624-1.152-1.803c-0.816-0.182-1.623,0.335-1.802,1.151l-2.145,9.733
@@ -25,7 +25,7 @@
                                 s0.677,1.513,1.512,1.513h4.728c0.837,0,1.514-0.678,1.514-1.513S25.699,31.353,24.862,31.353z"/>
                         </g>
                     </svg>
-                    @elseif($table->ordertype_id==2)
+                    @elseif($table->tabletype_id==2)
                     <svg viewBox="0 0 424.862 424.862">
                         <g>
                             <path d="M413.909,311.887c1.121-5.759,0.753-12.313-1.141-19.134c-12.417-44.727-49.571-136.302-80.446-174.018
@@ -60,7 +60,10 @@
                         </g>
                     </svg>
                     @endif
-                    <span>{{$table->name}}</span>
+                    <div>{{$table->name}}</div>
+                    @if($table->hasOrder())
+                        <span class="material-icons ocupada">receipt_long</span>
+                    @endif
                 </a>
             @endforeach
         </div>
