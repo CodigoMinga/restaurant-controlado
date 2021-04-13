@@ -5,7 +5,7 @@
         <h1>
             <i class="material-icons">library_books</i>Detalles de la Compañia
         </h1>
-        <form method="post" action="{{url('app/companys/'.$company->id.'/edit/process')}}">
+        <form method="post" action="{{url('companys/'.$company->id.'/edit/process')}}">
             {{csrf_field()}}
             <div class="form-group">
                 <label>Nombre Compañia</label>
@@ -39,7 +39,7 @@
                 <i class="material-icons">done</i>
                 Editar Compañia
             </button>
-            <a  href="{{ url('/') }}/app/companys/{{$company->id}}/delete" class="btn btn-danger">
+            <a  href="{{url('companys')}}/{{$company->id}}/delete" class="btn btn-danger">
                 <i class="material-icons">clear</i>
                 Eliminar Compañia
             </a>

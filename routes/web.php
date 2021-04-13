@@ -17,14 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 //LOGIN
 Route::get('/',                                 'MainController@login')->name('login');
-Route::post('/app/checklogin',                  'MainController@checkLogin');
-Route::get('/app/register',                     'MainController@register');
-Route::post('/app/register/process',            'MainController@registerProcess');
-Route::get('/app/login/passwordlost',           'MainController@passwordLost');
-Route::post('/app/login/passwordlost/process',  'MainController@passwordLostProcess');
+Route::post('/checklogin',                  'MainController@checkLogin');
+Route::get('/register',                     'MainController@register');
+Route::post('/register/process',            'MainController@registerProcess');
+Route::get('/login/passwordlost',           'MainController@passwordLost');
+Route::post('/login/passwordlost/process',  'MainController@passwordLostProcess');
 
-Route::get('/app/login/resetpassword/{user_id}/token/{token}',            'MainController@passwordRessetToken');
-Route::post('/app/login/resetpassword/{user_id}/token/{token}/process',   'MainController@passwordRessetTokenProcess');
+Route::get('/resetpassword/{user_id}/token/{token}',            'MainController@passwordRessetToken');
+Route::post('/resetpassword/{user_id}/token/{token}/process',   'MainController@passwordRessetTokenProcess');
 
 //ESTAS RUTAS NECESITAN ESTAR LOGUEADO
 Route::group(['middleware' => ['auth']], function() {
@@ -53,59 +53,40 @@ Route::group(['middleware' => ['auth']], function() {
     route::post('/users/process',           'UserController@process')->name('users.process');
     //CAMBIAR CLAVE
     Route::post('/users/passwordchange/process','UserController@passwordchangeProcess');
+    
+    //CATEGORIAS (PRODUCTTYPES)
+    route::get('/producttypes/list',                    'ProducttypeController@list')->name('producttypes.list');
+    route::get('/producttypes/add',                     'ProducttypeController@add')->name('producttypes.add');
+    route::get('/producttypes/{producttype_id}',        'ProducttypeController@details')->name('producttypes.details');
+    route::get('/producttypes/{producttype_id}/delete', 'ProducttypeController@delete')->name('producttypes.delete');
+    route::post('/producttypes/process',                'ProducttypeController@process');
 
     //PRODUCTOS
-    Route::get('/app/products/list',                        'ProductController@list')->name('products.list');
-    Route::get('/app/products/add',                         'ProductController@add')->name('products.add');
-    Route::post('/app/products/add/process',                'ProductController@addProcess');
-    Route::get('/app/products/{product_id}',                'ProductController@details')->name('products.details');
-    Route::get('/app/products/{product_id}/prescriptions/{prescription_id}/details', 'ProductController@details');
-    Route::post('/app/products/{product_id}/edit/process',  'ProductController@editprocess');
-    Route::get('/app/products/{product_id}/delete',         'ProductController@delete');
+    Route::get('/products/list',                        'ProductController@list')->name('products.list');
+    Route::get('/products/add',                         'ProductController@add')->name('products.add');
+    Route::get('/products/{product_id}',                'ProductController@details')->name('products.details');
+    Route::get('/products/{product_id}/delete',         'ProductController@delete');
+    Route::post('/products/process',                    'ProductController@process');
 
-    //CATEGORIAS (PRODUCTTYPES)
-    route::get('/app/producttypes/add',                             'ProducttypeController@add')->name('producttypes.add');
-    route::post('/app/producttypes/add/process',                    'ProducttypeController@addProcess');
-    route::get('/app/producttypes/list',                            'ProducttypeController@list')->name('producttypes.list');
-    route::get('/app/producttypes/{producttype_id}',                'ProducttypeController@details')->name('producttypes.details');
-    route::post('/app/producttypes/{producttype_id}/edit/process',  'ProducttypeController@editprocess')->name('producttypes.editprocess');
-    route::get('/app/producttypes/{producttype_id}/delete',         'ProducttypeController@delete')->name('producttypes.delete');
-
-    //UNIDADES DE MEDIDA
-    route::get('/app/measureunits/add',                             'MeasureunitController@add')->name('measureunits.add');
-    route::post('/app/measureunits/add/process',                    'MeasureunitController@addProcess');
-    route::get('/app/measureunits/list',                            'MeasureunitController@list')->name('measureunits.list');
-    route::get('/app/measureunits/{measureunit_id}',                'MeasureunitController@details')->name('measureunits.details');
-    route::post('/app/measureunits/{measureunit_id}/edit/process',  'MeasureunitController@editprocess')->name('measureunits.editprocess');
-    route::get('/app/measureunits/{measureunit_id}/delete',         'MeasureunitController@delete')->name('measureunitvs.delete');
-
-    //COMPAÑIAS
-    route::get('/app/companys/add',                         'CompanyController@add')->name('companys.add');
-    route::post('/app/companys/add/process',                'CompanyController@addProcess');
-    route::get('/app/companys/list',                        'CompanyController@list')->name('companys.list');
-    route::get('/app/companys/{company_id}',                'CompanyController@details');
-    route::post('/app/companys/{company_id}/edit/process',  'CompanyController@editprocess');
-    route::get('/app/companys/{company_id}/delete',         'CompanyController@delete');
-    
-    //RECETA
-    Route::get('/app/products/{product_id}/prescriptions/add',             'PrescriptionController@add')->name('prescriptions.add');
-    Route::post('/app/products/{product_id}/prescriptions/add/process',    'PrescriptionController@addProcess');
-    route::get('app/prescriptions/list',                                   'PrescriptionController@list')->name('prescriptions.list');
-    route::get('/app/products/{product_id}/prescriptions/details',         'PrescriptionController@details')->name('prescriptions.details');
-    route::post('app/prescriptions/{prescription_id}/edit/process',        'PrescriptionController@editprocess')->name('prescriptions.editprocess');
-    route::get('app/prescriptions/{prescription_id}/delete',               'PrescriptionController@delete')->name('prescriptions.delete');
-    //Detalles de Receta 
-    route::get('/app/products/{product_id}/prescriptiondetails/details',         'PrescriptiondetailController@details')->name('prescriptiondetails.details');
-
-    //Receta
-    Route::post('/prescriptions/create',  'PrescriptionController@create');
+    //RECERA
+    Route::post('/prescriptions/store',                     'PrescriptionController@store');
+    Route::get('/prescriptions/{prescription_id}',          'PrescriptionController@details');
+    Route::get('/prescriptions/{prescription_id}/delete',   'PrescriptionController@delete');
 
     //Detalle de Receta
-    Route::post('/prescriptiondetails/create',                          'PrescriptiondetailController@create');
-    Route::post('/prescriptiondetails/update',                          'PrescriptiondetailController@update');
-    Route::get('/prescriptiondetails/select/{prescriptiondetail_id}',   'PrescriptiondetailController@select');
+    Route::post('/prescriptiondetails/store',                           'PrescriptiondetailController@store');
+    Route::get('/prescriptiondetails/{prescriptiondetail_id}',          'PrescriptiondetailController@select');
+    Route::get('/prescriptiondetails/{prescriptiondetail_id}/delete',   'PrescriptiondetailController@delete');
 
+    //COMPAÑIAS
+    route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
+    route::post('/companys/add/process',                'CompanyController@addProcess');
+    route::get('/companys/list',                        'CompanyController@list')->name('companys.list');
+    route::get('/companys/{company_id}',                'CompanyController@details');
+    route::post('/companys/{company_id}/edit/process',  'CompanyController@editprocess');
+    route::get('/companys/{company_id}/delete',         'CompanyController@delete');
     
+
     Route::get('prueba',function(){
         //1 Compañias a la que pertenece el usuario
         $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();

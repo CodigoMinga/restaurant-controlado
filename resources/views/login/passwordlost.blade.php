@@ -21,7 +21,7 @@
                 </ul>
             </div>
         @endif
-        <form method="post" action="{{url('/app/login/passwordlost/process')}}">
+        <form method="post" action="{{url('passwordlost/process')}}">
             {{csrf_field()}}
             <div class="form-group has-feedback">
                 <input type="email" class="form-control" placeholder="Email" name="email">

@@ -7,7 +7,7 @@
             <h2 class="page-header">
                 <i class="fa fa-list"></i> Detalles de Unidad de Medida<b></b>
             </h2>
-            <form method="post" action="{{url('app/measureunits/'.$measureunit->id.'/edit/process')}}">
+            <form method="post" action="{{url('measureunits/'.$measureunit->id.'/edit/process')}}">
                 {{csrf_field()}}
 
 
@@ -24,7 +24,7 @@
 
                 <button type="submit" class="btn btn-danger "><i class="fa fa-check"></i>Editar Unidad de Medida</button>
                 <div class="row">
-                    <div class="col-xs-12 pl-3 pt-3"><a  href="{{ url('/') }}/app/measureunits/{{$measureunit->id}}/delete" class="btn btn-warning"><i class="fa fa-edit"></i>Eliminar Unidad de Medida</a></div>
+                    <div class="col-xs-12 pl-3 pt-3"><a  href="{{ url('measureunits') }}/{{$measureunit->id}}/delete" class="btn btn-warning"><i class="fa fa-edit"></i>Eliminar Unidad de Medida</a></div>
                 </div>
             </form>
 

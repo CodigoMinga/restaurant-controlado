@@ -12,7 +12,7 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <h1>Lista de Compañias</h1>
-                <a  href="{{ url('/') }}/app/companys/add" class="btn btn-danger">Agregar Compañia</a>
+                <a  href="{{ url('companys') }}/add" class="btn btn-danger">Agregar Compañia</a>
             </div>
             <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
                 <thead>
@@ -37,7 +37,7 @@
                 "columns": [
                     { "data": "name","width":"90%"},
                     { data: "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-success material-icons" href="{{ url("/")}}/app/companys/'+data+'" >description</a>';
+                        return '<a class="btn btn-success material-icons" href="{{ url("companys")}}/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {
