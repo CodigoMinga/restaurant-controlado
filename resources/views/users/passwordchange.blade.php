@@ -4,7 +4,7 @@
     <h1>
         <i class="material-icons pr-2">vpn_key</i>Cambiar Contraseña
     </h1>
-    <form method="post" action="{{url('/app/password/'.$user->id.'/passwordchange/process')}}" id="form">
+    <form method="post" action="{{url('/users/passwordchange/process')}}" id="form">
     {{csrf_field()}}
 
     <div class="form-group">
