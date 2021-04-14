@@ -1,11 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Order;
-use App\Orderdetail;
+use App\Tabletype;
 
-
-class OrderSeeder extends Seeder
+class TabletypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +12,7 @@ class OrderSeeder extends Seeder
      */
     public function run()
     {
-        
+        Tabletype::create(['name'=>'Mesas']);
+        Tabletype::create(['name'=>'Internet']);
     }
 }

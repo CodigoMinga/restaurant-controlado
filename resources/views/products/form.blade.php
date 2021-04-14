@@ -3,29 +3,55 @@
 @section('content')
     <div class="container pt-3">
         <h1>
-            <i class="material-icons">library_books</i>Detalles del Producto
+            @if ($product->id)
+                <i class="material-icons">edit</i>Editar Producto
+            @else
+                <i class="material-icons">add_box</i>Agregar Producto
+            @endif
         </h1>
-        <form method="post" action="{{url('app/products/'.$product->id.'/edit/process')}}">
+
+        <form method="post" action="{{url('products/process')}}">
             {{csrf_field()}}
+            <input type="hidden" name="id" value="{{ $product->id }}">
+            @if (!$product->id)
+                <div class="form-group">
+                    <label for="producttype_id">Categoria:</label>
+                    <select name="producttype_id" id="producttype_id" class="form-control">
+                        @foreach($producttypes as $producttype)
+                            <option value="{{ $producttype->id }}" {{$product->producttype_id==$producttype->id ? 'selected' : ''}}>{{ $producttype->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
             <div class="form-group">
                 <label>Nombre Producto</label>
-                <input required type="text" class="form-control" name="name" value="{{$product->name}}">
+                <input type="text" class="form-control" name="name" value="{{$product->name}}" required>
             </div>
             <div class="form-group">
                 <label>Descripción</label>
                 <input type="text" class="form-control" name="description"  value="{{$product->description}}">
             </div>
-            <button type="submit" class="btn btn-success ">
-                <i class="material-icons">done</i>
-                Editar Producto
-            </button>
-            <a  href="{{ url('/') }}/app/products/{{$product->id}}/delete" class="btn btn-danger">
-                <i class="material-icons">clear</i>
-                Eliminar Producto
-            </a>
+            <div class="form-group">
+                <label for="formGroupExampleInput2" class="form-label">Precio</label>
+                <input type="number" class="form-control" name="price" value="{{$product->price}}" required>
+            </div>
+            <br>
+            <div class="d-flex  justify-content-between">
+                <button type="submit" class="btn btn-success">
+                    <i class="material-icons">send</i>
+                    Guardar
+                </button>
+                @if ($product->id)
+                <a href="{{ url('/producttypes') }}/{{ $product->id }}/delete" class="btn btn-danger">
+                    <i class="material-icons">close</i>
+                    Eliminar
+                </a>
+                @endif
+            </div>
         </form>
     </div>
 
+    @if ($product->id)
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center">
             <h1>
@@ -37,8 +63,10 @@
             </a>
         </div>
         <ul>
-            @foreach($prescriptions as $prescription)
-            <li><a href="{{ route('prescriptions.details', $prescription) }}">{{$prescription->description}}</a></li>
+            @foreach($product->prescriptions as $prescription)
+                @if($prescription->enabled==1)
+                    <li><a href="{{url('prescriptions')}}/{{$prescription->id}}">{{$prescription->description}}</a></li>
+                @endif
             @endforeach
         </ul>
     </div>
@@ -80,7 +108,7 @@
         prescriptionForm.onsubmit = function(e){
             var formData = new FormData(prescriptionForm);
             $.ajax({
-                url: "{{url('/prescriptions/create')}}",
+                url: "{{url('/prescriptions/store')}}",
                 type: "POST",
                 data: formData,
                 processData: false,  // tell jQuery not to process the data
@@ -88,7 +116,7 @@
             }).done(function( data ) {
                 if(typeof(data)=='object'){
                     if(data.id){
-                        window.location.href = "{{url('/app/products/'.$product->id)}}";
+                        window.location.href = "{{url('products/'.$product->id)}}";
                     }
                     $('#protuct-modal').modal('hide');
                 }else{
@@ -101,4 +129,5 @@
             return false;
         };
     </script>
+    @endif
 @stop
