@@ -3,83 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Table;
+use App\Tabletype;
 use Illuminate\Http\Request;
 
 class TableController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+    
+    public function add(){
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+        //Array de las Compañias del Usuario
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        //Tipos de Productos que pertenecesn a las conpañias del Usuario
+        $tabletypes = Tabletype::whereIn('company_id',$companies_id)->get();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Table  $table
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Table $table)
-    {
-        //
-    }
+        $product = new Product;
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Table  $table
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Table $table)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Table  $table
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Table $table)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Table  $table
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Table $table)
-    {
-        //
+        return view('products.form',compact('producttypes','product'));
     }
 }
