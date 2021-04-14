@@ -4,96 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Role;
 use App\User;
+use App\Company;
+use DB;
 use Auth;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Role $role)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Role $role)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Role $role)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Role $role)
-    {
-        //
-    }
     public function add(){
 
         $roles = Role::all();
-
-        return view('users.add',compact('roles'));
+        $companies = Company::all();
+        return view('users.add',compact('roles', 'companies'));
     }
     public function list(){
 
-        $users = User::all();
-        return view('users.list',compact('users'));
+        //1 Compañias a la que pertenece el usuario
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+
+        //Consultar a la tabla company_user las id de los usuarios que pertenecen a las compañias dichas
+        $users_id= DB::table('company_user')->whereIn('company_id',$companies_id)->pluck('user_id')->toArray();
+
+        //buscar los usuarios con las id obtenidas
+        $users = User::WhereIn('id',$users_id)->get();
+ 
+        return view('users.list' , \compact('users'));
     }
     public function editprocess($user_id, Request $request)
 {
@@ -106,7 +41,10 @@ class RoleController extends Controller
 }
 public function details($user_id)
 {
-    return view('users.details', [
+ 
+    $roles = Role::all();
+  
+    return view('users.details',compact('roles') ,[
         'user' => User::find($user_id)
     ]);
 }

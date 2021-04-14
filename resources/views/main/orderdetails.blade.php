@@ -75,7 +75,8 @@
                             <input type="checkbox" name="" id="">
                         </td>
                         <td>
-                            {{$orderdetail->product->name}}
+                            {{$orderdetail->product->name}}<br>
+                            <small>{{$orderdetail->description}}</small>
                         </td>
                         <td align="right">
                             {{number_format($orderdetail->quantity, 0, '', '.')}}
@@ -110,6 +111,14 @@
                 </td>
                 <td>
                     <input type="text"      placeholder="Razón del descuento">
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Transferencia
+                </th>
+                <td>
+                    <input type="number"    size="6" value="0" id="transferencia" class="dinero">
                 </td>
             </tr>
             <tr>
@@ -174,7 +183,8 @@
                 @foreach ($order->orderdetails as $orderdetail)
                     <tr>
                         <td>
-                            {{$orderdetail->product->name}}
+                            {{$orderdetail->product->name}}<br>
+                            <small>{{$orderdetail->description}}</small>
                         </td>
                         <td align="right">
                             {{$orderdetail->quantity}}
@@ -192,6 +202,7 @@
         let Total=parseFloat("{{$order->Total*1.19}}");
         var imprimir = document.getElementById('imprimir');
 
+        var transferencia = document.getElementById('transferencia');
         var descuento = document.getElementById('descuento');
         var debito = document.getElementById('debito');
         var credito = document.getElementById('credito');
@@ -239,7 +250,7 @@
         dinero.forEach(input => 
             input.onkeyup = function(){
 
-                vuelto.value= - Total + parseFloat(descuento.value) + parseFloat(debito.value) + parseFloat(credito.value) + parseFloat(efectivo.value);
+                vuelto.value= - Total + parseFloat(descuento.value) + parseFloat(debito.value) + parseFloat(credito.value) + parseFloat(efectivo.value) + parseFloat(transferencia.value);
             }
         )
 
