@@ -15,17 +15,15 @@ class CreateClientsTable extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
+            $table->timestamps();
+            $table->bigInteger('phone');
             $table->string('name');
-            $table->string('phone');
-            $table->longText('address');
-
-            $table->bigInteger('company_id')->unsigned();
-            $table->foreign('company_id')->references('id')->on('companies')->onUpdate('RESTRICT')->onDelete('RESTRICT');
-
+            $table->string('address');
+            $table->bigInteger('region_id')->unsigned();
+            $table->foreign('region_id')->references('id')->on('regions');
             $table->bigInteger('commune_id')->unsigned();
             $table->foreign('commune_id')->references('id')->on('communes');
-            
-            $table->timestamps();
+
         });
     }
 
