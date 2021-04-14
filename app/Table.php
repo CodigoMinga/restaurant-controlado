@@ -17,23 +17,28 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Table extends Model
 {
-    /**
-     * The "type" of the auto-incrementing ID.
-     * 
-     * @var string
-     */
     protected $keyType = 'integer';
 
-    /**
-     * @var array
-     */
     protected $fillable = ['company_id', 'created_at', 'updated_at', 'name', 'description', 'number', 'enabled'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function company()
     {
         return $this->belongsTo('App\Company');
     }
+
+    public function orders()
+    {
+        return $this->hasMany('App\Order');
+    }
+
+    public function hasOrder()
+    {
+        $order = $this->orders()->where('closed', 0)->first();
+        if($order){
+            return $order;
+        }else{
+            return null;
+        }
+    }
+
 }

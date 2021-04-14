@@ -27,6 +27,11 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 
+            
+
+            $table->bigInteger('ordertype_id')->unsigned()->default(1);
+            $table->foreign('ordertype_id')->references('id')->on('ordertypes')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+
             $table->integer('credit_card')->unsigned()->nullable();
             $table->integer('debit_card')->unsigned()->nullable();
             $table->integer('efective')->unsigned()->nullable();
