@@ -108,11 +108,8 @@
                 <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/producttypes/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Categoria
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/measureunits/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Medida
-                </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/items/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Insumos
+                <a class="sidebar-button {{(request()->is('items/list')) ? 'active' : '' }}" href="{{ url('items/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">shopping_cart</i>Insumos
                 </a>
                 <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/companys/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Compañias

@@ -5,17 +5,18 @@
         <h1>
             <i class="material-icons">library_books</i>Detalles del Receta
         </h1>
-        <form method="post" action="{{url('/prescriptions/'.$prescription->id.'/update')}}">
+        <form method="post" action="{{url('/prescriptions/store')}}">
             {{csrf_field()}}
+            <input type="hidden" name="id" value="{{$prescription->id}}">
             <div class="form-group">
                 <label>Descripción</label>
                 <input type="text" class="form-control" name="description"  value="{{$prescription->description}}">
             </div>
-            <button type="submit" class="btn btn-warning ">
+            <button type="submit" class="btn btn-success ">
                 <i class="material-icons">done</i>
                 Editar Receta
             </button>
-            <a  href="{{url('/prescription/'.$prescription->id.'/delete')}}" class="btn btn-danger">
+            <a  href="{{url('/prescriptions/'.$prescription->id.'/delete')}}" class="btn btn-danger">
                 <i class="material-icons">clear</i>
                 Eliminar Receta
             </a>
@@ -92,15 +93,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <button data-dismiss="modal"    class="btn btn-danger"  >
-                            <i class="material-icons">close</i>
-                            Cancelar
-                        </button>
+                    <div class="modal-footer d-flex justify-content-between flex-row-reverse">
                         <button type="submit"           class="btn btn-success" >
                             <i class="material-icons">add</i>
-                            Agregar
+                            Guardar
                         </button>
+                        <a class="btn btn-danger"  id="eliminar" onclick="prescriptiondetailDelete()">
+                            <i class="material-icons">close</i>
+                            Eliminar
+                        </a>
                     </div>
                 </form>
             </div>
@@ -111,6 +112,9 @@
         var itemsList = document.getElementById('itemsList');
         var prescriptiondetail_id = document.getElementById('prescriptiondetail_id');
         var unidad = document.getElementById('unidad');
+
+        var eliminar = document.getElementById('eliminar');
+        
         var items = {!! json_encode($items) !!};
         var measureunits = {!! json_encode($measureunits) !!};
 
@@ -127,17 +131,11 @@
             itemsList.appendChild(newoption);
         });
 
-
-
         var prescriptiondetailForm = document.getElementById('prescriptiondetailForm');
         prescriptiondetailForm.onsubmit = function(e){
             var formData = new FormData(prescriptiondetailForm);
-            var urlaux = '/create';
-            if(prescriptiondetail_id.value!=''){
-                urlaux = '/update';
-            }
             $.ajax({
-                url: "{{url('/prescriptiondetails')}}"+urlaux,
+                url: "{{url('/prescriptiondetails/store')}}",
                 type: "POST",
                 data: formData,
                 processData: false,  // tell jQuery not to process the data
@@ -156,24 +154,23 @@
                     }
                     $('#prescriptiondetail-modal').modal('hide');
                 }else{
-                    alert(data);
+                    toastError("Error al agregar ingrediente");
                 }
             }).fail(function() {
-                alert( "error al recibir respuesta del servidor" );
+                toastError( "error al recibir respuesta del servidor" );
             });
             e.preventDefault();
             return false;
         };
 
         function prescriptiondetails(id){
-            $.get( "{{url('/prescriptiondetails/select')}}/"+id, function( data ) {
-
+            $.get( "{{url('prescriptiondetails')}}/"+id, function( data ) {
 
                 prescriptiondetailForm.id.value=data.id;
                 prescriptiondetailForm.prescription_id.value=data.prescription_id;
                 prescriptiondetailForm.item_id.value=data.item_id;
                 prescriptiondetailForm.quantity.value=data.quantity;
-
+                eliminar.style.display='block';
                 var item = items.find(e => e.id==data.item_id);
                 var measureunit = measureunits.find(e => e.id == item.measureunit_id);
                 unidad.innerHTML=measureunit.name;
@@ -188,8 +185,22 @@
             prescriptiondetailForm.id.value='';
             prescriptiondetailForm.item_id.value='';
             prescriptiondetailForm.quantity.value='';
+            eliminar.style.display='none';
             $('#prescriptiondetail-modal .modal-title').eq(0).html('Agregar Ingrediente');
             $('#prescriptiondetail-modal').modal('show');
+        }
+
+        function prescriptiondetailDelete(){
+            var id = prescriptiondetail_id.value
+            $.get( "{{url('prescriptiondetails')}}/"+id+"/delete", function( data ) {
+                if(typeof(data)=='object'){
+                    prescriptiondetailUpdate(data);                
+                    toastSuccess('Ingrediente eliminado de la Receta');
+                }else{
+                    toastError("Error al eliminar ingrediente");
+                }
+                $('#prescriptiondetail-modal').modal('hide');
+            });
         }
 
         function prescriptiondetailAdd(prescriptiondetail){
@@ -202,7 +213,11 @@
             var filas = Array.from(Ingredientes.children);
             filas.forEach(fila => {
                 if(fila.getAttribute('prescriptiondetail_id')==prescriptiondetail.id){
-                    Ingredientes.replaceChild(prescriptiondetailFila(prescriptiondetail), fila);
+                    if(prescriptiondetail.enabled){
+                        Ingredientes.replaceChild(prescriptiondetailFila(prescriptiondetail), fila);
+                    }else{
+                        Ingredientes.removeChild(fila);
+                    }
                 }
             });
         }
@@ -227,6 +242,7 @@
             newbutton.classList.add('material-icons');
             newbutton.innerHTML='description';
             newbutton.onclick = prescriptiondetails(prescriptiondetail.id);
+            newbutton.setAttribute('onclick','prescriptiondetails('+prescriptiondetail.id+')'); 
             newtd.appendChild(newbutton);
 
             newtr.appendChild(newtd);
