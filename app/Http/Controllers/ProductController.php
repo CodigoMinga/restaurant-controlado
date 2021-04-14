@@ -8,31 +8,31 @@ use Illuminate\Http\Request;
 use App\Company;
 use App\Producttype;
 use App\Prescription;
+
 class ProductController extends Controller
 {
     public function add(){
-
+        //Array de las Compañias del Usuario
         $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
 
+        //Tipos de Productos que pertenecesn a las conpañias del Usuario
         $producttypes = Producttype::whereIn('company_id',$companies_id)->get();
         return view('products.add',compact('producttypes'));
     }
 
-    /* NO SE ESTA USANDO
-    public function getdata(){
-
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-
-        $products = Product::whereIn('company_id',$companies_id)->get();
-        return DataTables::of($products)->make(true);
-    }*/
-
     public function list(){
 
+        //Array de las Compañias del Usuario
         $companies_id       = Auth::user()->companies()->pluck('company_id')->toArray();
+        
+        //Tipos de Productos que pertenecesn a las conpañias del Usuario
         $producttypes_id    = Producttype::whereIn('company_id',$companies_id)->pluck('id')->toArray();
 
+        //Productos que pertenecesn a los tipos de producto de las conpañias del Usuario
         $products = Product::whereIn('producttype_id',$producttypes_id)->get();
+        foreach ($products as $key => $product) {
+            $product->producttype;
+        }
         return view('products.list',compact('products'));
     }
 
@@ -44,9 +44,14 @@ class ProductController extends Controller
 
     public function details($product_id)
     {
-        return view('products.details', [
-            'product' => Product::find($product_id)
-        ]);
+        //se asigana un valor a la variable $product buscando el producto asociado a la variable.
+        $product = Product::find($product_id);
+        $prescription = Prescription::all();
+       
+        //prescriptions resive las recetas  que pertenescan al producto con el mismo id que el que se esta resiviendo y lo pagina.
+        $prescriptions = Prescription::where('product_id','=',$product_id)->latest()->paginate();
+
+        return view('products.details', compact('product','prescriptions'));
     }
 
     public function editprocess($product_id, Request $request)

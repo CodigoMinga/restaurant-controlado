@@ -44,4 +44,9 @@ class Product extends Model
     {
         return $this->hasMany('App\Prescription');
     }
+
+    public function producttype()
+    {
+        return $this->belongsTo('App\producttype');
+    }
 }

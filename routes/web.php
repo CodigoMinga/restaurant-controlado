@@ -23,8 +23,8 @@ Route::post('/app/register/process',            'MainController@registerProcess'
 Route::get('/app/login/passwordlost',           'MainController@passwordLost');
 Route::post('/app/login/passwordlost/process',  'MainController@passwordLostProcess');
 
-Route::get('/app/resetpassword/{user_id}/token/{token}',            'MainController@passwordRessetToken');
-Route::post('/app/resetpassword/{user_id}/token/{token}/process',   'MainController@passwordRessetTokenProcess');
+Route::get('/app/login/resetpassword/{user_id}/token/{token}',            'MainController@passwordRessetToken');
+Route::post('/app/login/resetpassword/{user_id}/token/{token}/process',   'MainController@passwordRessetTokenProcess');
 
 //ESTAS RUTAS NECESITAN ESTAR LOGUEADO
 Route::group(['middleware' => ['auth']], function() {
@@ -32,7 +32,13 @@ Route::group(['middleware' => ['auth']], function() {
     //CAMBIAR CLAVE
     Route::get('/app/password/{user_id}/change',            'MainController@passwordChange');
     Route::post('/app/password/{user_id}/change/process',   'MainController@passwordChangeProcess');
-
+    //CLIENTE
+    Route::get('/app/clients/list',                        'ClientController@list')->name('clients.list');
+    Route::get('/app/clients/add',                         'ClientController@add')->name('clients.add');
+    Route::post('/app/clients/add/process',                'ClientController@addProcess');
+    Route::get('/app/clients/{client_id}',                'ClientController@details');
+    Route::post('/app/clients/{client_id}/edit/process',                'ClientController@editprocess');
+    Route::get('/app/clients/{client_id}/delete',                'ClientController@delete');
     //ORDENES
     Route::get('/tables',                       'OrderController@tables');
     Route::get('/tableorder/{table_id}',        'OrderController@tableorder');
@@ -45,8 +51,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/app/products/list',                        'ProductController@list')->name('products.list');
     Route::get('/app/products/add',                         'ProductController@add')->name('products.add');
     Route::post('/app/products/add/process',                'ProductController@addProcess');
-    Route::get('/app/products/{product_id}',                'ProductController@details');
-    //Route::get('/app/products/{product_id}/prescriptions/{prescriptions_id}/details', 'ProductController@details');
+    Route::get('/app/products/{product_id}',                'ProductController@details')->name('products.details');
+    Route::get('/app/products/{product_id}/prescriptions/{prescription_id}/details', 'ProductController@details');
     Route::post('/app/products/{product_id}/edit/process',  'ProductController@editprocess');
     Route::get('/app/products/{product_id}/delete',         'ProductController@delete');
 
@@ -94,13 +100,37 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/app/password/{user_id}/passwordchange/process', 'MainController@passwordChangeProcess');
     
     //RECETA
-    Route::get('/app/products/{product_id}/prescriptions/add','PrescriptionController@add')->name('prescriptions.add');
-    Route::post('/app/products/{product_id}/prescriptions/add/process','PrescriptionController@addProcess');
-    route::get('app/prescriptions/getdata','PrescriptionController@getdata')->name('prescriptions.getdata');
-    route::get('app/prescriptions/list','PrescriptionController@list')->name('prescriptions.list');
-    route::get('/app/products/{product_id}/prescriptions/details','PrescriptionController@details')->name('prescriptions.details');
-    route::post('app/prescriptions/{prescription_id}/edit/process','PrescriptionController@editprocess')->name('prescriptions.editprocess');
-    route::get('app/prescriptions/{prescription_id}/delete','PrescriptionController@delete')->name('prescriptions.delete');
+    Route::get('/app/products/{product_id}/prescriptions/add',             'PrescriptionController@add')->name('prescriptions.add');
+    Route::post('/app/products/{product_id}/prescriptions/add/process',    'PrescriptionController@addProcess');
+    route::get('app/prescriptions/list',                                   'PrescriptionController@list')->name('prescriptions.list');
+    route::get('/app/products/{product_id}/prescriptions/details',         'PrescriptionController@details')->name('prescriptions.details');
+    route::post('app/prescriptions/{prescription_id}/edit/process',        'PrescriptionController@editprocess')->name('prescriptions.editprocess');
+    route::get('app/prescriptions/{prescription_id}/delete',               'PrescriptionController@delete')->name('prescriptions.delete');
+    //Detalles de Receta 
+    route::get('/app/products/{product_id}/prescriptiondetails/details',         'PrescriptiondetailController@details')->name('prescriptiondetails.details');
+
+    //Receta
+    Route::post('/prescriptions/create',  'PrescriptionController@create');
+
+    //Detalle de Receta
+    Route::post('/prescriptiondetails/create',                          'PrescriptiondetailController@create');
+    Route::post('/prescriptiondetails/update',                          'PrescriptiondetailController@update');
+    Route::get('/prescriptiondetails/select/{prescriptiondetail_id}',   'PrescriptiondetailController@select');
+
+    
+    Route::get('prueba',function(){
+        //1 Compañias a la que pertenece el usuario
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+
+        //Consultar a la tabla company_user las id de los usuarios que pertenecen a las compañias dichas
+        $users_id= DB::table('company_user')->whereIn('company_id',$companies_id)->pluck('user_id')->toArray();
+
+        //buscar los usuarios con las id obtenidas
+        $users = App\User::WhereIn('id',$users_id)->get();
+
+        //Esto es solo para mostrar
+        dd($users);
+    });
 
 });
 

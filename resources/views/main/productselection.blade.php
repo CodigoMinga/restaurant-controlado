@@ -5,7 +5,7 @@
 @section('info')
     <div>
         <h6>{{$order->table->name}}</h6>
-        <h6>{{$order ? $order->Total : 0}}</h6>
+        <h6 id="order_total">{{$order ? $order->Total : 0}}</h6>
         <a href="{{url('/tableorder/'.$order->id)}}" class="btn btn-light">
             ORDEN
         </a>
@@ -69,7 +69,14 @@
                     <input type="hidden" name='order_id' value={{$order->id}}>
                     <input type="hidden" name='product_id' value=0 id="product_id">
                     <input type="hidden" name='product_name' value='' id="product_name">
-                    <input type="number" min=1 name='quantity' required>
+                    <div class="form-group">
+                        <label>Cantidad</label>
+                        <input type="number" min=1 name='quantity' class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cambios</label>
+                        <input type="text" name='description' class="form-control" placeholder="Sin palta">
+                    </div>
                 </div>
                 <div class="modal-footer">
                 <button type="submit" class="btn btn-success" id="a-orden">Agregar</button>
@@ -81,6 +88,7 @@
     </div>
     <script>
         var productattachForm = document.getElementById('productattach-form');
+        var order_total = document.getElementById('order_total');
         var productos = document.querySelectorAll(".producto");
 
         $(document).ready(function(){
@@ -133,9 +141,9 @@
                     processData: false,  // tell jQuery not to process the data
                     contentType: false   // tell jQuery not to set contentType
                 }).done(function( data ) {
-                    console.log(data);
                     if(typeof(data)=='object'){
                         if(data.id){
+                            order_total.innerText=data.Total;
                             if(activate=="a-orden"){
                                 window.location.href = "{{url('/')}}/orderdetails/" + data.id;
                             }else{

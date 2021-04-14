@@ -25,16 +25,28 @@
         <div class="form-group has-feedback">
             <input required type="decimal" class="form-control" placeholder="Stock" name="stock" value="">
             <span class="fa fa-id-card form-control-feedback"></span>
-           
+        </div> 
+
+        <div class="form-group has-feedback">
+            <input required type="decimal" class="form-control" placeholder="Advertencia" name="warning" value="">
+            <span class="fa fa-id-card form-control-feedback"></span>
+        </div> 
+
+        <div class="form-group has-feedback">
+            <input required type="decimal" class="form-control" placeholder="Alerta" name="alert" value="">
+            <span class="fa fa-id-card form-control-feedback"></span>
+        </div> 
+
             <label for="measureunit_id">Unidad de Media:</label>
-        <select name="measureunit_id" id="measureunit_id">
+        <select class="form-control" name="measureunit_id" id="measureunit_id">
             @forelse($measureunits as $measureunit)
             <option value="{{ $measureunit->id }}">{{ $measureunit->name }}</option>
             @empty
             <li>Aun no hay unidades de medida</li>
             @endforelse
         </select>
-        </div>
+        <br>
+        
         <button type="submit" class="btn btn-danger"><i class="fa fa-check"></i>Guardar</button>
         
     </form>

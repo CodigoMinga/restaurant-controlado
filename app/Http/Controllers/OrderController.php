@@ -73,6 +73,7 @@ class OrderController extends Controller
         $orderdetail->product_id    = $product->id;
         $orderdetail->order_id      = $order->id;
         $orderdetail->quantity      = $input['quantity'];
+        $orderdetail->description   = $input['description'];
         $orderdetail->unit_ammount  = $product->price;
         $orderdetail->total_ammount = intval($input['quantity']) * intval($product->price);
         $orderdetail->save();

@@ -21,6 +21,7 @@
             <thead>
                 <tr>
                     <th>Usuarios</th>
+                    <th>Email</th>
                     <th>Acción</th>
                 </tr>
             </thead>
@@ -37,9 +38,10 @@
                 responsive: true,
                 "data": {!! json_encode($users->toArray()) !!},
                 "columns": [
-                    { "data": "name","width":"90%"},
+                    { "data": "name","width":"40%"},
+                    { "data": "email","width":"40%"},
                     { data: "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/users/'+data+'" target="_blank">description</a>';
+                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/users/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {

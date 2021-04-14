@@ -19,6 +19,7 @@ class OrderSeeder extends Seeder
         $order->company_id = 1;
         $order->table_id = 1;
         $order->internal_id = 1;
+        $order->user_id = 1;
         $order->save();
 
         $orderdetail = new Orderdetail();
@@ -51,6 +52,7 @@ class OrderSeeder extends Seeder
         $order->company_id = 1;
         $order->table_id = 2;
         $order->internal_id = 2;
+        $order->user_id = 1;
         $order->save();
 
         $orderdetail = new Orderdetail();

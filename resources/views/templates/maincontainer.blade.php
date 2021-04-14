@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="{{url('/css/restorant.css')}}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -15,11 +14,79 @@
     <script src="{{url('/js/jquery.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    
 </head>
 <body>
     <nav>
 
     </nav>
+    <div aria-live="polite" aria-atomic="true" style="position: fixed; min-height: 200px;top:0px;right:0px;">
+        <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-agregar'>
+            <div class="toast-header ">
+            <i class="rounded mr-2 material-icons bg-success text-white">done</i>
+            <strong class="mr-auto">Agregado</strong>
+            <small class="text-muted">cerrar</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="toast-body">
+                ...
+            </div>
+        </div>
+        <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-error'>
+            <div class="toast-header">
+            <i class="rounded mr-2 material-icons bg-danger text-white">alert</i>
+            <strong class="mr-auto">Error</strong>
+            <small class="text-muted">cerrar</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="toast-body">
+                Mensaje de error
+            </div>
+        </div>
+        <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-check'>
+            <div class="toast-header">
+            <i class="rounded mr-2 material-icons bg-success text-white">done</i>
+            <strong class="mr-auto">Realizado</strong>
+            <small class="text-muted">cerrar</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="toast-body">
+                Mensaje de realizado
+            </div>
+        </div>
+    </div>
+    <script>
+        $('.toast').toast({delay:2000});
+        function toastError(mensaje){
+            $('#toast-error .toast-body').eq(0).html(mensaje);
+            $('#toast-error').toast('show');
+        }
+        function toastSuccess(mensaje){
+            $('#toast-check .toast-body').eq(0).html(mensaje);
+            $('#toast-check').toast('show');
+        }
+    </script>
+
+    @if ($message = Session::get('error'))
+    <script>
+        $('#toast-error .toast-body').eq(0).html('{!! $message !!}');
+        $('#toast-error').toast('show');
+    </script>
+    @endif
+    
+    @if ($message = Session::get('success'))
+    <script>
+        $('#toast-check .toast-body').eq(0).html('{!! $message !!}');
+        $('#toast-check').toast('show');
+    </script>
+    @endif
     <div id="sidebar" align="center">
         <div id="sidebar-content">
             <img src="{{url('/img/logo.jpg')}}" class="logo-circle">
@@ -35,7 +102,7 @@
                 
                 @yield('info')
 
-                <a class="sidebar-button {{(request()->is('products/add')) ? 'active' : '' }}" href="{{ url('/app/products/list') }}">
+                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('/app/products/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Producto
                 </a>
                 <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/producttypes/list') }}">
@@ -71,36 +138,6 @@
     <div id="main">
         @yield('content')
     </div>
-    <div aria-live="polite" aria-atomic="true" style="position: fixed; min-height: 200px;top:0px;right:0px;">
-        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id='toast-agregar'>
-            <div class="toast-header ">
-            <i class="rounded mr-2 material-icons bg-success text-white">done</i>
-            <strong class="mr-auto">Agregado</strong>
-            <small class="text-muted">cerrar</small>
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div class="toast-body">
-                ...
-            </div>
-        </div>
-        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-            <i class="rounded mr-2 material-icons">alert</i>
-            <strong class="mr-auto">Alerta</strong>
-            <small class="text-muted">cerrar</small>
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div class="toast-body">
-                See? Just like this.
-            </div>
-        </div>
-    </div>
-
-
     <script>
         var sidebar         = document.getElementById('sidebar');
         var sidebarToggle   = document.getElementById('sidebar-toggle');
@@ -109,8 +146,6 @@
             sidebar.classList.toggle('active');
             this.classList.toggle('active')
         }, false);
-
-        //$('.toast').toast({delay:1000});
     </script>
 </body>
 </html>
