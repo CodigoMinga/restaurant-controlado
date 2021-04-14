@@ -17,18 +17,28 @@ use Illuminate\Support\Facades\Route;
 
 //LOGIN
 Route::get('/',                                 'MainController@login')->name('login');
-Route::post('/checklogin',                  'MainController@checkLogin');
-Route::get('/register',                     'MainController@register');
-Route::post('/register/process',            'MainController@registerProcess');
-Route::get('/login/passwordlost',           'MainController@passwordLost');
-Route::post('/login/passwordlost/process',  'MainController@passwordLostProcess');
+Route::post('/app/checklogin',                  'MainController@checkLogin');
+Route::get('/app/register',                     'MainController@register');
+Route::post('/app/register/process',            'MainController@registerProcess');
+Route::get('/app/login/passwordlost',           'MainController@passwordLost');
+Route::post('/app/login/passwordlost/process',  'MainController@passwordLostProcess');
 
-Route::get('/resetpassword/{user_id}/token/{token}',            'MainController@passwordRessetToken');
-Route::post('/resetpassword/{user_id}/token/{token}/process',   'MainController@passwordRessetTokenProcess');
+Route::get('/app/login/resetpassword/{user_id}/token/{token}',            'MainController@passwordRessetToken');
+Route::post('/app/login/resetpassword/{user_id}/token/{token}/process',   'MainController@passwordRessetTokenProcess');
 
 //ESTAS RUTAS NECESITAN ESTAR LOGUEADO
 Route::group(['middleware' => ['auth']], function() {
 
+    //CAMBIAR CLAVE
+    Route::get('/app/password/{user_id}/change',            'MainController@passwordChange');
+    Route::post('/app/password/{user_id}/change/process',   'MainController@passwordChangeProcess');
+    //CLIENTE
+    Route::get('/app/clients/list',                        'ClientController@list')->name('clients.list');
+    Route::get('/app/clients/add',                         'ClientController@add')->name('clients.add');
+    Route::post('/app/clients/add/process',                'ClientController@addProcess');
+    Route::get('/app/clients/{client_id}',                'ClientController@details');
+    Route::post('/app/clients/{client_id}/edit/process',                'ClientController@editprocess');
+    Route::get('/app/clients/{client_id}/delete',                'ClientController@delete');
     //ORDENES
     Route::get('/tables',                       'OrderController@tables');
     Route::get('/tableorder/{table_id}',        'OrderController@tableorder');
@@ -80,13 +90,32 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/prescriptiondetails/{prescriptiondetail_id}',          'PrescriptiondetailController@select');
     Route::get('/prescriptiondetails/{prescriptiondetail_id}/delete',   'PrescriptiondetailController@delete');
 
+    //ITEMS
+    route::get('/app/items/add',                    'ItemController@add')->name('items.add');
+    route::post('/app/items/add/process',           'ItemController@addProcess');
+    route::get('/app/items/list',                   'ItemController@list')->name('items.list');
+    route::get('/app/items/{item_id}/details',      'ItemController@details')->name('items.details');
+    route::post('/app/items/{item_id}/edit/process','ItemController@editprocess')->name('items.editprocess');
+    route::get('/app/items/{item_id}/delete',       'ItemController@delete')->name('items.delete');
+
     //COMPAÑIAS
-    route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
-    route::post('/companys/add/process',                'CompanyController@addProcess');
-    route::get('/companys/list',                        'CompanyController@list')->name('companys.list');
-    route::get('/companys/{company_id}',                'CompanyController@details');
-    route::post('/companys/{company_id}/edit/process',  'CompanyController@editprocess');
-    route::get('/companys/{company_id}/delete',         'CompanyController@delete');
+    route::get('/app/companys/add',                         'CompanyController@add')->name('companys.add');
+    route::post('/app/companys/add/process',                'CompanyController@addProcess');
+    route::get('/app/companys/list',                        'CompanyController@list')->name('companys.list');
+    route::get('/app/companys/{company_id}',                'CompanyController@details');
+    route::post('/app/companys/{company_id}/edit/process',  'CompanyController@editprocess');
+    route::get('/app/companys/{company_id}/delete',         'CompanyController@delete');
+
+    //USUARIOS
+    route::get('/app/users/add','RoleController@add')->name('users.add');
+    route::post('/app/users/add/process','RoleController@addProcess');
+    route::get('/app/users/list','RoleController@list')->name('users.list');
+    route::get('/app/users/getdata','RoleController@getdata');
+    route::post('/app/users/{user_id}/edit/process','RoleController@editprocess');
+    route::get('/app/users/{user_id}','RoleController@details');
+        //Cambio de clave
+    Route::get('/app/password/{user_id}/passwordchange', 'MainController@passwordChange');
+    Route::post('/app/password/{user_id}/passwordchange/process', 'MainController@passwordChangeProcess');
     
 
     Route::get('prueba',function(){

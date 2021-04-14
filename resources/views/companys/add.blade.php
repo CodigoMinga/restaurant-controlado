@@ -2,7 +2,7 @@
 
 @section('content')
 
-<form method="post" class="pt-5 pl-5 col-7" action="{{url('companys/add/process')}}" id="form">
+<form method="post" class="pt-5 pl-5 col-7" action="{{url('app/companys/add/process')}}" id="form">
   {{csrf_field()}}
  
       

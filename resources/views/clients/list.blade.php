@@ -1,6 +1,7 @@
- @extends('templates.maincontainer')
+@extends('templates.maincontainer')
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap.min.css"/>
+
 <style>
     #tabla_filter,#tabla_paginate{
         text-align: right;
@@ -10,17 +11,18 @@
 @section('content')
     <div class="container pt-3">
         <div class="d-flex justify-content-between align-items-center">
-            <h1>Lista de Insumos</h1>
-            <a  href="{{ url('/') }}/app/items/add" class="btn btn-success">
+            <h1>Lista de Clientes</h1>
+            <a  href="{{ url('/') }}/app/clients/add" class="btn btn-success">
                 <i class="material-icons">add</i>
-                Agregar Insumo
+                Agregar Cliente
             </a>
         </div>
         <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
             <thead>
                 <tr>
-                    <th>Insumos</th>
-                    <th>Stock</th>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
                     <th>Acción</th>
                 </tr>
             </thead>
@@ -35,12 +37,13 @@
         $(document).ready(function() {
             $('#tabla').DataTable({
                 responsive: true,
-                "data": {!! json_encode($items->toArray()) !!},
+                "data": {!! json_encode($clients->toArray()) !!},
                 "columns": [
-                    { "data": "name","width":"90%"},
-                    { "data": "stock","width":"1%"},
-                    { "data": "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/items/'+data+'/details" >description</a>';
+                    { "data": "name","width":"25%"},
+                    { "data": "address","width":"25%"},
+                    { "data": "phone","width":"25%"},
+                    { data: "id", render : function ( data, type, row, meta ) {
+                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/clients/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {

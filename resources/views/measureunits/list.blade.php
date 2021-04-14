@@ -9,7 +9,7 @@
             Lista de Unidades de Medida
          </h2>
                 <div>
-                 <a  href="{{ url('measureunits/add') }}" class="btn btn-danger">Crear Nueva Unidad de Medida</a>
+                 <a  href="{{ url('/') }}/app/measureunits/add" class="btn btn-danger">Crear Nueva Unidad de Medida</a>
               </div>       
       </div>
 </div>
