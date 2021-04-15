@@ -44,8 +44,8 @@
                     { "data": "name","width":"20%"},
                     { "data": "address","width":"20%"},
                     { "data": "phone","width":"10%"},
-                    { "data": "region","width":"20%"},
-                    { "data": "commune","width":"20%"},
+                    { "data": "region.name","width":"20%"},
+                    { "data": "commune.name","width":"20%"},
                     { data: "id", render : function ( data, type, row, meta ) {
                         return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/clients/'+data+'" >description</a>';
                     },"width":"1%"},

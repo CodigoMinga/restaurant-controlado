@@ -39,10 +39,7 @@ class Commune extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function users()
-    {
-        return $this->hasMany('App\User');
-    }
+
         /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

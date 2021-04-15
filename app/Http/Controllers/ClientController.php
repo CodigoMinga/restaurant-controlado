@@ -29,8 +29,14 @@ class ClientController extends Controller
     
         return redirect()->route('clients.list')->with('success', 'Cliente Creado correctamente');
     }
-    public function list(){
+    public function list()
+    {
         $clients = Client::all();
+        foreach ($clients as $key => $client) {
+            $client -> commune;
+            $client -> region;
+        }
+        
         return view('clients.list',compact('clients'));
     }
     public function add(){
