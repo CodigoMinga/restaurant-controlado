@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Order;
 use App\Orderdetail;
+use App\Ordertype;
 use App\Table;
 use App\Producttype;
 use App\Product;
@@ -26,7 +27,8 @@ class OrderController extends Controller
         if (!isset($order)) {
             return view('main.orderstart', compact('table'));
         }else{
-            return view('main.orderdetails', compact('order'));
+            $ordertypes = Ordertype::all();
+            return view('main.orderdetails', compact('order','ordertypes'));
         }
     }
 
@@ -48,12 +50,14 @@ class OrderController extends Controller
             }
             $order->save();
         }
-        return view('main.orderdetails', compact('order'));
+        $ordertypes = Ordertype::all();
+        return view('main.orderdetails', compact('order','ordertypes'));
     }
     
     public function orderdetails($order_id){
         $order = Order::findOrFail($order_id);
-        return view('main.orderdetails', compact('order'));
+        $ordertypes = Ordertype::all();
+        return view('main.orderdetails', compact('order','ordertypes'));
     }
 
     public function productselection($order_id)
