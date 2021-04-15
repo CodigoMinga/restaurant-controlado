@@ -20,42 +20,102 @@
     }
 </style>
 @section('content')
-    <div class="p-3">
+    <div class="container p-3">
         <h1>Orden: {{$order->internal_id}}</h1>
-        <table class="table table-striped table-sm table-dark w-50">
-            <tr>
-                <th>
-                    Apertura
-                </th>
-                <td>
-                    {{date("d/m/Y H:i:s", strtotime($order->created_at))}}
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Garzón
-                </th>
-                <td>
-                    {{$order->user->name}}
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Mesa
-                </th>
-                <td>
-                    {{$order->table->name}}
-                </td>
-            </tr>
-        </table>
+        <div class="d-flex justify-content-between">            
+            <table class="table table-striped table-sm table-dark" style="max-width: 300px">
+                <tr>
+                    <th>
+                        Apertura
+                    </th>
+                    <td>
+                        {{date("d/m/Y H:i:s", strtotime($order->created_at))}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Garzón
+                    </th>
+                    <td>
+                        {{$order->user->name}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Selector
+                    </th>
+                    <td>
+                        {{$order->table->tabletype->name}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Mesa
+                    </th>
+                    <td>
+                        {{$order->table->name}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Tipo
+                    </th>
+                    <td style="padding:0px">
+                        <select name="ordertype_id" style="width:100%;height:33px;">
+                            @foreach ($ordertypes as $ordertype)
+                                <option value="{{$ordertype->id}}">{{$ordertype->name}}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table table-striped table-sm table-dark" style="max-width: 300px">
+                <tr>
+                    <th>
+                        Teléfono
+                    </th>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Nombre
+                    </th>
+                    <td>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Comuna
+                    </th>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Dirección
+                    </th>
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
         <table class="table table-striped table-sm table-dark">
             <thead>
                 <tr>
-                    <th width=1>
-                        Seleccionar
-                    </th>
                     <th>
                         Producto
+                    </th>
+                    <th>
+                        Comanda
+                    </th>
+                    <th>
+                        Pagado
                     </th>
                     <th width=1>
                         Cant.
@@ -71,12 +131,15 @@
             <tbody>
                 @foreach ($order->orderdetails as $orderdetail)
                     <tr>
-                        <td align="center">
-                            <input type="checkbox" name="" id="">
-                        </td>
                         <td>
                             {{$orderdetail->product->name}}<br>
                             <small>{{$orderdetail->description}}</small>
+                        </td>
+                        <td>
+                            {{$orderdetail->command ? '<span class="material-icons text-success">done</span>' : ''}}<br>
+                        </td>
+                        <td>
+                            {{$orderdetail->command ? '<span class="material-icons text-success">done</span>' : ''}}<br>
                         </td>
                         <td align="right">
                             {{number_format($orderdetail->quantity, 0, '', '.')}}

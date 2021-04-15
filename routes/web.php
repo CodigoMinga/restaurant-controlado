@@ -89,12 +89,12 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/prescriptiondetails/{prescriptiondetail_id}/delete',   'PrescriptiondetailController@delete');
 
     //COMPAÑIAS
-    route::get('/app/companys/add',                         'CompanyController@add')->name('companys.add');
-    route::post('/app/companys/add/process',                'CompanyController@addProcess');
-    route::get('/app/companys/list',                        'CompanyController@list')->name('companys.list');
-    route::get('/app/companys/{company_id}',                'CompanyController@details');
-    route::post('/app/companys/{company_id}/edit/process',  'CompanyController@editprocess');
-    route::get('/app/companys/{company_id}/delete',         'CompanyController@delete');
+    route::get('/ompanys/add',                         'CompanyController@add')->name('companys.add');
+    route::post('/companys/add/process',                'CompanyController@addProcess');
+    route::get('/companys/list',                        'CompanyController@list')->name('companys.list');
+    route::get('/companys/{company_id}',                'CompanyController@details');
+    route::post('/companys/{company_id}/edit/process',  'CompanyController@editprocess');
+    route::get('/companys/{company_id}/delete',         'CompanyController@delete');
     
 
     Route::get('prueba',function(){

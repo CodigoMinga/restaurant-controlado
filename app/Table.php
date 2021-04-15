@@ -26,6 +26,11 @@ class Table extends Model
         return $this->belongsTo('App\Company');
     }
 
+    public function tabletype()
+    {
+        return $this->belongsTo('App\Tabletype');
+    }
+
     public function orders()
     {
         return $this->hasMany('App\Order');
