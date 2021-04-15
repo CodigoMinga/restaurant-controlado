@@ -52,4 +52,61 @@
     </button>
     </form>
   </div>
+  
+<script>
+        //PASO ELEMENTOS DE HTML A VARIABLES
+        var region = document.getElementById('region');
+        var comuna = document.getElementById('comuna');
+        
+        //DESDE EL CONTROLADOS TOMO LAS COLECCIONES DE REGIONES Y COMUNAS Y LAS PASO A VARIABLES
+        var region_list = {!! json_encode($regions->toArray()) !!};
+        var comuna_list = {!! json_encode($communes->toArray()) !!};
+
+        //LLAMO FUNCION REGIONLOAD()
+        regionLoad();
+        //ASINGNO UN VALOR BASE AL SELECTOR DE REGION
+        region.value = 16;
+        //UNA VEZ SELECCIONADO EL VALOR BASE DE REGION CARGO LAS COMUNAS
+        comunaLoad();
+
+        //FINCION REGIONLOAD
+        function regionLoad() {
+            //POR CADA REGION
+            region_list.forEach(el => {
+                //CREO UNA OPCION
+                var newoption = document.createElement('option');
+                //ASIGNO UN VALOR A LA OPCION
+                newoption.value = el.id;
+                //ASIGNO UN TEXTO A LA OPCION
+                newoption.text = el.name;
+                //AGREGO LA OPCION AL SELECTOR REGION
+                region.appendChild(newoption);
+            });
+        }
+
+        //AL SELECTOR REGION CUANDO CAMBIE (ONCHANGE) USO LA FUNCION COMUNALOAD
+        region.onchange = comunaLoad;
+
+        //FUNCION COMUNALOAD
+        function comunaLoad() {
+            //TOMO EL VALOR (region->id) DEL SELECTOR DE REGIONES 
+            var value = region.value;
+            //ELIMINO TODAS LAS OPCIONES EN CASO DE CAMBIAR
+            comuna.innerHTML = '';
+            //POR CADA COMUNA(TODAS) EJECUTO LA SIGUENTE FUNCION
+            comuna_list.forEach(el => {
+                //SI EL region_id ES IGUAL AL VALOR DEL SELECTOR DE COMUNA AGREGO LA COMUNA AL SLECTOR DE COMUNA
+                if (el.region_id == value) {
+                    //CREO UNA OPCION
+                    var newoption = document.createElement('option');
+                    //A LA OPCION LE DOI UN VALOR (commune->id)
+                    newoption.value = el.id;
+                    //A LA OPCION LE DOI UN TEXTO (commune->name)
+                    newoption.text = el.name;
+                    //AGREGO LA OPCION AL SELECTOR DE COMUNAS
+                    comuna.appendChild(newoption);
+                }
+            });
+        }
+    </script>
   @stop

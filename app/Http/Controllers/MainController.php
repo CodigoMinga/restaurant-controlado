@@ -82,37 +82,6 @@ class MainController extends Controller
 
     }
 
-    public function passwordChange($user_id){
-        //busca el usuario en la bd
-        $user = User::findOrFail($user_id);
-        return view('password.passwordchange' , compact('user'));
-    }
-
-    public function passwordChangeProcess($user_id, Request $request){
-
-        $user = User::findOrFail($user_id);
-        $oldpassword = $request->oldpassword;
-
-        if(Hash::check($oldpassword,$user->password)){
-            $input = $request->all();
-            $input['password'] = Hash::make($request->password);
-            $user->update($input);
-
-            $userAutentificated = Auth::loginUsingId($user->id);
-            /*
-            $sucess  = true;
-            $returnUrl = url('/')."/app/home";
-            $message =  "Contraseña Cambiada Correctamente";
-            */
-
-            //return view('template.genericphoneprocess',compact('message','sucess','returnUrl'));
-            return redirect('/tables');
-        }else{
-            return back()->with('noti-error','La clave antigua no corresponde')->withInput();
-        }
-    }
-
-
     function passwordLostProcess(Request $request){
 
         //dd($request->email);

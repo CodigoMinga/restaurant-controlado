@@ -22,32 +22,69 @@
 @section('content')
     <div class="p-3">
         <h1>Orden: {{$order->internal_id}}</h1>
-        <table class="table table-striped table-sm table-dark w-50">
-            <tr>
-                <th>
-                    Apertura
-                </th>
-                <td>
-                    {{date("d/m/Y H:i:s", strtotime($order->created_at))}}
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Garzón
-                </th>
-                <td>
-                    {{$order->user->name}}
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Mesa
-                </th>
-                <td>
-                    {{$order->table->name}}
-                </td>
-            </tr>
-        </table>
+        <div class="d-flex justify-content-between">            
+            <table class="table table-striped table-sm table-dark" style="max-width: 300px">
+                <tr>
+                    <th>
+                        Apertura
+                    </th>
+                    <td>
+                        {{date("d/m/Y H:i:s", strtotime($order->created_at))}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Garzón
+                    </th>
+                    <td>
+                        {{$order->user->name}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Selector
+                    </th>
+                    <td>
+                        {{$order->table->tabletype->name}}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Mesa
+                    </th>
+                    <td>
+                        {{$order->table->name}}
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table table-striped table-sm table-dark" style="max-width: 300px">
+                <tr>
+                    <th>
+                        Tipo
+                    </th>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Cliente
+                    </th>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Mesa
+                    </th>
+                    <td>
+                        {{$order->table->name}}
+                    </td>
+                </tr>
+            </table>
+        </div>
         <table class="table table-striped table-sm table-dark">
             <thead>
                 <tr>
