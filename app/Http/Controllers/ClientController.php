@@ -16,15 +16,17 @@ class ClientController extends Controller
         return redirect()->route('clients.list')->with('success', 'Cliente eliminado correctamente');
     }
 
-    public function editprocess($product_id, Request $request)
+    public function editprocess($client_id, Request $request)
      {
-         $client = Client::findOrFail($product_id);
+         $client = Client::findOrFail($client_id);
          $client->update($request->all());
+         
          return redirect()->route('clients.list')->with('success', 'Cliente editado correctamente');
      }
      public function addProcess(Request $request){
 
         Client::create($request->all());
+    
         return redirect()->route('clients.list')->with('success', 'Cliente Creado correctamente');
     }
     public function list(){
@@ -41,7 +43,9 @@ class ClientController extends Controller
     }
     public function details($client_id)
 {
-    return view('clients.details', [
+    $communes = Commune::all();
+    $regions=Region::all();
+    return view('clients.details',\compact('regions' ,'communes') , [
         'client' => Client::find($client_id)
     ]);
 }

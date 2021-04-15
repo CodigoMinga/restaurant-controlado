@@ -27,16 +27,12 @@
 
     <div class="form-group">
       <label for="region_id">Region:</label>
-      <select name="region_id" id="region_id" class="form-control" >
-
+      <select name="region_id" id="region_id" class="form-control" required>
       </select>
     </div>
     <div class="form-group">
         <label for="commune_id">Comuna:</label>
-        <select name="commune_id" id="commune_id" class="form-control" >
-            
-        
-           
+        <select name="commune_id" id="commune_id" class="form-control" required>    
         </select>
       </div>
   

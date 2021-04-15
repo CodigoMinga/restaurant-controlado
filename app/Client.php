@@ -20,7 +20,7 @@ class Client extends Model
     /**
      * @var array
      */
-    protected $fillable = ['client_id','created_at', 'updated_at', 'name', 'phone', 'address', 'company_id','commune_id'];
+    protected $fillable = ['created_at', 'updated_at', 'name', 'phone', 'address', 'region_id','commune_id'];
 
     public function commune()
     {
