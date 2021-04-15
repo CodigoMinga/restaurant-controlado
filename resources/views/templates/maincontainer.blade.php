@@ -114,6 +114,9 @@
                 <a class="sidebar-button {{(request()->is('companys/list')) ? 'active' : '' }}" href="{{ url('companys/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">apartment</i>Compañias
                 </a>
+                <a class="sidebar-button {{(request()->is('tables/list')) ? 'active' : '' }}" href="{{ url('tables/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">deck</i>Mesas
+                </a>
                 <a class="sidebar-button {{(request()->is('users/list')) ? 'active' : '' }}" href="{{ url('users/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">groups</i>Usuarios
                 </a>

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Table;
 use App\Tabletype;
+use App\Company;
 use Illuminate\Http\Request;
 
 class TableController extends Controller
@@ -12,13 +14,25 @@ class TableController extends Controller
     public function add(){
 
         //Array de las Compañias del Usuario
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+        $companys = Auth::user()->companies()->get();
 
-        //Tipos de Productos que pertenecesn a las conpañias del Usuario
-        $tabletypes = Tabletype::whereIn('company_id',$companies_id)->get();
+        $tabletypes = Tabletype::all();
 
-        $product = new Product;
+        $table = new Table;
 
-        return view('products.form',compact('producttypes','product'));
+        return view('tables.form',compact('table','companys','tabletypes'));
+    }
+
+    public function list(){
+
+        //Array de las Compañias del Usuario
+        $companies_id       = Auth::user()->companies()->pluck('company_id')->toArray();
+
+        //Mesas que pertenecesn a el Usuario
+        $tables = Table::whereIn('company_id',$companies_id)->get();
+        foreach ($tables as $key => $table) {
+            $table->tabletype;
+        }
+        return view('tables.list',compact('tables'));
     }
 }

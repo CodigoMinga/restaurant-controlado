@@ -78,6 +78,13 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/products/{product_id}/delete',         'ProductController@delete');
     Route::post('/products/process',                    'ProductController@process');
 
+    //Tables
+    Route::get('/tables/list',                        'TableController@list')->name('tables.list');
+    Route::get('/tables/add',                         'TableController@add')->name('tables.add');
+    Route::get('/tables/{table_id}',                  'TableController@details')->name('tables.details');
+    Route::get('/tables/{table_id}/delete',           'TableController@delete');
+    Route::post('/tables/process',                    'TableController@process');
+
     //RECETA
     Route::post('/prescriptions/store',                     'PrescriptionController@store');
     Route::get('/prescriptions/{prescription_id}',          'PrescriptionController@details');
