@@ -82,7 +82,7 @@ class OrderController extends Controller
         $orderdetail->unit_ammount  = $product->price;
         $orderdetail->total_ammount = intval($input['quantity']) * intval($product->price);
         $orderdetail->save();
-
+        $this->discount($orderdetail);
         $order->Total=$order->Total;
         return $order;
     }
@@ -111,7 +111,6 @@ class OrderController extends Controller
             $orderdetail = Orderdetail::findOrFail($orderdetail_id);
             $orderdetail->command=1;
             $orderdetail->save();
-            $this->discount($orderdetail);
         }
         return true;
     }

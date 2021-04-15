@@ -344,8 +344,16 @@
         }
 
         dinero.forEach(input => 
-            input.onkeyup = function(){
-                vuelto.value= - Total + parseFloat(descuento.value) + parseFloat(debito.value) + parseFloat(credito.value) + parseFloat(efectivo.value) + parseFloat(transferencia.value);
+            input.onchange = function(){
+                var db = debito.value ? parseFloat(debito.value) : 0;
+                var cd = debito.value ? parseFloat(credito.value) : 0;
+                var ef = debito.value ? parseFloat(efectivo.value) : 0;
+                var tf = debito.value ? parseFloat(transferencia.value) : 0;
+
+                var exeso= - Total + db + cd + ef + tf;
+                var falta= + Total - db - cd - ef - tf;
+                
+                vuelto.value= exeso > 0 ? exeso : 0;
             }
         )
 
