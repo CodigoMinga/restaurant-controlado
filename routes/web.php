@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/orderstart/{table_id}',        'OrderController@orderstart');
     Route::get('/productselection/{order_id}',  'OrderController@productselection');
     Route::post('/productattach',               'OrderController@productattach');
+    Route::post('/orderdetails/command',        'OrderController@command');
     Route::get('/orderdetails/{order_id}',      'OrderController@orderdetails');
     Route::get('/changetable/{order_id}',       'OrderController@changetable');
     Route::get('/order/{order_id}/chagetable/{table_id}',       'OrderController@changetableProcess');

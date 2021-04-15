@@ -104,4 +104,14 @@ class OrderController extends Controller
         return redirect('/orderdetails/'.$order->id)->with('success', 'Mesa cambiada correctamente');;
     }
 
+    public function command(Request $request)
+    {
+        $orderdetail_ids = $request->orderdetail_id;
+        foreach ($orderdetail_ids as $key => $orderdetail_id) {
+            $orderdetail = Orderdetail::findOrFail($orderdetail_id);
+            $orderdetail->command=1;
+            $orderdetail->save();
+        }
+        return true;
+    }
 }
