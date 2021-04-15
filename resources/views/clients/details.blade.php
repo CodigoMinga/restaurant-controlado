@@ -3,7 +3,7 @@
 @section('content')
     <div class="container pt-3">
         <h1>
-            <i class="material-icons">library_books</i>Detalles del Pedido
+            <i class="material-icons">library_books</i>Detalles del Cliente
         </h1>
         <form method="post" action="{{url('app/clients/'.$client->id.'/edit/process')}}">
             {{csrf_field()}}
@@ -34,11 +34,11 @@
 
             <button type="submit" class="btn btn-success ">
                 <i class="material-icons">done</i>
-                Editar Pedido
+                Editar Cliente
             </button>
             <a  href="{{ url('/') }}/app/clients/{{$client->id}}/delete" class="btn btn-danger">
                 <i class="material-icons">clear</i>
-                Eliminar Pedido
+                Eliminar Cliente
             </a>
         </form>
 
