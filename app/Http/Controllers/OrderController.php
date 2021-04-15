@@ -116,6 +116,7 @@ class OrderController extends Controller
     }
 
     public function discount($orderdetail){
+        $low_stock=[];
         $prescription= $orderdetail->product->prescriptions->last();
         if($prescription){                
             $prescriptiondetails = $prescription->prescriptiondetails;
@@ -124,6 +125,23 @@ class OrderController extends Controller
                 $stock = $item->stock;
                 $quantity =$prescriptiondetail->quantity * $orderdetail->quantity;
                 $item->stock = $stock - ($quantity);
+                $item->save();
+                if($item->stock<=$item->warning){
+
+                }
+            }
+        }
+    }
+
+    public function addcount($orderdetail){
+        $prescription= $orderdetail->product->prescriptions->last();
+        if($prescription){                
+            $prescriptiondetails = $prescription->prescriptiondetails;
+            foreach ($prescriptiondetails as $key => $prescriptiondetail) {
+                $item=$prescriptiondetail->item;
+                $stock = $item->stock;
+                $quantity =$prescriptiondetail->quantity * $orderdetail->quantity;
+                $item->stock = $stock + ($quantity);
                 $item->save();
             }
         }
