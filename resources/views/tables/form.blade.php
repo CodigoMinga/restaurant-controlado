@@ -12,6 +12,22 @@
 
         <form method="post" action="{{url('tables/process')}}">
             {{csrf_field()}}
+
+            @if (!$table->id)
+                @if(count($companys)>1)
+                <div class="form-group">
+                    <label for="company_id">Restoran:</label>
+                    <select name="company_id" id="company_id" class="form-control">
+                        @foreach($companys as $company)
+                        <option value="{{ $company->id }}">{{$company->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                @else
+                <input type="hidden" name="company_id" value="{{$companys[0]->id}}">
+                @endif
+            @endif
+
             <input type="hidden" name="id" value="{{ $table->id }}">
             @if (!$table->id)
                 <div class="form-group">
@@ -39,7 +55,7 @@
                     Guardar
                 </button>
                 @if ($table->id)
-                <a href="{{ url('/tabletypes') }}/{{ $table->id }}/delete" class="btn btn-danger">
+                <a href="{{ url('/tables') }}/{{ $table->id }}/delete" class="btn btn-danger">
                     <i class="material-icons">close</i>
                     Eliminar
                 </a>

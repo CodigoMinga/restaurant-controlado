@@ -19,7 +19,7 @@ class Table extends Model
 {
     protected $keyType = 'integer';
 
-    protected $fillable = ['company_id', 'created_at', 'updated_at', 'name', 'description', 'number', 'enabled'];
+    protected $fillable = ['company_id', 'created_at', 'updated_at', 'name', 'description', 'number', 'enabled','tabletype_id'];
 
     public function company()
     {
