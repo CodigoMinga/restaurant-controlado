@@ -111,7 +111,22 @@ class OrderController extends Controller
             $orderdetail = Orderdetail::findOrFail($orderdetail_id);
             $orderdetail->command=1;
             $orderdetail->save();
+            $this->discount($orderdetail);
         }
         return true;
+    }
+
+    public function discount($orderdetail){
+        $prescription= $orderdetail->product->prescriptions->last();
+        if($prescription){                
+            $prescriptiondetails = $prescription->prescriptiondetails;
+            foreach ($prescriptiondetails as $key => $prescriptiondetail) {
+                $item=$prescriptiondetail->item;
+                $stock = $item->stock;
+                $quantity =$prescriptiondetail->quantity * $orderdetail->quantity;
+                $item->stock = $stock - ($quantity);
+                $item->save();
+            }
+        }
     }
 }
