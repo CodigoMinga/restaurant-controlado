@@ -143,6 +143,9 @@
                 <a class="sidebar-button {{(request()->is('users/passwordchange')) ? 'active' : '' }}" href="{{ url('users/passwordchange') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">password</i>Contraseña
                 </a>
+                <a class="sidebar-button {{(request()->is('app/logout')) ? 'active' : '' }}" href="{{ url('app/logout') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">logout</i>Logout
+                </a>
                 
             </div>
         </div>
