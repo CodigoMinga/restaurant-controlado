@@ -28,11 +28,6 @@
                 <label>Nombre </label>
                 <input required type="text" class="form-control" name="name" value="{{ $item->name }}">
             </div>
-
-            <div class="form-group">
-                <label>Descripión</label>
-                <input required type="text" class="form-control" name="description" value="{{ $item->description }}">
-            </div>
             <div class="form-row">
                 <div class="form-group col-12 col-sm-6">
                     <label>Stock</label>
