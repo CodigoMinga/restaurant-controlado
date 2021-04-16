@@ -76,7 +76,6 @@
                         Teléfono
                     </th>
                     <td>
-
                     </td>
                 </tr>
                 <tr>
@@ -105,65 +104,73 @@
                 </tr>
             </table>
         </div>
-        <table class="table table-striped table-sm table-dark">
-            <thead>
-                <tr>
-                    <th>
-                        Producto
-                    </th>
-                    <th>
-                        Comanda
-                    </th>
-                    <th>
-                        Pagado
-                    </th>
-                    <th width=1>
-                        Cant.
-                    </th>
-                    <th width=1>
-                        Precio Unit.
-                    </th>
-                    <th width=1 style="text-align: right">
-                        Precio Total.
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($order->orderdetails as $orderdetail)
+        <form id="productos">
+            {{csrf_field()}}
+            <table class="table table-striped table-sm table-dark">
+                <thead>
                     <tr>
+                        <th>
+                            Producto
+                        </th>
+                        <th width=1>
+                            Comanda
+                        </th>
+                        <th width=1>
+                            Pagado
+                        </th>
+                        <th width=1>
+                            Cant.
+                        </th>
+                        <th width=1 >
+                            P.Unit.
+                        </th>
+                        <th width=1 style="text-align: right">
+                            P.Total.
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($order->orderdetails as $orderdetail)
+                        <tr>
+                            <td>
+                                {{$orderdetail->product->name}}<br>
+                                <small>{{$orderdetail->description}}</small>
+                                <input type="hidden" name="orderdetail_id[]" value="{{$orderdetail->id}}">
+                            </td>
+                            <td align="center">
+                                @if($orderdetail->command)
+                                    <span class="material-icons text-success">done</span>
+                                @endif
+                            </td>
+                            <td align="center">
+                                @if($orderdetail->paid)
+                                    <span class="material-icons text-success">done</span>
+                                @endif
+                            </td>
+                            <td align="right">
+                                {{number_format($orderdetail->quantity, 0, '', '.')}}
+                            </td>
+                            <td align="right">
+                                {{number_format($orderdetail->unit_ammount, 0, '', '.')}}
+                            </td>
+                            <td align="right">
+                                {{number_format($orderdetail->total_ammount, 0, '', '.')}}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+                <tfoot align="right">
+                    <tr>
+                        <th colspan="5" >
+                            <p class="m-0" align="right">Total</p>
+                        </th>
                         <td>
-                            {{$orderdetail->product->name}}<br>
-                            <small>{{$orderdetail->description}}</small>
-                        </td>
-                        <td>
-                            {{$orderdetail->command ? '<span class="material-icons text-success">done</span>' : ''}}<br>
-                        </td>
-                        <td>
-                            {{$orderdetail->command ? '<span class="material-icons text-success">done</span>' : ''}}<br>
-                        </td>
-                        <td align="right">
-                            {{number_format($orderdetail->quantity, 0, '', '.')}}
-                        </td>
-                        <td align="right">
-                            {{number_format($orderdetail->unit_ammount, 0, '', '.')}}
-                        </td>
-                        <td align="right">
-                            {{number_format($orderdetail->total_ammount, 0, '', '.')}}
+                            {{number_format($order->Total, 0, '', '.') }}
                         </td>
                     </tr>
-                @endforeach
-            </tbody>
-            <tfoot align="right">
-                <tr>
-                    <th colspan="4" >
-                        <p class="m-0" align="right">Total</p>
-                    </th>
-                    <td>
-                        {{number_format($order->Total, 0, '', '.') }}
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+                </tfoot>
+            </table>
+        </form>
         <table style="color:white">
             <tr>
                 <th>
@@ -224,7 +231,7 @@
         <a href="{{url('/changetable/'.$order->id)}}" class="btn btn-danger btn-lg">
             Cambiar Mesa
         </a>
-        <button  onclick="Print()" class="btn btn-primary btn-lg">
+        <button  onclick="comanda()" class="btn btn-primary btn-lg">
             Comanda
         </button>
         <button  onclick="PrintBoleta()" class="btn btn-warning btn-lg">
@@ -265,8 +272,11 @@
     <script src="{{ url('/') }}/js/pdf.js"></script>
     <script src="{{ url('/') }}/js/pdf.worker.js"></script>
     <script>
-        let Total=parseFloat("{{$order->Total*1.19}}");
+
+        let Total=parseFloat("{{$order->Total}}");
+
         var imprimir = document.getElementById('imprimir');
+        var productos = document.getElementById('productos');
 
         var transferencia = document.getElementById('transferencia');
         var descuento = document.getElementById('descuento');
@@ -276,7 +286,8 @@
         var vuelto = document.getElementById('vuelto');
 
         var dinero = document.querySelectorAll(".dinero");
-        function Print()
+
+        function PrintComanda()
         {
             var mywindow = window.open('', 'PRINT', 'height=1,width=1');
 
@@ -312,11 +323,37 @@
             });
         }
 
+        function comanda(){
+            var formData = new FormData(productos);
+            $.ajax({
+                url: "{{url('/orderdetails/command')}}",
+                type: "POST",
+                data: formData,
+                processData: false,  // tell jQuery not to process the data
+                contentType: false   // tell jQuery not to set contentType
+            }).done(function( data ) {
+                console.log(data);
+                if(typeof(data)=='object'){
+
+                }else{
+                    alert(data);
+                }
+            }).fail(function() {
+                alert( "error al recibir respuesta del servidor" );
+            });
+        }
 
         dinero.forEach(input => 
-            input.onkeyup = function(){
+            input.onchange = function(){
+                var db = debito.value ? parseFloat(debito.value) : 0;
+                var cd = debito.value ? parseFloat(credito.value) : 0;
+                var ef = debito.value ? parseFloat(efectivo.value) : 0;
+                var tf = debito.value ? parseFloat(transferencia.value) : 0;
 
-                vuelto.value= - Total + parseFloat(descuento.value) + parseFloat(debito.value) + parseFloat(credito.value) + parseFloat(efectivo.value) + parseFloat(transferencia.value);
+                var exeso= - Total + db + cd + ef + tf;
+                var falta= + Total - db - cd - ef - tf;
+                
+                vuelto.value= exeso > 0 ? exeso : 0;
             }
         )
 
@@ -345,7 +382,7 @@
                 //mywindow.print();
             }).catch(function(error) {                
                 alert(error.message);
-            });;
+            });
         }
 
         function showPage() {
@@ -385,7 +422,6 @@
                 });	
                 
             }
-            
         }
     </script>
 @stop

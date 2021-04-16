@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/orderstart/{table_id}',        'OrderController@orderstart');
     Route::get('/productselection/{order_id}',  'OrderController@productselection');
     Route::post('/productattach',               'OrderController@productattach');
+    Route::post('/orderdetails/command',        'OrderController@command');
     Route::get('/orderdetails/{order_id}',      'OrderController@orderdetails');
     Route::get('/changetable/{order_id}',       'OrderController@changetable');
     Route::get('/order/{order_id}/chagetable/{table_id}',       'OrderController@changetableProcess');
@@ -78,6 +79,13 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/products/{product_id}/delete',         'ProductController@delete');
     Route::post('/products/process',                    'ProductController@process');
 
+    //Tables
+    Route::get('/tables/list',                        'TableController@list')->name('tables.list');
+    Route::get('/tables/add',                         'TableController@add')->name('tables.add');
+    Route::get('/tables/{table_id}',                  'TableController@details')->name('tables.details');
+    Route::get('/tables/{table_id}/delete',           'TableController@delete');
+    Route::post('/tables/process',                    'TableController@process');
+
     //RECETA
     Route::post('/prescriptions/store',                     'PrescriptionController@store');
     Route::get('/prescriptions/{prescription_id}',          'PrescriptionController@details');
@@ -98,17 +106,9 @@ Route::group(['middleware' => ['auth']], function() {
     
 
     Route::get('prueba',function(){
-        //1 Compañias a la que pertenece el usuario
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-
-        //Consultar a la tabla company_user las id de los usuarios que pertenecen a las compañias dichas
-        $users_id= DB::table('company_user')->whereIn('company_id',$companies_id)->pluck('user_id')->toArray();
-
-        //buscar los usuarios con las id obtenidas
-        $users = App\User::WhereIn('id',$users_id)->get();
-
-        //Esto es solo para mostrar
-        dd($users);
+        $orderdetail = App\Orderdetail::findOrFail(1);
+        $prescription= $orderdetail->product->prescriptions->last();
+        dd($prescription->prescriptiondetails);
     });
 
 });

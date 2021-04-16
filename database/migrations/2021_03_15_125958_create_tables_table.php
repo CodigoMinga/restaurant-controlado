@@ -17,15 +17,12 @@ class CreateTablesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
-            $table->longText('description')->nullable();
             $table->longText('image')->nullable();
             $table->integer('number')->nullable();
             $table->boolean('enabled')->default(1);
 
-
             $table->bigInteger('company_id')->unsigned();
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('RESTRICT')->onDelete('RESTRICT');
-
             
             $table->bigInteger('tabletype_id')->unsigned();
             $table->foreign('tabletype_id')->references('id')->on('tabletypes')->onUpdate('RESTRICT')->onDelete('RESTRICT');

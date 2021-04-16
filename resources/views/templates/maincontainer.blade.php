@@ -24,7 +24,7 @@
     <div aria-live="polite" aria-atomic="true" style="position: fixed; min-height: 200px;top:0px;right:0px;">
         <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-agregar'>
             <div class="toast-header ">
-            <i class="rounded mr-2 material-icons bg-success text-white">done</i>
+            <i class="rounded mr-2 material-icons text-success text-white">receipt</i>
             <strong class="mr-auto">Agregado</strong>
             <small class="text-muted">cerrar</small>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -37,7 +37,7 @@
         </div>
         <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-error'>
             <div class="toast-header">
-            <i class="rounded mr-2 material-icons bg-danger text-white">report</i>
+            <i class="rounded mr-2 material-icons text-danger text-white">report</i>
             <strong class="mr-auto">Error</strong>
             <small class="text-muted">cerrar</small>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -48,9 +48,22 @@
                 Mensaje de error
             </div>
         </div>
+        <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-warning'>
+            <div class="toast-header">
+            <i class="rounded mr-2 material-icons text-warning text-white">report_problem</i>
+            <strong class="mr-auto">Cuidado</strong>
+            <small class="text-muted">cerrar</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="toast-body">
+                Mensaje de Cuidado
+            </div>
+        </div>
         <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-check'>
             <div class="toast-header">
-            <i class="rounded mr-2 material-icons bg-success text-white">done</i>
+            <i class="rounded mr-2 material-icons text-success text-white">verified</i>
             <strong class="mr-auto">Realizado</strong>
             <small class="text-muted">cerrar</small>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -71,6 +84,10 @@
         function toastSuccess(mensaje){
             $('#toast-check .toast-body').eq(0).html(mensaje);
             $('#toast-check').toast('show');
+        }
+        function toastwarning(mensaje){
+            $('#toast-warning .toast-body').eq(0).html(mensaje);
+            $('#toast-warning').toast('show');
         }
     </script>
 
@@ -113,6 +130,9 @@
                 </a>
                 <a class="sidebar-button {{(request()->is('companys/list')) ? 'active' : '' }}" href="{{ url('companys/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">apartment</i>Compañias
+                </a>
+                <a class="sidebar-button {{(request()->is('tables/list')) ? 'active' : '' }}" href="{{ url('tables/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">deck</i>Mesas
                 </a>
                 <a class="sidebar-button {{(request()->is('users/list')) ? 'active' : '' }}" href="{{ url('users/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">groups</i>Usuarios
