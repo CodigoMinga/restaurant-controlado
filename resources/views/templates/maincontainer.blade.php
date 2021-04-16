@@ -134,9 +134,13 @@
                 <a class="sidebar-button {{(request()->is('users/list')) ? 'active' : '' }}" href="{{ url('users/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">groups</i>Usuarios
                 </a>
+                <a class="sidebar-button {{(request()->is('clients/list')) ? 'active' : '' }}" href="{{ url('app/clients/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">people</i>Clientes
+                </a>
                 <a class="sidebar-button {{(request()->is('users/passwordchange')) ? 'active' : '' }}" href="{{ url('users/passwordchange') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">password</i>Contraseña
                 </a>
+                
             </div>
         </div>
         <div id="sidebar-toggle">
