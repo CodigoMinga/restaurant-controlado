@@ -29,16 +29,14 @@
             @endif
 
             <input type="hidden" name="id" value="{{ $table->id }}">
-            @if (!$table->id)
-                <div class="form-group">
-                    <label for="tabletype_id">Tipo de Mesa:</label>
-                    <select name="tabletype_id" id="tabletype_id" class="form-control">
-                        @foreach($tabletypes as $tabletype)
-                            <option value="{{ $tabletype->id }}" {{$table->tabletype_id==$tabletype->id ? 'selected' : ''}}>{{ $tabletype->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            @endif
+            <div class="form-group">
+                <label for="tabletype_id">Tipo de Mesa:</label>
+                <select name="tabletype_id" id="tabletype_id" class="form-control">
+                    @foreach($tabletypes as $tabletype)
+                        <option value="{{ $tabletype->id }}" {{$table->tabletype_id==$tabletype->id ? 'selected' : ''}}>{{ $tabletype->name }}</option>
+                    @endforeach
+                </select>
+            </div>
             <div class="form-group">
                 <label>Nombre Mesa</label>
                 <input type="text" class="form-control" name="name" value="{{$table->name}}" required>
