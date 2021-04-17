@@ -103,6 +103,9 @@ Route::group(['middleware' => ['auth']], function() {
     route::get('/companys/{company_id}',                'CompanyController@details');
     route::post('/companys/{company_id}/edit/process',  'CompanyController@editprocess');
     route::get('/companys/{company_id}/delete',         'CompanyController@delete');
+
+    //LOGOUT
+    route::get('/app/logout','MainController@logout');
     
 
     Route::get('prueba',function(){
