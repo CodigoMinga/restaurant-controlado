@@ -97,32 +97,32 @@
                         <th>
                             Nombre
                         </th>
-                        <td>
-                            {{$order->client->name}}
+                        <td id="client_name">
+                            {{$order->client ? $order->client->name : ''}}
                         </td>
                     </tr>
                     <tr>
                         <th>
                             Teléfono
                         </th>
-                        <td>
-                            {{$order->client->phone}}
+                        <td id="client_phone">
+                            {{$order->client ? $order->client->phone : ''}}
                         </td>
                     </tr>
                     <tr>
                         <th>
                             Comuna
                         </th>
-                        <td>
-                            {{$order->client->commune->name}}
+                        <td id="client_commune">
+                            {{$order->client ? $order->client->commune->name : ''}}
                         </td>
                     </tr>
                     <tr>
                         <th>
                             Dirección
                         </th>
-                        <td>                        
-                            {{$order->client->address}}
+                        <td id="client_address">
+                            {{$order->client ? $order->client->address : ''}}
                         </td>
                     </tr>
                     <tr>
@@ -534,6 +534,12 @@
         var commune_select = document.getElementById('commune_select');
         var region_select = document.getElementById('region_select');
         var clientForm = document.getElementById('client-form');
+
+
+        var client_name = document.getElementById('client_name');
+        var client_phone = document.getElementById('client_phone');
+        var client_commune = document.getElementById('client_commune');
+        var client_address = document.getElementById('client_address');
         
         var rowselect = document.getElementsByClassName("bg-select");
 
@@ -551,6 +557,14 @@
             }else{
                 clienttable.row.add(data).draw(false);
             }
+            client_name.innerHTML=data.name;
+            client_phone.innerHTML=data.phone;
+            client_commune.innerHTML=data.commune.name;
+            client_address.innerHTML=data.address;
+
+            setSelectRow(clienttable.row("#"+data.id).node());
+
+            $('#clientList').modal('hide');
         }
 
         function clientNew(){                    
@@ -564,24 +578,29 @@
             clientForm['address'].value='';
             clientForm['id'].value='';
         }
-
+        var loadclient=true;
         function clientStore(){
-            var formData = new FormData(clientForm);
-            $.ajax({
-                url: "{{url('/clients/store')}}",
-                type: "POST",
-                data: formData,
-                processData: false,  // tell jQuery not to process the data
-                contentType: false   // tell jQuery not to set contentType
-            }).done(function( data ) {
-                if(typeof(data)=='object'){
-                    rowStore(data);
-                }else{
-                    alert(data);
-                }
-            }).fail(function() {
-                alert( "error al recibir respuesta del servidor" );
-            });
+            if(loadclient){                
+                loadclient=false;
+                var formData = new FormData(clientForm);
+                $.ajax({
+                    url: "{{url('/clients/store')}}",
+                    type: "POST",
+                    data: formData,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false   // tell jQuery not to set contentType
+                }).done(function( data ) {
+                    if(typeof(data)=='object'){
+                        rowStore(data);
+                    }else{
+                        alert(data);
+                    }
+                }).fail(function() {
+                    alert( "error al recibir respuesta del servidor" );
+                }).always(function(){
+                    loadclient=true;
+                });
+            }
         }
 
         function regionLoad() {
@@ -592,6 +611,7 @@
                 region_select.appendChild(newoption);
             });
         }
+
         region_select.onchange = comunaLoad;
 
         function comunaLoad() {
@@ -662,6 +682,13 @@
                     },
                     order: [[ 0, "desc" ]],
                 });
+                
+                @if($order->client);
+                var fila = clienttable.row("#{{$order->client->id}}");
+                if(fila.id()){
+                    setSelectRow(fila.node());
+                }
+                @endif
             });
 
             var primera=true;
@@ -692,19 +719,25 @@
             });
 
             $('#tabla tbody').on( 'click', 'tr', function () {
-                if(rowselect[0]){
-                    rowselect[0].classList.remove('bg-select');
-                }
-                this.classList.add('bg-select');
-                var client = clienttable.row( this ).data();
-                clientForm['region_id'].value=client.commune.region_id;
-                comunaLoad();
-                clientForm['commune_id'].value=client.commune_id;
-                clientForm['name'].value=client.name;
-                clientForm['phone'].value=client.phone;
-                clientForm['address'].value=client.address;
-                clientForm['id'].value=client.id;
+                setSelectRow(this);
             });
         });
+
+        function setSelectRow(rowElement){
+            var rowpos = rowElement.position();
+            console.log(rowpos);
+            if(rowselect[0]){
+                rowselect[0].classList.remove('bg-select');
+            }
+            rowElement.classList.add('bg-select');
+            var client = clienttable.row( rowElement ).data();
+            clientForm['region_id'].value=client.commune.region_id;
+            comunaLoad();
+            clientForm['commune_id'].value=client.commune_id;
+            clientForm['name'].value=client.name;
+            clientForm['phone'].value=client.phone;
+            clientForm['address'].value=client.address;
+            clientForm['id'].value=client.id;
+        }
     </script>
 @stop
