@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Auth;
+use App\Order;
 use App\Client;
 use App\Commune;
 use App\Region;
@@ -80,11 +81,23 @@ class ClientController extends Controller
             $client = Client::findOrFail($request->id);
             $client->update($request->all());
             $client->commune->region;
+
+            //AGREGA CLIENTE A ORDEN
+            $order = Order::findOrFail($request->order_id);
+            $order->client_id = $client->id;
+            $order->save();
+
             return $client;
         }else{
             //Si no, Crea un Item
             $client = Client::create($request->all());
             $client->commune->region;
+            
+            //AGREGA CLIENTE A ORDEN
+            $order = Order::findOrFail($request->order_id);
+            $order->client_id = $client->id;
+            $order->save();
+
             return $client;
         }
     }

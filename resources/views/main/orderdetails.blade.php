@@ -27,91 +27,113 @@
         padding: 0px;
     }
     .dataTables_filter, .dataTables_info { display: none; }
+
+    .table-dark.table-hover tbody tr:hover {
+        color: #fff;
+        background-color: rgba(255,255,255,.85);
+    }
+    .bg-select{
+        background: #0d47a1;
+    }
+    .bg-select:hover{
+        background-color: #0d47a1!important;
+    }
 </style>
 @section('content')
     <div class="container p-3">
         <h1>Orden: {{$order->internal_id}}</h1>
-        <div class="d-flex justify-content-between">            
-            <table class="table table-striped table-sm table-dark" style="max-width: 300px">
-                <tr>
-                    <th>
-                        Apertura
-                    </th>
-                    <td>
-                        {{date("d/m/Y H:i:s", strtotime($order->created_at))}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Garzón
-                    </th>
-                    <td>
-                        {{$order->user->name}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Selector
-                    </th>
-                    <td>
-                        {{$order->table->tabletype->name}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Mesa
-                    </th>
-                    <td>
-                        {{$order->table->name}}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Tipo
-                    </th>
-                    <td style="padding:0px">
-                        <select name="ordertype_id" style="width:100%;height:33px;">
-                            @foreach ($ordertypes as $ordertype)
-                                <option value="{{$ordertype->id}}">{{$ordertype->name}}</option>
-                            @endforeach
-                        </select>
-                    </td>
-                </tr>
-            </table>
-
-            <table class="table table-striped table-sm table-dark" style="max-width: 300px">
-                <tr>
-                    <th>
-                        Teléfono
-                    </th>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Nombre
-                    </th>
-                    <td>
-                        
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Comuna
-                    </th>
-                    <td>
-
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Dirección
-                    </th>
-                    <td>
-
-                    </td>
-                </tr>
-            </table>
+        <div class="row"> 
+            <div class="col">
+                <table class="table table-striped table-sm table-dark">
+                    <tr>
+                        <th>
+                            Apertura
+                        </th>
+                        <td>
+                            {{date("d/m/Y H:i:s", strtotime($order->created_at))}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Garzón
+                        </th>
+                        <td>
+                            {{$order->user->name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Selector
+                        </th>
+                        <td>
+                            {{$order->table->tabletype->name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Mesa
+                        </th>
+                        <td>
+                            {{$order->table->name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Tipo
+                        </th>
+                        <td style="padding:0px">
+                            <select name="ordertype_id" style="width:100%;height:33px;">
+                                @foreach ($ordertypes as $ordertype)
+                                    <option value="{{$ordertype->id}}">{{$ordertype->name}}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col">
+                <table class="table table-striped table-sm table-dark" style="">
+                    <tr>
+                        <th>
+                            Nombre
+                        </th>
+                        <td>
+                            {{$order->client->name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Teléfono
+                        </th>
+                        <td>
+                            {{$order->client->phone}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Comuna
+                        </th>
+                        <td>
+                            {{$order->client->commune->name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Dirección
+                        </th>
+                        <td>                        
+                            {{$order->client->address}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="p-0 m-0" colspan="2">
+                            <button type="button" class="btn btn-block btn-primary btn-sm" id="clientButton">
+                                Cliente
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
         <form id="productos">
             {{csrf_field()}}
@@ -247,11 +269,8 @@
             Boleta
         </button>
         
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-            Launch demo modal
-        </button>
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content  bg-dark">
                     <div class="modal-header">
@@ -266,6 +285,7 @@
                                 {{csrf_field()}}
                                 <input type="hidden" name="id">
                                 <input type="hidden" name="company_id" value="{{$order->company_id}}">
+                                <input type="hidden" name="order_id" value="{{$order->id}}">
                                 <div class="form-row">
                                     <div class="form-group col-12 col-sm-6 mb-2">
                                         <label class="mb-1">Nombre</label>
@@ -299,8 +319,8 @@
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
                             </div>
                         </div>                       
-                        <div style="display:block;width:100%;min-height:40vh">
-                            <table id="tabla" class="table table-striped table-dark table-sm mb-0" style="width:100%" >
+                        <div style="display:block;width:100%;min-height:40vh" id='container'>
+                            <table id="tabla" class="table table-dark table-sm mb-0 table-hover">
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
@@ -352,9 +372,6 @@
     <script src="{{ url('/') }}/js/pdf.js"></script>
     <script src="{{ url('/') }}/js/pdf.worker.js"></script>
     
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.18/af-2.3.3/fc-3.2.5/fh-3.1.4/sc-2.0.0/datatables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/responsive.bootstrap.min.js"></script>
     <script>
 
         let Total=parseFloat("{{$order->Total}}");
@@ -416,7 +433,6 @@
                 processData: false,  // tell jQuery not to process the data
                 contentType: false   // tell jQuery not to set contentType
             }).done(function( data ) {
-                console.log(data);
                 if(typeof(data)=='object'){
 
                 }else{
@@ -508,14 +524,18 @@
             }
         }
 
+    </script>
+    
+    <script>
         var clients=[];
         var regions=[];
         var communes=[];
         
         var commune_select = document.getElementById('commune_select');
         var region_select = document.getElementById('region_select');
-        
         var clientForm = document.getElementById('client-form');
+        
+        var rowselect = document.getElementsByClassName("bg-select");
 
         clientForm.onsubmit = function(e){
             e.preventDefault();
@@ -533,8 +553,10 @@
             }
         }
 
-        function clientNew(){
-            var client = clienttable.row( this ).data();
+        function clientNew(){                    
+            if(rowselect[0]){
+                rowselect[0].classList.remove('bg-select');
+            }
             clientForm['region_id'].value=7;
             comunaLoad();
             clientForm['name'].value='';
@@ -552,7 +574,6 @@
                 processData: false,  // tell jQuery not to process the data
                 contentType: false   // tell jQuery not to set contentType
             }).done(function( data ) {
-                console.log(data);
                 if(typeof(data)=='object'){
                     rowStore(data);
                 }else{
@@ -563,73 +584,60 @@
             });
         }
 
-
-        
-        //FINCION REGIONLOAD
         function regionLoad() {
-            //POR CADA REGION
             regions.forEach(el => {
-                //CREO UNA OPCION
                 var newoption = document.createElement('option');
-                //ASIGNO UN VALOR A LA OPCION
                 newoption.value = el.id;
-                //ASIGNO UN TEXTO A LA OPCION
                 newoption.text = el.name;
-                //AGREGO LA OPCION AL SELECTOR REGION
                 region_select.appendChild(newoption);
             });
         }
-
-        //AL SELECTOR REGION CUANDO CAMBIE (ONCHANGE) USO LA FUNCION COMUNALOAD
         region_select.onchange = comunaLoad;
 
-        //FUNCION COMUNALOAD
         function comunaLoad() {
-            //TOMO EL VALOR (region->id) DEL SELECTOR DE REGIONES 
             var value = region_select.value;
-            //ELIMINO TODAS LAS OPCIONES EN CASO DE CAMBIAR
             commune_select.innerHTML = '';
-            //POR CADA COMUNA(TODAS) EJECUTO LA SIGUENTE FUNCION
             communes.forEach(el => {
-                //SI EL region_id ES IGUAL AL VALOR DEL SELECTOR DE COMUNA AGREGO LA COMUNA AL SLECTOR DE COMUNA
                 if (el.region_id == value) {
-                    //CREO UNA OPCION
                     var newoption = document.createElement('option');
-                    //A LA OPCION LE DOI UN VALOR (commune->id)
                     newoption.value = el.id;
-                    //A LA OPCION LE DOI UN TEXTO (commune->name)
                     newoption.text = el.name;
-                    //AGREGO LA OPCION AL SELECTOR DE COMUNAS
                     commune_select.appendChild(newoption);
                 }
             });
         }
 
 
+        $('#clientButton').click(function(){
+            $('#clientList').modal('show');
+        });
 
+
+    </script>
+    <script type="text/javascript" src="https:////cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/responsive.bootstrap.min.js"></script>
+    <script>
         $(document).ready(function() {    
+            
             $.get( "{{url('clients/getdata')}}", function(data) {
                 datos=JSON.parse(data);
 
                 clients=datos.clients;
                 regions=datos.regions;
                 communes=datos.communes;
-
-                //LLAMO FUNCION REGIONLOAD()
                 regionLoad();
-                //ASINGNO UN VALOR BASE AL SELECTOR DE REGION
                 region_select.value = 7;
-                //UNA VEZ SELECCIONADO EL VALOR BASE DE REGION CARGO LAS COMUNAS
                 comunaLoad();
 
                 clienttable = $('#tabla').DataTable({
-                    "order": [[ 0, "desc" ]],
-                    "scrollY":        "35vh",
-                    "scrollCollapse": true,
-                    "paging":         false,
+                    scrollY:        "35vh",
+                    scrollCollapse: true,
+                    paging:         false,
+                    fixedHeader: true,
                     info: false,
-                    responsive: true,					
-                    "data": clients,
+                    responsive: true,	
+                    data: clients,
                     rowId: 'id',
                     columns: [
                         { "data": "name","width":"30%"},
@@ -652,41 +660,50 @@
                             last:       "Ultima"
                         },
                     },
+                    order: [[ 0, "desc" ]],
                 });
+            });
 
-                
-
-                $('#client-name').on('keyup', function () {
-                    if ( clienttable.column(0).search() !== this.value ) {
-                        console.log(this.value);
-                        clienttable
-                        .column(0)
-                        .search( this.value )
-                        .draw();
-                    }
-                });
-
-                $('#client-phone').on('keyup', function () {
-                    if ( clienttable.column(3).search() !== this.value ) {
-                        clienttable
-                        .column(3)
-                        .search( this.value )
-                        .draw();
-                    }
-                });
-
-                $('#tabla tbody').on( 'click', 'tr', function () {
-                    var client = clienttable.row( this ).data();
-                    clientForm['region_id'].value=client.commune.region_id;
-                    comunaLoad();
-                    clientForm['commune_id'].value=client.commune_id;
-                    clientForm['name'].value=client.name;
-                    clientForm['phone'].value=client.phone;
-                    clientForm['address'].value=client.address;
-                    clientForm['id'].value=client.id;
-                });
+            var primera=true;
+            $('#clientList').on('shown.bs.modal', function () {
+                if(primera){
+                    clienttable.columns.adjust().draw();
+                    primera=false;
+                }
+            });
 
 
+            $('#client-name').on('keyup', function () {
+                if ( clienttable.column(0).search() !== this.value ) {
+                    clienttable
+                    .column(0)
+                    .search( this.value )
+                    .draw();
+                }
+            });
+
+            $('#client-phone').on('keyup', function () {
+                if ( clienttable.column(3).search() !== this.value ) {
+                    clienttable
+                    .column(3)
+                    .search( this.value )
+                    .draw();
+                }
+            });
+
+            $('#tabla tbody').on( 'click', 'tr', function () {
+                if(rowselect[0]){
+                    rowselect[0].classList.remove('bg-select');
+                }
+                this.classList.add('bg-select');
+                var client = clienttable.row( this ).data();
+                clientForm['region_id'].value=client.commune.region_id;
+                comunaLoad();
+                clientForm['commune_id'].value=client.commune_id;
+                clientForm['name'].value=client.name;
+                clientForm['phone'].value=client.phone;
+                clientForm['address'].value=client.address;
+                clientForm['id'].value=client.id;
             });
         });
     </script>
