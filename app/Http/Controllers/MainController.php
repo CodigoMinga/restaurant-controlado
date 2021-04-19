@@ -6,7 +6,12 @@ use App\User;
 use App\Mail\PasswordResetMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
+use DB;
+use Str;
+use Carbon\Carbon;
 use Auth;
+use App\Log;
+use Session;
 
 
 class MainController extends Controller
