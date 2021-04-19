@@ -274,11 +274,11 @@
                                 <div class="form-row">
                                     <div class="form-group col-12 col-sm-6 mb-2">
                                         <label class="mb-1">Nombre</label>
-                                        <input type="text" class="form-control form-control-sm" name="name">
+                                        <input type="text" class="form-control form-control-sm" name="name" id="client-name">
                                     </div>
                                     <div class="form-group col-12 col-sm-6 mb-2">
                                         <label class="mb-1">Teléfono</label>
-                                        <input type="text" class="form-control form-control-sm" name="phone">
+                                        <input type="text" class="form-control form-control-sm" name="phone" id="client-phone">
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -640,6 +640,26 @@
                             last:       "Ultima"
                         },
                     },
+                });
+
+                
+
+                $('#client-name').on('change', function () {
+                    if ( clienttable.column(0).search() !== this.value ) {
+                        clienttable
+                        .column(0)
+                        .search( this.value )
+                        .draw();
+                    }
+                });
+
+                $('#client-phone').on('change', function () {
+                    if ( clienttable.column(3).search() !== this.value ) {
+                        clienttable
+                        .column(3)
+                        .search( this.value )
+                        .draw();
+                    }
                 });
 
                 $('#tabla tbody').on( 'click', 'tr', function () {
