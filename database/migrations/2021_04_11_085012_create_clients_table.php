@@ -20,11 +20,11 @@ class CreateClientsTable extends Migration
             $table->longText('address');
 
             $table->bigInteger('company_id')->unsigned();
-            $table->foreign('company_id')->references('id')->on('companies')->onUpdate('RESTRICT')->onDelete('RESTRICT');
-
+            $table->foreign('company_id')->references('id')->on('regions')->onUpdate('RESTRICT')->onDelete('RESTRICT');
             $table->bigInteger('commune_id')->unsigned();
-            $table->foreign('commune_id')->references('id')->on('communes');
+            $table->foreign('commune_id')->references('id')->on('communes')->onUpdate('RESTRICT')->onDelete('RESTRICT');
             
+            $table->boolean('enabled')->default(1);
             $table->timestamps();
         });
     }

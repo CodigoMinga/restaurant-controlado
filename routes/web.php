@@ -37,12 +37,16 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/app/clients/{client_id}/edit/process',    'ClientController@editprocess');
     Route::get('/app/clients/{client_id}/delete',           'ClientController@delete');
 
+    Route::get('/clients/getdata',                          'ClientController@getdata');
+    Route::post('/clients/store',                            'ClientController@store');
+
     //ORDENES
     Route::get('/tables',                       'OrderController@tables');
     Route::get('/tableorder/{table_id}',        'OrderController@tableorder');
     Route::get('/orderstart/{table_id}',        'OrderController@orderstart');
     Route::get('/productselection/{order_id}',  'OrderController@productselection');
     Route::post('/productattach',               'OrderController@productattach');
+    Route::post('/orderdetails/command',        'OrderController@command');
     Route::get('/orderdetails/{order_id}',      'OrderController@orderdetails');
     Route::get('/changetable/{order_id}',       'OrderController@changetable');
     Route::get('/order/{order_id}/chagetable/{table_id}',       'OrderController@changetableProcess');
@@ -78,7 +82,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/products/{product_id}/delete',         'ProductController@delete');
     Route::post('/products/process',                    'ProductController@process');
 
-    //Tables
+    //MESAS
     Route::get('/tables/list',                        'TableController@list')->name('tables.list');
     Route::get('/tables/add',                         'TableController@add')->name('tables.add');
     Route::get('/tables/{table_id}',                  'TableController@details')->name('tables.details');
@@ -102,20 +106,15 @@ Route::group(['middleware' => ['auth']], function() {
     route::get('/companys/{company_id}',                'CompanyController@details');
     route::post('/companys/{company_id}/edit/process',  'CompanyController@editprocess');
     route::get('/companys/{company_id}/delete',         'CompanyController@delete');
+
+    //LOGOUT
+    route::get('/app/logout','MainController@logout');
     
 
     Route::get('prueba',function(){
-        //1 Compañias a la que pertenece el usuario
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-
-        //Consultar a la tabla company_user las id de los usuarios que pertenecen a las compañias dichas
-        $users_id= DB::table('company_user')->whereIn('company_id',$companies_id)->pluck('user_id')->toArray();
-
-        //buscar los usuarios con las id obtenidas
-        $users = App\User::WhereIn('id',$users_id)->get();
-
-        //Esto es solo para mostrar
-        dd($users);
+        $orderdetail = App\Orderdetail::findOrFail(1);
+        $prescription= $orderdetail->product->prescriptions->last();
+        dd($prescription->prescriptiondetails);
     });
 
 });

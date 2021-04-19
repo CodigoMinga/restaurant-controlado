@@ -7,15 +7,28 @@
     </h1>
     <form method="post" action="{{url('app/clients/add/process')}}" id="form">
     {{csrf_field()}}
-
+    @if(count(Auth::user()->companies)>1)
     <div class="form-group">
-        <label for="formGroupExampleInput" class="form-label">Teléfono</label>
-        <input type="text" class="form-control" placeholder="Telefono" name="phone" id="phone" required>
-      </div>
+        <label for="company_id">Restoran:</label>
+        <select name="company_id" id="company_id" class="form-control">
+            @foreach(Auth::user()->companies as $company)
+            <option value="{{ $company->id }}">{{$company->name}}</option>
+            @endforeach
+        </select>
+    </div>
+    @else
+    <input type="hidden" name="company_id" value="{{Auth::user()->companies[0]->id}}">
+    @endif
     <div class="form-group">
       <label for="formGroupExampleInput" class="form-label">Nombre</label>
       <input type="text" class="form-control" placeholder="Nombre" name="name" id="name" required>
     </div>
+
+    <div class="form-group">
+        <label for="formGroupExampleInput" class="form-label">Teléfono</label>
+        <input type="text" class="form-control" placeholder="Telefono" name="phone" id="phone" required>
+    </div>
+
 
     <div class="form-group">
       <label for="formGroupExampleInput" class="form-label">Direccion</label>
@@ -25,22 +38,12 @@
 
     <div class="form-group">
       <label for="region_id">Region:</label>
-      <select name="region_id" id="region_id" class="form-control" >
-          @forelse($regions as $region)
-          <option value="{{ $region->id }}">{{ $region->name }}</option>
-          @empty
-          <li>Aun no hay Regiones</li>
-          @endforelse
+      <select name="region_id" id="region_id" class="form-control" required>
       </select>
     </div>
     <div class="form-group">
         <label for="commune_id">Comuna:</label>
-        <select name="commune_id" id="commune_id" class="form-control" >
-            @forelse($communes as $commune)
-            <option value="{{ $commune->id }}">{{ $commune->name }}</option>
-            @empty
-            <li>Aun no hay Comunas</li>
-            @endforelse
+        <select name="commune_id" id="commune_id" class="form-control" required>    
         </select>
       </div>
   
@@ -55,8 +58,8 @@
   
 <script>
         //PASO ELEMENTOS DE HTML A VARIABLES
-        var region = document.getElementById('region');
-        var comuna = document.getElementById('comuna');
+        var region = document.getElementById('region_id');
+        var comuna = document.getElementById('commune_id');
         
         //DESDE EL CONTROLADOS TOMO LAS COLECCIONES DE REGIONES Y COMUNAS Y LAS PASO A VARIABLES
         var region_list = {!! json_encode($regions->toArray()) !!};
@@ -65,7 +68,7 @@
         //LLAMO FUNCION REGIONLOAD()
         regionLoad();
         //ASINGNO UN VALOR BASE AL SELECTOR DE REGION
-        region.value = 16;
+        region.value = 7;
         //UNA VEZ SELECCIONADO EL VALOR BASE DE REGION CARGO LAS COMUNAS
         comunaLoad();
 

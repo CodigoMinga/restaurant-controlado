@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property string $name
  * @property Region $region
+ * @property Client $client
  * @property User[] $users
  */
 class Commune extends Model
@@ -38,8 +39,12 @@ class Commune extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function users()
+
+        /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function clients()
     {
-        return $this->hasMany('App\User');
+        return $this->hasMany('App\Client');
     }
 }

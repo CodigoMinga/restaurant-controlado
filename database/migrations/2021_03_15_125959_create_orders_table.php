@@ -27,8 +27,6 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 
-            
-
             $table->bigInteger('ordertype_id')->unsigned()->default(1);
             $table->foreign('ordertype_id')->references('id')->on('ordertypes')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 
@@ -37,10 +35,13 @@ class CreateOrdersTable extends Migration
             $table->integer('efective')->unsigned()->nullable();
             $table->integer('transfer')->unsigned()->nullable();
 
+            $table->integer('tip')->unsigned()->nullable();
+
             $table->integer('discount')->unsigned()->nullable();
             $table->longText('discount_description')->nullable();
 
             $table->boolean('closed')->default(0);
+
             $table->boolean('enabled')->default(1);
 
             $table->bigInteger('internal_id')->default(1);
