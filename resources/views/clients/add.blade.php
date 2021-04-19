@@ -7,7 +7,18 @@
     </h1>
     <form method="post" action="{{url('app/clients/add/process')}}" id="form">
     {{csrf_field()}}
-
+    @if(count(Auth::user()->companies)>1)
+    <div class="form-group">
+        <label for="company_id">Restoran:</label>
+        <select name="company_id" id="company_id" class="form-control">
+            @foreach(Auth::user()->companies as $company)
+            <option value="{{ $company->id }}">{{$company->name}}</option>
+            @endforeach
+        </select>
+    </div>
+    @else
+    <input type="hidden" name="company_id" value="{{Auth::user()->companies[0]->id}}">
+    @endif
     <div class="form-group">
       <label for="formGroupExampleInput" class="form-label">Nombre</label>
       <input type="text" class="form-control" placeholder="Nombre" name="name" id="name" required>

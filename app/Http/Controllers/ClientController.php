@@ -23,22 +23,24 @@ class ClientController extends Controller
          
          return redirect()->route('clients.list')->with('success', 'Cliente editado correctamente');
      }
+
      public function addProcess(Request $request){
 
         Client::create($request->all());
     
         return redirect()->route('clients.list')->with('success', 'Cliente Creado correctamente');
     }
+
     public function list()
     {
         $clients = Client::all();
         foreach ($clients as $key => $client) {
-            $client -> commune;
-            $client -> region;
+            $client -> commune-> region;
         }
         
         return view('clients.list',compact('clients'));
     }
+
     public function add(){
        
         $clients = Client::all();  //se crea la variable 
@@ -47,13 +49,46 @@ class ClientController extends Controller
 
         return view('clients.add' , compact('clients', 'communes','regions')); // para luego pasarla con compact
     }
-    public function details($client_id)
-{
-    $communes = Commune::all();
-    $regions=Region::all();
-    return view('clients.details',\compact('regions' ,'communes') , [
-        'client' => Client::find($client_id)
-    ]);
-}
 
+    public function details($client_id)
+    {
+        $communes = Commune::all();
+        $regions=Region::all();
+        return view('clients.details',compact('regions' ,'communes') , [
+            'client' => Client::find($client_id)
+        ]);
+    }
+
+    
+    public function getdata()
+    {   
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+        $clients = Client::whereIn('company_id',$companies_id)->get();
+
+        foreach ($clients as $key => $client) {
+            $client -> commune -> region;
+        }
+        
+        $aux['clients']=$clients;
+        $aux['regions']=Region::all();
+        $aux['communes']=Commune::all();
+
+        return json_encode($aux);
+    }
+
+    public function store(Request $request){
+        $id = $request->id;
+        if($id){
+            //Si encuentra el ID edita
+            $client = Client::findOrFail($request->id);
+            $client->update($request->all());
+            $client->commune->region;
+            return $client;
+        }else{
+            //Si no, Crea un Item
+            $client = Client::create($request->all());
+            $client->commune->region;
+            return $client;
+        }
+    }
 }
