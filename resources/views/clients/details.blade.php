@@ -6,7 +6,19 @@
             <i class="material-icons">library_books</i>Detalles del Cliente
         </h1>
         <form method="post" action="{{url('app/clients/'.$client->id.'/edit/process')}}">
-            {{csrf_field()}}
+            {{csrf_field()}}               
+            @if(count(Auth::user()->companies)>1)
+            <div class="form-group">
+                <label for="company_id">Restoran:</label>
+                <select name="company_id" id="company_id" class="form-control">
+                    @foreach(Auth::user()->companies as $company)
+                    <option value="{{ $company->id }}">{{$company->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            @else
+            <input type="hidden" name="company_id" value="{{Auth::user()->companies[0]->id}}">
+            @endif
             <div class="form-group">
                 <label>Nombre Cliente</label>
                 <input required type="text" class="form-control" name="name" value="{{$client->name}}">

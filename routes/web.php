@@ -37,6 +37,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/app/clients/{client_id}/edit/process',    'ClientController@editprocess');
     Route::get('/app/clients/{client_id}/delete',           'ClientController@delete');
 
+    Route::get('/clients/getdata',                          'ClientController@getdata');
+    Route::post('/clients/store',                            'ClientController@store');
+
     //ORDENES
     Route::get('/tables',                       'OrderController@tables');
     Route::get('/tableorder/{table_id}',        'OrderController@tableorder');
@@ -79,7 +82,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/products/{product_id}/delete',         'ProductController@delete');
     Route::post('/products/process',                    'ProductController@process');
 
-    //Tables
+    //MESAS
     Route::get('/tables/list',                        'TableController@list')->name('tables.list');
     Route::get('/tables/add',                         'TableController@add')->name('tables.add');
     Route::get('/tables/{table_id}',                  'TableController@details')->name('tables.details');
