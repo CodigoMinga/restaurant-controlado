@@ -590,7 +590,13 @@
         }
         var loadclient=true;
         function clientStore(){
-            if(loadclient){                
+            if(
+                clientForm['name'].value=='' ||
+                clientForm['phone'].value=='' ||
+                clientForm['address'].value==''
+            ){
+                alert( "Falta Agregar Información" );
+            }else if(loadclient){                
                 loadclient=false;
                 var formData = new FormData(clientForm);
                 $.ajax({
