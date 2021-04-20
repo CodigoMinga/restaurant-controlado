@@ -662,8 +662,8 @@
                     columns: [
                         { "data": "name","width":"30%"},
                         { "data": "commune.name","width":"20%"},
-                        { "data": "address","width":"40%"},
-                        { "data": "phone","width":"10%"},
+                        { "data": "address","width":"35%"},
+                        { "data": "phone","width":"15%"},
                     ],
                     language: {
                         "lengthMenu": "Mostrar _MENU_ registros por pagina &nbsp;&nbsp;&nbsp;",
@@ -697,6 +697,8 @@
                     clienttable.columns.adjust().draw();
                     primera=false;
                 }
+                var rowpos = $('.bg-select').eq(0).position();
+                $('.dataTables_scrollBody').eq(0).scrollTop(rowpos.top);
             });
 
 
@@ -724,8 +726,6 @@
         });
 
         function setSelectRow(rowElement){
-            var rowpos = rowElement.position();
-            console.log(rowpos);
             if(rowselect[0]){
                 rowselect[0].classList.remove('bg-select');
             }
