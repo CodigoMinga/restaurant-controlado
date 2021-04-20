@@ -128,6 +128,7 @@
                     <tr>
                         <td class="p-0 m-0" colspan="2">
                             <button type="button" class="btn btn-block btn-primary btn-sm" id="clientButton">
+                                <span class="material-icons">person</span>
                                 Cliente
                             </button>
                         </td>
@@ -314,9 +315,18 @@
                                 </div>
                             </form>
                             <div>
-                                <button type="button" class="btn btn-success"   onclick="clientStore()">Guardar</button>
-                                <button type="button" class="btn btn-primary"   onclick="clientNew()">Nuevo</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
+                                <button type="button" class="btn btn-success"   onclick="clientStore()">
+                                    <span class="material-icons">send</span>
+                                    Guardar
+                                </button>
+                                <button type="button" class="btn btn-primary"   onclick="clientNew()">
+                                    <span class="material-icons">person_add</span>
+                                    Nuevo
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">                                    
+                                    <span class="material-icons">close</span>
+                                    Volver
+                                </button>
                             </div>
                         </div>                       
                         <div style="display:block;width:100%;min-height:40vh" id='container'>
