@@ -38,6 +38,11 @@
     .bg-select:hover{
         background-color: #0d47a1!important;
     }
+    .inputtable{
+        width:100%;
+        height:33px;
+    }
+
 </style>
 @section('content')
     <div class="container p-3">
@@ -82,7 +87,7 @@
                             Tipo
                         </th>
                         <td style="padding:0px">
-                            <select name="ordertype_id" style="width:100%;height:33px;">
+                            <select name="ordertype_id" class="inputtable">
                                 @foreach ($ordertypes as $ordertype)
                                     <option value="{{$ordertype->id}}">{{$ordertype->name}}</option>
                                 @endforeach
@@ -191,68 +196,70 @@
                         </tr>
                     @endforeach
                 </tbody>
-                <tfoot align="right">
-                    <tr>
-                        <th colspan="5" >
-                            <p class="m-0" align="right">Total</p>
-                        </th>
-                        <td>
-                            {{number_format($order->Total, 0, '', '.') }}
-                        </td>
-                    </tr>
-                </tfoot>
             </table>
         </form>
-        <table style="color:white">
+        <table class="table table-striped table-sm table-dark">
             <tr>
+                <th width=1>
+                    Envio
+                </th>
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="descuento" class="dinero inputtable">
+                </td>
                 <th>
+                    Consumo
+                </th>
+                <td>
+                    {{number_format($order->Total, 0, '', '.') }}
+                </td>
+            </tr>
+            <tr>
+                <th width=1>
                     Descuento
                 </th>
-                <td width=1>
-                    <input type="number"    size="6" value="0" id="descuento" class="dinero">
-                </td>
-                <td>
-                    <input type="text"      placeholder="Razón del descuento">
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="descuento" class="dinero inputtable">
+                    <input type="text"      placeholder="Razón del descuento"   class="inputtable">
                 </td>
             </tr>
             <tr>
-                <th>
+                <th width=1 >
                     Transferencia
                 </th>
-                <td>
-                    <input type="number"    size="6" value="0" id="transferencia" class="dinero">
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="transferencia"  class="dinero inputtable">
                 </td>
             </tr>
             <tr>
-                <th>
+                <th width=1>
                     T.de Debito
                 </th>
-                <td>
-                    <input type="number"    size="6" value="0" id="debito" class="dinero">
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="debito"  class="dinero inputtable">
                 </td>
             </tr>
             <tr>
-                <th>
+                <th width=1>
                     T.de Credito
                 </th>
-                <td>
-                    <input type="number"    size="6" value="0" id="credito" class="dinero">
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="credito"  class="dinero inputtable">
                 </td>
             </tr>
             <tr>
-                <th>
+                <th width=1>
                     Efectivo
                 </th>
-                <td>
-                    <input type="number"    size="6" value="0" id="efectivo" class="dinero">
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="efectivo"  class="dinero inputtable">
                 </td>
             </tr>
             <tr>
-                <th>
+                <th width=1>
                     Vuelto
                 </th>
-                <td>
-                    <input type="number"    size="6" value="0" id="vuelto" readonly>
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="vuelto" readonly  class="inputtable">
                 </td>
             </tr>
         </table>

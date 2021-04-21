@@ -27,8 +27,7 @@ class AddFkToOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropForeign('client_id');
-            $table->dropColumn('client_id');
+            $table->dropForeign(['client_id']);
         });
     }
 }
