@@ -8,6 +8,8 @@ use App\Orderdetail;
 use App\Ordertype;
 use App\Table;
 use App\Producttype;
+use App\Discount;
+use App\Delivery;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -27,8 +29,7 @@ class OrderController extends Controller
         if (!isset($order)) {
             return view('main.orderstart', compact('table'));
         }else{
-            $ordertypes = Ordertype::all();
-            return view('main.orderdetails', compact('order','ordertypes'));
+            return redirect('/orderdetails/'.$order->id);
         }
     }
 
@@ -50,14 +51,15 @@ class OrderController extends Controller
             }
             $order->save();
         }
-        $ordertypes = Ordertype::all();
-        return view('main.orderdetails', compact('order','ordertypes'));
+        return redirect('/orderdetails/'.$order->id)->with('success', 'Order Iniciada');;
     }
     
     public function orderdetails($order_id){
         $order = Order::findOrFail($order_id);
         $ordertypes = Ordertype::all();
-        return view('main.orderdetails', compact('order','ordertypes'));
+        $discounts = Discount::all();
+        $deliveries = Delivery::all();
+        return view('main.orderdetails', compact('order','ordertypes','discounts','deliveries'));
     }
 
     public function productselection($order_id)
@@ -101,7 +103,7 @@ class OrderController extends Controller
         $table  = Table::findOrFail($table_id);
         $order->table_id = $table->id;
         $order->save();
-        return redirect('/orderdetails/'.$order->id)->with('success', 'Mesa cambiada correctamente');;
+        return redirect('/orderdetails/'.$order->id)->with('success', 'Mesa cambiada correctamente');
     }
 
     public function command(Request $request)

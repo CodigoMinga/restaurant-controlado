@@ -39,7 +39,6 @@
         background-color: #0d47a1!important;
     }
     .inputtable{
-        width:100%;
         height:33px;
     }
 
@@ -87,7 +86,7 @@
                             Tipo
                         </th>
                         <td style="padding:0px">
-                            <select name="ordertype_id" class="inputtable">
+                            <select name="ordertype_id" class="inputtable w-100">
                                 @foreach ($ordertypes as $ordertype)
                                     <option value="{{$ordertype->id}}">{{$ordertype->name}}</option>
                                 @endforeach
@@ -204,7 +203,12 @@
                     Envio
                 </th>
                 <td class="p-0 m-0">
-                    <input type="number"    size="6" value="0" id="descuento" class="dinero inputtable">
+                    <select name="envio" class="dinero inputtable w-100">
+                        <option value="0">0</option>
+                        @foreach ($deliveries as $delivery)
+                            <option value="{{$delivery->ammount}}">{{$delivery->ammount}}</option>
+                        @endforeach
+                    </select>
                 </td>
                 <th>
                     Consumo
@@ -218,8 +222,18 @@
                     Descuento
                 </th>
                 <td class="p-0 m-0">
-                    <input type="number"    size="6" value="0" id="descuento" class="dinero inputtable">
+                    <select name="descuento" id='descuento' class="dinero inputtable w-100">
+                        <option value="0">0</option>
+                        @foreach ($discounts as $discount)
+                            <option value="{{$discount->ammount}}">{{$discount->ammount}}</option>
+                        @endforeach
+                    </select>
+                </td>
+                <td class="p-0 m-0">
                     <input type="text"      placeholder="Razón del descuento"   class="inputtable">
+                </td>
+                <td>
+                    {{number_format($order->Total, 0, '', '.') }}
                 </td>
             </tr>
             <tr>
@@ -229,6 +243,12 @@
                 <td class="p-0 m-0">
                     <input type="number"    size="6" value="0" id="transferencia"  class="dinero inputtable">
                 </td>
+                <th>
+                    Sub. Total
+                </th>
+                <td>
+
+                </td>
             </tr>
             <tr>
                 <th width=1>
@@ -236,6 +256,12 @@
                 </th>
                 <td class="p-0 m-0">
                     <input type="number"    size="6" value="0" id="debito"  class="dinero inputtable">
+                </td>
+                <th>
+                    Propina
+                </th>
+                <td>
+                    
                 </td>
             </tr>
             <tr>
@@ -245,6 +271,12 @@
                 <td class="p-0 m-0">
                     <input type="number"    size="6" value="0" id="credito"  class="dinero inputtable">
                 </td>
+                <th>
+                    Sub. Total
+                </th>
+                <td>
+
+                </td>
             </tr>
             <tr>
                 <th width=1>
@@ -252,6 +284,12 @@
                 </th>
                 <td class="p-0 m-0">
                     <input type="number"    size="6" value="0" id="efectivo"  class="dinero inputtable">
+                </td>
+                <th>
+                    Total
+                </th>
+                <td>
+
                 </td>
             </tr>
             <tr>

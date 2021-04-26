@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/app/clients/{client_id}/delete',           'ClientController@delete');
 
     Route::get('/clients/getdata',                          'ClientController@getdata');
-    Route::post('/clients/store',                            'ClientController@store');
+    Route::post('/clients/store',                           'ClientController@store');
 
     //ORDENES
     Route::get('/tables',                       'OrderController@tables');
