@@ -41,6 +41,9 @@
     .inputtable{
         height:33px;
     }
+    .number{
+        width: 120px;
+    }
 
 </style>
 @section('content')
@@ -197,123 +200,153 @@
                 </tbody>
             </table>
         </form>
-        <table class="table table-striped table-sm table-dark">
-            <tr>
-                <th width=1>
-                    Envio
-                </th>
-                <td class="p-0 m-0">
-                    <select name="envio" class="dinero inputtable w-100">
-                        <option value="0">0</option>
-                        @foreach ($deliveries as $delivery)
-                            <option value="{{$delivery->ammount}}">{{$delivery->ammount}}</option>
-                        @endforeach
-                    </select>
-                </td>
-                <th>
-                    Consumo
-                </th>
-                <td>
-                    {{number_format($order->Total, 0, '', '.') }}
-                </td>
-            </tr>
-            <tr>
-                <th width=1>
-                    Descuento
-                </th>
-                <td class="p-0 m-0">
-                    <select name="descuento" id='descuento' class="dinero inputtable w-100">
-                        <option value="0">0</option>
-                        @foreach ($discounts as $discount)
-                            <option value="{{$discount->ammount}}">{{$discount->ammount}}</option>
-                        @endforeach
-                    </select>
-                </td>
-                <td class="p-0 m-0">
-                    <input type="text"      placeholder="Razón del descuento"   class="inputtable">
-                </td>
-                <td>
-                    {{number_format($order->Total, 0, '', '.') }}
-                </td>
-            </tr>
-            <tr>
-                <th width=1 >
-                    Transferencia
-                </th>
-                <td class="p-0 m-0">
-                    <input type="number"    size="6" value="0" id="transferencia"  class="dinero inputtable">
-                </td>
-                <th>
-                    Sub. Total
-                </th>
-                <td>
-
-                </td>
-            </tr>
-            <tr>
-                <th width=1>
-                    T.de Debito
-                </th>
-                <td class="p-0 m-0">
-                    <input type="number"    size="6" value="0" id="debito"  class="dinero inputtable">
-                </td>
-                <th>
-                    Propina
-                </th>
-                <td>
+        <div class="d-flex flex-wrap justify-content-between"> 
+            <div>
+                <table class="table table-striped table-sm table-dark">
+                    <tr>
+                        <th colspan="2" style="text-align: center">
+                            Forma de pagos
+                        </th>
+                    </tr>
+                    <tr>
+                        <th width=1 >
+                            Transferencia
+                        </th>
+                        <td class="p-0 m-0">
+                            <input type="number"    size="6" value="0" id="transferencia"  class="dinero inputtable">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width=1>
+                            T.de Debito
+                        </th>
+                        <td class="p-0 m-0">
+                            <input type="number"    size="6" value="0" id="debito"  class="dinero inputtable">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width=1>
+                            T.de Credito
+                        </th>
+                        <td class="p-0 m-0">
+                            <input type="number"    size="6" value="0" id="credito"  class="dinero inputtable">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width=1>
+                            Efectivo
+                        </th>
+                        <td class="p-0 m-0">
+                            <input type="number"    size="6" value="0" id="efectivo"  class="dinero inputtable">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width=1>
+                            Vuelto
+                        </th>
+                        <td class="p-0 m-0">
+                            <input type="number"    size="6" value="0" id="vuelto" readonly  class="inputtable">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table class="table table-striped table-sm table-dark">
+                    <tr>
+                        <th colspan="4" style="text-align: center">
+                            Adicionales
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="3">
+                            Consumo
+                        </th>
+                        <td>
+                            {{number_format($order->Total, 0, '', '.') }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width=1>
+                            Descuento
+                        </th>
+                        <td class="p-0 m-0"  width=1>
+                            <select name="descuento" id='descuento' class="inputtable number">
+                                <option value="0">0</option>
+                                @foreach ($discounts as $discount)
+                                    <option value="{{$discount->ammount}}">{{number_format($discount->ammount, 0, '', '.')}}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td class="p-0 m-0">
+                            <input type="text" name="discount_comment" class="inputtable number" placeholder="Razón del descuento">
+                        </td>
+                        <td>
+                            0
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Propina
+                        </th>
+                        <td class="p-0 m-0"  width=1>
+                            <select name="descuento" id='descuento' class="inputtable number">
+                                <option value="0">0</option>
+                                <option value="10">10%</option>
+                            </select>
+                        </td>
+                        <td class="p-0 m-0"  width=1>
+                            <input type="number"    size="6" value="0" id="efectivo"  class="dinero inputtable">
+                        </td>
+                        <td>
+                            0
+                        </td>
+                    </tr>
                     
-                </td>
-            </tr>
-            <tr>
-                <th width=1>
-                    T.de Credito
-                </th>
-                <td class="p-0 m-0">
-                    <input type="number"    size="6" value="0" id="credito"  class="dinero inputtable">
-                </td>
-                <th>
-                    Sub. Total
-                </th>
-                <td>
-
-                </td>
-            </tr>
-            <tr>
-                <th width=1>
-                    Efectivo
-                </th>
-                <td class="p-0 m-0">
-                    <input type="number"    size="6" value="0" id="efectivo"  class="dinero inputtable">
-                </td>
-                <th>
-                    Total
-                </th>
-                <td>
-
-                </td>
-            </tr>
-            <tr>
-                <th width=1>
-                    Vuelto
-                </th>
-                <td class="p-0 m-0">
-                    <input type="number"    size="6" value="0" id="vuelto" readonly  class="inputtable">
-                </td>
-            </tr>
-        </table>
+                    <tr>
+                        <th width=1 colspan="2">
+                            Envio
+                        </th>
+                        <td class="p-0 m-0"  width=1>
+                            <select name="envio" class="inputtable number">
+                                <option value="0">0</option>
+                                @foreach ($deliveries as $delivery)
+                                    <option value="{{$delivery->ammount}}">{{number_format($delivery->ammount, 0, '', '.')}}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            0
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan=3>
+                           Total a pagar
+                        </th>
+                        <td> 
+                            0
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
         <hr>
-        <a href="{{url('/productselection/'.$order->id)}}" class="btn btn-success btn-lg">
-            Agregar
-        </a>
-        <a href="{{url('/changetable/'.$order->id)}}" class="btn btn-danger btn-lg">
-            Cambiar Mesa
-        </a>
-        <button  onclick="comanda()" class="btn btn-primary btn-lg">
-            Comanda
-        </button>
-        <button  onclick="PrintBoleta()" class="btn btn-warning btn-lg">
-            Boleta
-        </button>
+        <div class="d-flex flex-wrap justify-content-between">              
+            <a href="{{url('/productselection/'.$order->id)}}" class="btn btn-success btn-lg">
+                Agregar
+            </a>
+            <a href="{{url('/changetable/'.$order->id)}}" class="btn btn-danger btn-lg">
+                Cambiar Mesa
+            </a>
+            <button  onclick="Cerrar()" class="btn btn-info btn-lg">
+                Cerrar
+            </button>
+            <button  onclick="comanda()" class="btn btn-primary btn-lg">
+                Comanda
+            </button>
+            <button  onclick="PrintBoleta()" class="btn btn-warning btn-lg">
+                Boleta
+            </button>
+        </div>
         
         <!-- Modal -->
         <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
