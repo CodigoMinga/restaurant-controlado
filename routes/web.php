@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/changetable/{order_id}',       'OrderController@changetable');
     Route::get('/order/{order_id}/chagetable/{table_id}',       'OrderController@changetableProcess');
     
+    Route::post('/order/{order_id}/close',       'OrderController@orderclose');
+    
     //ITEMS
     route::get('/items/list',               'ItemController@list')->name('items.list');
     route::get('/items/add',                'ItemController@add')->name('items.add');

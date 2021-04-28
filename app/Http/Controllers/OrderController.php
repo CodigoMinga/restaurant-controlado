@@ -53,6 +53,13 @@ class OrderController extends Controller
         }
         return redirect('/orderdetails/'.$order->id)->with('success', 'Order Iniciada');;
     }
+
+    public function orderclose($order_id, Request $request)
+    {
+        $order  = Order::findOrFail($order_id);
+        $order->update($request->all());
+        return $order;
+    }
     
     public function orderdetails($order_id){
         $order = Order::findOrFail($order_id);
@@ -105,6 +112,7 @@ class OrderController extends Controller
         $order->save();
         return redirect('/orderdetails/'.$order->id)->with('success', 'Mesa cambiada correctamente');
     }
+
 
     public function command(Request $request)
     {

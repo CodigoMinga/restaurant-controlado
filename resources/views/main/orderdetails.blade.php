@@ -213,160 +213,167 @@
                 </tbody>
             </table>
         </form>
-        <div class="d-flex flex-wrap justify-content-between">
-            <div>
-                <table class="table table-striped table-sm table-dark">
-                    <tr>
-                        <th colspan="2" style="text-align: center">
-                            Forma de pagos
-                        </th>
-                    </tr>
-                    <tr>
-                        <th width=1>
-                            Transferencia
-                        </th>
-                        <td class="p-0 m-0">
-                            <input type="number" size="6" value="0" id="transfer" class="dinero inputtable">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width=1>
-                            T.de Debito
-                        </th>
-                        <td class="p-0 m-0">
-                            <input type="number" size="6" value="0" id="debit_card" class="dinero inputtable">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width=1>
-                            T.de Credito
-                        </th>
-                        <td class="p-0 m-0">
-                            <input type="number" size="6" value="0" id="credit_card" class="dinero inputtable">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width=1>
-                            Efectivo
-                        </th>
-                        <td class="p-0 m-0">
-                            <input type="number" size="6" value="0" id="efective" class="dinero inputtable">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width=1>
-                            Vuelto
-                        </th>
-                        <td id="pay_back">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style="white-space: nowrap">
-                            Pago restante
-                        </th>
-                        <td id="pay_left">
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div>
-                <table class="table table-striped table-sm table-dark">
-                    <tr>
-                        <th colspan="4" style="text-align: center">
-                            Adicionales
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="3">
-                            Consumo total
-                        </th>
-                        <td>
-                            ${{ number_format($order->Total, 0, '', '.') }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width=1>
-                            Descuento
-                        </th>
-                        <td class="p-0 m-0" width=1>
-                            <select name="discount" id='discount' class="inputtable number dinero">
-                                <option value="0">0</option>
-                                @foreach ($discounts as $discount)
-                                    <option value="{{ $discount->ammount }}">
-                                        {{ number_format($discount->ammount, 0, '', '.') }}</option>
-                                @endforeach
-                            </select>
-                        </td>
-                        <td class="p-0 m-0">
-                            <input type="text" name="discount_comment" class="inputtable number"
-                                placeholder="Razón del descuento">
-                        </td>
-                        <td id='discount_total'>
-                            0
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Propina
-                        </th>
-                        <td class="p-0 m-0" width=1>
-                            <select name="tip_type" id='tip_type' class="inputtable number dinero">
-                                <option value="0">0</option>
-                                <option value="10">10%</option>
-                                <option value="-1">Cantidad</option>
-                            </select>
-                        </td>
-                        <td class="p-0 m-0" width=1>
-                            <input type="number" size="6" value="0" id="tip" class="inputtable dinero" readonly>
-                        </td>
-                        <td id='tip_total'>
-                            0
-                        </td>
-                    </tr>
+        <form id="payment">
+            {{ csrf_field() }}
+            <div class="d-flex flex-wrap justify-content-between">
+                <div>
+                    <table class="table table-striped table-sm table-dark">
+                        <tr>
+                            <th colspan="2" style="text-align: center">
+                                Forma de pagos
+                            </th>
+                        </tr>
+                        <tr>
+                            <th width=1>
+                                Transferencia
+                            </th>
+                            <td class="p-0 m-0">
+                                <input type="number" size="6" value="0" id="transfer" name="transfer" class="dinero inputtable">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th width=1>
+                                T. de Débito
+                            </th>
+                            <td class="p-0 m-0">
+                                <input type="number" size="6" value="0" id="debit_card" name="debit_card" class="dinero inputtable">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th width=1>
+                                T. de Crédito
+                            </th>
+                            <td class="p-0 m-0">
+                                <input type="number" size="6" value="0" id="credit_card" name="credit_card" class="dinero inputtable">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th width=1>
+                                Efectivo
+                            </th>
+                            <td class="p-0 m-0">
+                                <input type="number" size="6" value="0" id="efective" name="efective" class="dinero inputtable">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th width=1>
+                                Vuelto
+                            </th>
+                            <td id="pay_back">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="white-space: nowrap">
+                                Pago restante
+                            </th>
+                            <td id="pay_left">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <table class="table table-striped table-sm table-dark">
+                        <tr>
+                            <th colspan="4" style="text-align: center">
+                                Adicionales
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">
+                                Consumo total
+                            </th>
+                            <td>
+                                ${{ number_format($order->Total, 0, '', '.') }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th width=1>
+                                Descuento
+                            </th>
+                            <td class="p-0 m-0" width=1>
+                                <select name="discount" id='discount' class="inputtable number dinero">
+                                    <option value="0">0</option>
+                                    @foreach ($discounts as $discount)
+                                        <option value="{{ $discount->ammount }}">
+                                            {{ number_format($discount->ammount, 0, '', '.') }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td class="p-0 m-0">
+                                <input type="text" name="discount_description" class="inputtable number"
+                                    placeholder="Razón del descuento">
+                            </td>
+                            <td id='discount_total'>
+                                0
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Propina
+                            </th>
+                            <td class="p-0 m-0" width=1>
+                                <select name="tip_type" id='tip_type' class="inputtable number dinero">
+                                    <option value="0">0</option>
+                                    <option value="10">10%</option>
+                                    <option value="-1">Cantidad</option>
+                                </select>
+                            </td>
+                            <td class="p-0 m-0" width=1>
+                                <input type="number" size="6" value="0" id="tip" name="tip" class="inputtable dinero" readonly>
+                            </td>
+                            <td id='tip_total'>
+                                0
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <th width=1 colspan="2">
-                            Envio
-                        </th>
-                        <td class="p-0 m-0" width=1>
-                            <select name="delivery" id="delivery" class="inputtable number dinero">
-                                <option value="0">0</option>
-                                @foreach ($deliveries as $delivery)
-                                    <option value="{{ $delivery->ammount }}">
-                                        {{ number_format($delivery->ammount, 0, '', '.') }}</option>
-                                @endforeach
-                            </select>
-                        </td>
-                        <td id="delivery_total">
-                            0
-                        </td>
-                    </tr>
-                    <tr>
-                        <th colspan=3 style="white-space: nowrap">
-                            Total a pagar
-                        </th>
-                        <td id="pay_total">
-                            0
-                        </td>
-                    </tr>
-                </table>
+                        <tr>
+                            <th width=1 colspan="2">
+                                Envío
+                            </th>
+                            <td class="p-0 m-0" width=1>
+                                <select name="delivery" id="delivery" class="inputtable number dinero">
+                                    <option value="0">0</option>
+                                    @foreach ($deliveries as $delivery)
+                                        <option value="{{ $delivery->ammount }}">
+                                            {{ number_format($delivery->ammount, 0, '', '.') }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td id="delivery_total">
+                                0
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan=3 style="white-space: nowrap">
+                                Total a pagar
+                            </th>
+                            <td id="pay_total">
+                                0
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-        </div>
+        </form>
         <hr>
         <div class="d-flex flex-wrap justify-content-between">
             <a href="{{ url('/productselection/' . $order->id) }}" class="btn btn-success btn-lg">
+                <span class="material-icons">add_shopping_cart</span>
                 Agregar
             </a>
             <a href="{{ url('/changetable/' . $order->id) }}" class="btn btn-danger btn-lg">
                 Cambiar Mesa
             </a>
-            <button onclick="Cerrar()" class="btn btn-info btn-lg">
+            <button onclick="paymentStore()" class="btn btn-info btn-lg">
+                <span class="material-icons">price_check</span>
                 Cerrar Venta
             </button>
             <button onclick="comanda()" class="btn btn-primary btn-lg">
+                <span class="material-icons">receipt</span>
                 Comanda
             </button>
             <button onclick="PrintBoleta()" class="btn btn-warning btn-lg">
+                <span class="material-icons">receipt_long</span>
                 Boleta
             </button>
         </div>
@@ -660,6 +667,46 @@
         //TODOS LOS CAMPOS RELACIONADOS CON DINERO AL CAMBIAR EJECUTAN LA FUNCION CALCULAR
         var dinero = document.querySelectorAll(".dinero");
         dinero.forEach(input =>input.onchange = calcular);
+
+        calcular();
+
+        
+        var payment = document.getElementById('payment');
+        payment.onsubmit = function(e) {
+            e.preventDefault();
+            return false;
+        }
+
+        var loadpayment=true;
+
+        function paymentStore() {
+            if (
+                payment['discount_description'].value == '' &&
+                payment['discount'].value != 0
+            ) {
+                alert("Falta agregar razon del descuento");
+            } else if (loadpayment) {
+                loadpayment = false;
+                var formData = new FormData(payment);
+                $.ajax({
+                    url: "{{ url('/order/'.$order->id.'/close') }}",
+                    type: "POST",
+                    data: formData,
+                    processData: false, // tell jQuery not to process the data
+                    contentType: false // tell jQuery not to set contentType
+                }).done(function(data) {
+                    if (typeof(data) == 'object') {
+                        console.log(data);
+                    } else {
+                        alert(data);
+                    }
+                }).fail(function() {
+                    alert("error al recibir respuesta del servidor");
+                }).always(function() {
+                    loadpayment = true;
+                });
+            }
+        }
 
 
         function calcular(){
