@@ -41,17 +41,23 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/clients/store',                           'ClientController@store');
 
     //ORDENES
-    Route::get('/tables',                       'OrderController@tables');
-    Route::get('/tableorder/{table_id}',        'OrderController@tableorder');
-    Route::get('/orderstart/{table_id}',        'OrderController@orderstart');
-    Route::get('/productselection/{order_id}',  'OrderController@productselection');
-    Route::post('/productattach',               'OrderController@productattach');
-    Route::post('/orderdetails/command',        'OrderController@command');
-    Route::get('/orderdetails/{order_id}',      'OrderController@orderdetails');
-    Route::get('/changetable/{order_id}',       'OrderController@changetable');
-    Route::get('/order/{order_id}/chagetable/{table_id}',       'OrderController@changetableProcess');
+    Route::get('/orders/list',                              'OrderController@ordersList');
     
-    Route::post('/order/{order_id}/close',       'OrderController@orderclose');
+    Route::get('/tables',                                   'OrderController@tables');
+
+    Route::get('/tableorder/{table_id}',                    'OrderController@tableorder');
+    Route::get('/orderstart/{table_id}',                    'OrderController@orderstart');
+
+    Route::get('/productselection/{order_id}',              'OrderController@productselection');
+    Route::post('/productattach',                           'OrderController@productattach');
+
+    Route::post('/orderdetails/command',                    'OrderController@command');
+    Route::get('/orderdetails/{order_id}',                  'OrderController@orderdetails');
+    Route::get('/changetable/{order_id}',                   'OrderController@changetable');
+
+    Route::get('/order/{order_id}/chagetable/{table_id}',   'OrderController@changetableProcess');
+    Route::post('/order/{order_id}/close',                  'OrderController@orderclose');
+
     
     //ITEMS
     route::get('/items/list',               'ItemController@list')->name('items.list');

@@ -25,7 +25,7 @@ class OrderController extends Controller
 
     public function tableorder($table_id){
         $table = Table::findOrFail($table_id);
-        $order = Order::where('table_id', $table->id)->first();
+        $order = Order::where('table_id', $table->id)->where('closed','!=',1)->first();
         if (!isset($order)) {
             return view('main.orderstart', compact('table'));
         }else{
@@ -36,7 +36,7 @@ class OrderController extends Controller
     public function orderstart($table_id)
     {
         $table = Table::findOrFail($table_id);
-        $order = Order::where('table_id', $table->id)->first();
+        $order = Order::where('table_id', $table->id)->where('closed','!=',1)->first();
         if (!isset($order)) {
             $order = new Order();
             $order->table_id = $table->id;
@@ -158,4 +158,15 @@ class OrderController extends Controller
             }
         }
     }
+
+    public function ordersList(){
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+        $orders = Order::where('closed','=',1)->whereIn('company_id',$companies_id)->get();
+        foreach ($orders as $key => $order) {
+            $order->total=$order->Total;
+            $order->ordertype;
+        }
+        return view('orders.list', compact('orders'));
+    }
+
 }
