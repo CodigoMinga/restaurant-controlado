@@ -8,6 +8,8 @@ use App\Orderdetail;
 use App\Ordertype;
 use App\Table;
 use App\Producttype;
+use App\Discount;
+use App\Delivery;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,19 +25,18 @@ class OrderController extends Controller
 
     public function tableorder($table_id){
         $table = Table::findOrFail($table_id);
-        $order = Order::where('table_id', $table->id)->first();
+        $order = Order::where('table_id', $table->id)->where('closed','!=',1)->first();
         if (!isset($order)) {
             return view('main.orderstart', compact('table'));
         }else{
-            $ordertypes = Ordertype::all();
-            return view('main.orderdetails', compact('order','ordertypes'));
+            return redirect('/orderdetails/'.$order->id);
         }
     }
 
     public function orderstart($table_id)
     {
         $table = Table::findOrFail($table_id);
-        $order = Order::where('table_id', $table->id)->first();
+        $order = Order::where('table_id', $table->id)->where('closed','!=',1)->first();
         if (!isset($order)) {
             $order = new Order();
             $order->table_id = $table->id;
@@ -50,14 +51,22 @@ class OrderController extends Controller
             }
             $order->save();
         }
-        $ordertypes = Ordertype::all();
-        return view('main.orderdetails', compact('order','ordertypes'));
+        return redirect('/orderdetails/'.$order->id)->with('success', 'Order Iniciada');;
+    }
+
+    public function orderclose($order_id, Request $request)
+    {
+        $order  = Order::findOrFail($order_id);
+        $order->update($request->all());
+        return $order;
     }
     
     public function orderdetails($order_id){
         $order = Order::findOrFail($order_id);
         $ordertypes = Ordertype::all();
-        return view('main.orderdetails', compact('order','ordertypes'));
+        $discounts = Discount::all();
+        $deliveries = Delivery::all();
+        return view('main.orderdetails', compact('order','ordertypes','discounts','deliveries'));
     }
 
     public function productselection($order_id)
@@ -101,8 +110,9 @@ class OrderController extends Controller
         $table  = Table::findOrFail($table_id);
         $order->table_id = $table->id;
         $order->save();
-        return redirect('/orderdetails/'.$order->id)->with('success', 'Mesa cambiada correctamente');;
+        return redirect('/orderdetails/'.$order->id)->with('success', 'Mesa cambiada correctamente');
     }
+
 
     public function command(Request $request)
     {
@@ -148,4 +158,15 @@ class OrderController extends Controller
             }
         }
     }
+
+    public function ordersList(){
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+        $orders = Order::where('closed','=',1)->whereIn('company_id',$companies_id)->get();
+        foreach ($orders as $key => $order) {
+            $order->total=$order->Total;
+            $order->ordertype;
+        }
+        return view('orders.list', compact('orders'));
+    }
+
 }

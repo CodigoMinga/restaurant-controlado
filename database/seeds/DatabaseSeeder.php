@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call(OrdertypeSeeder::class);
         $this->call(TabletypeSeeder::class);
         $this->call(RoleSeeder::class);
+        $this->call(DeliverySeeder::class);
+        $this->call(DiscountSeeder::class);
 
         //POR TENNAT
         $this->call(CompanySeeder::class);

@@ -110,23 +110,25 @@
                 <p>DARUICHRODRIGUEZ SPA</p>
             </div>
             <div>
-                <a class="sidebar-button {{(request()->is('tables')) ? 'active' : '' }}" href="{{ url('/tables') }}">
+                
+                <a class="sidebar-button {{(request()->is('tables')) ? 'active' : '' }}" href="{{ url('tables') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Sectores
                 </a>
                 
                 @yield('info')
 
+                <!--SI ES ADMINISTRADOR-->
+                <a class="sidebar-button {{(request()->is('orders/list')) ? 'active' : '' }}" href="{{ url('orders/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">paid</i>Ventas
+                </a>
                 <a class="sidebar-button {{(request()->is('products/add')) ? 'active' : '' }}" href="{{ url('products/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">fastfood</i>Producto
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">fastfood</i>Productos
                 </a>
                 <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('producttypes/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Categoria
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Categorias
                 </a>
                 <a class="sidebar-button {{(request()->is('items/list')) ? 'active' : '' }}" href="{{ url('items/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">shopping_cart</i>Insumos
-                </a>
-                <a class="sidebar-button {{(request()->is('companys/list')) ? 'active' : '' }}" href="{{ url('companys/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">apartment</i>Compañias
                 </a>
                 <a class="sidebar-button {{(request()->is('tables/list')) ? 'active' : '' }}" href="{{ url('tables/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">deck</i>Mesas
@@ -137,13 +139,20 @@
                 <a class="sidebar-button {{(request()->is('clients/list')) ? 'active' : '' }}" href="{{ url('app/clients/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">people</i>Clientes
                 </a>
+                <!--FIN SI ADMINISTRADOR-->
+
                 <a class="sidebar-button {{(request()->is('users/passwordchange')) ? 'active' : '' }}" href="{{ url('users/passwordchange') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">password</i>Contraseña
                 </a>
                 <a class="sidebar-button {{(request()->is('app/logout')) ? 'active' : '' }}" href="{{ url('app/logout') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">logout</i>Logout
                 </a>
-                
+
+                <!--SI ES CODIGOMINGA-->
+                <a class="sidebar-button {{(request()->is('companys/list')) ? 'active' : '' }}" href="{{ url('companys/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">apartment</i>Compañias
+                </a>
+                <!--FIN SI CODIGOMINGA-->
             </div>
         </div>
         <div id="sidebar-toggle">

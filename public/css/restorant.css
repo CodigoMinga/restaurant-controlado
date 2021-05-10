@@ -22,6 +22,7 @@ form{
     left:0px;
     transition: left 0.8s;
     z-index: 30;
+    overflow-y: overlay;
 }
 #sidebar-content{
     display: block;

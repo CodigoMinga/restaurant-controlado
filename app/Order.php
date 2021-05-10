@@ -27,7 +27,29 @@ class Order extends Model
     /**
      * @var array
      */
-    protected $fillable = ['company_id', 'ordertype_id', 'table_id', 'user_id', 'client_id', 'created_at', 'updated_at','closed','enabled','internal_id'];
+    protected $fillable = [
+        'internal_id',
+        'company_id', 
+        'ordertype_id', 
+        'table_id', 
+        'user_id', 
+        'client_id', 
+        'closed', 
+
+        'discount', 
+        'discount_description', 
+        'tip_type', 
+        'tip', 
+        'delivery', 
+        
+        'credit_card', 
+        'debit_card', 
+        'efective', 
+        'transfer', 
+
+        'enabled', 
+        'created_at', 
+        'updated_at'];
 
 
     public function company()

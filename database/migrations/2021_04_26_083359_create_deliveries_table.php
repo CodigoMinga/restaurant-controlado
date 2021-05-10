@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFkToOrdersTable extends Migration
+class CreateDeliveriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AddFkToOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->bigInteger('client_id')->unsigned()->nullable();
-            $table->foreign('client_id')->references('id')->on('clients');
+        Schema::create('deliveries', function (Blueprint $table) {
+            $table->id();
+            $table->decimal('ammount');
+            $table->timestamps();
         });
     }
 
@@ -26,8 +27,6 @@ class AddFkToOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropForeign(['client_id']);
-        });
+        Schema::dropIfExists('deliveries');
     }
 }
