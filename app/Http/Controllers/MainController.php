@@ -109,4 +109,9 @@ class MainController extends Controller
     }
 
 
+    
+    function dashboard(){
+        return view('main.dashboard');
+    }
+    
 }

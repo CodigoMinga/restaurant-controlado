@@ -85,7 +85,9 @@ class Order extends Model
     public function getTotalAttribute(){
         $total=0;
         foreach ($this->orderdetails as $key => $orderdetail) {
-            $total=$total+$orderdetail->total_ammount;
+            if($orderdetail->enabled){
+                $total=$total+$orderdetail->total_ammount;
+            }
         }
         return $total;
     }

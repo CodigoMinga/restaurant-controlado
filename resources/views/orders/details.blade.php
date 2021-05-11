@@ -179,6 +179,9 @@
                         <th width=1 style="text-align: right">
                             P.Total.
                         </th>
+                        <th width=1 style="text-align: right">
+                            
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -207,6 +210,9 @@
                             </td>
                             <td align="right">
                                 {{ number_format($orderdetail->total_ammount, 0, '', '.') }}
+                            </td>
+                            <td align="right" width="20">
+                                <a class="btn btn-sm btn-danger material-icons p-0"  onclick="eliminarModal('{{$orderdetail}}')">close</a>
                             </td>
                         </tr>
                     @endforeach
@@ -357,11 +363,11 @@
         </form>
         <hr>
         <div class="d-flex flex-wrap justify-content-between">
-            <a href="{{ url('/productselection/' . $order->id) }}" class="btn btn-success btn-lg">
+            <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
                 <span class="material-icons">add_shopping_cart</span>
                 Agregar
             </a>
-            <a href="{{ url('/changetable/' . $order->id) }}" class="btn btn-danger btn-lg">
+            <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-danger btn-lg">
                 Cambiar Mesa
             </a>
             <button onclick="paymentStore()" class="btn btn-info btn-lg">
@@ -459,7 +465,42 @@
                 </div>
             </div>
         </div>
+
+        
+        <!-- Modal -->
+        <div class="modal fade" id="eliminarModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal">
+                <div class="modal-content  bg-dark">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Eliminar Producto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="detachForm">
+                        {{ csrf_field() }}
+                        <div class="modal-body" align="center">
+                            ¿Desea borrar <br>"<i class="text-danger font-weight-bold" id="product_name"></i>"<br>de la orden?
+                        </div>
+                        <input type="hidden" value="0" name="orderdetail_id">
+                    </form>
+                    <div class="modal-footer p-0 justify-content-between">
+                        <button type="button" class="btn btn-danger" onclick="eliminarProducto()">
+                            <span class="material-icons">send</span>
+                            Eliminar
+                        </button>                                
+                        <a type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <span class="material-icons">close</span>
+                            Cerrar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
     <div id="imprimir">
         <h3 style="margin-bottom:0px">ORDEN: {{ $order->id }}</h3>
         <h3 style="margin-top:0px">{{ $order->table->name }}</h3>
@@ -546,7 +587,7 @@
         function comanda() {
             var formData = new FormData(productos);
             $.ajax({
-                url: "{{ url('/orderdetails/command') }}",
+                url: "{{ url('/orders/details/command') }}",
                 type: "POST",
                 data: formData,
                 processData: false, // tell jQuery not to process the data
@@ -664,6 +705,8 @@
         var pay_back    = document.getElementById('pay_back');
         var pay_left    = document.getElementById('pay_left');
         
+        var detachForm  = document.getElementById('detachForm');
+        
         //TODOS LOS CAMPOS RELACIONADOS CON DINERO AL CAMBIAR EJECUTAN LA FUNCION CALCULAR
         var dinero = document.querySelectorAll(".dinero");
         dinero.forEach(input =>input.onchange = calcular);
@@ -689,7 +732,7 @@
                 loadpayment = false;
                 var formData = new FormData(payment);
                 $.ajax({
-                    url: "{{ url('/order/'.$order->id.'/close') }}",
+                    url: "{{ url('/orders/'.$order->id.'/close') }}",
                     type: "POST",
                     data: formData,
                     processData: false, // tell jQuery not to process the data
@@ -706,6 +749,41 @@
                     loadpayment = true;
                 });
             }
+        }
+
+        function eliminarModal(objeto){
+            var json =  JSON.parse(objeto);
+            $('#product_name').html(json.product.name);
+            detachForm['orderdetail_id'].value = json.id;
+            $('#eliminarModal').modal('show');
+        }
+
+        function eliminarProducto(){
+            var formData = new FormData(detachForm);
+            $.ajax({
+                url: "{{ url('/orders/products/detach') }}",
+                type: "POST",
+                data: formData,
+                processData: false, // tell jQuery not to process the data
+                contentType: false // tell jQuery not to set contentType
+            }).done(function(data) {
+                if (typeof(data) == 'object') {
+                    TotalBase=data.Total;                    
+                    productos['orderdetail_id[]'].forEach(input =>{
+                        if(input.value == detachForm['orderdetail_id'].value){
+                            input.parentElement.parentElement.remove();
+                        }
+                    });
+                    calcular();
+                    $('#eliminarModal').modal('hide');
+                } else {
+                    alert(data);
+                }
+            }).fail(function() {
+                alert("error al recibir respuesta del servidor");
+            }).always(function() {
+                loadpayment = true;
+            });
         }
 
 

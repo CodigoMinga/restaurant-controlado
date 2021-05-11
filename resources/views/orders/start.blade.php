@@ -6,7 +6,7 @@
             <h1>Iniciar Orden</h1>
             <h5>¿Quiere iniciar una Orden en la mesa {{$table->name}}?</h5>
             <div class="d-flex  justify-content-between" >
-                <a class="btn btn-success btn-lg" href="{{url('/orderstart/'.$table->id)}}">
+                <a class="btn btn-success btn-lg" href="{{url('/orders/start/'.$table->id)}}">
                     <span class="material-icons">receipt_long</span>
                     Iniciar
                 </a>

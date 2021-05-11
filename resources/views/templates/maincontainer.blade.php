@@ -121,6 +121,9 @@
                 <a class="sidebar-button {{(request()->is('orders/list')) ? 'active' : '' }}" href="{{ url('orders/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">paid</i>Ventas
                 </a>
+                <a class="sidebar-button {{(request()->is('dashboard')) ? 'active' : '' }}" href="{{ url('dashboard') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">dashboard</i>Indicadores
+                </a>
                 <a class="sidebar-button {{(request()->is('products/add')) ? 'active' : '' }}" href="{{ url('products/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">fastfood</i>Productos
                 </a>

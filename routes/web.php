@@ -41,23 +41,21 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/clients/store',                           'ClientController@store');
 
     //ORDENES
-    Route::get('/orders/list',                              'OrderController@ordersList');
-    
+    Route::get('/orders/list',                              'OrderController@list');
+    Route::get('/orders/start/{table_id}',                  'OrderController@start');
+    Route::get('/orders/{order_id}/details',                'OrderController@details');
+    Route::post('/orders/{order_id}/close',                 'OrderController@close');
+    Route::get('/orders/{order_id}/changetable',            'OrderController@changetable');
+    Route::get('/orders/{order_id}/changetable/{table_id}', 'OrderController@changetableProcess');
     Route::get('/tables',                                   'OrderController@tables');
+    Route::get('/tables/{table_id}/orders',                 'OrderController@tableorder');
+    Route::get('/orders/{order_id}/products',               'OrderController@products');
+    Route::post('/orders/products/attach',                  'OrderController@productAttach');
+    Route::post('/orders/products/detach',                  'OrderController@productDetach');
+    Route::post('/orders/command',                          'OrderController@command');
 
-    Route::get('/tableorder/{table_id}',                    'OrderController@tableorder');
-    Route::get('/orderstart/{table_id}',                    'OrderController@orderstart');
-
-    Route::get('/productselection/{order_id}',              'OrderController@productselection');
-    Route::post('/productattach',                           'OrderController@productattach');
-
-    Route::post('/orderdetails/command',                    'OrderController@command');
-    Route::get('/orderdetails/{order_id}',                  'OrderController@orderdetails');
-    Route::get('/changetable/{order_id}',                   'OrderController@changetable');
-
-    Route::get('/order/{order_id}/chagetable/{table_id}',   'OrderController@changetableProcess');
-    Route::post('/order/{order_id}/close',                  'OrderController@orderclose');
-
+    //DASHBOARD
+    Route::get('/dashboard',                'MainController@dashboard');
     
     //ITEMS
     route::get('/items/list',               'ItemController@list')->name('items.list');
@@ -108,7 +106,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/prescriptiondetails/{prescriptiondetail_id}/delete',   'PrescriptiondetailController@delete');
 
     //COMPAÑIAS
-    route::get('/ompanys/add',                         'CompanyController@add')->name('companys.add');
+    route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
     route::post('/companys/add/process',                'CompanyController@addProcess');
     route::get('/companys/list',                        'CompanyController@list')->name('companys.list');
     route::get('/companys/{company_id}',                'CompanyController@details');
