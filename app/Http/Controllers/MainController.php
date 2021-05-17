@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 use Hash;
+use DB;
+use Auth;
 use App\User;
+use App\Order;
+use App\Item;
+use App\Orderdetail;
 use App\Mail\PasswordResetMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
-use Auth;
 
 
 class MainController extends Controller
@@ -111,7 +115,53 @@ class MainController extends Controller
 
     
     function dashboard(){
-        return view('main.dashboard');
+        $desde = date('Y-m-d', strtotime('monday this week'));
+        $hasta = date('Y-m-d', strtotime('monday next week'));        
+        $companies_id = Auth::user()->companies()->pluck('company_id');
+        $companiesString = $companies_id->implode(',');
+        
+        //ventas de la semana
+        $query = "SELECT COUNT(id) AS sales, DAYOFWEEK(created_at) AS dayweek FROM orders WHERE enabled = 1 AND company_id IN ($companiesString) AND created_at > '$desde' AND created_at < '$hasta' GROUP BY DATE(created_at)";       
+        $salesweek = DB::select($query);
+
+        //bajo stock
+        $lowstock = Item::where('enabled',1)->whereIn('company_id',$companies_id->toArray())->orderByRaw('(stock - warning) ASC')->limit(10)->get();
+
+        //Mas Vendidos
+        $query = 
+        "SELECT COUNT(od.id) AS cant,p.name  FROM 
+        orderdetails AS od LEFT JOIN 
+        products p ON od.product_id = p.id LEFT JOIN 
+        orders o ON od.order_id = o.id 
+        WHERE 
+        od.enabled = 1 AND 
+        o.enabled = 1 AND 
+        o.company_id IN ($companiesString) 
+        GROUP BY od.product_id ORDER BY cant DESC LIMIT 7";
+        $salesbest = DB::select($query);
+
+        //Ganacia
+        $order_totals = 0;
+        $orders = Order::where('enabled',1)->get();
+        foreach ($orders as $key => $order) {
+            $order_totals=$order_totals+$order->Total;
+        }
+
+        $query = 
+        "SELECT 
+        SUM(credit_card) AS credit_card, 
+        SUM(debit_card) AS debit_card, 
+        SUM(efective) AS efective, 
+        SUM(transfer) AS transfer, 
+        SUM(discount) AS discount, 
+        SUM(tip) AS tip, 
+        SUM(delivery) AS delivery 
+        FROM orders";
+        $profit = DB::select($query);
+        
+        //dd($profit);
+
+        return view('main.dashboard',compact('salesweek','lowstock','salesbest','profit','order_totals'));
     }
     
 }

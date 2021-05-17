@@ -25,10 +25,12 @@ class OrderController extends Controller
     
     public function list(){
         $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $orders = Order::where('closed','=',1)->whereIn('company_id',$companies_id)->get();
+        $orders = Order::where('enabled','=',1)->whereIn('company_id',$companies_id)->get();
         foreach ($orders as $key => $order) {
             $order->total=$order->Total;
             $order->ordertype;
+            $order->user;
+            $order->table;
         }
         return view('orders.list', compact('orders'));
     }
@@ -39,7 +41,7 @@ class OrderController extends Controller
         if (!isset($order)) {
             return view('orders.start', compact('table'));
         }else{
-            return redirect('/orders/'.$order->id.'/details/');
+            return redirect('/orders/'.$order->id);
         }
     }
 
@@ -61,19 +63,26 @@ class OrderController extends Controller
             }
             $order->save();
         }
-        return redirect('/orders/'.$order->id.'/details/')->with('success', 'Order Iniciada');;
+        return redirect('/orders/'.$order->id)->with('success', 'Order Iniciada');;
     }
 
     public function close($order_id, Request $request)
     {
         $order  = Order::findOrFail($order_id);
-        $order->update($request->all());
+        $order->fill($request->all());
+        $order->closed = 1;
+        $order->save();
         return $order;
     }
     
     public function details($order_id){
         $order = Order::findOrFail($order_id);
-        $ordertypes = Ordertype::all();
+        if($order->table->tabletype_id==1){
+            $ordertypes = Ordertype::whereIn('id',[1])->get();
+        }else{
+            $ordertypes = Ordertype::whereIn('id',[2,3])->get();
+        }
+
         $discounts = Discount::all();
         $deliveries = Delivery::all();
         return view('orders.details', compact('order','ordertypes','discounts','deliveries'));
@@ -139,7 +148,7 @@ class OrderController extends Controller
         $table  = Table::findOrFail($table_id);
         $order->table_id = $table->id;
         $order->save();
-        return redirect('/orders/'.$order->id.'/details/')->with('success', 'Mesa cambiada correctamente');
+        return redirect('/orders/'.$order->id)->with('success', 'Mesa cambiada correctamente');
     }
 
     public function command(Request $request)

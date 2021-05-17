@@ -14,6 +14,14 @@
     .card-header .material-icons{
         vertical-align:-5px;
     }
+    .ind{
+        display:block;
+        width:22px;
+        height: 22px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 50%;
+    }
 </style>
 
 @section('content')
@@ -44,8 +52,23 @@
                             Top Productos Vendidos
                         </h5>
                     </div>
-                    <div class="card-body">
-                        <canvas id="topventas" width="200" height="200"></canvas>
+                    <div class="card-body" align="center">
+                        <table class="text-light w-100" id="topventas_table"> 
+                            <tr>
+                                <th>
+                                </th>
+                                <th style="width:70%">
+                                    Producto
+                                </th>
+                                <th>
+                                    Ventas
+                                </th>
+                            </tr>
+                        </table>
+
+                        <div style="max-height:16rem;max-width:16rem;padding-top:2rem">
+                            <canvas id="topventas" width="200" height="200"></canvas>
+                        </div>
                     </div>
                 </div>                     
             </div>
@@ -60,11 +83,32 @@
                         </h5>
                     </div>
                     <div class="card-body">
-                        <ol>
-                            <li>
-                                California Salumado (california) 
-                            </li>
-                        </ol>
+                        <table class="text-light w-100"> 
+                            <tr>
+                                <th style="width:50%">
+                                    Insumo
+                                </th>
+                                <th>
+                                    Stock
+                                </th>
+                                <th>
+                                    Minimo
+                                </th>
+                            </tr>
+                            @foreach ($lowstock as $item)   
+                                <tr>
+                                    <td>
+                                        {{$item->name}}
+                                    </td>
+                                    <td>
+                                        {{$item->stock}} {{$item->measureunit->name}}
+                                    </td>
+                                    <td>
+                                        {{$item->warning}} {{$item->measureunit->name}}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
                     </div>
                 </div>                     
             </div>
@@ -79,28 +123,99 @@
                         </h5>
                     </div>
                     <div class="card-body">
-                        <ol>
-                            <li>
-                                Ventas $256.250
-                            </li>
-                            <li>
-                                Repartos $35.500
-                            </li>
-                            <li>
-                                Propinas $23.750
-                            </li>
-                            <li>
-                                Descuentos $25.000
-                            </li>
-                        </ol>
+                        <table class="text-light w-100">
+                            <tr>
+                                <td>
+                                    Consumo
+                                </td>
+                                <td>
+                                    ${{number_format($order_totals,0,",",".")}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Descuentos
+                                </td>
+                                <td>
+                                    ${{number_format($profit[0]->discount,0,",",".")}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Ganacias
+                                </td>
+                                <td>
+                                    ${{number_format($order_totals + $profit[0]->discount,0,",",".")}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Propinas
+                                </td>
+                                <td>
+                                    ${{number_format($profit[0]->tip,0,",",".")}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Repartos
+                                </td>
+                                <td>
+                                    ${{number_format($profit[0]->delivery,0,",",".")}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Ganancias 
+                                </td>
+                                <td>
+                                    ${{number_format($profit[0]->delivery,0,",",".")}}
+                                </td>
+                            </tr>
+                        </table>
+                        <br>
+                        <h5>Formas de Pago</h5>
+                        <table class="text-light w-100">
+                            <tr>
+                                <td>
+                                    Transferencias
+                                </td>
+                                <td>
+                                    ${{number_format($profit[0]->transfer,0,",",".")}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Tarjeta de Debito
+                                </td>
+                                <td>
+                                    ${{number_format($profit[0]->debit_card,0,",",".")}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Tarjeta de Credito
+                                </td>
+                                <td>
+                                    ${{number_format($profit[0]->credit_card,0,",",".")}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Efectivo
+                                </td>
+                                <td>
+                                    ${{number_format($profit[0]->efective,0,",",".")}}
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                </div>                     
+                </div>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-
         var opcionesBar =  {
             scales: {
                 y: {
@@ -135,7 +250,7 @@
         var opcionesPie =  {
             plugins: {
                 legend: {
-                    display: true,
+                    display: false,
                     labels: {
                         // This more specific font property overrides the global property
                         font: {
@@ -145,6 +260,15 @@
                 },
             }
         };
+        var salesweek=@json($salesweek);
+        var datos = [0, 0, 0, 0, 0, 0, 0];
+        salesweek.forEach((el,index) => {
+            var i = el.dayweek - 2;
+            if(el.dayweek==1){
+                i=6;
+            }
+            datos[i]=el.sales;
+        });
 
         var ctx = document.getElementById('ventassemanales');
         var myChart = new Chart(ctx, {
@@ -153,7 +277,7 @@
                 labels: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
                 datasets: [{
                     label: 'Ventas Semana',
-                    data: [12, 19, 3, 5, 2, 3,6],
+                    data: datos,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
@@ -179,14 +303,36 @@
         });
 
         
+        var salesbest=@json($salesbest);
+        var salesbest_labels=[];
+        var salesbest_data=[];
+        var colors = [
+            "255, 99, 132",
+            "54, 162, 235",
+            "255, 206, 86",
+            "75, 192, 192",
+            "153, 102, 255",
+            "255, 159, 64",
+            "136, 14, 79"
+        ];
+
+        
         var topventasCanvas = document.getElementById('topventas');
+        var topventasTabla = document.getElementById('topventas_table');
+
+        salesbest.forEach((el,index) => {
+            salesbest_labels.push(el.name);
+            salesbest_data.push(el.cant);
+            topventasTabla.insertAdjacentHTML('beforeend', "<tr><td><div class='ind' style='background:rgba("+colors[index]+",0.2);border-color:rgba("+colors[index]+",1)'></div></td><td>"+el.name+"</td><td>"+el.cant+"</td></tr>");           
+        });
+        
         var topventasGrafico = new Chart(topventasCanvas, {
             type: 'pie',
             data: {
-                labels: ['Rolls Sin Arroz Envuelto en Queso Crema', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
+                labels: salesbest_labels,
                 datasets: [{
                     label: 'Ventas Semana',
-                    data: [12, 19, 3, 5, 2, 3,6],
+                    data: salesbest_data,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',

@@ -6,7 +6,7 @@
     <div>
         <h6>{{$order->table->name}}</h6>
         <h6 id="order_total">{{$order ? $order->Total : 0}}</h6>
-        <a href="{{url('/orders/'.$order->id.'/details/')}}" class="btn btn-light">
+        <a href="{{url('/orders/'.$order->id)}}" class="btn btn-light">
             ORDEN
         </a>
     </div>    
@@ -145,7 +145,7 @@
                         if(data.id){
                             order_total.innerText=data.Total;
                             if(activate=="a-orden"){
-                                window.location.href = "{{url('/')}}/orders/" + data.id + "/details/";
+                                window.location.href = "{{url('/')}}/orders/" + data.id;
                             }else{
                                 $('#toast-agregar .toast-body').eq(0).html(formData.get('product_name'));
                                 $('#toast-agregar').toast('show');
