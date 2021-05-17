@@ -54,9 +54,13 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/orders/products/detach',                  'OrderController@productDetach');
     Route::post('/orders/command',                          'OrderController@command');
 
-    //DASHBOARD
-    Route::get('/dashboard',                'MainController@dashboard');
-    Route::get('/settings',                 'MainController@settings');
+    
+    //ESTAS RUTAS NECESITAS SER COMPANY ADMIN
+    Route::group(['middleware' => ['admin:companyadmin,normaluser']], function() {
+        //Administrador
+        Route::get('/dashboard',                'MainController@dashboard');
+        Route::get('/settings',                 'MainController@settings');
+    });
     
     //ITEMS
     route::get('/items/list',               'ItemController@list')->name('items.list');
