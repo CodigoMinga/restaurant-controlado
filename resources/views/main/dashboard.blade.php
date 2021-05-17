@@ -142,7 +142,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Ganacias
+                                    Ganancias
                                 </td>
                                 <td>
                                     ${{number_format($order_totals + $profit[0]->discount,0,",",".")}}

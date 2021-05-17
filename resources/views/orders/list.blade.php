@@ -20,6 +20,7 @@
                     <th>Encargado</th>
                     <th>Mesa</th>
                     <th>Tipo</th>
+                    <th>Fecha</th>
                     <th>Venta</th>
                     <th>Acción</th>
                 </tr>
@@ -41,7 +42,15 @@
                     { "data": "user.name"       ,"width":"20%"},
                     { "data": "table.name"      ,"width":"20%"},
                     { "data": "ordertype.name"  ,"width":"40%"},
-                    { "data": "total", render : function ( data, type, row, meta ){
+                    { "data": "created_at"      , render : function ( data, type, row, meta ){
+                        var returnString='';
+                        if(data){
+                            var fecha = new Date(data);
+                            returnString = fecha.toLocaleString();
+                        }
+                        return type === 'display' ? returnString : data;
+                    },"width":"1%"},
+                    { "data": "total"           , render : function ( data, type, row, meta ){
                         return '$'+(parseInt(row.total)+parseInt(row.discount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     },"width":"1%"},
                     { data: "id", render : function ( data, type, row, meta ){

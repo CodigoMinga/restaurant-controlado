@@ -163,5 +163,9 @@ class MainController extends Controller
 
         return view('main.dashboard',compact('salesweek','lowstock','salesbest','profit','order_totals'));
     }
+
     
+    function settings(){
+        return view('main.settings');
+    }    
 }

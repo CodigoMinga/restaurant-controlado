@@ -56,6 +56,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     //DASHBOARD
     Route::get('/dashboard',                'MainController@dashboard');
+    Route::get('/settings',                 'MainController@settings');
     
     //ITEMS
     route::get('/items/list',               'ItemController@list')->name('items.list');
