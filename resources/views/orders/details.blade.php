@@ -57,107 +57,117 @@
     .number {
         width: 120px;
     }
-
+    .text-rojo td{
+        color:crimson!important;
+    }
+    select:disabled {
+        background-color:white;
+        color:black;
+        opacity: 1;
+    }
 </style>
 @section('content')
     <div class="container p-3">
         <h1>Orden: {{ $order->internal_id }}</h1>
-        <div class="row">
-            <div class="col">
-                <table class="table table-striped table-sm table-dark">
-                    <tr>
-                        <th>
-                            Apertura
-                        </th>
-                        <td>
-                            {{ date('d/m/Y H:i:s', strtotime($order->created_at)) }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Garzón
-                        </th>
-                        <td>
-                            {{ $order->user->name }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Selector
-                        </th>
-                        <td>
-                            {{ $order->table->tabletype->name }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Mesa
-                        </th>
-                        <td>
-                            {{ $order->table->name }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Tipo
-                        </th>
-                        <td style="padding:0px">
-                            <select name="ordertype_id" class="inputtable w-100">
-                                @foreach ($ordertypes as $ordertype)
-                                    <option value="{{ $ordertype->id }}">{{ $ordertype->name }}</option>
-                                @endforeach
-                            </select>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col">
-                <table class="table table-striped table-sm table-dark" style="">
-                    <tr>
-                        <th>
-                            Nombre
-                        </th>
-                        <td id="client_name">
-                            {{ $order->client ? $order->client->name : '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Teléfono
-                        </th>
-                        <td id="client_phone">
-                            {{ $order->client ? $order->client->phone : '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Comuna
-                        </th>
-                        <td id="client_commune">
-                            {{ $order->client ? $order->client->commune->name : '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Dirección
-                        </th>
-                        <td id="client_address">
-                            {{ $order->client ? $order->client->address : '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="p-0 m-0" colspan="2">
-                            <button type="button" class="btn btn-block btn-primary btn-sm" id="clientButton">
-                                <span class="material-icons">person</span>
-                                Cliente
-                            </button>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <form id="productos">
+        <form id="orderForm">
             {{ csrf_field() }}
+            <input name="client_id" type="hidden" value="{{$order->client_id}}">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-striped table-sm table-dark">
+                        <tr>
+                            <th>
+                                Apertura
+                            </th>
+                            <td>
+                                {{ date('d/m/Y H:i:s', strtotime($order->created_at)) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Garzón
+                            </th>
+                            <td>
+                                {{ $order->user->name }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Selector
+                            </th>
+                            <td>
+                                {{ $order->table->tabletype->name }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Mesa
+                            </th>
+                            <td>
+                                {{ $order->table->name }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Tipo
+                            </th>
+                            <td style="padding:0px">
+                                <select name="ordertype_id" class="inputtable w-100" id="ordertype" {{$order->closed==1 ? "disabled" :""}}>
+                                    @foreach ($ordertypes as $ordertype)
+                                        <option value="{{ $ordertype->id }}" {{$ordertype->id==$order->ordertype_id ? "selected":""}}>{{ $ordertype->name }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col">
+                    <table class="table table-striped table-sm table-dark" id="clientBox">
+                        <tr>
+                            <th>
+                                Nombre
+                            </th>
+                            <td id="client_name">
+                                {{ $order->client ? $order->client->name : '' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Teléfono
+                            </th>
+                            <td id="client_phone">
+                                {{ $order->client ? $order->client->phone : '' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Comuna
+                            </th>
+                            <td id="client_commune">
+                                {{ $order->client ? $order->client->commune->name : '' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Dirección
+                            </th>
+                            <td id="client_address">
+                                {{ $order->client ? $order->client->address : '' }}
+                            </td>
+                        </tr>
+                        @if($order->closed==0)
+                        <tr>
+                            <td class="p-0 m-0" colspan="2">
+                                <a class="btn btn-block btn-primary btn-sm" id="clientButton">
+                                    <span class="material-icons">person</span>
+                                    Cliente
+                                </a>
+                            </td>
+                        </tr>
+                        @endif
+                    </table>
+                </div>
+            </div>
             <table class="table table-striped table-sm table-dark">
                 <thead>
                     <tr>
@@ -179,14 +189,20 @@
                         <th width=1 style="text-align: right">
                             P.Total.
                         </th>
+                        @if($order->closed==0)
+                        <th width=1 style="text-align: right">
+                            
+                        </th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($order->orderdetails as $orderdetail)
-                        <tr>
+                        @if($order->closed==0 && $orderdetail->enabled==1 || $order->closed==1)
+                        <tr {{$orderdetail->enabled==0 ? "class=text-danger" : ""}}>
                             <td>
                                 {{ $orderdetail->product->name }}<br>
-                                <small>{{ $orderdetail->description }}</small>
+                                <small>{{ $orderdetail->enabled==1 ? $orderdetail->description : "(eliminado)"}}</small>
                                 <input type="hidden" name="orderdetail_id[]" value="{{ $orderdetail->id }}">
                             </td>
                             <td align="center">
@@ -208,13 +224,16 @@
                             <td align="right">
                                 {{ number_format($orderdetail->total_ammount, 0, '', '.') }}
                             </td>
+                            @if($order->closed==0)
+                            <td align="right" width="20">
+                                <a class="btn btn-sm btn-danger material-icons p-0"  onclick="eliminarModal('{{$orderdetail}}')">close</a>
+                            </td>
+                            @endif
                         </tr>
+                        @endif
                     @endforeach
                 </tbody>
             </table>
-        </form>
-        <form id="payment">
-            {{ csrf_field() }}
             <div class="d-flex flex-wrap justify-content-between">
                 <div>
                     <table class="table table-striped table-sm table-dark">
@@ -228,7 +247,7 @@
                                 Transferencia
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" value="0" id="transfer" name="transfer" class="dinero inputtable">
+                                <input type="number" size="6" id="transfer" name="transfer" class="dinero inputtable" value="{{$order->transfer}}" {{$order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -236,7 +255,7 @@
                                 T. de Débito
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" value="0" id="debit_card" name="debit_card" class="dinero inputtable">
+                                <input type="number" size="6" id="debit_card" name="debit_card" class="dinero inputtable" value="{{$order->debit_card}}" {{$order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -244,7 +263,7 @@
                                 T. de Crédito
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" value="0" id="credit_card" name="credit_card" class="dinero inputtable">
+                                <input type="number" size="6" id="credit_card" name="credit_card" class="dinero inputtable" value="{{$order->credit_card}}" {{$order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -252,7 +271,7 @@
                                 Efectivo
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" value="0" id="efective" name="efective" class="dinero inputtable">
+                                <input type="number" size="6" id="efective" name="efective" class="dinero inputtable" value="{{$order->efective}}" {{$order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -260,6 +279,7 @@
                                 Vuelto
                             </th>
                             <td id="pay_back">
+
                             </td>
                         </tr>
                         <tr>
@@ -267,6 +287,7 @@
                                 Pago restante
                             </th>
                             <td id="pay_left">
+
                             </td>
                         </tr>
                     </table>
@@ -278,6 +299,7 @@
                                 Adicionales
                             </th>
                         </tr>
+
                         <tr>
                             <th colspan="3">
                                 Consumo total
@@ -286,56 +308,57 @@
                                 ${{ number_format($order->Total, 0, '', '.') }}
                             </td>
                         </tr>
+
                         <tr>
                             <th width=1>
                                 Descuento
                             </th>
                             <td class="p-0 m-0" width=1>
-                                <select name="discount" id='discount' class="inputtable number dinero">
+                                <select name="discount" id='discount' class="inputtable number dinero"  {{$order->closed==1 ? "disabled" :""}}>
                                     <option value="0">0</option>
                                     @foreach ($discounts as $discount)
-                                        <option value="{{ $discount->ammount }}">
-                                            {{ number_format($discount->ammount, 0, '', '.') }}</option>
+                                        <option value="{{ $discount->ammount }}" {{$order->discount==$discount->ammount ? "selected": ""}}>{{ number_format($discount->ammount, 0, '', '.') }}</option>
                                     @endforeach
                                 </select>
                             </td>
                             <td class="p-0 m-0">
-                                <input type="text" name="discount_description" class="inputtable number"
-                                    placeholder="Razón del descuento">
+                                <input type="text" name="discount_description" class="inputtable number" placeholder="Razón del descuento" value="{{$order->discount_description}}"  {{$order->closed==1 ? "readonly " :""}}>
                             </td>
                             <td id='discount_total'>
                                 0
                             </td>
                         </tr>
+
                         <tr>
                             <th>
                                 Propina
                             </th>
                             <td class="p-0 m-0" width=1>
-                                <select name="tip_type" id='tip_type' class="inputtable number dinero">
-                                    <option value="0">0</option>
-                                    <option value="10">10%</option>
-                                    <option value="-1">Cantidad</option>
+                                <select name="tip_type" id='tip_type' class="inputtable number dinero" {{$order->closed==1 ? "disabled" :""}}>
+                                    <option value="0"   {{$order->tip_type==0 ? "selected": ""}}>0</option>
+                                    <option value="10"  {{$order->tip_type==10 ? "selected": ""}}>10%</option>
+                                    <option value="-1"  {{$order->tip_type==-1 ? "selected": ""}}>Cantidad</option>
                                 </select>
                             </td>
                             <td class="p-0 m-0" width=1>
-                                <input type="number" size="6" value="0" id="tip" name="tip" class="inputtable dinero" readonly>
+                                <input type="number" size="6" id="tip" name="tip" class="inputtable dinero" value={{$order->tip}} readonly>
                             </td>
                             <td id='tip_total'>
                                 0
                             </td>
                         </tr>
 
-                        <tr>
+                        <tr id="deliveryTr">
                             <th width=1 colspan="2">
-                                Envío
+                                Despacho
                             </th>
                             <td class="p-0 m-0" width=1>
-                                <select name="delivery" id="delivery" class="inputtable number dinero">
-                                    <option value="0">0</option>
+                                <select name="delivery" id="delivery" class="inputtable number dinero"  {{$order->closed==1 ? "disabled" :""}}>
+                                    <option value="0" {{0 == $order->delivery ? "selected" : ""}}>0</option>
                                     @foreach ($deliveries as $delivery)
-                                        <option value="{{ $delivery->ammount }}">
-                                            {{ number_format($delivery->ammount, 0, '', '.') }}</option>
+                                        <option value="{{$delivery->ammount}}" {{$order->delivery==$delivery->ammount ? "selected": ""}}>
+                                            {{ number_format($delivery->ammount, 0, '', '.') }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </td>
@@ -343,6 +366,7 @@
                                 0
                             </td>
                         </tr>
+
                         <tr>
                             <th colspan=3 style="white-space: nowrap">
                                 Total a pagar
@@ -351,23 +375,26 @@
                                 0
                             </td>
                         </tr>
+
                     </table>
                 </div>
             </div>
         </form>
         <hr>
         <div class="d-flex flex-wrap justify-content-between">
-            <a href="{{ url('/productselection/' . $order->id) }}" class="btn btn-success btn-lg">
+            @if($order->closed==0)
+            <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
                 <span class="material-icons">add_shopping_cart</span>
                 Agregar
             </a>
-            <a href="{{ url('/changetable/' . $order->id) }}" class="btn btn-danger btn-lg">
+            <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-danger btn-lg">
                 Cambiar Mesa
             </a>
             <button onclick="paymentStore()" class="btn btn-info btn-lg">
                 <span class="material-icons">price_check</span>
                 Cerrar Venta
             </button>
+            @endif
             <button onclick="comanda()" class="btn btn-primary btn-lg">
                 <span class="material-icons">receipt</span>
                 Comanda
@@ -459,7 +486,40 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="eliminarModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal">
+                <div class="modal-content  bg-dark">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Eliminar Producto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="detachForm">
+                        {{ csrf_field() }}
+                        <div class="modal-body" align="center">
+                            ¿Desea borrar <br>"<i class="text-danger font-weight-bold" id="product_name"></i>"<br>de la orden?
+                        </div>
+                        <input type="hidden" value="0" name="orderdetail_id">
+                    </form>
+                    <div class="modal-footer p-0 justify-content-between">
+                        <button type="button" class="btn btn-danger" onclick="eliminarProducto()">
+                            <span class="material-icons">send</span>
+                            Eliminar
+                        </button>                                
+                        <a type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <span class="material-icons">close</span>
+                            Cerrar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
     <div id="imprimir">
         <h3 style="margin-bottom:0px">ORDEN: {{ $order->id }}</h3>
         <h3 style="margin-top:0px">{{ $order->table->name }}</h3>
@@ -500,7 +560,7 @@
     <!--SCRIPT DE COMANDA Y BOLETA-->
     <script>
         var imprimir = document.getElementById('imprimir');
-        var productos = document.getElementById('productos');
+        var orderForm = document.getElementById('orderForm');
 
         function PrintComanda() {
             var mywindow = window.open('', 'PRINT', 'height=1,width=1');
@@ -508,7 +568,7 @@
             mywindow.document.write('<html><head><title>Comanda</title>');
             mywindow.document.write(
                 '<style>*{font-family:Arial, sans-serif;} @page{margin-left: 4mm;margin-right: 4mm;margin-top: 0px;margin-bottom: 0px;}</style>'
-                );
+            );
             mywindow.document.write(imprimir.innerHTML);
             mywindow.document.write('</body></html>');
 
@@ -544,9 +604,9 @@
         }
 
         function comanda() {
-            var formData = new FormData(productos);
+            var formData = new FormData(orderForm);
             $.ajax({
-                url: "{{ url('/orderdetails/command') }}",
+                url: "{{ url('/orders/details/command') }}",
                 type: "POST",
                 data: formData,
                 processData: false, // tell jQuery not to process the data
@@ -637,145 +697,6 @@
 
     </script>
 
-    <!--SCRIPT DE ADICIONALES Y PAGOS-->
-    <script>        
-        //TOTAL CONSUMO
-        let TotalBase = parseFloat("{{ $order->Total }}");
-        
-        //Adicionales
-        var discount = document.getElementById('discount');
-        var discount_total = document.getElementById('discount_total');
-
-        var tip_type = document.getElementById('tip_type');
-        var tip      = document.getElementById('tip');
-        var tip_total      = document.getElementById('tip_total');
-
-        var delivery = document.getElementById('delivery');
-        var delivery_total = document.getElementById('delivery_total');
-
-        //FORMAS DE PAGOS
-        var transfer    = document.getElementById('transfer');
-        var debit_card  = document.getElementById('debit_card');
-        var credit_card = document.getElementById('credit_card');
-        var efective    = document.getElementById('efective');
-
-        //PAGOS
-        var pay_total   = document.getElementById('pay_total');
-        var pay_back    = document.getElementById('pay_back');
-        var pay_left    = document.getElementById('pay_left');
-        
-        //TODOS LOS CAMPOS RELACIONADOS CON DINERO AL CAMBIAR EJECUTAN LA FUNCION CALCULAR
-        var dinero = document.querySelectorAll(".dinero");
-        dinero.forEach(input =>input.onchange = calcular);
-
-        calcular();
-
-        
-        var payment = document.getElementById('payment');
-        payment.onsubmit = function(e) {
-            e.preventDefault();
-            return false;
-        }
-
-        var loadpayment=true;
-
-        function paymentStore() {
-            if (
-                payment['discount_description'].value == '' &&
-                payment['discount'].value != 0
-            ) {
-                alert("Falta agregar razon del descuento");
-            } else if (loadpayment) {
-                loadpayment = false;
-                var formData = new FormData(payment);
-                $.ajax({
-                    url: "{{ url('/order/'.$order->id.'/close') }}",
-                    type: "POST",
-                    data: formData,
-                    processData: false, // tell jQuery not to process the data
-                    contentType: false // tell jQuery not to set contentType
-                }).done(function(data) {
-                    if (typeof(data) == 'object') {
-                        console.log(data);
-                    } else {
-                        alert(data);
-                    }
-                }).fail(function() {
-                    alert("error al recibir respuesta del servidor");
-                }).always(function() {
-                    loadpayment = true;
-                });
-            }
-        }
-
-
-        function calcular(){
-            //VALOR BASE
-            var total_pay=TotalBase;
-
-            //ADICIONALES------------------------------------------------
-
-            //DESCUENTO
-            var discount_ammount    = discount.value ? parseFloat(discount.value) : 0;
-            total_pay = total_pay + discount_ammount
-            discount_total.innerHTML = '$'+miles(total_pay);
-
-            //PROPINA
-            if(tip_type.value==-1){
-                tip.readOnly=false;
-            }else{
-                tip.readOnly=true;
-                tip.value = Math.round((tip_type.value/100) * total_pay);
-            }
-            var tip_ammount         = tip.value ? parseFloat(tip.value) : 0;
-            total_pay = total_pay + tip_ammount
-            tip_total.innerHTML = '$'+miles(total_pay);
-
-            //DELIVERY
-            var delivery_ammount    = delivery.value ? parseFloat(delivery.value) : 0;
-            total_pay = total_pay + delivery_ammount
-            delivery_total.innerHTML = '$'+miles(total_pay);
-
-            //TOTAL A PAGAR
-            pay_total.innerHTML = '$'+miles(total_pay);
-
-            //FORMA DE PAGO----------------------------------------------------
-
-            //TRANSFERENCIA
-            var transfer_ammount = transfer.value ? parseFloat(transfer.value) : 0;
-            total_pay = total_pay - transfer_ammount;
-
-            //TRAJETA DE DEBITO
-            var debit_card_ammount = debit_card.value ? parseFloat(debit_card.value) : 0;
-            total_pay = total_pay - debit_card_ammount;
-
-            //TRAJETA DE CREDITO
-            var credit_card_ammount = credit_card.value ? parseFloat(credit_card.value) : 0;
-            total_pay = total_pay - credit_card_ammount;
-
-            //PAGO EFECTIVO
-            var efective_ammount = efective.value ? parseFloat(efective.value) : 0;
-            total_pay = total_pay - efective_ammount;
-
-            if(total_pay<0){
-                pay_back.innerHTML = '$'+miles(total_pay*-1);
-            }else{
-                pay_back.innerHTML = '$'+0;
-            }
-            
-            if(total_pay>0){
-                pay_left.innerHTML = '$'+miles(total_pay);
-            }else{
-                pay_left.innerHTML = '$'+0;
-            }
-        }
-
-        function miles(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
-    </script>
-
-
     <!--SCRIPT DE CLIENTES-->
     <script>
         var clients = [];
@@ -849,6 +770,7 @@
                     contentType: false // tell jQuery not to set contentType
                 }).done(function(data) {
                     if (typeof(data) == 'object') {
+                        orderForm['client_id'].value=data.id;
                         rowStore(data);
                     } else {
                         alert(data);
@@ -1005,6 +927,202 @@
             clientForm['phone'].value = client.phone;
             clientForm['address'].value = client.address;
             clientForm['id'].value = client.id;
+        }
+    </script>
+
+    <!--SCRIPT DE ADICIONALES Y PAGOS-->
+    <script>        
+        //TOTAL CONSUMO
+        let TotalBase = parseFloat("{{ $order->Total }}");
+        
+        //Adicionales
+        var discount        = document.getElementById('discount');
+        var discount_total  = document.getElementById('discount_total');
+
+        var tip_type        = document.getElementById('tip_type');
+        var tip             = document.getElementById('tip');
+        var tip_total       = document.getElementById('tip_total');
+
+        var delivery        = document.getElementById('delivery');
+        var delivery_total  = document.getElementById('delivery_total');
+
+        //FORMAS DE PAGOS
+        var transfer        = document.getElementById('transfer');
+        var debit_card      = document.getElementById('debit_card');
+        var credit_card     = document.getElementById('credit_card');
+        var efective        = document.getElementById('efective');
+
+        //PAGOS
+        var pay_total       = document.getElementById('pay_total');
+        var pay_back        = document.getElementById('pay_back');
+        var pay_left        = document.getElementById('pay_left');
+        
+        var detachForm      = document.getElementById('detachForm');
+        
+        //TODOS LOS CAMPOS RELACIONADOS CON DINERO AL CAMBIAR EJECUTAN LA FUNCION CALCULAR
+        var dinero = document.querySelectorAll(".dinero");
+        dinero.forEach(input =>input.onchange = calcular);
+
+        calcular();
+
+        var orderForm = document.getElementById('orderForm');
+        orderForm.onsubmit = function(e) {
+            e.preventDefault();
+            return false;
+        }
+
+        //Mostrar cosas de Delivery
+        var clientBox = document.getElementById('clientBox');
+        var ordertype = document.getElementById('ordertype');        
+        var deliveryTr = document.getElementById('deliveryTr');
+
+        function motrarClientBox(){
+            if(ordertype.value==2){
+                clientBox.style.display='table';
+                deliveryTr.style.display='table-row';
+            }else{
+                clientBox.style.display='none';
+                deliveryTr.style.display='none';
+                delivery.value="0";
+            }
+        }
+        motrarClientBox();
+        ordertype.onchange = motrarClientBox;
+        //
+
+        var loadorderForm=true;
+
+        function paymentStore(){
+            if(
+                orderForm['discount_description'].value == '' &&
+                orderForm['discount'].value != 0
+            ){
+                alert("Falta agregar razon del descuento");
+            }else if(
+                orderForm['ordertype_id'].value=="2" && orderForm['client_id'].value==""
+            ){
+                alert("para Entrega a domicilio debe ingresar la información del cliente y costo de Despacho");
+            }else if(loadorderForm) {
+                loadorderForm = false;
+                var formData = new FormData(orderForm);
+                $.ajax({
+                    url: "{{ url('/orders/'.$order->id.'/close') }}",
+                    type: "POST",
+                    data: formData,
+                    processData: false, // tell jQuery not to process the data
+                    contentType: false // tell jQuery not to set contentType
+                }).done(function(data) {
+                    if (typeof(data) == 'object') {
+                        console.log(data);
+                    } else {
+                        alert(data);
+                    }
+                }).fail(function() {
+                    alert("error al recibir respuesta del servidor");
+                }).always(function() {
+                    loadorderForm = true;
+                });
+            }
+        }
+
+        function eliminarModal(objeto){
+            var json =  JSON.parse(objeto);
+            $('#product_name').html(json.product.name);
+            detachForm['orderdetail_id'].value = json.id;
+            $('#eliminarModal').modal('show');
+        }
+
+        function eliminarProducto(){
+            var formData = new FormData(detachForm);
+            $.ajax({
+                url: "{{ url('/orders/products/detach') }}",
+                type: "POST",
+                data: formData,
+                processData: false, // tell jQuery not to process the data
+                contentType: false // tell jQuery not to set contentType
+            }).done(function(data) {
+                if (typeof(data) == 'object') {
+                    TotalBase=data.Total;                    
+                    orderForm['orderdetail_id[]'].forEach(input =>{
+                        if(input.value == detachForm['orderdetail_id'].value){
+                            input.parentElement.parentElement.remove();
+                        }
+                    });
+                    calcular();
+                    $('#eliminarModal').modal('hide');
+                } else {
+                    alert(data);
+                }
+            }).fail(function() {
+                alert("error al recibir respuesta del servidor");
+            }).always(function() {
+                loadorderForm = true;
+            });
+        }
+
+        function calcular(){
+            //VALOR BASE
+            var total_pay=TotalBase;
+
+            //ADICIONALES------------------------------------------------
+
+            //DESCUENTO
+            var discount_ammount    = discount.value ? parseFloat(discount.value) : 0;
+            total_pay = total_pay + discount_ammount
+            discount_total.innerHTML = '$'+miles(total_pay);
+
+            //PROPINA
+            if(tip_type.value==-1){
+                tip.readOnly=false;
+            }else{
+                tip.readOnly=true;
+                tip.value = Math.round((tip_type.value/100) * total_pay);
+            }
+            var tip_ammount         = tip.value ? parseFloat(tip.value) : 0;
+            total_pay = total_pay + tip_ammount
+            tip_total.innerHTML = '$'+miles(total_pay);
+
+            //DELIVERY
+            var delivery_ammount    = delivery.value ? parseFloat(delivery.value) : 0;
+            total_pay = total_pay + delivery_ammount
+            delivery_total.innerHTML = '$'+miles(total_pay);
+
+            //TOTAL A PAGAR
+            pay_total.innerHTML = '$'+miles(total_pay);
+
+            //FORMA DE PAGO----------------------------------------------------
+
+            //TRANSFERENCIA
+            var transfer_ammount = transfer.value ? parseFloat(transfer.value) : 0;
+            total_pay = total_pay - transfer_ammount;
+
+            //TRAJETA DE DEBITO
+            var debit_card_ammount = debit_card.value ? parseFloat(debit_card.value) : 0;
+            total_pay = total_pay - debit_card_ammount;
+
+            //TRAJETA DE CREDITO
+            var credit_card_ammount = credit_card.value ? parseFloat(credit_card.value) : 0;
+            total_pay = total_pay - credit_card_ammount;
+
+            //PAGO EFECTIVO
+            var efective_ammount = efective.value ? parseFloat(efective.value) : 0;
+            total_pay = total_pay - efective_ammount;
+
+            if(total_pay<0){
+                pay_back.innerHTML = '$'+miles(total_pay*-1);
+            }else{
+                pay_back.innerHTML = '$'+0;
+            }
+            
+            if(total_pay>0){
+                pay_left.innerHTML = '$'+miles(total_pay);
+            }else{
+                pay_left.innerHTML = '$'+0;
+            }
+        }
+
+        function miles(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
     </script>
 @stop

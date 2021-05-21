@@ -7,14 +7,7 @@
         </div>
         <div class="scrollselection pl-4 pr-4">
             @foreach ($tables as $table)
-                <a class="mesa"
-
-                @if($table->hasOrder())
-                    onclick="toastError('Esta mesa esta uso, intente cambiar a otra')"
-                @else
-                    href="{{url('/')}}/order/{{$order->id}}/chagetable/{{$table->id}}"
-                @endif
-                >
+                <a class="mesa" href="{{url('/')}}/tables/{{$table->id}}/orders">
                     @if($table->image)
                         <img src="{{$table->image}}">
                     @else

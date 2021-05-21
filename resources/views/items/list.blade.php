@@ -43,10 +43,10 @@
                     { "data": "name","width":"60%"},
                     { "data": "stock", render : function ( data, type, row, meta ) {
                         var aux='';
-                        if(parseFloat(data)<parseFloat(row.warning)){
+                        if(parseFloat(data) < parseFloat(row.warning)){
                             aux=' <i class="material-icons alert-icon text-warning">report_problem</i>';
                         }
-                        if(parseFloat(data)<parseFloat(row.alert)){
+                        if(parseFloat(data) < parseFloat(row.alert)){
                             aux=' <i class="material-icons alert-icon text-danger">report</i>';
                         }
                         return data +" "+row.measureunit.name+aux;

@@ -29,7 +29,7 @@ class Item extends Model
     /**
      * @var array
      */
-    protected $fillable = ['measureunit_id', 'company_id', 'created_at', 'updated_at', 'name', 'stock'];
+    protected $fillable = ['measureunit_id', 'company_id', 'created_at', 'updated_at', 'name', 'stock','alert','warning'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -121,26 +121,15 @@
                 <a class="sidebar-button {{(request()->is('orders/list')) ? 'active' : '' }}" href="{{ url('orders/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">paid</i>Ventas
                 </a>
-                <a class="sidebar-button {{(request()->is('products/add')) ? 'active' : '' }}" href="{{ url('products/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">fastfood</i>Productos
+                <a class="sidebar-button {{(request()->is('dashboard')) ? 'active' : '' }}" href="{{ url('dashboard') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">dashboard</i>Indicadores
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('producttypes/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Categorias
-                </a>
-                <a class="sidebar-button {{(request()->is('items/list')) ? 'active' : '' }}" href="{{ url('items/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">shopping_cart</i>Insumos
-                </a>
-                <a class="sidebar-button {{(request()->is('tables/list')) ? 'active' : '' }}" href="{{ url('tables/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">deck</i>Mesas
-                </a>
-                <a class="sidebar-button {{(request()->is('users/list')) ? 'active' : '' }}" href="{{ url('users/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">groups</i>Usuarios
-                </a>
-                <a class="sidebar-button {{(request()->is('clients/list')) ? 'active' : '' }}" href="{{ url('app/clients/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">people</i>Clientes
-                </a>
-                <!--FIN SI ADMINISTRADOR-->
 
+                <a class="sidebar-button {{(request()->is('settings')) ? 'active' : '' }}" href="{{ url('settings') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">settings</i>Configuración
+                </a>
+
+                <!--FIN SI ADMINISTRADOR-->
                 <a class="sidebar-button {{(request()->is('users/passwordchange')) ? 'active' : '' }}" href="{{ url('users/passwordchange') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">password</i>Contraseña
                 </a>
