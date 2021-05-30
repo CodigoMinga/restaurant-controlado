@@ -109,7 +109,8 @@ class SalesHelper extends Controller
                 CURLOPT_CUSTOMREQUEST => "POST",
                 CURLOPT_POSTFIELDS => json_encode($paramsArr),
                 CURLOPT_HTTPHEADER => [
-                    "apikey: " . $apiKey
+                    "apikey: " . $apiKey,
+                    "Idempotency-Key: " . "CodigoMingaRulz-". $order->id
                 ],
             ]);
             $response = curl_exec($curl);
@@ -131,6 +132,9 @@ class SalesHelper extends Controller
                     'request' => $paramsArr
                 ], 400);
             } else {
+
+                $order->dte_token= $response->TOKEN;
+                $order->save();
                 return new Response([
                     'response' => $response,
                     'request' => $paramsArr
