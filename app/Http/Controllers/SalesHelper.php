@@ -152,49 +152,68 @@ class SalesHelper extends Controller
 
 
     public function printAgainInvoice($order_id){
-        $order = Order::findOrFail($order_id);
+        $order = Order::find($order_id);
 
-        if (app()->environment('production')){
-            $url = self::URL_PRODUCCION;
-            $apiKey = $order->company->api_key_openfactura;
+
+        if(isset($order)){
+            if(isset($order->dte_token)){
+                if (app()->environment('production')){
+                    $url = self::URL_PRODUCCION;
+                    $apiKey = $order->company->api_key_openfactura;
+                }else{
+                    $url = self::URL_DESARROLLO;
+                    $apiKey = self::API_KEY_DESARROLLO;
+                }
+                $curl = curl_init();
+
+                curl_setopt_array($curl, [
+                    CURLOPT_URL => $url . "v2/dte/document/".$order->dte_token."/pdf"  ,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => false,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "GET",
+                    CURLOPT_HTTPHEADER => [
+                        "apikey: " . $apiKey
+                    ],
+                ]);
+
+                $response = curl_exec($curl);
+                $err = curl_error($curl);
+
+                $response = json_decode($response);
+                $err = json_decode($err);
+
+
+                curl_close($curl);
+
+                if ($err) {
+                    return new Response([
+                        'response' => $err,
+                    ], 400);
+                } else {
+                    return new Response([
+                        'response' => $response,
+                    ], 201);
+                }
+
+            }else{
+
+                return new Response([
+                    'response' => "Error la orden no tiene ninguna BOLETA emitida",
+                    'request' => ""
+                ], 400);
+            }
+
         }else{
-            $url = self::URL_DESARROLLO;
-            $apiKey = self::API_KEY_DESARROLLO;
-        }
-        $curl = curl_init();
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL => $url . "v2/dte/document/".$order->dte_token."/pdf"  ,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => false,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => [
-                "apikey: " . $apiKey
-            ],
-        ]);
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-
-        $response = json_decode($response);
-        $err = json_decode($err);
-
-
-        curl_close($curl);
-
-        if ($err) {
             return new Response([
-                'response' => $err,
+                'response' => "Error la orden enviada no existe en la DB",
+                'request' => ""
             ], 400);
-        } else {
-            return new Response([
-                'response' => $response,
-            ], 201);
         }
+
 
     }
 }
