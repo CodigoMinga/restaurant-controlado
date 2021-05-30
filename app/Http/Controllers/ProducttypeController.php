@@ -10,50 +10,45 @@ use Illuminate\Http\Request;
 
 class ProducttypeController extends Controller
 {   
-    public function add(){
-        $companys = Auth::user()->companies()->get();
-        return view('producttypes.add',compact('companys'));
-    }
-   
-    public function addProcess(Request $request){
-        Producttype::create($request->all());
-        return redirect()->route('producttypes.list')->with('success', 'Categoria Creada correctamente');
-    }
-
     public function list(){
         $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
         $producttypes = Producttype::whereIn('company_id',$companies_id)->get();
         return view('producttypes.list',compact('producttypes'));
     }
 
-    /* NO SE ESTA USANDO
-    public function getdata(){
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $producttypes = Producttype::whereIn('company_id',$companies_id)->get();
-        return DataTables::of($producttypes)->make(true);
+    public function add(){
+        $companys = Auth::user()->companies()->get();
+        $producttype = new Producttype;
+        return view('producttypes.form',compact('companys','producttype'));
     }
-    */
+   
     public function details($producttype_id)
     {
-        return view('producttypes.details', [
-            'producttype' => Producttype::find($producttype_id)
-        ]);
+        $companys = Auth::user()->companies()->get();
+        $producttype = Producttype::find($producttype_id);
+        return view('producttypes.form',compact('companys','producttype'));
     }
 
-    public function editprocess($producttype_id, Request $request)
+    public function process(Request $request)
     {
-        //busca la orden en la base de datos con el id que se le pasa desde la URL
-        $producttype = Producttype::findOrFail($producttype_id);
-
-        $producttype->update($request->all());
-
-        return redirect()->route('producttypes.list')->with('success', 'Categoria editada correctamente');
+        $id = $request->id;
+        if($id){
+            //Si encuentra el ID edita
+            $producttype = Producttype::findOrFail($request->id);
+            $producttype->update($request->all());
+            return redirect()->route('producttypes.list')->with('success', 'Categoria editada correctamente');
+        }else{
+            //Si no, Crea un Item
+            Producttype::create($request->all());
+            return redirect()->route('producttypes.list')->with('success', 'Categoria Agregada correctamente');
+        }
     }
 
     public function delete($producttype_id)
     {
         $producttype = Producttype::findOrFail($producttype_id);
-        $producttype->delete();
+        $producttype->enabled=0;
+        $producttype->save();
         return redirect()->route('producttypes.list')->with('success', 'Categoria eliminada correctamente');
     }
 }

@@ -22,6 +22,7 @@ form{
     left:0px;
     transition: left 0.8s;
     z-index: 30;
+    overflow-y: overlay;
 }
 #sidebar-content{
     display: block;
@@ -167,7 +168,8 @@ h1 .material-icons{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    
+    justify-content: center;
+    position: relative;
     width: 330px;
     border-width: 3px;
     border-style: solid;
@@ -180,6 +182,16 @@ h1 .material-icons{
     text-align: center;
     cursor:pointer;
 }
+.mesa .ocupada{
+    position: absolute;
+    font-size: 2.5rem;
+    color:#03a9f4 ;
+    bottom:0.2rem;
+    right:0.2rem;
+}
+.mesa div{
+    flex-grow: 1;
+}
 
 .mesa svg{
     width:80px;
@@ -188,12 +200,21 @@ h1 .material-icons{
     fill:white;
 }
 
+.mesa img{
+    width:80px;
+    height:80px;
+    padding:5px;
+}
+
 .mesa:hover{
-    color:rgb(39, 39, 190);
+    color:#fbc02d ;
     text-decoration: none;
 }
 .mesa:hover svg{
-    fill:rgb(39, 39, 190);
+    fill:#fbc02d ;
+}
+.mesa:hover .ocupada{
+    color:#fb8c00  ;
 }
 
 .producto{

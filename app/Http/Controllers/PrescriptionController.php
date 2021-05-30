@@ -9,35 +9,7 @@ use App\Measureunit;
 use Illuminate\Http\Request;
 
 class PrescriptionController extends Controller
-{
-   
-
-
-    public function add($product_id){
-        $product = Product::findOrFail($product_id);
-        $company = $product->producttype->company;
-        $items = Item::where('company_id',$company->id)->get();
-        $measureunits = Measureunit::all();
-        return view('prescriptions.add', compact('product','items','measureunits'));
-    }
-
-    public function addProcess( Request $request,$product_id){
-        Prescription::create($request->all()  + ['product_id' => $product_id]);
-        return redirect()->route('products.details',$product_id)->with('success', 'Reseta Creada Correctamente');
-    }
-
-    
-    public function create(Request $request){
-        $prescription = Prescription::create($request->all());
-        return $prescription;
-    }
-
-    public function list(){
-        return view('prescriptions.list', [
-            'prescriptions' => Prescription::latest()->paginate()
-
-        ]);
-    }
+{   
 
     public function details($prescription_id){   
         $prescription = Prescription::find($prescription_id);
@@ -53,18 +25,22 @@ class PrescriptionController extends Controller
         return view('prescriptions.details',compact('prescription','items','measureunits'));
     }
 
-    public function editprocess($prescription_id, Request $request){
-        //busca la orden en la base de datos con el id que se le pasa desde la URL
-        $prescription = Prescription::findOrFail($prescription_id);
-
-        $prescription->update($request->all());
-
-        return redirect()->route('prescriptions.list')->with('success', 'Receta editada correctamente');
+    public function store(Request $request){
+        $id = $request->id;
+        if($id){
+            $prescription = Prescription::findOrFail($request->id);
+            $prescription->update($request->all());
+            return redirect('products/'.$prescription->product_id)->with('success', 'Receta editada correctamente');
+        }else{
+            $prescription = Prescription::create($request->all());
+            return $prescription;
+        }
     }
 
-    public function delete($item_id){
+    public function delete($prescription_id){
         $prescription = Prescription::findOrFail($prescription_id);
-        $prescription->delete();
-        return redirect()->route('prescriptions.list')->with('success', 'Receta eliminada correctamente');
+        $prescription->enabled=0;
+        $prescription->save();
+        return redirect('products/'.$prescription->product_id)->with('success', 'Receta eliminada correctamente');
     }
 }

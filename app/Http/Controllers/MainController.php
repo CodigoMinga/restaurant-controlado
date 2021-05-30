@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 use Hash;
-use App\User;
-use Illuminate\Http\Request;
+use DB;
 use Auth;
+use App\User;
+use App\Order;
+use App\Item;
+use App\Orderdetail;
+use App\Mail\PasswordResetMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 
 
 class MainController extends Controller
@@ -80,34 +86,86 @@ class MainController extends Controller
 
     }
 
-    public function passwordChange($user_id){
-        //busca el usuario en la bd
-        $user = User::findOrFail($user_id);
-        return view('password.passwordchange' , compact('user'));
+    function passwordLostProcess(Request $request){
+
+        //dd($request->email);
+        $user = User::where ('email', $request->email)->first();
+        if ( !$user ) return redirect()->back()->withErrors(['error' => 'Ingrese un correo valido']);
+
+        //create a new token to be sent to the user.
+        DB::table('password_resets')->insert([
+            'email' => $request->email,
+            'token' => Str::random(60), //change 60 to any length you want
+            'created_at' => Carbon::now()
+        ]);
+
+        $tokenData = DB::table('password_resets')
+            ->where('email', $request->email)->first();
+        $token = $tokenData->token;
+        $email = $request->email; // or $email = $tokenData->email;
+
+        $subject = "Solicitud de reinicio de contraseña";
+        $receivers = [$email];
+        $status = Mail::to($receivers)->send(new PasswordResetMail($user,$token,$subject));
+
+        $message = "Se ha enviado un correo para reestablecer contraseña";
+        return view('generic',compact('message'));
     }
 
-    public function passwordChangeProcess($user_id, Request $request){
 
-        $user = User::findOrFail($user_id);
-        $oldpassword = $request->oldpassword;
+    
+    function dashboard(){
+        $desde = date('Y-m-d', strtotime('monday this week'));
+        $hasta = date('Y-m-d', strtotime('monday next week'));        
+        $companies_id = Auth::user()->companies()->pluck('company_id');
+        $companiesString = $companies_id->implode(',');
+        
+        //ventas de la semana
+        $query = "SELECT COUNT(id) AS sales, DAYOFWEEK(created_at) AS dayweek FROM orders WHERE enabled = 1 AND company_id IN ($companiesString) AND created_at > '$desde' AND created_at < '$hasta' GROUP BY DATE(created_at)";       
+        $salesweek = DB::select($query);
 
-        if(Hash::check($oldpassword,$user->password)){
-            $input = $request->all();
-            $input['password'] = Hash::make($request->password);
-            $user->update($input);
+        //bajo stock
+        $lowstock = Item::where('enabled',1)->whereIn('company_id',$companies_id->toArray())->orderByRaw('(stock - warning) ASC')->limit(10)->get();
 
-            $userAutentificated = Auth::loginUsingId($user->id);
-            /*
-            $sucess  = true;
-            $returnUrl = url('/')."/app/home";
-            $message =  "Contraseña Cambiada Correctamente";
-            */
+        //Mas Vendidos
+        $query = 
+        "SELECT COUNT(od.id) AS cant,p.name  FROM 
+        orderdetails AS od LEFT JOIN 
+        products p ON od.product_id = p.id LEFT JOIN 
+        orders o ON od.order_id = o.id 
+        WHERE 
+        od.enabled = 1 AND 
+        o.enabled = 1 AND 
+        o.company_id IN ($companiesString) 
+        GROUP BY od.product_id ORDER BY cant DESC LIMIT 7";
+        $salesbest = DB::select($query);
 
-            //return view('template.genericphoneprocess',compact('message','sucess','returnUrl'));
-            return redirect('/tables');
-        }else{
-            return back()->with('noti-error','La clave antigua no corresponde')->withInput();
+        //Ganacia
+        $order_totals = 0;
+        $orders = Order::where('enabled',1)->get();
+        foreach ($orders as $key => $order) {
+            $order_totals=$order_totals+$order->Total;
         }
+
+        $query = 
+        "SELECT 
+        SUM(credit_card) AS credit_card, 
+        SUM(debit_card) AS debit_card, 
+        SUM(efective) AS efective, 
+        SUM(transfer) AS transfer, 
+        SUM(discount) AS discount, 
+        SUM(tip) AS tip, 
+        SUM(delivery) AS delivery 
+        FROM orders";
+        $profit = DB::select($query);
+        
+        //dd($profit);
+
+        return view('main.dashboard',compact('salesweek','lowstock','salesbest','profit','order_totals'));
     }
 
+    
+    function settings(){
+        return view('main.settings');
+    }    
 }

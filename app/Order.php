@@ -27,7 +27,29 @@ class Order extends Model
     /**
      * @var array
      */
-    protected $fillable = ['company_id', 'ordertype_id', 'table_id', 'user_id', 'created_at', 'updated_at','closed','enabled','internal_id'];
+    protected $fillable = [
+        'internal_id',
+        'company_id', 
+        'ordertype_id', 
+        'table_id', 
+        'user_id', 
+        'client_id', 
+        'closed', 
+
+        'discount', 
+        'discount_description', 
+        'tip_type', 
+        'tip', 
+        'delivery', 
+        
+        'credit_card', 
+        'debit_card', 
+        'efective', 
+        'transfer', 
+
+        'enabled', 
+        'created_at', 
+        'updated_at'];
 
 
     public function company()
@@ -45,6 +67,11 @@ class Order extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function client()
+    {
+        return $this->belongsTo('App\Client');
+    }
+
     public function ordertype()
     {
         return $this->belongsTo('App\Ordertype');
@@ -58,7 +85,9 @@ class Order extends Model
     public function getTotalAttribute(){
         $total=0;
         foreach ($this->orderdetails as $key => $orderdetail) {
-            $total=$total+$orderdetail->total_ammount;
+            if($orderdetail->enabled){
+                $total=$total+$orderdetail->total_ammount;
+            }
         }
         return $total;
     }

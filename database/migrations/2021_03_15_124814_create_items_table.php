@@ -17,9 +17,8 @@ class CreateItemsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
-            $table->longText('description')->nullable();
-            $table->decimal('stock')->default(0);
 
+            $table->decimal('stock')->default(0);
             $table->decimal('warning')->default(0);
             $table->decimal('alert')->default(0);
 
@@ -28,8 +27,8 @@ class CreateItemsTable extends Migration
 
             $table->bigInteger('company_id')->unsigned();
             $table->foreign('company_id')->references('id')->on('companies')->onUpdate('RESTRICT')->onDelete('RESTRICT');
-            $table->boolean('enabled')->default(1);
 
+            $table->boolean('enabled')->default(1);
         });
     }
 

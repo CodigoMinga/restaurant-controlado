@@ -12,10 +12,7 @@
     
     <title>Restaurant Controlado</title>
     <script src="{{url('/js/jquery.min.js')}}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-    
 </head>
 <body>
     <nav>
@@ -24,7 +21,7 @@
     <div aria-live="polite" aria-atomic="true" style="position: fixed; min-height: 200px;top:0px;right:0px;">
         <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-agregar'>
             <div class="toast-header ">
-            <i class="rounded mr-2 material-icons bg-success text-white">done</i>
+            <i class="rounded mr-2 material-icons text-success text-white">receipt</i>
             <strong class="mr-auto">Agregado</strong>
             <small class="text-muted">cerrar</small>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -37,7 +34,7 @@
         </div>
         <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-error'>
             <div class="toast-header">
-            <i class="rounded mr-2 material-icons bg-danger text-white">alert</i>
+            <i class="rounded mr-2 material-icons text-danger text-white">report</i>
             <strong class="mr-auto">Error</strong>
             <small class="text-muted">cerrar</small>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -48,9 +45,22 @@
                 Mensaje de error
             </div>
         </div>
+        <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-warning'>
+            <div class="toast-header">
+            <i class="rounded mr-2 material-icons text-warning text-white">report_problem</i>
+            <strong class="mr-auto">Cuidado</strong>
+            <small class="text-muted">cerrar</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="toast-body">
+                Mensaje de Cuidado
+            </div>
+        </div>
         <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-check'>
             <div class="toast-header">
-            <i class="rounded mr-2 material-icons bg-success text-white">done</i>
+            <i class="rounded mr-2 material-icons text-success text-white">verified</i>
             <strong class="mr-auto">Realizado</strong>
             <small class="text-muted">cerrar</small>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -71,6 +81,10 @@
         function toastSuccess(mensaje){
             $('#toast-check .toast-body').eq(0).html(mensaje);
             $('#toast-check').toast('show');
+        }
+        function toastwarning(mensaje){
+            $('#toast-warning .toast-body').eq(0).html(mensaje);
+            $('#toast-warning').toast('show');
         }
     </script>
 
@@ -96,33 +110,38 @@
                 <p>DARUICHRODRIGUEZ SPA</p>
             </div>
             <div>
-                <a class="sidebar-button {{(request()->is('tables')) ? 'active' : '' }}" href="{{ url('/tables') }}">
+                
+                <a class="sidebar-button {{(request()->is('tables')) ? 'active' : '' }}" href="{{ url('tables') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Sectores
                 </a>
                 
                 @yield('info')
 
-                <a class="sidebar-button {{(request()->is('products/add')) ? 'active' : '' }}" href="{{ url('/app/products/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Producto
+                <!--SI ES ADMINISTRADOR-->
+                <a class="sidebar-button {{(request()->is('orders/list')) ? 'active' : '' }}" href="{{ url('orders/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">paid</i>Ventas
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/producttypes/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Categoria
+                <a class="sidebar-button {{(request()->is('dashboard')) ? 'active' : '' }}" href="{{ url('dashboard') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">dashboard</i>Indicadores
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/measureunits/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Medida
+
+                <a class="sidebar-button {{(request()->is('settings')) ? 'active' : '' }}" href="{{ url('settings') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">settings</i>Configuración
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/items/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Insumos
+
+                <!--FIN SI ADMINISTRADOR-->
+                <a class="sidebar-button {{(request()->is('users/passwordchange')) ? 'active' : '' }}" href="{{ url('users/passwordchange') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">password</i>Contraseña
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/companys/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Compañias
+                <a class="sidebar-button {{(request()->is('app/logout')) ? 'active' : '' }}" href="{{ url('app/logout') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">logout</i>Logout
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/users/list') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Usuarios
+
+                <!--SI ES CODIGOMINGA-->
+                <a class="sidebar-button {{(request()->is('companys/list')) ? 'active' : '' }}" href="{{ url('companys/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">apartment</i>Compañias
                 </a>
-                <a class="sidebar-button {{(request()->is('items/add')) ? 'active' : '' }}" href="{{ url('app/password/'.Auth::user()->id.'/passwordchange') }}">
-                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">add</i>Contraseña
-                </a>
+                <!--FIN SI CODIGOMINGA-->
             </div>
         </div>
         <div id="sidebar-toggle">

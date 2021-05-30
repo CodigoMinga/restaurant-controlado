@@ -11,28 +11,15 @@ use App\Prescription;
 
 class ProductController extends Controller
 {
-    public function add(){
-
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-
-        $producttypes = Producttype::whereIn('company_id',$companies_id)->get();
-        return view('products.add',compact('producttypes'));
-    }
-
-    /* NO SE ESTA USANDO
-    public function getdata(){
-
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-
-        $products = Product::whereIn('company_id',$companies_id)->get();
-        return DataTables::of($products)->make(true);
-    }*/
-
     public function list(){
 
+        //Array de las Compañias del Usuario
         $companies_id       = Auth::user()->companies()->pluck('company_id')->toArray();
+        
+        //Tipos de Productos que pertenecesn a las conpañias del Usuario
         $producttypes_id    = Producttype::whereIn('company_id',$companies_id)->pluck('id')->toArray();
 
+        //Productos que pertenecesn a los tipos de producto de las conpañias del Usuario
         $products = Product::whereIn('producttype_id',$producttypes_id)->get();
         foreach ($products as $key => $product) {
             $product->producttype;
@@ -40,35 +27,49 @@ class ProductController extends Controller
         return view('products.list',compact('products'));
     }
 
-    public function addProcess(Request $request){
+    public function add(){
+        //Array de las Compañias del Usuario
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
 
-        Product::create($request->all());
-        return redirect()->route('products.list')->with('success', 'Producto Creado correctamente');
+        //Tipos de Productos que pertenecesn a las conpañias del Usuario
+        $producttypes = Producttype::whereIn('company_id',$companies_id)->get();
+
+        $product = new Product;
+
+        return view('products.form',compact('producttypes','product'));
     }
 
     public function details($product_id)
     {
-        //se asigana un valor a la variable $product buscando el producto asociado a la variable.
-        $product = Product::find($product_id);
-        $prescription = Prescription::all();
-       
-        //prescriptions resive las recetas  que pertenescan al producto con el mismo id que el que se esta resiviendo y lo pagina.
-        $prescriptions = Prescription::where('product_id','=',$product_id)->latest()->paginate();
+        //Array de las Compañias del Usuario
+        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
 
-        return view('products.details', compact('product','prescriptions'));
+        //Tipos de Productos que pertenecesn a las conpañias del Usuario
+        $producttypes = Producttype::whereIn('company_id',$companies_id)->get();
+
+        $product = Product::find($product_id);
+        return view('products.form',compact('producttypes','product'));
     }
 
-    public function editprocess($product_id, Request $request)
+    public function process(Request $request)
     {
-        $product = Product::findOrFail($product_id);
-        $product->update($request->all());
-        return redirect()->route('products.list')->with('success', 'Producto editado correctamente');
+
+        $id = $request->id;
+        if($id){
+            $product = Product::findOrFail($request->id);
+            $product->update($request->all());
+            return redirect()->route('products.list')->with('success', 'Producto editado correctamente');
+        }else{
+            $product = Product::create($request->all());
+            return redirect('/products/'.$product->id)->with('success', 'Producto Creado correctamente');
+        }
     }
 
     public function delete($product_id)
     {
         $product = product::findOrFail($product_id);
-        $product->delete();
+        $product->enabled=0;
+        $product->save();
         return redirect()->route('products.list')->with('success', 'Producto eliminado correctamente');
     }
 }
