@@ -41,20 +41,20 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/orders/products/detach',                  'OrderController@productDetach');
     Route::post('/orders/command',                          'OrderController@command');
 
-    
+
     //ESTAS RUTAS NECESITAS SER COMPANY ADMIN
     Route::group(['middleware' => ['admin:companyadmin|superadmin']], function() {
         Route::get('/dashboard',                'MainController@dashboard');
         Route::get('/settings',                 'MainController@settings');
     });
-    
+
     //ITEMS
     route::get('/items/list',               'ItemController@list')->name('items.list');
     route::get('/items/add',                'ItemController@add')->name('items.add');
     route::get('/items/{item_id}',          'ItemController@details')->name('items.details');
     route::get('/items/{item_id}/delete',   'ItemController@delete')->name('items.delete');
     route::post('/items/process',           'ItemController@process')->name('items.process');
-    
+
     //USUARIOS
     route::get('/users/list',               'UserController@list')->name('users.list');
     route::get('/users/add',                'UserController@add')->name('users.add');
@@ -64,7 +64,7 @@ Route::group(['middleware' => ['auth']], function() {
     route::post('/users/process',           'UserController@process')->name('users.process');
     //CAMBIAR CLAVE
     Route::post('/users/passwordchange/process','UserController@passwordchangeProcess');
-    
+
     //CATEGORIAS (PRODUCTTYPES)
     route::get('/producttypes/list',                    'ProducttypeController@list')->name('producttypes.list');
     route::get('/producttypes/add',                     'ProducttypeController@add')->name('producttypes.add');
@@ -108,7 +108,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     //LOGOUT
     route::get('/app/logout','MainController@logout');
-    
+
 
     Route::get('prueba',function(){
         $string = 'companyadmin,superadmin';
@@ -121,6 +121,7 @@ Route::group(['middleware' => ['auth']], function() {
 
 //rutas ajax
 route::get('/ajax/generateInvoice/{order_id}','SalesHelper@generateInvoice');
+route::get('/ajax/printAgainInvoice/{order_id}','SalesHelper@printAgainInvoice');
 
 
 
