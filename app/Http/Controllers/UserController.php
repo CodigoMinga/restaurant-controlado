@@ -25,10 +25,11 @@ class UserController extends Controller
 
     public function add(){
         $role_ids=[1,2];
+        $companies = Auth::user()->companies;
         if(Auth::user()->hasRole('superadmin')){
             $role_ids=[1,2,3];
+            $companies = Company::All();
         }
-        $companies = Auth::user()->companies;
         $roles = Role::whereIn("id",$role_ids)->get();
         $user = new User;
         return view('users.form',compact('roles','companies','user'));
@@ -36,10 +37,11 @@ class UserController extends Controller
 
     public function details($user_id){
         $role_ids=[1,2];
+        $companies = Auth::user()->companies;
         if(Auth::user()->hasRole('superadmin')){
             $role_ids=[1,2,3];
+            $companies = Company::All();
         }
-        $companies = Auth::user()->companies;
         $roles = Role::whereIn("id",$role_ids)->get();
         $user = User::findOrFail($user_id);
         return view('users.form',compact('roles','companies','user'));

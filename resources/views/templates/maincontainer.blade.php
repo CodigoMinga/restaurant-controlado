@@ -105,9 +105,9 @@
         <div id="sidebar-content">
             <img src="{{url('/img/logo.jpg')}}" class="logo-circle">
             <div class="info-bar mb-3">
-                <p>DELIXIUS RESTOBAR</p>
-                <p>RUT: 77.012.555-3</p>
-                <p>DARUICHRODRIGUEZ SPA</p>
+                <p>DELIXIUS SUSHI OFICIAL</p>
+                <p>RUT: 77.324.712-9</p>
+                <p>San Martín 395, Quilicura</p>
             </div>
             <div>
                 

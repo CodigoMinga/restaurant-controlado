@@ -164,14 +164,6 @@
                                     ${{number_format($profit[0]->delivery,0,",",".")}}
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    Ganancias 
-                                </td>
-                                <td>
-                                    ${{number_format($profit[0]->delivery,0,",",".")}}
-                                </td>
-                            </tr>
                         </table>
                         <br>
                         <h5>Formas de Pago</h5>

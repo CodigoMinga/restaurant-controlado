@@ -12,7 +12,7 @@ class ProducttypeController extends Controller
 {   
     public function list(){
         $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $producttypes = Producttype::whereIn('company_id',$companies_id)->get();
+        $producttypes = Producttype::where('enabled',1)->whereIn('company_id',$companies_id)->get();
         return view('producttypes.list',compact('producttypes'));
     }
 

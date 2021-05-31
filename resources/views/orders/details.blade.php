@@ -934,6 +934,7 @@
     <script>        
         //TOTAL CONSUMO
         let TotalBase = parseFloat("{{ $order->Total }}");
+        var FaltaPagar = 0;
         
         //Adicionales
         var discount        = document.getElementById('discount');
@@ -999,9 +1000,13 @@
             ){
                 alert("Falta agregar razon del descuento");
             }else if(
-                orderForm['ordertype_id'].value=="2" && orderForm['client_id'].value==""
+                orderForm['ordertype_id'].value=="2" && (orderForm['client_id'].value=="" || orderForm['delivery'].value==0)
             ){
                 alert("para Entrega a domicilio debe ingresar la información del cliente y costo de Despacho");
+            }else if(
+                FaltaPagar !=0
+            ){
+                alert("Falta pagar: $"+miles(FaltaPagar));
             }else if(loadorderForm) {
                 loadorderForm = false;
                 var formData = new FormData(orderForm);
@@ -1014,6 +1019,7 @@
                 }).done(function(data) {
                     if (typeof(data) == 'object') {
                         console.log(data);
+                        location.reload();
                     } else {
                         alert(data);
                     }
@@ -1116,8 +1122,10 @@
             
             if(total_pay>0){
                 pay_left.innerHTML = '$'+miles(total_pay);
+                FaltaPagar=total_pay;
             }else{
                 pay_left.innerHTML = '$'+0;
+                FaltaPagar=0;
             }
         }
 

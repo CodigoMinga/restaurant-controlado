@@ -2,19 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
-
 //LOGIN
 Route::get('/',                                 'MainController@login')->name('login');
 Route::post('/app/checklogin',                  'MainController@checkLogin');
@@ -56,8 +43,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     
     //ESTAS RUTAS NECESITAS SER COMPANY ADMIN
-    Route::group(['middleware' => ['admin:companyadmin,normaluser']], function() {
-        //Administrador
+    Route::group(['middleware' => ['admin:companyadmin|superadmin']], function() {
         Route::get('/dashboard',                'MainController@dashboard');
         Route::get('/settings',                 'MainController@settings');
     });
@@ -111,21 +97,24 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/prescriptiondetails/{prescriptiondetail_id}/delete',   'PrescriptiondetailController@delete');
 
     //COMPAÑIAS
-    route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
-    route::post('/companys/add/process',                'CompanyController@addProcess');
-    route::get('/companys/list',                        'CompanyController@list')->name('companys.list');
-    route::get('/companys/{company_id}',                'CompanyController@details');
-    route::post('/companys/{company_id}/edit/process',  'CompanyController@editprocess');
-    route::get('/companys/{company_id}/delete',         'CompanyController@delete');
+    Route::group(['middleware' => ['admin:superadmin']], function(){
+        route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
+        route::post('/companys/add/process',                'CompanyController@addProcess');
+        route::get('/companys/list',                        'CompanyController@list')->name('companys.list');
+        route::get('/companys/{company_id}',                'CompanyController@details');
+        route::post('/companys/{company_id}/edit/process',  'CompanyController@editprocess');
+        route::get('/companys/{company_id}/delete',         'CompanyController@delete');
+    });
 
     //LOGOUT
     route::get('/app/logout','MainController@logout');
     
 
     Route::get('prueba',function(){
-        $orderdetail = App\Orderdetail::findOrFail(1);
-        $prescription= $orderdetail->product->prescriptions->last();
-        dd($prescription->prescriptiondetails);
+        $string = 'companyadmin,superadmin';
+        $arr = explode(",",$string);
+        $user = Auth::user()->hasrole($arr);
+        dd($user);
     });
 
 });
