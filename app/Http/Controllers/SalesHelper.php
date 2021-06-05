@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Company;
 use App\Order;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 
 
 class SalesHelper extends Controller
@@ -38,8 +39,9 @@ class SalesHelper extends Controller
             $paramsArr['dte'] = [];
             $idDoc = [
                 'TipoDTE' => self::BOLETA_ELECTRONICA,
-                'Folio' => $order->id,
+                'Folio' => 0,
                 'FchEmis' => date('Y-m-d'),
+
                 'IndServicio' => self::BOLETA_VENTA_SERVICIO
             ];
 
@@ -97,6 +99,8 @@ class SalesHelper extends Controller
                 $apiKey = self::API_KEY_DESARROLLO;
             }
 
+            $order->empotency_key = "MingaRulz-" . Str::random(10). '-' . $order->id;
+            $order->save();
 
             curl_setopt_array($curl, [
                 CURLOPT_URL => $url . "v2/dte/document"  ,
@@ -110,7 +114,7 @@ class SalesHelper extends Controller
                 CURLOPT_POSTFIELDS => json_encode($paramsArr),
                 CURLOPT_HTTPHEADER => [
                     "apikey: " . $apiKey,
-                    "Idempotency-Key: " . "CodigoMingaRulz-". $order->id
+                    "Idempotency-Key: " . $order->empotency_key
                 ],
             ]);
             $response = curl_exec($curl);
@@ -134,6 +138,8 @@ class SalesHelper extends Controller
             } else {
 
                 $order->dte_token= $response->TOKEN;
+                $order->dte_folio= $response->FOLIO;
+                $order->fecha_resolucion_sii= $response->RESOLUCION->fecha;
                 $order->save();
                 return new Response([
                     'response' => $response,
@@ -214,6 +220,79 @@ class SalesHelper extends Controller
             ], 400);
         }
 
+
+    }
+
+    public function removeDte($order_id){
+        $order = Order::find($order_id);
+
+
+        if(isset($order)){
+            if(isset($order->dte_token)){
+                if (app()->environment('production')){
+                    $url = self::URL_PRODUCCION;
+                    $apiKey = $order->company->api_key_openfactura;
+                }else{
+                    $url = self::URL_DESARROLLO;
+                    $apiKey = self::API_KEY_DESARROLLO;
+                }
+                $curl = curl_init();
+
+                $paramsArr['Dte'] = 52;
+                $paramsArr['Folio'] = $order->dte_folio;
+
+                $paramsArr['Fecha'] = $order->fecha_resolucion_sii->format('Y-m-d');
+                //$paramsArr['Fecha'] = $order->created_at->format('Y-m-d');
+
+                //return json_encode($paramsArr);
+                curl_setopt_array($curl, [
+                    CURLOPT_URL => $url . "v2/dte/anularDTE52/"  ,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => false,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => json_encode($paramsArr),
+                    CURLOPT_HTTPHEADER => [
+                        "apikey: " . $apiKey,
+                        "Content-Type: application/json"
+                    ],
+                ]);
+
+                $response = curl_exec($curl);
+                $err = curl_error($curl);
+
+                $response = json_decode($response);
+                $err = json_decode($err);
+
+
+                curl_close($curl);
+
+                if ($err) {
+                    return new Response([
+                        'response' => $err,
+                    ], 400);
+                } else {
+                    return new Response([
+                        'response' => $response,
+                    ], 201);
+                }
+
+            }else{
+                return new Response([
+                    'response' => "La orden no tiene una BOLETA asociada",
+                    'request' => ""
+                ], 400);
+            }
+
+        }else{
+            return new Response([
+                'response' => "Error la orden enviada no existe en la DB",
+                'request' => ""
+            ], 400);
+        }
 
     }
 }
