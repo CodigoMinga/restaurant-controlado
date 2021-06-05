@@ -31,8 +31,13 @@ class SalesHelper extends Controller
         $order = Order::find($order_id);
 
         if(isset($order)){
-
-
+            //valida si la boleta ya fue emitida, existe token no deja emitirla denuevo
+            if(isset($order->dte_token)){
+                return new Response([
+                    'response' => "Esta boleta ya fue emitida, existe token, puede re-imprimirla",
+                    'request' => ""
+                ], 400);
+            }
 
             $paramsArr = [];
             $paramsArr['response'] = self::RESPONSES;
