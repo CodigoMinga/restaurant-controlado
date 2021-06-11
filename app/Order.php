@@ -29,29 +29,32 @@ class Order extends Model
      */
     protected $fillable = [
         'internal_id',
-        'company_id', 
-        'ordertype_id', 
-        'table_id', 
-        'user_id', 
-        'client_id', 
-        'closed', 
+        'company_id',
+        'ordertype_id',
+        'table_id',
+        'user_id',
+        'client_id',
+        'closed',
 
-        'discount', 
-        'discount_description', 
-        'tip_type', 
-        'tip', 
-        'delivery', 
-        
-        'credit_card', 
-        'debit_card', 
-        'efective', 
-        'transfer', 
+        'discount',
+        'discount_description',
+        'tip_type',
+        'tip',
+        'delivery',
 
-        'enabled', 
-        'created_at', 
+        'credit_card',
+        'debit_card',
+        'efective',
+        'transfer',
+
+        'enabled',
+        'created_at',
         'updated_at'];
 
-
+    //setea el campo como date
+    protected $casts = [
+        'fecha_resolucion_sii'  => 'date:Y-m-d'
+    ];
     public function company()
     {
         return $this->belongsTo('App\Company');

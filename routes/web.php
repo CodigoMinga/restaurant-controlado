@@ -113,6 +113,7 @@ Route::group(['middleware' => ['auth']], function() {
 //rutas ajax
 route::get('/ajax/generateInvoice/{order_id}','SalesHelper@generateInvoice');
 route::get('/ajax/printAgainInvoice/{order_id}','SalesHelper@printAgainInvoice');
+route::get('/ajax/removeDte/{order_id}','SalesHelper@removeDte');
 
 
 
