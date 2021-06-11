@@ -108,15 +108,6 @@ Route::group(['middleware' => ['auth']], function() {
 
     //LOGOUT
     route::get('/app/logout','MainController@logout');
-
-
-    Route::get('prueba',function(){
-        $string = 'companyadmin,superadmin';
-        $arr = explode(",",$string);
-        $user = Auth::user()->hasrole($arr);
-        dd($user);
-    });
-
 });
 
 //rutas ajax

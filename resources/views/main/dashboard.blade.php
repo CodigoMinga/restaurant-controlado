@@ -142,14 +142,6 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Ganancias
-                                </td>
-                                <td>
-                                    ${{number_format($order_totals + $profit[0]->discount,0,",",".")}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
                                     Propinas
                                 </td>
                                 <td>
@@ -182,6 +174,22 @@
                                 </td>
                                 <td>
                                     ${{number_format($profit[0]->debit_card,0,",",".")}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    IVA Debito
+                                </td>
+                                <td>
+                                    -${{number_format($profit[0]->debit_card *0.19 ,0,",",".")}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Comision Debito
+                                </td>
+                                <td>
+                                    -${{number_format(($profit[0]->debit_card - $profit[0]->debit_card/0.19) * 0.0149 ,0,",",".")}}
                                 </td>
                             </tr>
                             <tr>

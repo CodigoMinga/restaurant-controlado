@@ -395,7 +395,7 @@
                 Cerrar Venta
             </button>
             @endif
-            <button onclick="comanda()" class="btn btn-primary btn-lg">
+            <button onclick="PrintComanda()" class="btn btn-primary btn-lg">
                 <span class="material-icons">receipt</span>
                 Comanda
             </button>
@@ -526,7 +526,7 @@
         <table style="margin-bottom:10mm;font-size:14px;width:100%">
             <thead>
                 <tr>
-                    <th>
+                    <th align="left">
                         Producto
                     </th>
                     <th width="1">
@@ -575,7 +575,7 @@
             mywindow.document.close(); // necessary for IE >= 10
             mywindow.focus(); // necessary for IE >= 10*/
             mywindow.onafterprint = function(event) {
-                mywindow.close()
+                //mywindow.close()
             };
             mywindow.print();
 
