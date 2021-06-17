@@ -175,12 +175,6 @@
                             Producto
                         </th>
                         <th width=1>
-                            Comanda
-                        </th>
-                        <th width=1>
-                            Pagado
-                        </th>
-                        <th width=1>
                             Cant.
                         </th>
                         <th width=1>
@@ -204,16 +198,6 @@
                                 {{ $orderdetail->product->name }}<br>
                                 <small>{{ $orderdetail->enabled==1 ? $orderdetail->description : "(eliminado)"}}</small>
                                 <input type="hidden" name="orderdetail_id[]" value="{{ $orderdetail->id }}">
-                            </td>
-                            <td align="center">
-                                @if ($orderdetail->command)
-                                    <span class="material-icons text-success">done</span>
-                                @endif
-                            </td>
-                            <td align="center">
-                                @if ($orderdetail->paid)
-                                    <span class="material-icons text-success">done</span>
-                                @endif
                             </td>
                             <td align="right">
                                 {{ number_format($orderdetail->quantity, 0, '', '.') }}
@@ -404,7 +388,6 @@
                 Boleta
             </button>
         </div>
-
         <!-- Modal -->
         <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -552,7 +535,6 @@
     </div>
 
     <script src="{{ url('/') }}/js/pdf.js"></script>
-    <script src="{{ url('/') }}/js/pdf.worker.js"></script>
     <script type="text/javascript" src="https:////cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/responsive.bootstrap.min.js"></script>
@@ -562,44 +544,91 @@
         var imprimir = document.getElementById('imprimir');
         var orderForm = document.getElementById('orderForm');
 
+        var ua = navigator.userAgent.toLowerCase();
+        var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+
         function PrintComanda() {
             var mywindow = window.open('', 'PRINT', 'height=1,width=1');
 
-            mywindow.document.write('<html><head><title>Comanda</title>');
+            mywindow.document.write('<html><head></head><title>Comanda</title>');
             mywindow.document.write(
-                '<style>*{font-family:Arial, sans-serif;} @page{margin-left: 4mm;margin-right: 4mm;margin-top: 0px;margin-bottom: 0px;}</style>'
+                '<style>*{font-family:Arial, sans-serif;} body{max-width:58mm}</style><body>'
             );
             mywindow.document.write(imprimir.innerHTML);
             mywindow.document.write('</body></html>');
-
+            if(isAndroid) {
+                mywindow.onfocus = function(){mywindow.close();};
+            }else{
+                mywindow.onafterprint  = function(){mywindow.close();};
+            }
             mywindow.document.close(); // necessary for IE >= 10
             mywindow.focus(); // necessary for IE >= 10*/
-            mywindow.onafterprint = function(event) {
-                //mywindow.close()
-            };
             mywindow.print();
-
             return true;
         }
+        
+        function cancelBoleta() {
+            $.get("{{ url('/') }}/ajax/removeDte/{{ $order->id }}", function(data) {
 
-        function PrintBoleta() {
+            });
+        }
+
+        function PrintBoleta(){
+
             $.get("{{ url('/') }}/ajax/generateInvoice/{{ $order->id }}", function(data) {
-                var byteCharacters = window.atob(data.response.PDF);
-                var byteNumbers = new Array(byteCharacters.length);
-                for (var i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                var byteArray = new Uint8Array(byteNumbers);
-                var blob = new Blob([byteArray], {
-                    type: 'application/pdf'
+                var pdfData = atob(data.response.PDF==null ? data.response.pdf : data.response.PDF);
+                var pdfjsLib = window['pdfjs-dist/build/pdf'];
+                pdfjsLib.GlobalWorkerOptions.workerSrc = "{{ url('/') }}/js/pdf.worker.js";
+
+                var loadingTask = pdfjsLib.getDocument({data: pdfData});
+                loadingTask.promise.then(function(pdf) {
+                    console.log('PDF loaded');
+
+                    var pageNumber = 1;
+                    pdf.getPage(pageNumber).then(function(page) {
+                        console.log('Page loaded');
+                        
+                        var scale = 2;
+                        var viewport = page.getViewport({scale: scale});
+
+                        // Prepare canvas using PDF page dimensions
+                        //var canvas = document.getElementById('the-canvas');
+                        var canvas = document.createElement("canvas");
+                        var context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+
+                        // Render PDF page into canvas context
+                        var renderContext = {
+                            canvasContext: context,
+                            viewport: viewport
+                        };
+                        var renderTask = page.render(renderContext);
+
+                        renderTask.promise.then(function () {
+                            console.log('Page rendered');
+                            var mywindow2 = window.open('', 'PRINT', 'height=1,width=1');
+                            mywindow2.document.write('<html><head><title>Boleta</title>');
+                            mywindow2.document.write(
+                                '<style>@page{margin-left: 0px;margin-right: 0px;margin-top: 0px;margin-bottom: 0px;} canvas{width:100%}</style>'
+                                );
+                            mywindow2.document.write('</head><body></body></html>');
+                            mywindow2.document.body.appendChild(canvas);
+                            mywindow2.document.close();
+                            if(isAndroid) {
+                                mywindow2.onfocus = function(){mywindow2.close();};
+                            }else{
+                                mywindow2.onafterprint  = function(){mywindow2.close();};
+                            }
+                            mywindow2.focus();
+                            mywindow2.print();
+                        });
+                    });
+                }, function (reason) {
+                    // PDF loading error
+                    alert(reason);
                 });
-                var fileURL = URL.createObjectURL(blob);
-                //var mywindow = window.open(fileURL, 'PRINT', 'height=1,width=1');
-                showPDF(fileURL);
-                /*let pdfWindow = window.open("");
-                pdfWindow.document.write("<html<head><title>Boleta.pdf</title><style>body{margin: 0px;}iframe{border-width: 0px;} @media print {body {transform: scale(.7);}table {page-break-inside: avoid;}}</style></head>");
-                pdfWindow.document.write("<body><embed width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(data)+"#toolbar=0&navpanes=0&scrollbar=0'></embed></body></html>");*/
-                return true;
+                
             });
         }
 
@@ -626,74 +655,6 @@
             __TOTAL_PAGES,
             __PAGE_RENDERING_IN_PROGRESS = 0;
         page_index = 0;
-
-        var mywindow2;
-
-        function showPDF(pdf_url) {
-            $("#pdf-loader").show();
-
-            PDFJS.getDocument({
-                url: pdf_url
-            }).then(function(pdf_doc) {
-                __PDF_DOC = pdf_doc;
-                __TOTAL_PAGES = __PDF_DOC.numPages;
-
-                mywindow2 = window.open('', 'PRINT', 'height=1,width=1');
-                mywindow2.document.write('<html><head><title>Comanda</title>');
-                mywindow2.document.write(
-                    '<style>@page{margin-left: 0px;margin-right: 0px;margin-top: 0px;margin-bottom: 0px;} canvas{width:100%}</style>'
-                    );
-                mywindow2.document.write('</body></html>');
-                showPage();
-                mywindow2.document.close();
-                mywindow2.focus();
-                mywindow2.onafterprint = function(event) {
-                    mywindow2.close()
-                };
-                //mywindow.print();
-            }).catch(function(error) {
-                alert(error.message);
-            });
-        }
-
-        function showPage() {
-            __PAGE_RENDERING_IN_PROGRESS = 1;
-
-            for (var page_no = 1; page_no <= __TOTAL_PAGES; page_no++) {
-
-                __PDF_DOC.getPage(page_no).then(function(page) {
-                    page_index++
-
-                    var new_canvas = document.createElement("canvas");
-                    new_canvas.width = 1080;
-                    new_canvas.id = 'canvas' + page_index;
-
-                    mywindow2.document.body.appendChild(new_canvas);
-
-                    // As the canvas is of a fixed width we need to set the scale of the viewport accordingly
-                    var scale_required = new_canvas.width / page.getViewport(1).width;
-
-                    // Get viewport of the page at required scale
-                    var viewport = page.getViewport(scale_required);
-
-                    // Set canvas height
-                    new_canvas.height = viewport.height;
-
-                    var renderContext = {
-                        canvasContext: new_canvas.getContext('2d'),
-                        viewport: viewport
-                    };
-
-
-                    // Render the page contents in the canvas
-                    page.render(renderContext).then(function() {
-                        __PAGE_RENDERING_IN_PROGRESS = 0;
-                        mywindow2.print();
-                    });
-                });
-
-            }
-        }
 
     </script>
 

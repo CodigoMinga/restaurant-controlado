@@ -22,7 +22,6 @@ form{
     left:0px;
     transition: left 0.8s;
     z-index: 30;
-    overflow-y: overlay;
 }
 #sidebar-content{
     display: block;
@@ -31,6 +30,7 @@ form{
     width: 300px;
     background-color: #F4123D;
     z-index: 40;
+    overflow-y: overlay;
 }
 #sidebar-toggle{
     width: 2.5rem;
@@ -105,7 +105,8 @@ form{
     border-color: #F4123D;
 }
 
-#main{
+#main{    
+    overflow: overlay;
     display: block;
     min-height: 100%;
     max-height: 100%;

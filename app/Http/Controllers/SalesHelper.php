@@ -33,10 +33,12 @@ class SalesHelper extends Controller
         if(isset($order)){
             //valida si la boleta ya fue emitida, existe token no deja emitirla denuevo
             if(isset($order->dte_token)){
+                $this->printAgainInvoice($order_id);
+                /*
                 return new Response([
                     'response' => "Esta boleta ya fue emitida, existe token, puede re-imprimirla",
                     'request' => ""
-                ], 400);
+                ], 400);*/
             }
 
             $paramsArr = [];
@@ -122,6 +124,7 @@ class SalesHelper extends Controller
                     "Idempotency-Key: " . $order->empotency_key
                 ],
             ]);
+            
             $response = curl_exec($curl);
             $err = curl_error($curl);
 
@@ -141,7 +144,6 @@ class SalesHelper extends Controller
                     'request' => $paramsArr
                 ], 400);
             } else {
-
                 $order->dte_token= $response->TOKEN;
                 $order->dte_folio= $response->FOLIO;
                 $order->fecha_resolucion_sii= $response->RESOLUCION->fecha;
@@ -164,7 +166,6 @@ class SalesHelper extends Controller
 
     public function printAgainInvoice($order_id){
         $order = Order::find($order_id);
-
 
         if(isset($order)){
             if(isset($order->dte_token)){
@@ -224,13 +225,11 @@ class SalesHelper extends Controller
                 'request' => ""
             ], 400);
         }
-
-
     }
 
     public function removeDte($order_id){
-        $order = Order::find($order_id);
 
+        $order = Order::find($order_id);
 
         if(isset($order)){
             if(isset($order->dte_token)){

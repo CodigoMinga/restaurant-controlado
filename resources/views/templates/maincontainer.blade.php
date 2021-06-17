@@ -103,13 +103,13 @@
     @endif
     <div id="sidebar" align="center">
         <div id="sidebar-content">
-            <img src="{{url('/img/logo.jpg')}}" class="logo-circle">
-            <div class="info-bar mb-3">
-                <p>DELIXIUS SUSHI OFICIAL</p>
-                <p>RUT: 77.324.712-9</p>
-                <p>San Martín 395, Quilicura</p>
-            </div>
             <div>
+                <img src="{{url('/img/logo.jpg')}}" class="logo-circle">
+                <div class="info-bar mb-3">
+                    <p>DELIXIUS SUSHI OFICIAL</p>
+                    <p>RUT: 77.324.712-9</p>
+                    <p>San Martín 395, Quilicura</p>
+                </div>
                 
                 <a class="sidebar-button {{(request()->is('tables')) ? 'active' : '' }}" href="{{ url('tables') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Sectores
