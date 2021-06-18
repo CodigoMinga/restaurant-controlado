@@ -34,16 +34,24 @@ class ProducttypeSeeder extends Seeder
         Producttype::create(['name'=>'Agregar ingrediente','company_id'=>2]);
 
         /*Caregorias codigomingeras*/
-        Producttype::create(['name'=>'California y Avocado','company_id'=>1]);
-        Producttype::create(['name'=>'Hots Rolls','company_id'=>1]);
-        Producttype::create(['name'=>'Chesse Rolls','company_id'=>1]);
-        Producttype::create(['name'=>'Veggie Rolls','company_id'=>1]);
-        Producttype::create(['name'=>'Hosomakis','company_id'=>1]);
-        Producttype::create(['name'=>'Rolls Premium','company_id'=>1]);
+        Producttype::create(['name'=>'Entradas','company_id'=>1]);
+        Producttype::create(['name'=>'Californias sesamo','company_id'=>1]);
+        Producttype::create(['name'=>'Avocado Palta','company_id'=>1]);
+        Producttype::create(['name'=>'Californias masago','company_id'=>1]);
+        Producttype::create(['name'=>'California ciboulette','company_id'=>1]);
+        Producttype::create(['name'=>'Veggie rolls','company_id'=>1]);
+        Producttype::create(['name'=>'Cheese rolls','company_id'=>1]);
+        Producttype::create(['name'=>'Panko','company_id'=>1]);
+        Producttype::create(['name'=>'Avocado salmon','company_id'=>1]);
         Producttype::create(['name'=>'Gohan','company_id'=>1]);
-        Producttype::create(['name'=>'Para Comenzar','company_id'=>1]);
-        Producttype::create(['name'=>'Postres Rolls','company_id'=>1]);
-        Producttype::create(['name'=>'Bebidas','company_id'=>1]);
+        Producttype::create(['name'=>'Extras','company_id'=>1]);
+        Producttype::create(['name'=>'Bebidas y jugos','company_id'=>1]);
+        Producttype::create(['name'=>'Postres','company_id'=>1]);
+        Producttype::create(['name'=>'Rolls Premium','company_id'=>1]);
         Producttype::create(['name'=>'Promociones','company_id'=>1]);
+        Producttype::create(['name'=>'Pedidos Ya','company_id'=>1]);
+        Producttype::create(['name'=>'Tragos','company_id'=>1]);
+        Producttype::create(['name'=>'Handrolls','company_id'=>1]);
+        Producttype::create(['name'=>'Agregar ingrediente','company_id'=>1]);
     }
 }

@@ -18,14 +18,14 @@ class OrderController extends Controller
 {
     public function tables()
     {
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $tables = Table::whereIn('company_id',$companies_id)->get();
+        $company = session('company');
+        $tables = Table::where('company_id',$company->id)->get();
         return view('orders.tableselection', compact('tables'));
     }
     
     public function list(){
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $orders = Order::where('enabled','=',1)->whereIn('company_id',$companies_id)->get();
+        $company = session('company');
+        $orders = Order::where('enabled','=',1)->where('company_id',$company->id)->get();
         foreach ($orders as $key => $order) {
             $order->total=$order->Total;
             $order->ordertype;

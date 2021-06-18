@@ -108,6 +108,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     //LOGOUT
     route::get('/app/logout','MainController@logout');
+    route::post('set/company','MainController@setcompany');
 });
 
 //rutas ajax

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 use Hash;
 use DB;
 use Auth;
+use Session;
 use App\User;
+use App\Company;
 use App\Order;
 use App\Item;
 use App\Orderdetail;
@@ -37,7 +39,12 @@ class MainController extends Controller
 
         if(Auth::attempt(['email' => $user_data['email'], 'password' => $user_data['password'], 'enabled' => 1])){
             $message="[Login] Successfully El usuario ". Auth::user()->email." a iniciado sesión correctamente";
-            return redirect('/tables');
+            if(COUNT(Auth::user()->companies)>1){
+                $companys = Auth::user()->companies;
+                return view('companyselection',compact('companys'));;
+            }else{
+                return redirect('/tables');
+            }
         }
 
         else{
@@ -167,5 +174,11 @@ class MainController extends Controller
     
     function settings(){
         return view('main.settings');
-    }    
+    }
+
+    function setcompany(Request $request){
+        $company = Company::findOrFail($request->company_id);
+        session(['company' => $company]);
+        return redirect('/tables');
+    }
 }

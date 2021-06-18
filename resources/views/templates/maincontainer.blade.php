@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<?php 
+$company = session('company');
+$cashregister = \App\Cashregister::where('company_id',$company->id)->orderBy('id', 'desc')->first();
+if(!$cashregister){
+    $cashregister = new \App\Cashregister;
+    $cashregister->closed = 'not null';
+}
+?>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -106,11 +114,14 @@
             <div>
                 <img src="{{url('/img/logo.jpg')}}" class="logo-circle">
                 <div class="info-bar mb-3">
-                    <p>DELIXIUS SUSHI OFICIAL</p>
-                    <p>RUT: 77.324.712-9</p>
-                    <p>San Martín 395, Quilicura</p>
+                    <p>{{$company->name}}</p>
+                    <p>RUT: {{$company->rut}}</p>
+                    <p>{{$company->direccion}}</p>
                 </div>
                 
+                <a class="sidebar-button {{(request()->is('cashregister')) ? 'active' : '' }}" href="{{ url('cashregister') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">point_of_sale</i>{{$cashregister->closed!=null ? 'Abrir' : 'Cerrar' }} Caja
+                </a>
                 <a class="sidebar-button {{(request()->is('tables')) ? 'active' : '' }}" href="{{ url('tables') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Sectores
                 </a>

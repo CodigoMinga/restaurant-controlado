@@ -32,8 +32,8 @@ class ClientController extends Controller
 
     public function list()
     {
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $clients = Client::whereIn('company_id',$companies_id)->get();
+        $company = session('company');
+        $clients = Client::where('company_id',$company->id)->get();
         foreach ($clients as $key => $client) {
             $client -> commune-> region;
         }
@@ -45,7 +45,6 @@ class ClientController extends Controller
         $client = new Client;  //se crea la variable 
         $regions=Region::all();
         $communes = Commune::all();
-
         return view('clients.add' , compact('client', 'communes','regions')); // para luego pasarla con compact
     }
 
@@ -60,9 +59,8 @@ class ClientController extends Controller
     
     public function getdata()
     {   
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $clients = Client::whereIn('company_id',$companies_id)->get();
-
+        $company = session('company');
+        $clients = Client::where('company_id',$company->id)->get();
         foreach ($clients as $key => $client) {
             $client -> commune -> region;
         }
