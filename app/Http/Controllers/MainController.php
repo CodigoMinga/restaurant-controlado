@@ -43,6 +43,8 @@ class MainController extends Controller
                 $companys = Auth::user()->companies;
                 return view('companyselection',compact('companys'));;
             }else{
+                $company = Auth::user()->companies[0];
+                session(['company' => $company]);
                 return redirect('/tables');
             }
         }
@@ -136,7 +138,7 @@ class MainController extends Controller
 
         //Mas Vendidos
         $query = 
-        "SELECT COUNT(od.id) AS cant,p.name  FROM 
+        "SELECT SUM(od.quantity) AS cant,p.name  FROM 
         orderdetails AS od LEFT JOIN 
         products p ON od.product_id = p.id LEFT JOIN 
         orders o ON od.order_id = o.id 

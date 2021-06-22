@@ -26,7 +26,7 @@ if(!$cashregister){
     <nav>
 
     </nav>
-    <div aria-live="polite" aria-atomic="true" style="position: fixed; min-height: 200px;top:0px;right:0px;">
+    <div aria-live="polite" aria-atomic="true" style="position: fixed; min-height: 100px;top:0px;right:0px;z-index: 5000;">
         <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-agregar'>
             <div class="toast-header ">
             <i class="rounded mr-2 material-icons text-success text-white">receipt</i>
@@ -119,7 +119,7 @@ if(!$cashregister){
                     <p>{{$company->direccion}}</p>
                 </div>
                 
-                <a class="sidebar-button {{(request()->is('cashregister')) ? 'active' : '' }}" href="{{ url('cashregister') }}">
+                <a class="sidebar-button {{(request()->is('cashregister/form')) ? 'active' : '' }}" href="{{ url('cashregister/form') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">point_of_sale</i>{{$cashregister->closed!=null ? 'Abrir' : 'Cerrar' }} Caja
                 </a>
                 <a class="sidebar-button {{(request()->is('tables')) ? 'active' : '' }}" href="{{ url('tables') }}">

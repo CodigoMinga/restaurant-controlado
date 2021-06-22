@@ -99,4 +99,15 @@ class ClientController extends Controller
             return $client;
         }
     }
+
+    
+    public function history($client_id)
+    {
+        //$order = Order::findOrFail($order_id);
+        $client = Client::findOrFail($client_id);
+        foreach ($client->orders as $key => $order) {
+            $order->orderdetails;
+        }
+        return $client->orders;
+    }
 }

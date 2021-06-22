@@ -178,22 +178,6 @@
                             </tr>
                             <tr>
                                 <td>
-                                    IVA Debito
-                                </td>
-                                <td>
-                                    -${{number_format($profit[0]->debit_card *0.19 ,0,",",".")}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Comision Debito
-                                </td>
-                                <td>
-                                    -${{number_format(($profit[0]->debit_card - $profit[0]->debit_card/0.19) * 0.0149 ,0,",",".")}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
                                     Tarjeta de Credito
                                 </td>
                                 <td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\Client;
 use App\Order;
 use App\Orderdetail;
 use App\Ordertype;
@@ -11,6 +12,7 @@ use App\Producttype;
 use App\Discount;
 use App\Delivery;
 use App\Product;
+use App\Cashregister;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,8 +21,19 @@ class OrderController extends Controller
     public function tables()
     {
         $company = session('company');
-        $tables = Table::where('company_id',$company->id)->get();
-        return view('orders.tableselection', compact('tables'));
+        //busco ultima caja registrada de la compañia
+        $cashregister = Cashregister::where('company_id',$company->id)->orderBy('id', 'desc')->first();
+        
+        if(!$cashregister){
+            $cashregister = new Cashregister;
+            $cashregister->closed = 'not null';
+        }
+        if($cashregister->closed==null){
+            $tables = Table::where('company_id',$company->id)->get();
+            return view('orders.tableselection', compact('tables'));
+        }else{
+            return view('cashregister.notfound');
+        }
     }
     
     public function list(){
@@ -54,6 +67,8 @@ class OrderController extends Controller
             $order->table_id = $table->id;
             $order->user_id = Auth::user()->id;
             $order->company_id = $table->company_id;
+            $cashregister = Cashregister::where('company_id',$table->company_id)->whereNull('closed')->orderBy('id', 'desc')->first();
+            $order->cashregister_id = $cashregister->id;
             //Añade el numero interno de la orden, si no hay ninguna la crea como primera
             $last_order = Order::latest('internal_id')->where('company_id','=',$table->company_id)->first();
             if(isset($last_order)){
@@ -196,5 +211,43 @@ class OrderController extends Controller
         }
     }
 
+    
+    public function history($order_id)
+    {
+        $order = Order::findOrFail($order_id);
+        
+        if($order->client_id){
+            $client = Client::findOrFail($order->client_id);
+            foreach ($client->orders as $key => $order_item) {
+                foreach ($order_item->orderdetails as $key => $orderdetail) {
+                    $orderdetail->product;
+                }
+            }
+            return $client->orders;
+        }else{
+            return 'necesita seleccionar cliente';
+        }
+    }
 
+    
+    
+    public function repeat($order_id,$order_id_old)
+    {
+        $order      = Order::findOrFail($order_id);
+        $order_old  = Order::findOrFail($order_id_old);
+        foreach ($order_old->orderdetails as $key => $orderdetail_old) {
+
+            $product    = Product::findOrFail($orderdetail_old->product_id);
+            $orderdetail = new Orderdetail();
+            $orderdetail->product_id    = $product->id;
+            $orderdetail->order_id      = $order->id;
+            $orderdetail->quantity      = $orderdetail_old->quantity;
+            $orderdetail->description   = $orderdetail_old->description;
+            $orderdetail->unit_ammount  = $product->price;
+            $orderdetail->total_ammount = intval($orderdetail_old->quantity) * intval($product->price);
+            $orderdetail->save();
+            $this->substock($orderdetail);
+        }
+        return redirect('/orders/'.$order->id)->with('success', 'Orden Repetida');
+    }
 }

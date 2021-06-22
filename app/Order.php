@@ -94,4 +94,9 @@ class Order extends Model
         }
         return $total;
     }
+
+    public function cashregister()
+    {
+        return $this->belongsTo('App\Cashregister');
+    }
 }

@@ -26,7 +26,7 @@ class AddDtetokenToOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            //
+            $table->dropColumn('dte_token');
         });
     }
 }

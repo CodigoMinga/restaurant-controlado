@@ -27,6 +27,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/clients/getdata',                          'ClientController@getdata');
     Route::post('/clients/store',                           'ClientController@store');
 
+    //pedidos del cliente
+    Route::get('/clients/{client_id}/history',             'ClientController@history');
+
     //ORDENES
     Route::get('/orders/list',                              'OrderController@list');
     Route::get('/orders/start/{table_id}',                  'OrderController@start');
@@ -40,6 +43,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/orders/products/attach',                  'OrderController@productAttach');
     Route::post('/orders/products/detach',                  'OrderController@productDetach');
     Route::post('/orders/command',                          'OrderController@command');
+
+    //pedidos del cliente de la orden
+    Route::get('/orders/{order_id}/clienthistory',          'OrderController@history');
+    Route::get('/orders/{order_id}/repeat/{order_id_old}',  'OrderController@repeat');
 
 
     //ESTAS RUTAS NECESITAS SER COMPANY ADMIN
@@ -109,6 +116,12 @@ Route::group(['middleware' => ['auth']], function() {
     //LOGOUT
     route::get('/app/logout','MainController@logout');
     route::post('set/company','MainController@setcompany');
+
+    //APERTURA Y CIERRE DE CAJA
+    route::get('/cashregister/form','CashregisterController@form');
+    route::post('/cashregister/open','CashregisterController@open');
+    route::post('/cashregister/close','CashregisterController@close');
+    
 });
 
 //rutas ajax

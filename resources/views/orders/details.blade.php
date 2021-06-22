@@ -157,11 +157,17 @@
                         </tr>
                         @if($order->closed==0)
                         <tr>
-                            <td class="p-0 m-0" colspan="2">
-                                <a class="btn btn-block btn-primary btn-sm" id="clientButton">
-                                    <span class="material-icons">person</span>
-                                    Cliente
-                                </a>
+                            <td colspan="2" class="p-0 m-0">
+                                <div class="btn-group w-100" role="group">
+                                    <a class="btn btn-primary btn-sm" style="border:none" id="clientButton">
+                                        <span class="material-icons">person</span>
+                                        Clientes
+                                    </a>
+                                    <a class="btn btn-info btn-sm"  style="border:none" id="historyButton">
+                                        <span class="material-icons">folder</span>
+                                        Pedidos
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         @endif
@@ -389,8 +395,7 @@
             </button>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content  bg-dark">
                     <div class="modal-header">
@@ -501,6 +506,44 @@
                 </div>
             </div>
         </div>
+
+        
+        <!-- Modal -->
+        <div class="modal fade" id="historyModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Pedidos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" align="center">
+                        <table class="table table-dark">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Orden
+                                    </th>
+                                    <th>
+                                        Detalle
+                                    </th>
+                                    <th>
+                                        Repetir
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyList">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
     </div>
 
     <div id="imprimir">
@@ -772,6 +815,55 @@
         $('#clientButton').click(function() {
             $('#clientList').modal('show');
         });
+
+        $('#historyButton').click(function() {
+            $.get("{{ url('orders/'.$order->id.'/clienthistory') }}", function(data) {
+                if(typeof data === 'object'){
+                    loadHistory(data);
+                }else{
+                    toastError(data);
+                }
+            });
+        });
+
+        function loadHistory(history){
+            $('#historyList').html('');
+            history.forEach(order => {
+                if(order.closed==1 && order.enabled==1){
+                    var ntr = document.createElement('tr');
+                    //agregar numero de orden
+                    var ntd = document.createElement('td');
+                    ntd.append(order.internal_id);
+                    ntr.append(ntd);
+
+                    //agregar detalle de 
+                    var nul = document.createElement('ul');
+                    order.orderdetails.forEach(orderdetail => {
+                        if(orderdetail.enabled==1){
+                            var nli = document.createElement('li');
+                            nli.append(orderdetail.product.name+" X"+orderdetail.quantity);
+                            nul.append(nli);
+                        }
+                    });
+                    var ntd = document.createElement('td');
+                    ntd.append(nul);
+                    ntr.append(ntd);
+
+
+                    //agregar numero de orden
+                    var ntd = document.createElement('td');
+                    var na = document.createElement('a');
+                    na.classList.add("btn", "btn-primary","material-icons");
+                    na.innerText="refresh";
+                    na.href="{{url('orders/'.$order->id.'/repeat')}}/"+order.id;
+                    ntd.append(na);
+                    ntr.append(ntd);
+
+                    $('#historyList').append(ntr);
+                }
+            });
+            $('#historyModal').modal('show');
+        }
 
         $(document).ready(function() {
 

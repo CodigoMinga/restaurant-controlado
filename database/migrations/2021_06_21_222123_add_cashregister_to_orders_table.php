@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDtefolioToOrdersTable extends Migration
+class AddCashregisterToOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,9 @@ class AddDtefolioToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->bigInteger('dte_folio')->nullable();
-            $table->date('fecha_resolucion_sii')->nullable();
-            $table->longText('empotency_key')->nullable();
+            //cashregister
+            $table->bigInteger('cashregister_id')->unsigned();
+            $table->foreign('cashregister_id')->references('id')->on('cashregisters')->onUpdate('RESTRICT')->onDelete('RESTRICT');
         });
     }
 
@@ -28,10 +28,8 @@ class AddDtefolioToOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            
-            $table->dropColumn('dte_folio');
-            $table->dropColumn('fecha_resolucion_sii');
-            $table->dropColumn('empotency_key');
+            $table->dropColumn('cashregister_id');
+            $table->dropForeign('cashregister_id');
         });
     }
 }
