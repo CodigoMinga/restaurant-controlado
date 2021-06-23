@@ -20,14 +20,10 @@ class Client extends Model
     /**
      * @var array
      */
-    protected $fillable = ['client_id','created_at', 'updated_at', 'name', 'phone', 'address', 'company_id','commune_id'];
+    protected $fillable = ['created_at', 'updated_at', 'name', 'phone', 'address', 'company_id','commune_id','enabled'];
 
     public function commune()
     {
-        return $this->hasMany('App\Commune');
-    }
-    public function region()
-    {
-        return $this->hasMany('App\Region');
+        return $this->belongsTo('App\Commune');
     }
 }

@@ -62,13 +62,11 @@
                 Agregar Receta
             </a>
         </div>
-        <ul>
-            @foreach($product->prescriptions as $prescription)
-                @if($prescription->enabled==1)
-                    <li><a href="{{url('prescriptions')}}/{{$prescription->id}}">{{$prescription->description}}</a></li>
-                @endif
-            @endforeach
-        </ul>
+        @foreach($product->prescriptions as $prescription)
+            @if($prescription->enabled==1)
+                <a class="btn btn-block btn-primary" href="{{url('prescriptions')}}/{{$prescription->id}}">{{$prescription->created_at}} - {{$prescription->description}}</a>
+            @endif
+        @endforeach
     </div>
     <!-- Modal -->
     <div class="modal fade" id="prescription-modal" tabindex="-1" data-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true" aria-labelledby="staticBackdropLabel">

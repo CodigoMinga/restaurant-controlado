@@ -11,7 +11,7 @@
     <div class="container pt-3">
         <div class="d-flex justify-content-between align-items-center">
             <h1>Lista de Categorias</h1>
-            <a  href="{{ url('/') }}/app/producttypes/add" class="btn btn-success">
+            <a  href="{{ url('producttypes/add') }}" class="btn btn-success">
                 <i class="material-icons">add</i>
                 Agregar Categoria
             </a>
@@ -38,7 +38,7 @@
                 "columns": [
                     { "data": "name","width":"90%"},
                     { "data": "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/producttypes/'+data+'" >description</a>';
+                        return '<a class="btn btn-light material-icons" href="{{ url("producttypes")}}/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {

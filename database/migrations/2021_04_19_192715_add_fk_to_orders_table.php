@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRegionsTable extends Migration
+class AddFkToOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateRegionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('regions', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-
-            $table->string('name', 128);
-            $table->string('ordinal', 4);
-
+        Schema::table('orders', function (Blueprint $table) {
+            $table->bigInteger('client_id')->unsigned()->nullable();
+            $table->foreign('client_id')->references('id')->on('clients');
         });
     }
 
@@ -30,6 +26,8 @@ class CreateRegionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('regions');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropForeign(['client_id']);
+        });
     }
 }
