@@ -157,7 +157,7 @@ class OrderController extends Controller
     {
         $company = session('company');
         $order = Order::findOrFail($order_id);
-        $tables = Table::where('company_id',$$company->id)->get();
+        $tables = Table::where('company_id',$company->id)->get();
         return view('orders.changetable', compact('tables','order'));
     }
     
