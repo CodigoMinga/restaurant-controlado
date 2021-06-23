@@ -10,23 +10,21 @@ use Illuminate\Http\Request;
 
 class ProducttypeController extends Controller
 {   
-    public function list(){
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $producttypes = Producttype::whereIn('company_id',$companies_id)->get();
+    public function list(){        
+        $company = session('company');
+        $producttypes = Producttype::where('enabled',1)->where('company_id',$company->id)->get();
         return view('producttypes.list',compact('producttypes'));
     }
 
     public function add(){
-        $companys = Auth::user()->companies()->get();
         $producttype = new Producttype;
-        return view('producttypes.form',compact('companys','producttype'));
+        return view('producttypes.form',compact('producttype'));
     }
    
     public function details($producttype_id)
     {
-        $companys = Auth::user()->companies()->get();
         $producttype = Producttype::find($producttype_id);
-        return view('producttypes.form',compact('companys','producttype'));
+        return view('producttypes.form',compact('producttype'));
     }
 
     public function process(Request $request)

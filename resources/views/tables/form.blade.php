@@ -12,23 +12,10 @@
 
         <form method="post" action="{{url('tables/process')}}">
             {{csrf_field()}}
-
-            @if (!$table->id)
-                @if(count($companys)>1)
-                <div class="form-group">
-                    <label for="company_id">Restoran:</label>
-                    <select name="company_id" id="company_id" class="form-control">
-                        @foreach($companys as $company)
-                        <option value="{{ $company->id }}">{{$company->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                @else
-                <input type="hidden" name="company_id" value="{{$companys[0]->id}}">
-                @endif
-            @endif
-
             <input type="hidden" name="id" value="{{ $table->id }}">
+            @if (!$table->id)
+            <input type="hidden" name="company_id" value="{{session('company')->id }}">
+            @endif
             <div class="form-group">
                 <label for="tabletype_id">Tipo de Mesa:</label>
                 <select name="tabletype_id" id="tabletype_id" class="form-control">

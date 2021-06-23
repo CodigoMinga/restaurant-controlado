@@ -15,7 +15,5 @@ class RoleSeeder extends Seeder
         Role::create(['name'=>'superadmin','description'=>'Usuario super administrador, puede ver todo (codigominga)']);
         Role::create(['name'=>'companyadmin','description'=>'Dueño de las compañias']);
         Role::create(['name'=>'normaluser','description'=>'Usuario Normal']);
-
-
     }
 }

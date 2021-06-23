@@ -3,11 +3,14 @@
 <style></style>
 
 @section('info')
-    <div>
+    <div id="order-info">
         <h6>{{$order->table->name}}</h6>
-        <h6 id="order_total">{{$order ? $order->Total : 0}}</h6>
-        <a href="{{url('/orderdetails/'.$order->id)}}" class="btn btn-light">
-            ORDEN
+        <h6>$<span id="order_total">{{$order ? number_format($order->Total, 0, '', '.') : 0}}</span></h6>
+        <a href="{{url('/orders/'.$order->id)}}" class="btn">
+            <span class="material-icons">
+                receipt_long
+            </span>
+            Ver Orden
         </a>
     </div>    
 @endsection
@@ -57,7 +60,7 @@
     <div class="modal fade" id="protuct-modal" tabindex="-1" data-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true" aria-labelledby="staticBackdropLabel">
         <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-dark">
-            <form id="productattach-form" method="POST" action="{{url('/')}}/productattach">
+            <form id="productattach-form" method="POST" action="{{url('/')}}/orders/products/attach">
                 {{csrf_field()}}
                 <div class="modal-header">
                 <h5 class="modal-title" id="ModalLabel">...</h5>
@@ -135,7 +138,7 @@
                 var formData = new FormData(productattachForm);
                 var activate = document.activeElement.id;
                 $.ajax({
-                    url: "{{url('/')}}/productattach",
+                    url: "{{url('/')}}/orders/products/attach",
                     type: "POST",
                     data: formData,
                     processData: false,  // tell jQuery not to process the data
@@ -143,9 +146,9 @@
                 }).done(function( data ) {
                     if(typeof(data)=='object'){
                         if(data.id){
-                            order_total.innerText=data.Total;
+                            order_total.innerText= miles(data.Total);
                             if(activate=="a-orden"){
-                                window.location.href = "{{url('/')}}/orderdetails/" + data.id;
+                                window.location.href = "{{url('/')}}/orders/" + data.id;
                             }else{
                                 $('#toast-agregar .toast-body').eq(0).html(formData.get('product_name'));
                                 $('#toast-agregar').toast('show');
@@ -160,5 +163,9 @@
                 });
             });
         });
+
+        function miles(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
     </script>
 @stop

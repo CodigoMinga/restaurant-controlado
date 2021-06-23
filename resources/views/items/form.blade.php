@@ -12,17 +12,8 @@
         <form method="post" action="{{ url('items/process') }}">
             {{ csrf_field() }}
             <input type="hidden" name="id" value="{{ $item->id }}">
-            @if (count($companys) > 1)
-                <div class="form-group">
-                    <label for="company_id">Empresa:</label>
-                    <select name="company_id" id="company_id">
-                        @foreach ($companys as $company)
-                            <option value="{{ $company->id }}">{{ $company->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            @else
-                <input type="hidden" name="company_id" value="{{ $companys[0]->id }}">
+            @if (!$item->id)
+            <input type="hidden" name="company_id" value="{{session('company')->id }}">
             @endif
             <div class="form-group">
                 <label>Nombre </label>
