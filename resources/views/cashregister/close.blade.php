@@ -100,7 +100,7 @@
                 </button>
             </div>
         </form>
-        
+
     </div>
     <script>
         var orders ={!! json_encode($cashregister->orders) !!};
@@ -111,23 +111,33 @@
             $('#credit_card').html(pesos(breakdown.credit_card));
             $('#credit_card_comision').html(pesos(breakdown.credit_card_comision));
             $('#credit_card_iva').html(pesos(breakdown.credit_card_iva));
-            $('#credit_card_resto').html(pesos(breakdown.credit_card - breakdown.credit_card_comision - breakdown.credit_card_iva));
+            var credit_card_resto = breakdown.credit_card - breakdown.credit_card_comision - breakdown.credit_card_iva;
+            $('#credit_card_resto').html(pesos(credit_card_resto));
 
             
             $('#debit_card').html(pesos(breakdown.debit_card));
             $('#debit_card_comision').html(pesos(breakdown.debit_card_comision));
             $('#debit_card_iva').html(pesos(breakdown.debit_card_iva));
-            $('#debit_card_resto').html(pesos(breakdown.debit_card - breakdown.debit_card_comision - breakdown.debit_card_iva));
+            var debit_card_resto = breakdown.debit_card - breakdown.debit_card_comision - breakdown.debit_card_iva;
+            $('#debit_card_resto').html(pesos(debit_card_resto));
 
             $('#transfer').html(pesos(breakdown.transfer));
             $('#transfer_comision').html("-");
             $('#transfer_iva').html(pesos(breakdown.transfer_iva));
-            $('#transfer_resto').html(pesos(breakdown.transfer  - breakdown.transfer_iva));
+            var transfer_resto = breakdown.transfer - breakdown.transfer_iva;
+            $('#transfer_resto').html(pesos(transfer_resto));
             
             $('#efective').html(pesos(breakdown.efective));
             $('#efective_comision').html("-");
             $('#efective_iva').html(pesos(breakdown.efective_iva));
-            $('#efective_resto').html(pesos(breakdown.efective - breakdown.efective_iva));
+            var efective_resto = breakdown.efective - breakdown.efective_iva;
+            $('#efective_resto').html(pesos(efective_resto));
+
+            
+            $('#Total').html(pesos(breakdown.credit_card + breakdown.debit_card + breakdown.transfer + breakdown.efective));
+            $('#Total_comision').html(pesos(breakdown.debit_card_comision + breakdown.credit_card_comision));
+            $('#Total_iva').html(pesos(breakdown.efective_iva + breakdown.transfer_iva + breakdown.debit_card_iva + breakdown.credit_card_iva));
+            $('#Total_resto').html(pesos(efective_resto + transfer_resto + debit_card_resto + credit_card_resto));
         });
         
         function pesos(x) {
