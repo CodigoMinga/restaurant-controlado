@@ -15,9 +15,9 @@ class UserController extends Controller
     
     public function list(){
         //1 Compañias a la que pertenece el usuario
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+        $company = session('company');
         //Consultar a la tabla company_user las id de los usuarios que pertenecen a las compañias dichas
-        $users_id= DB::table('company_user')->whereIn('company_id',$companies_id)->pluck('user_id')->toArray();
+        $users_id= DB::table('company_user')->where('company_id',$company->id)->pluck('user_id')->toArray();
         //buscar los usuarios con las id obtenidas
         $users = User::WhereIn('id',$users_id)->get();
         return view('users.list',compact('users'));
