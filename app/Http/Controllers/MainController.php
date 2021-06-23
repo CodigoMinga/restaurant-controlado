@@ -124,17 +124,17 @@ class MainController extends Controller
 
     
     function dashboard(){
+        $company = session('company');
+
         $desde = date('Y-m-d', strtotime('monday this week'));
-        $hasta = date('Y-m-d', strtotime('monday next week'));        
-        $companies_id = Auth::user()->companies()->pluck('company_id');
-        $companiesString = $companies_id->implode(',');
+        $hasta = date('Y-m-d', strtotime('monday next week'));
         
         //ventas de la semana
-        $query = "SELECT COUNT(id) AS sales, DAYOFWEEK(created_at) AS dayweek FROM orders WHERE enabled = 1 AND company_id IN ($companiesString) AND created_at > '$desde' AND created_at < '$hasta' GROUP BY DATE(created_at)";       
+        $query = "SELECT COUNT(id) AS sales, DAYOFWEEK(created_at) AS dayweek FROM orders WHERE enabled = 1 AND company_id = $company->id AND created_at > '$desde' AND created_at < '$hasta' GROUP BY DATE(created_at)";       
         $salesweek = DB::select($query);
 
         //bajo stock
-        $lowstock = Item::where('enabled',1)->whereIn('company_id',$companies_id->toArray())->orderByRaw('(stock - warning) ASC')->limit(10)->get();
+        $lowstock = Item::where('enabled',1)->where('company_id',$company->id)->orderByRaw('(stock - warning) ASC')->limit(10)->get();
 
         //Mas Vendidos
         $query = 
@@ -145,13 +145,13 @@ class MainController extends Controller
         WHERE 
         od.enabled = 1 AND 
         o.enabled = 1 AND 
-        o.company_id IN ($companiesString) 
+        o.company_id = $company->id 
         GROUP BY od.product_id ORDER BY cant DESC LIMIT 7";
         $salesbest = DB::select($query);
 
         //Ganacia
         $order_totals = 0;
-        $orders = Order::where('enabled',1)->get();
+        $orders = Order::where('enabled',1)->where('company_id',$company->id)->get();
         foreach ($orders as $key => $order) {
             $order_totals=$order_totals+$order->Total;
         }
@@ -165,10 +165,12 @@ class MainController extends Controller
         SUM(discount) AS discount, 
         SUM(tip) AS tip, 
         SUM(delivery) AS delivery 
-        FROM orders";
+        FROM orders
+        WHERE 
+        company_id = $company->id AND
+        enabled = 1
+        ";
         $profit = DB::select($query);
-        
-        //dd($profit);
 
         return view('main.dashboard',compact('salesweek','lowstock','salesbest','profit','order_totals'));
     }

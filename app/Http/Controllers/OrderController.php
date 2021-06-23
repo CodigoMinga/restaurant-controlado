@@ -106,8 +106,12 @@ class OrderController extends Controller
     public function products($order_id)
     {
         $order = Order::findOrFail($order_id);
-        $producttypes = Producttype::where('company_id',$order->company_id)->get();
-        return view('orders.products', compact('producttypes','order'));
+        if($order->dte_token==null){
+            $producttypes = Producttype::where('company_id',$order->company_id)->get();
+            return view('orders.products', compact('producttypes','order'));
+        }else{
+            return back()->with('error','No se puede agregar más productos, la boleta ya fue emitida');
+        }
     }
 
     public function productAttach(Request $request)
@@ -151,9 +155,9 @@ class OrderController extends Controller
 
     public function changetable($order_id)
     {
+        $company = session('company');
         $order = Order::findOrFail($order_id);
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $tables = Table::whereIn('company_id',$companies_id)->get();
+        $tables = Table::where('company_id',$$company->id)->get();
         return view('orders.changetable', compact('tables','order'));
     }
     
@@ -166,15 +170,18 @@ class OrderController extends Controller
         return redirect('/orders/'.$order->id)->with('success', 'Mesa cambiada correctamente');
     }
 
-    public function command(Request $request)
+    public function command($order_id)
     {
-        $orderdetail_ids = $request->orderdetail_id;
-        foreach ($orderdetail_ids as $key => $orderdetail_id) {
-            $orderdetail = Orderdetail::findOrFail($orderdetail_id);
-            $orderdetail->command=1;
-            $orderdetail->save();
+        $order = Order::findOrFail($order_id);
+        $orderdetails = $order->orderdetails;
+        foreach ($orderdetails as $key => $orderdetail) {
+            $orderdetail->product;
+            if($orderdetail->command==0  && $orderdetail->enabled){
+                $orderdetail->command=1;
+                $orderdetail->save();
+            }
         }
-        return true;
+        return $orderdetails;
     }
 
     public function substock($orderdetail){
