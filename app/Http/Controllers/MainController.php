@@ -130,7 +130,7 @@ class MainController extends Controller
         $hasta = date('Y-m-d', strtotime('monday next week'));
         
         //ventas de la semana
-        $query = "SELECT COUNT(id) AS sales, DAYOFWEEK(created_at) AS dayweek FROM orders WHERE enabled = 1 AND company_id = $company->id AND created_at > '$desde' AND created_at < '$hasta' GROUP BY DATE(created_at)";       
+        $query = "SELECT COUNT(internal_id) AS sales, DAYOFWEEK(created_at) AS dayweek FROM orders WHERE enabled = 1 AND company_id = $company->id AND created_at > '$desde' AND created_at < '$hasta' GROUP BY DATE(created_at)";       
         $salesweek = DB::select($query);
 
         //bajo stock
