@@ -1,29 +1,27 @@
- @extends('templates.maincontainer')
+@extends('templates.maincontainer')
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap.min.css"/>
+
 <style>
     #tabla_filter,#tabla_paginate{
         text-align: right;
-    }
-    .alert-icon{
-        vertical-align: -6px;
     }
 </style>
 
 @section('content')
     <div class="container pt-3">
         <div class="d-flex justify-content-between align-items-center">
-            <h1>Lista de Insumos</h1>
-            <a  href="{{url('/items/add')}}" class="btn btn-success">
+            <h1>Lista de Mesas</h1>
+            <a  href="{{ url('tables/add')}}" class="btn btn-success">
                 <i class="material-icons">add</i>
-                Agregar Insumo
+                Agregar Mesa
             </a>
         </div>
         <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
             <thead>
                 <tr>
-                    <th>Insumos</th>
-                    <th>Stock</th>
+                    <th>Tipo de Mesa</th>
+                    <th>Nombre de Mesa</th>
                     <th>Acción</th>
                 </tr>
             </thead>
@@ -38,21 +36,12 @@
         $(document).ready(function() {
             $('#tabla').DataTable({
                 responsive: true,
-                "data": {!! json_encode($items->toArray()) !!},
+                "data": {!! json_encode($tables->toArray()) !!},
                 "columns": [
+                    { "data": "tabletype.name","width":"30%"},
                     { "data": "name","width":"60%"},
-                    { "data": "stock", render : function ( data, type, row, meta ) {
-                        var aux='';
-                        if(parseFloat(data)<parseFloat(row.warning)){
-                            aux=' <i class="material-icons alert-icon text-warning">report_problem</i>';
-                        }
-                        if(parseFloat(data)<parseFloat(row.alert)){
-                            aux=' <i class="material-icons alert-icon text-danger">report</i>';
-                        }
-                        return data +" "+row.measureunit.name+aux;
-                    },"width":"15%"},
-                    { "data": "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-light material-icons" href="{{ url("/items")}}/'+data+'" >description</a>';
+                    { data: "id", render : function ( data, type, row, meta ){
+                        return '<a class="btn btn-light material-icons" href="{{ url("tables")}}/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {

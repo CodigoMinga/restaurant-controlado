@@ -6,7 +6,7 @@
     <div>
         <h6>{{$order->table->name}}</h6>
         <h6 id="order_total">{{$order ? $order->Total : 0}}</h6>
-        <a href="{{url('/tableorder/'.$order->id)}}" class="btn btn-light">
+        <a href="{{url('/orderdetails/'.$order->id)}}" class="btn btn-light">
             ORDEN
         </a>
     </div>    

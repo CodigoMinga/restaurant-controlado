@@ -1,4 +1,5 @@
 @extends('templates.maincontainer')
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap.min.css"/>
 <style>
     #imprimir{
         display: block;
@@ -18,139 +19,247 @@
         display: block;
         width:120px;
     }
+    #modal-table .row{
+        margin:0px;
+    }
+    #modal-table .row:nth-child(2) .col-sm-12{
+        margin:0px;
+        padding: 0px;
+    }
+    .dataTables_filter, .dataTables_info { display: none; }
+
+    .table-dark.table-hover tbody tr:hover {
+        color: #fff;
+        background-color: rgba(255,255,255,.85);
+    }
+    .bg-select{
+        background: #0d47a1;
+    }
+    .bg-select:hover{
+        background-color: #0d47a1!important;
+    }
+    .inputtable{
+        width:100%;
+        height:33px;
+    }
+
 </style>
 @section('content')
-    <div class="p-3">
+    <div class="container p-3">
         <h1>Orden: {{$order->internal_id}}</h1>
-        <table class="table table-striped table-sm table-dark w-50">
-            <tr>
-                <th>
-                    Apertura
-                </th>
-                <td>
-                    {{date("d/m/Y H:i:s", strtotime($order->created_at))}}
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Garzón
-                </th>
-                <td>
-                    {{$order->user->name}}
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Mesa
-                </th>
-                <td>
-                    {{$order->table->name}}
-                </td>
-            </tr>
-        </table>
-        <table class="table table-striped table-sm table-dark">
-            <thead>
-                <tr>
-                    <th width=1>
-                        Seleccionar
-                    </th>
-                    <th>
-                        Producto
-                    </th>
-                    <th width=1>
-                        Cant.
-                    </th>
-                    <th width=1>
-                        Precio Unit.
-                    </th>
-                    <th width=1 style="text-align: right">
-                        Precio Total.
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($order->orderdetails as $orderdetail)
+        <div class="row"> 
+            <div class="col">
+                <table class="table table-striped table-sm table-dark">
                     <tr>
-                        <td align="center">
-                            <input type="checkbox" name="" id="">
-                        </td>
+                        <th>
+                            Apertura
+                        </th>
                         <td>
-                            {{$orderdetail->product->name}}<br>
-                            <small>{{$orderdetail->description}}</small>
-                        </td>
-                        <td align="right">
-                            {{number_format($orderdetail->quantity, 0, '', '.')}}
-                        </td>
-                        <td align="right">
-                            {{number_format($orderdetail->unit_ammount, 0, '', '.')}}
-                        </td>
-                        <td align="right">
-                            {{number_format($orderdetail->total_ammount, 0, '', '.')}}
+                            {{date("d/m/Y H:i:s", strtotime($order->created_at))}}
                         </td>
                     </tr>
-                @endforeach
-            </tbody>
-            <tfoot align="right">
-                <tr>
-                    <th colspan="4" >
-                        <p class="m-0" align="right">Total</p>
-                    </th>
-                    <td>
-                        {{number_format($order->Total, 0, '', '.') }}
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-        <table style="color:white">
+                    <tr>
+                        <th>
+                            Garzón
+                        </th>
+                        <td>
+                            {{$order->user->name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Selector
+                        </th>
+                        <td>
+                            {{$order->table->tabletype->name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Mesa
+                        </th>
+                        <td>
+                            {{$order->table->name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Tipo
+                        </th>
+                        <td style="padding:0px">
+                            <select name="ordertype_id" class="inputtable">
+                                @foreach ($ordertypes as $ordertype)
+                                    <option value="{{$ordertype->id}}">{{$ordertype->name}}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col">
+                <table class="table table-striped table-sm table-dark" style="">
+                    <tr>
+                        <th>
+                            Nombre
+                        </th>
+                        <td id="client_name">
+                            {{$order->client ? $order->client->name : ''}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Teléfono
+                        </th>
+                        <td id="client_phone">
+                            {{$order->client ? $order->client->phone : ''}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Comuna
+                        </th>
+                        <td id="client_commune">
+                            {{$order->client ? $order->client->commune->name : ''}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Dirección
+                        </th>
+                        <td id="client_address">
+                            {{$order->client ? $order->client->address : ''}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="p-0 m-0" colspan="2">
+                            <button type="button" class="btn btn-block btn-primary btn-sm" id="clientButton">
+                                <span class="material-icons">person</span>
+                                Cliente
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <form id="productos">
+            {{csrf_field()}}
+            <table class="table table-striped table-sm table-dark">
+                <thead>
+                    <tr>
+                        <th>
+                            Producto
+                        </th>
+                        <th width=1>
+                            Comanda
+                        </th>
+                        <th width=1>
+                            Pagado
+                        </th>
+                        <th width=1>
+                            Cant.
+                        </th>
+                        <th width=1 >
+                            P.Unit.
+                        </th>
+                        <th width=1 style="text-align: right">
+                            P.Total.
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($order->orderdetails as $orderdetail)
+                        <tr>
+                            <td>
+                                {{$orderdetail->product->name}}<br>
+                                <small>{{$orderdetail->description}}</small>
+                                <input type="hidden" name="orderdetail_id[]" value="{{$orderdetail->id}}">
+                            </td>
+                            <td align="center">
+                                @if($orderdetail->command)
+                                    <span class="material-icons text-success">done</span>
+                                @endif
+                            </td>
+                            <td align="center">
+                                @if($orderdetail->paid)
+                                    <span class="material-icons text-success">done</span>
+                                @endif
+                            </td>
+                            <td align="right">
+                                {{number_format($orderdetail->quantity, 0, '', '.')}}
+                            </td>
+                            <td align="right">
+                                {{number_format($orderdetail->unit_ammount, 0, '', '.')}}
+                            </td>
+                            <td align="right">
+                                {{number_format($orderdetail->total_ammount, 0, '', '.')}}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </form>
+        <table class="table table-striped table-sm table-dark">
             <tr>
+                <th width=1>
+                    Envio
+                </th>
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="descuento" class="dinero inputtable">
+                </td>
                 <th>
+                    Consumo
+                </th>
+                <td>
+                    {{number_format($order->Total, 0, '', '.') }}
+                </td>
+            </tr>
+            <tr>
+                <th width=1>
                     Descuento
                 </th>
-                <td width=1>
-                    <input type="number"    size="6" value="0" id="descuento" class="dinero">
-                </td>
-                <td>
-                    <input type="text"      placeholder="Razón del descuento">
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="descuento" class="dinero inputtable">
+                    <input type="text"      placeholder="Razón del descuento"   class="inputtable">
                 </td>
             </tr>
             <tr>
-                <th>
+                <th width=1 >
                     Transferencia
                 </th>
-                <td>
-                    <input type="number"    size="6" value="0" id="transferencia" class="dinero">
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="transferencia"  class="dinero inputtable">
                 </td>
             </tr>
             <tr>
-                <th>
+                <th width=1>
                     T.de Debito
                 </th>
-                <td>
-                    <input type="number"    size="6" value="0" id="debito" class="dinero">
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="debito"  class="dinero inputtable">
                 </td>
             </tr>
             <tr>
-                <th>
+                <th width=1>
                     T.de Credito
                 </th>
-                <td>
-                    <input type="number"    size="6" value="0" id="credito" class="dinero">
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="credito"  class="dinero inputtable">
                 </td>
             </tr>
             <tr>
-                <th>
+                <th width=1>
                     Efectivo
                 </th>
-                <td>
-                    <input type="number"    size="6" value="0" id="efectivo" class="dinero">
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="efectivo"  class="dinero inputtable">
                 </td>
             </tr>
             <tr>
-                <th>
+                <th width=1>
                     Vuelto
                 </th>
-                <td>
-                    <input type="number"    size="6" value="0" id="vuelto" readonly>
+                <td class="p-0 m-0">
+                    <input type="number"    size="6" value="0" id="vuelto" readonly  class="inputtable">
                 </td>
             </tr>
         </table>
@@ -161,12 +270,90 @@
         <a href="{{url('/changetable/'.$order->id)}}" class="btn btn-danger btn-lg">
             Cambiar Mesa
         </a>
-        <button  onclick="Print()" class="btn btn-primary btn-lg">
+        <button  onclick="comanda()" class="btn btn-primary btn-lg">
             Comanda
         </button>
         <button  onclick="PrintBoleta()" class="btn btn-warning btn-lg">
             Boleta
         </button>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content  bg-dark">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Clientes</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body p-0" id="modal-table">
+                        <div class="p-2">
+                            <form id="client-form" class="was-validated">
+                                {{csrf_field()}}
+                                <input type="hidden" name="id">
+                                <input type="hidden" name="company_id" value="{{$order->company_id}}">
+                                <input type="hidden" name="order_id" value="{{$order->id}}">
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-6 mb-2">
+                                        <label class="mb-1">Nombre</label>
+                                        <input type="text" class="form-control form-control-sm" name="name" id="client-name" required>
+                                    </div>
+                                    <div class="form-group col-12 col-sm-6 mb-2">
+                                        <label class="mb-1">Teléfono</label>
+                                        <input type="text" class="form-control form-control-sm" name="phone" id="client-phone" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-6 mb-2">
+                                        <label class="mb-1">Región</label>
+                                        <select class="custom-select custom-select-sm" name="region_id" id="region_select"> 
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-12 col-sm-6 mb-2">
+                                        <label class="mb-1">Comuna</label>
+                                        <select class="custom-select custom-select-sm" name="commune_id" id="commune_select"> 
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label class="mb-1">Dirección</label>
+                                    <input type="text" class="form-control form-control-sm" name="address" required>
+                                </div>
+                            </form>
+                            <div>
+                                <button type="button" class="btn btn-success"   onclick="clientStore()">
+                                    <span class="material-icons">send</span>
+                                    Guardar
+                                </button>
+                                <button type="button" class="btn btn-primary"   onclick="clientNew()">
+                                    <span class="material-icons">person_add</span>
+                                    Nuevo
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">                                    
+                                    <span class="material-icons">close</span>
+                                    Volver
+                                </button>
+                            </div>
+                        </div>                       
+                        <div style="display:block;width:100%;min-height:40vh" id='container'>
+                            <table id="tabla" class="table table-dark table-sm mb-0 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Comuna</th>
+                                        <th>Dirección</th>
+                                        <th>Teléfono</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="imprimir">
         <h3 style="margin-bottom:0px">ORDEN: {{$order->id}}</h3>
@@ -198,12 +385,16 @@
         </table>
         <hr>
     </div>
-    
+
     <script src="{{ url('/') }}/js/pdf.js"></script>
     <script src="{{ url('/') }}/js/pdf.worker.js"></script>
+    
     <script>
-        let Total=parseFloat("{{$order->Total*1.19}}");
+
+        let Total=parseFloat("{{$order->Total}}");
+
         var imprimir = document.getElementById('imprimir');
+        var productos = document.getElementById('productos');
 
         var transferencia = document.getElementById('transferencia');
         var descuento = document.getElementById('descuento');
@@ -213,7 +404,8 @@
         var vuelto = document.getElementById('vuelto');
 
         var dinero = document.querySelectorAll(".dinero");
-        function Print()
+
+        function PrintComanda()
         {
             var mywindow = window.open('', 'PRINT', 'height=1,width=1');
 
@@ -249,11 +441,36 @@
             });
         }
 
+        function comanda(){
+            var formData = new FormData(productos);
+            $.ajax({
+                url: "{{url('/orderdetails/command')}}",
+                type: "POST",
+                data: formData,
+                processData: false,  // tell jQuery not to process the data
+                contentType: false   // tell jQuery not to set contentType
+            }).done(function( data ) {
+                if(typeof(data)=='object'){
+
+                }else{
+                    alert(data);
+                }
+            }).fail(function() {
+                alert( "error al recibir respuesta del servidor" );
+            });
+        }
 
         dinero.forEach(input => 
-            input.onkeyup = function(){
+            input.onchange = function(){
+                var db = debito.value ? parseFloat(debito.value) : 0;
+                var cd = debito.value ? parseFloat(credito.value) : 0;
+                var ef = debito.value ? parseFloat(efectivo.value) : 0;
+                var tf = debito.value ? parseFloat(transferencia.value) : 0;
 
-                vuelto.value= - Total + parseFloat(descuento.value) + parseFloat(debito.value) + parseFloat(credito.value) + parseFloat(efectivo.value) + parseFloat(transferencia.value);
+                var exeso= - Total + db + cd + ef + tf;
+                var falta= + Total - db - cd - ef - tf;
+                
+                vuelto.value= exeso > 0 ? exeso : 0;
             }
         )
 
@@ -282,7 +499,7 @@
                 //mywindow.print();
             }).catch(function(error) {                
                 alert(error.message);
-            });;
+            });
         }
 
         function showPage() {
@@ -322,7 +539,228 @@
                 });	
                 
             }
+        }
+
+    </script>
+    
+    <script>
+        var clients=[];
+        var regions=[];
+        var communes=[];
+        
+        var commune_select = document.getElementById('commune_select');
+        var region_select = document.getElementById('region_select');
+        var clientForm = document.getElementById('client-form');
+
+
+        var client_name = document.getElementById('client_name');
+        var client_phone = document.getElementById('client_phone');
+        var client_commune = document.getElementById('client_commune');
+        var client_address = document.getElementById('client_address');
+        
+        var rowselect = document.getElementsByClassName("bg-select");
+
+        clientForm.onsubmit = function(e){
+            e.preventDefault();
+            return false;
+        }
+
+        var clienttable;
+
+        function rowStore(data){
+            var fila = clienttable.row("#"+data.id);
+            if(fila.id()){
+				fila.data(data).draw(false);
+            }else{
+                clienttable.row.add(data).draw(false);
+            }
+            client_name.innerHTML=data.name;
+            client_phone.innerHTML=data.phone;
+            client_commune.innerHTML=data.commune.name;
+            client_address.innerHTML=data.address;
+
+            setSelectRow(clienttable.row("#"+data.id).node());
+
+            $('#clientList').modal('hide');
+        }
+
+        function clientNew(){                    
+            if(rowselect[0]){
+                rowselect[0].classList.remove('bg-select');
+            }
+            clientForm['region_id'].value=7;
+            comunaLoad();
+            clientForm['name'].value='';
+            clientForm['phone'].value='';
+            clientForm['address'].value='';
+            clientForm['id'].value='';
+        }
+        var loadclient=true;
+        function clientStore(){
+            if(
+                clientForm['name'].value=='' ||
+                clientForm['phone'].value=='' ||
+                clientForm['address'].value==''
+            ){
+                alert( "Falta Agregar Información" );
+            }else if(loadclient){                
+                loadclient=false;
+                var formData = new FormData(clientForm);
+                $.ajax({
+                    url: "{{url('/clients/store')}}",
+                    type: "POST",
+                    data: formData,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false   // tell jQuery not to set contentType
+                }).done(function( data ) {
+                    if(typeof(data)=='object'){
+                        rowStore(data);
+                    }else{
+                        alert(data);
+                    }
+                }).fail(function() {
+                    alert( "error al recibir respuesta del servidor" );
+                }).always(function(){
+                    loadclient=true;
+                });
+            }
+        }
+
+        function regionLoad() {
+            regions.forEach(el => {
+                var newoption = document.createElement('option');
+                newoption.value = el.id;
+                newoption.text = el.name;
+                region_select.appendChild(newoption);
+            });
+        }
+
+        region_select.onchange = comunaLoad;
+
+        function comunaLoad() {
+            var value = region_select.value;
+            commune_select.innerHTML = '';
+            communes.forEach(el => {
+                if (el.region_id == value) {
+                    var newoption = document.createElement('option');
+                    newoption.value = el.id;
+                    newoption.text = el.name;
+                    commune_select.appendChild(newoption);
+                }
+            });
+        }
+
+
+        $('#clientButton').click(function(){
+            $('#clientList').modal('show');
+        });
+
+
+    </script>
+    <script type="text/javascript" src="https:////cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/responsive.bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {    
             
+            $.get( "{{url('clients/getdata')}}", function(data) {
+                datos=JSON.parse(data);
+
+                clients=datos.clients;
+                regions=datos.regions;
+                communes=datos.communes;
+                regionLoad();
+                region_select.value = 7;
+                comunaLoad();
+
+                clienttable = $('#tabla').DataTable({
+                    scrollY:        "35vh",
+                    scrollCollapse: true,
+                    paging:         false,
+                    fixedHeader: true,
+                    info: false,
+                    responsive: true,	
+                    data: clients,
+                    rowId: 'id',
+                    columns: [
+                        { "data": "name","width":"30%"},
+                        { "data": "commune.name","width":"20%"},
+                        { "data": "address","width":"35%"},
+                        { "data": "phone","width":"15%"},
+                    ],
+                    language: {
+                        "lengthMenu": "Mostrar _MENU_ registros por pagina &nbsp;&nbsp;&nbsp;",
+                        "zeroRecords": "No se encuentra ningun registro",
+                        "info": "Pagina _PAGE_ de _PAGES_",
+                        "infoEmpty": "No hay registros",
+                        "infoFiltered": "(buscando entre _MAX_ registros)",
+                        "search":         "Filtrar Registros : &nbsp",
+                        "processing" : "Cargando...",
+                        paginate: {
+                            first:      "Primera Pagina",
+                            previous:   "Anterior",
+                            next:       "Siguiente",
+                            last:       "Ultima"
+                        },
+                    },
+                    order: [[ 0, "desc" ]],
+                });
+                
+                @if($order->client);
+                var fila = clienttable.row("#{{$order->client->id}}");
+                if(fila.id()){
+                    setSelectRow(fila.node());
+                }
+                @endif
+            });
+
+            var primera=true;
+            $('#clientList').on('shown.bs.modal', function () {
+                if(primera){
+                    clienttable.columns.adjust().draw();
+                    primera=false;
+                }
+                var rowpos = $('.bg-select').eq(0).position();
+                $('.dataTables_scrollBody').eq(0).scrollTop(rowpos.top);
+            });
+
+
+            $('#client-name').on('keyup', function () {
+                if ( clienttable.column(0).search() !== this.value ) {
+                    clienttable
+                    .column(0)
+                    .search( this.value )
+                    .draw();
+                }
+            });
+
+            $('#client-phone').on('keyup', function () {
+                if ( clienttable.column(3).search() !== this.value ) {
+                    clienttable
+                    .column(3)
+                    .search( this.value )
+                    .draw();
+                }
+            });
+
+            $('#tabla tbody').on( 'click', 'tr', function () {
+                setSelectRow(this);
+            });
+        });
+
+        function setSelectRow(rowElement){
+            if(rowselect[0]){
+                rowselect[0].classList.remove('bg-select');
+            }
+            rowElement.classList.add('bg-select');
+            var client = clienttable.row( rowElement ).data();
+            clientForm['region_id'].value=client.commune.region_id;
+            comunaLoad();
+            clientForm['commune_id'].value=client.commune_id;
+            clientForm['name'].value=client.name;
+            clientForm['phone'].value=client.phone;
+            clientForm['address'].value=client.address;
+            clientForm['id'].value=client.id;
         }
     </script>
 @stop

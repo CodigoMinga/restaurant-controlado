@@ -23,6 +23,8 @@
                     <th>Nombre</th>
                     <th>Dirección</th>
                     <th>Teléfono</th>
+                    <th>Region</th>
+                    <th>Comuna</th>
                     <th>Acción</th>
                 </tr>
             </thead>
@@ -39,9 +41,11 @@
                 responsive: true,
                 "data": {!! json_encode($clients->toArray()) !!},
                 "columns": [
-                    { "data": "name","width":"25%"},
-                    { "data": "address","width":"25%"},
-                    { "data": "phone","width":"25%"},
+                    { "data": "name","width":"20%"},
+                    { "data": "address","width":"20%"},
+                    { "data": "phone","width":"10%"},
+                    { "data": "commune.region.name","width":"20%"},
+                    { "data": "commune.name","width":"20%"},
                     { data: "id", render : function ( data, type, row, meta ) {
                         return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/clients/'+data+'" >description</a>';
                     },"width":"1%"},

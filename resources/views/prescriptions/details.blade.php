@@ -12,14 +12,17 @@
                 <label>Descripción</label>
                 <input type="text" class="form-control" name="description"  value="{{$prescription->description}}">
             </div>
-            <button type="submit" class="btn btn-success ">
-                <i class="material-icons">done</i>
-                Editar Receta
-            </button>
-            <a  href="{{url('/prescriptions/'.$prescription->id.'/delete')}}" class="btn btn-danger">
-                <i class="material-icons">clear</i>
-                Eliminar Receta
-            </a>
+            
+            <div class="d-flex  justify-content-between">
+                <button type="submit" class="btn btn-success ">
+                    <i class="material-icons">send</i>
+                    Guardar
+                </button>
+                <a  href="{{url('/prescriptions/'.$prescription->id.'/delete')}}" class="btn btn-danger">
+                    <i class="material-icons">clear</i>
+                    Eliminar
+                </a>
+            </div>
         </form>
 
         <div class="d-flex justify-content-between align-items-center mt-5">

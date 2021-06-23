@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Order;
 use App\Orderdetail;
+use App\Ordertype;
 use App\Table;
 use App\Producttype;
 use App\Product;
@@ -26,7 +27,8 @@ class OrderController extends Controller
         if (!isset($order)) {
             return view('main.orderstart', compact('table'));
         }else{
-            return view('main.orderdetails', compact('order'));
+            $ordertypes = Ordertype::all();
+            return view('main.orderdetails', compact('order','ordertypes'));
         }
     }
 
@@ -48,12 +50,14 @@ class OrderController extends Controller
             }
             $order->save();
         }
-        return view('main.orderdetails', compact('order'));
+        $ordertypes = Ordertype::all();
+        return view('main.orderdetails', compact('order','ordertypes'));
     }
     
     public function orderdetails($order_id){
         $order = Order::findOrFail($order_id);
-        return view('main.orderdetails', compact('order'));
+        $ordertypes = Ordertype::all();
+        return view('main.orderdetails', compact('order','ordertypes'));
     }
 
     public function productselection($order_id)
@@ -78,7 +82,7 @@ class OrderController extends Controller
         $orderdetail->unit_ammount  = $product->price;
         $orderdetail->total_ammount = intval($input['quantity']) * intval($product->price);
         $orderdetail->save();
-
+        $this->substock($orderdetail);
         $order->Total=$order->Total;
         return $order;
     }
@@ -100,4 +104,48 @@ class OrderController extends Controller
         return redirect('/orderdetails/'.$order->id)->with('success', 'Mesa cambiada correctamente');;
     }
 
+    public function command(Request $request)
+    {
+        $orderdetail_ids = $request->orderdetail_id;
+        foreach ($orderdetail_ids as $key => $orderdetail_id) {
+            $orderdetail = Orderdetail::findOrFail($orderdetail_id);
+            $orderdetail->command=1;
+            $orderdetail->save();
+        }
+        return true;
+    }
+
+    public function substock($orderdetail){
+        //$low_stock=[];
+        $prescription= $orderdetail->product->prescriptions->last();
+        if($prescription){                
+            $prescriptiondetails = $prescription->prescriptiondetails;
+            foreach ($prescriptiondetails as $key => $prescriptiondetail) {
+                $item=$prescriptiondetail->item;
+                $stock = $item->stock;
+                $quantity =$prescriptiondetail->quantity * $orderdetail->quantity;
+                $item->stock = $stock - ($quantity);
+                $item->save();
+                /*
+                if($item->stock<=$item->warning){
+                    $low_stock[]=$item->name;
+                }*/
+            }
+        }
+        //return 
+    }
+
+    public function addstock($orderdetail){
+        $prescription= $orderdetail->product->prescriptions->last();
+        if($prescription){                
+            $prescriptiondetails = $prescription->prescriptiondetails;
+            foreach ($prescriptiondetails as $key => $prescriptiondetail) {
+                $item=$prescriptiondetail->item;
+                $stock = $item->stock;
+                $quantity =$prescriptiondetail->quantity * $orderdetail->quantity;
+                $item->stock = $stock + ($quantity);
+                $item->save();
+            }
+        }
+    }
 }
