@@ -66,13 +66,14 @@
         opacity: 1;
     }
     .botones .btn{
-        width: 220px;
+        width: 300px;
         margin-bottom: 1rem;
     }
 </style>
 @section('content')
     <div class="container p-3">
         <h1>Orden: {{ $order->internal_id }}</h1>
+        {{$order->CommandComplete}}
         <form id="orderForm">
             {{ csrf_field() }}
             <input name="client_id" type="hidden" value="{{$order->client_id}}">
@@ -375,30 +376,45 @@
             </div>
         </form>
         <hr>
+        @if($order->closed==0)
+        <div class="d-flex flex-wrap justify-content-between botones">
+                <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
+                    <span class="material-icons">add_shopping_cart</span>
+                    Agregar
+                </a>
+                <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-danger btn-lg">
+                    <span class="material-icons">price_check</span>
+                    Cambiar Mesa
+                </a>
+        </div>
+        @endif
         <div class="d-flex flex-wrap justify-content-between botones">
             @if($order->closed==0)
-            <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
-                <span class="material-icons">add_shopping_cart</span>
-                Agregar
-            </a>
-            <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-danger btn-lg">
-                <span class="material-icons">price_check</span>
-                Cambiar Mesa
-            </a>
-            <button onclick="paymentStore()" class="btn btn-info btn-lg">
-                <span class="material-icons">price_check</span>
-                Cerrar Venta
-            </button>
+                <button onclick="comanda(0)" class="btn btn-primary btn-lg">
+                    <span class="material-icons">receipt</span>
+                    Comanda Parcial
+                </button>
+            @else
+                <button onclick="PrintBoleta()" class="btn btn-danger btn-lg">
+                    <span class="material-icons">receipt_long</span>
+                    Anular Venta
+                </button>
             @endif
-            <button onclick="comanda()" class="btn btn-primary btn-lg">
+            <button onclick="comanda(1)" class="btn btn-primary btn-lg">
                 <span class="material-icons">receipt</span>
-                Comanda
+                Comanda Completa
             </button>
             <button onclick="PrintBoleta()" class="btn btn-warning btn-lg">
                 <span class="material-icons">receipt_long</span>
                 Boleta
             </button>
         </div>
+        @if($order->closed==0)
+        <button onclick="paymentStore()" class="btn btn-info btn-lg btn-block">
+            <span class="material-icons">price_check</span>
+            Cerrar Venta
+        </button>
+        @endif
         <!-- Modal -->
         <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -670,6 +686,8 @@
                     alert(reason);
                 });
                 
+            }).fail(function(xhr, status, error) {
+                alert(xhr.responseJSON.response);
             });
         }
 
@@ -681,10 +699,23 @@
                 contentType: false // tell jQuery not to set contentType
             }).done(function(data) {
                 if (typeof(data) == 'object') {
+                    var toprint = 0;
+                    $('#comandList').html('');
                     data.forEach(element => {
-                        $('#comandList').append("<tr><td>"+element.product.name+"</td><td>"+element.quantity+"</td></tr>");
+                        if( (tipo==1  || element.command==0) && element.enabled==1){
+                            $('#comandList').append("<tr><td>"+element.product.name+"</td><td>"+element.quantity+"</td></tr>");
+                            toprint++;
+                        }
                     });
-                    PrintComanda();
+                    if(toprint>0){
+                        PrintComanda();
+                    }else{
+                        if(tipo==1){
+                            alert("Sin Productos en la comanda");
+                        }else{                      
+                            alert("Todos los productos ya fueron impresos");
+                        }
+                    }
                 } else {
                     alert(data);
                 }
