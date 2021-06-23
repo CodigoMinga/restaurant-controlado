@@ -64,15 +64,17 @@ class SalesHelper extends Controller
             $total = 0;
             $ct = 0 ;
             foreach($orderdetails as $detail) {
-                $ct = $ct + 1;
-                array_push($detalle, [
-                    "NroLinDet" => $ct,
-                    "NmbItem" => $detail->product->name,
-                    "QtyItem" => $detail->quantity,
-                    "PrcItem" => $detail->unit_ammount,
-                    "MontoItem" => $detail->total_ammount
-                ]);
-                $total += $detail->total_ammount;
+                if($detail->enabled){
+                    $ct = $ct + 1;
+                    array_push($detalle, [
+                        "NroLinDet" => $ct,
+                        "NmbItem" => $detail->product->name,
+                        "QtyItem" => $detail->quantity,
+                        "PrcItem" => $detail->unit_ammount,
+                        "MontoItem" => $detail->total_ammount
+                    ]);
+                    $total += $detail->total_ammount;
+                }
             }
 
 

@@ -42,7 +42,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/orders/{order_id}/products',               'OrderController@products');
     Route::post('/orders/products/attach',                  'OrderController@productAttach');
     Route::post('/orders/products/detach',                  'OrderController@productDetach');
-    Route::post('/orders/command',                          'OrderController@command');
+    Route::get('/orders/{order_id}/command',                'OrderController@command');
 
     //pedidos del cliente de la orden
     Route::get('/orders/{order_id}/clienthistory',          'OrderController@history');

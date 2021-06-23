@@ -65,6 +65,10 @@
         color:black;
         opacity: 1;
     }
+    .botones .btn{
+        width: 220px;
+        margin-bottom: 1rem;
+    }
 </style>
 @section('content')
     <div class="container p-3">
@@ -371,13 +375,14 @@
             </div>
         </form>
         <hr>
-        <div class="d-flex flex-wrap justify-content-between">
+        <div class="d-flex flex-wrap justify-content-between botones">
             @if($order->closed==0)
             <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
                 <span class="material-icons">add_shopping_cart</span>
                 Agregar
             </a>
             <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-danger btn-lg">
+                <span class="material-icons">price_check</span>
                 Cambiar Mesa
             </a>
             <button onclick="paymentStore()" class="btn btn-info btn-lg">
@@ -385,7 +390,7 @@
                 Cerrar Venta
             </button>
             @endif
-            <button onclick="PrintComanda()" class="btn btn-primary btn-lg">
+            <button onclick="comanda()" class="btn btn-primary btn-lg">
                 <span class="material-icons">receipt</span>
                 Comanda
             </button>
@@ -457,7 +462,7 @@
                             </div>
                         </div>
                         <div style="display:block;width:100%;min-height:40vh" id='container'>
-                            <table id="tabla" class="table table-dark table-sm mb-0 table-hover">
+                            <table id="tabla" class="table objtable table-dark table-sm mb-0 table-hover">
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
@@ -518,25 +523,26 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body" align="center">
-                        <table class="table table-dark">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        Orden
-                                    </th>
-                                    <th>
-                                        Detalle
-                                    </th>
-                                    <th>
-                                        Repetir
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="historyList">
-
-                            </tbody>
-                        </table>
+                    <div class="modal-body" align="center">                        
+                        <div style="display:block;width:100%;min-height:50vh;max-height:90vh;overflow-y:overlay" id='container'>
+                            <table class="table objtable table-dark table-sm mb-0 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Orden
+                                        </th>
+                                        <th>
+                                            Detalle
+                                        </th>
+                                        <th>
+                                            Repetir
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="historyList">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                 </div>
@@ -547,7 +553,7 @@
     </div>
 
     <div id="imprimir">
-        <h3 style="margin-bottom:0px">ORDEN: {{ $order->id }}</h3>
+        <h3 style="margin-bottom:0px">ORDEN: {{ $order->internal_id }}</h3>
         <h3 style="margin-top:0px">{{ $order->table->name }}</h3>
         <table style="margin-bottom:10mm;font-size:14px;width:100%">
             <thead>
@@ -560,18 +566,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($order->orderdetails as $orderdetail)
-                    <tr>
-                        <td>
-                            {{ $orderdetail->product->name }}<br>
-                            <small>{{ $orderdetail->description }}</small>
-                        </td>
-                        <td align="right">
-                            {{ $orderdetail->quantity }}
-                        </td>
-                    </tr>
-                @endforeach
+            <tbody id="comandList">
             </tbody>
         </table>
         <hr>
@@ -591,6 +586,8 @@
         var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
 
         function PrintComanda() {
+
+
             var mywindow = window.open('', 'PRINT', 'height=1,width=1');
 
             mywindow.document.write('<html><head></head><title>Comanda</title>');
@@ -605,6 +602,7 @@
                 mywindow.onafterprint  = function(){mywindow.close();};
             }
             mywindow.document.close(); // necessary for IE >= 10
+
             mywindow.focus(); // necessary for IE >= 10*/
             mywindow.print();
             return true;
@@ -675,17 +673,18 @@
             });
         }
 
-        function comanda() {
-            var formData = new FormData(orderForm);
+        function comanda(tipo) {
             $.ajax({
-                url: "{{ url('/orders/details/command') }}",
-                type: "POST",
-                data: formData,
+                url: "{{ url('/orders/'.$order->id.'/command') }}",
+                type: "GET",
                 processData: false, // tell jQuery not to process the data
                 contentType: false // tell jQuery not to set contentType
             }).done(function(data) {
                 if (typeof(data) == 'object') {
-
+                    data.forEach(element => {
+                        $('#comandList').append("<tr><td>"+element.product.name+"</td><td>"+element.quantity+"</td></tr>");
+                    });
+                    PrintComanda();
                 } else {
                     alert(data);
                 }
@@ -725,6 +724,8 @@
         }
 
         var clienttable;
+        var historytable;
+
 
         function rowStore(data) {
             var fila = clienttable.row("#" + data.id);
@@ -826,9 +827,10 @@
             });
         });
 
-        function loadHistory(history){
+        function loadHistory(data){
             $('#historyList').html('');
-            history.forEach(order => {
+
+            data.forEach(order => {
                 if(order.closed==1 && order.enabled==1){
                     var ntr = document.createElement('tr');
                     //agregar numero de orden
@@ -837,11 +839,23 @@
                     ntr.append(ntd);
 
                     //agregar detalle de 
-                    var nul = document.createElement('ul');
+                    var nul = document.createElement('div');
+                    nul.classList.add('mb-0');
                     order.orderdetails.forEach(orderdetail => {
                         if(orderdetail.enabled==1){
-                            var nli = document.createElement('li');
-                            nli.append(orderdetail.product.name+" X"+orderdetail.quantity);
+                            var nli = document.createElement('div');
+                            nli.classList.add('row');
+
+                            var ndiv = document.createElement('div');
+                            ndiv.classList.add('col-12','col-sm-8');
+                            ndiv.append(orderdetail.product.name+" X"+orderdetail.quantity);
+                            nli.append(ndiv);
+
+                            var nsmall = document.createElement('div');
+                            nsmall.classList.add('col-12','col-sm-4');
+                            nsmall.append("$" + miles(orderdetail.total_ammount*1) + " -> $" + miles(orderdetail.quantity*orderdetail.product.price));
+                            nli.append(nsmall);
+
                             nul.append(nli);
                         }
                     });
@@ -862,6 +876,7 @@
                     $('#historyList').append(ntr);
                 }
             });
+
             $('#historyModal').modal('show');
         }
 
@@ -876,7 +891,6 @@
                 regionLoad();
                 region_select.value = 7;
                 comunaLoad();
-
                 clienttable = $('#tabla').DataTable({
                     scrollY: "35vh",
                     scrollCollapse: true,
@@ -903,21 +917,6 @@
                             "width": "15%"
                         },
                     ],
-                    language: {
-                        "lengthMenu": "Mostrar _MENU_ registros por pagina &nbsp;&nbsp;&nbsp;",
-                        "zeroRecords": "No se encuentra ningun registro",
-                        "info": "Pagina _PAGE_ de _PAGES_",
-                        "infoEmpty": "No hay registros",
-                        "infoFiltered": "(buscando entre _MAX_ registros)",
-                        "search": "Filtrar Registros : &nbsp",
-                        "processing": "Cargando...",
-                        paginate: {
-                            first: "Primera Pagina",
-                            previous: "Anterior",
-                            next: "Siguiente",
-                            last: "Ultima"
-                        },
-                    },
                     order: [
                         [0, "desc"]
                     ],

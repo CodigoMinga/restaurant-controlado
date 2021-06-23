@@ -39,10 +39,11 @@ class TableController extends Controller
         if($id){
             $table = Table::findOrFail($request->id);
             $table->update($request->all());
-            return redirect()->route('tables.list')->with('success', 'Mesa editado correctamente');
+            return redirect()->route('tables.list')->with('success'
+            , 'Mesa editado correctamente');
         }else{
             $table = Table::create($request->all());
-            return redirect('/tables/'.$table->id)->with('success', 'Mesa Creado correctamente');
+            return redirect()->route('tables.list')->with('success', 'Mesa Creada correctamente');
         }
     }
 
