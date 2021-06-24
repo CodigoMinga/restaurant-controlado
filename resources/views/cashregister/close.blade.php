@@ -91,6 +91,7 @@
         </table>
 
         <p>descuentos:  <span id="discount"></span></p>
+
         <p>despachos:   <span id="delivery"></span></p>
         <p>A Repartidor:   <span id="delivery_discount"></span></p>
 
@@ -145,6 +146,7 @@
             
             $('#discount').html(pesos(breakdown.discount));
             $('#delivery').html(pesos(breakdown.delivery));
+            
             $('#delivery_discount').html(pesos(breakdown.delivery/3));
         });
         
