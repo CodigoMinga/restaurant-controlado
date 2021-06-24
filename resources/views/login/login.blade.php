@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta property="og:image" content="{{url('/img/favicon.png')}}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="{{url('/css/restorant.css')}}" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-  
   <title>Restaurant Controlado</title>
   <script src="{{url('/js/jquery.min.js')}}"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
@@ -127,10 +127,12 @@
 <body>
   <div class="glass-card mb-5">
     <div class="row p-sm-5 p-2">
-      <div class="logo col-12 col-sm-6 order-sm-2" align="center">
-        <img  src="{{url('/img/logo.svg')}}" class="logo pb-sm-0 pb-3">
+      <div class="logo col-12 col-sm-6" align="center">
+        <div style="background: rgba(255,255,255,0.0);border-radius:50%;padding:15px;" class="pb-sm-0 pb-3">
+          <img  src="{{url('/img/logo.svg')}}" class="logo" width="210">
+        </div>
       </div>
-      <div id="login"  class="col-12 col-sm-6 order-sm-1">
+      <div id="login"  class="col-12 col-sm-6">
         <h3 style="color:white; text-align:center" class="mb-4">Iniciar Sesión</h3>
         <form action="{{url('/app/checklogin')}}" method="post">
           {{csrf_field()}}
