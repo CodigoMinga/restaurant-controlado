@@ -73,7 +73,6 @@
 @section('content')
     <div class="container p-3">
         <h1>Orden: {{ $order->internal_id }}</h1>
-        {{$order->CommandComplete}}
         <form id="orderForm">
             {{ csrf_field() }}
             <input name="client_id" type="hidden" value="{{$order->client_id}}">

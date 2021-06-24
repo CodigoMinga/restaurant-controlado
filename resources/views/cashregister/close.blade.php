@@ -90,6 +90,11 @@
             </tr>
         </table>
 
+        <p>descuentos:  <span id="discount"></span></p>
+
+        <p>despachos:   <span id="delivery"></span></p>
+        <p>A Repartidor:   <span id="delivery_discount"></span></p>
+
         <form method="post" action="{{ url('cashregister/close') }}">
             {{ csrf_field() }}
             <input type="hidden" value="{{$cashregister->id}}" name="id">
@@ -106,7 +111,6 @@
         var orders ={!! json_encode($cashregister->orders) !!};
         var breakdown ={!! json_encode($cashregister->Breakdown) !!};
 
-        
         $(document).ready(function() {
             $('#credit_card').html(pesos(breakdown.credit_card));
             $('#credit_card_comision').html(pesos(breakdown.credit_card_comision));
@@ -138,6 +142,12 @@
             $('#Total_comision').html(pesos(breakdown.debit_card_comision + breakdown.credit_card_comision));
             $('#Total_iva').html(pesos(breakdown.efective_iva + breakdown.transfer_iva + breakdown.debit_card_iva + breakdown.credit_card_iva));
             $('#Total_resto').html(pesos(efective_resto + transfer_resto + debit_card_resto + credit_card_resto));
+
+            
+            $('#discount').html(pesos(breakdown.discount));
+            $('#delivery').html(pesos(breakdown.delivery));
+            
+            $('#delivery_discount').html(pesos(breakdown.delivery/3));
         });
         
         function pesos(x) {

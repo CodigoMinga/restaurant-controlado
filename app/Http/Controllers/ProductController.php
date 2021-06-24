@@ -12,13 +12,9 @@ use App\Prescription;
 class ProductController extends Controller
 {
     public function list(){
-
         $company = session('company');
         $producttypes_id    = Producttype::where('enabled',1)->where('company_id',$company->id)->pluck('id')->toArray();
-        $products = Product::where('enabled',1)->whereIn('producttype_id',$producttypes_id)->get();
-        foreach ($products as $key => $product) {
-            $product->producttype;
-        }
+        $products = Product::where('enabled',1)->whereIn('producttype_id',$producttypes_id)->with('producttype')->get();
         return view('products.list',compact('products'));
     }
 
@@ -33,7 +29,6 @@ class ProductController extends Controller
     {
         $company = session('company');
         $producttypes = Producttype::where('enabled',1)->where('company_id',$company->id)->get();
-
         $product = Product::find($product_id);
         return view('products.form',compact('producttypes','product'));
     }

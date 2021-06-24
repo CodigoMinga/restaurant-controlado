@@ -112,7 +112,7 @@ if(!$cashregister){
     <div id="sidebar" align="center">
         <div id="sidebar-content">
             <div>
-                <img src="{{url('/img/logo.jpg')}}" class="logo-circle">
+                <img src="{{url('/img/'.$company->id.'.png')}}" class="logo-circle">
                 <div class="info-bar mb-3">
                     <p>{{$company->name}}</p>
                     <p>RUT: {{$company->rut}}</p>
