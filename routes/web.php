@@ -121,6 +121,11 @@ Route::group(['middleware' => ['auth']], function() {
     route::get('/cashregister/form','CashregisterController@form');
     route::post('/cashregister/open','CashregisterController@open');
     route::post('/cashregister/close','CashregisterController@close');
+
+    route::get('test',function(){
+        $tabletypes = App\Tabletype::with(['tables'=>function($query){$query->where('tables.id',1);}])->get();
+        return $tabletypes;
+    });
     
 });
 

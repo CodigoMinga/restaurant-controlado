@@ -8,6 +8,7 @@ use App\Order;
 use App\Orderdetail;
 use App\Ordertype;
 use App\Table;
+use App\Tabletype;
 use App\Producttype;
 use App\Discount;
 use App\Delivery;
@@ -23,14 +24,18 @@ class OrderController extends Controller
         $company = session('company');
         //busco ultima caja registrada de la compañia
         $cashregister = Cashregister::where('company_id',$company->id)->orderBy('id', 'desc')->first();
-        
+
         if(!$cashregister){
             $cashregister = new Cashregister;
             $cashregister->closed = 'not null';
         }
         if($cashregister->closed==null){
-            $tables = Table::where('company_id',$company->id)->get();
-            return view('orders.tableselection', compact('tables'));
+
+            $tabletypes = Tabletype::with(['tables'=>function($query) use($company){
+                $query->where('company_id',$company->id)->where('enabled',1);
+            }])->get();
+
+            return view('orders.tableselection', compact('tabletypes'));
         }else{
             return view('cashregister.notfound');
         }
@@ -157,7 +162,7 @@ class OrderController extends Controller
     {
         $company = session('company');
         $order = Order::findOrFail($order_id);
-        $tables = Table::where('company_id',$company->id)->get();
+        $tables = Table::where('company_id',$company->id)->where('enabled',1)->with('tabletype')->get();
         return view('orders.changetable', compact('tables','order'));
     }
     
