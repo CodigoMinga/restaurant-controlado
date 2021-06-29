@@ -180,6 +180,7 @@ h1 .material-icons{
     text-align: center;
     cursor:pointer;
 }
+
 .categoria:hover{
     margin: 0.4rem 0.8rem 1.2rem 0.8rem;
     color: #F4123D;
@@ -208,6 +209,34 @@ h1 .material-icons{
     text-align: center;
     cursor:pointer;
 }
+
+.my-tab{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    position: relative;
+    width: 200px;
+    border-width: 3px;
+    border-style: solid;
+    text-decoration: none;
+    color:white;
+    font-weight: 500;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    margin: 0px;
+    text-align: center;
+    cursor:pointer;
+}
+
+.my-tab:hover{
+    text-decoration: none;
+}
+
+.my-tab .active{
+    color:#03a9f4;
+}
+
 .mesa .ocupada{
     position: absolute;
     font-size: 2.5rem;
@@ -215,6 +244,7 @@ h1 .material-icons{
     bottom:0.2rem;
     right:0.2rem;
 }
+
 .mesa div{
     flex-grow: 1;
 }
