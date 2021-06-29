@@ -1,9 +1,5 @@
 @extends('templates.maincontainer')
 <style>
-    .nav-pills{
-
-    }
-
 </style>
 @section('content')
     <div class="d-flex flex-column h-100">

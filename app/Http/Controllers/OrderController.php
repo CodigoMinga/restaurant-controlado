@@ -162,8 +162,10 @@ class OrderController extends Controller
     {
         $company = session('company');
         $order = Order::findOrFail($order_id);
-        $tables = Table::where('company_id',$company->id)->where('enabled',1)->with('tabletype')->get();
-        return view('orders.changetable', compact('tables','order'));
+        $tabletypes = Tabletype::with(['tables'=>function($query) use($company){
+            $query->where('company_id',$company->id)->where('enabled',1);
+        }])->get();
+        return view('orders.changetable', compact('tabletypes','order'));
     }
     
     public function changetableProcess($order_id,$table_id)
