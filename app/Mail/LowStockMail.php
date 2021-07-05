@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use App\Item;
 
 class LowStockMail extends Mailable
 {
@@ -29,6 +30,7 @@ class LowStockMail extends Mailable
      */
     public function build()
     {
-        return $this->view('mails.lowstock');
+        $item = $this->item;
+        return $this->view('mails.lowstock',compact('item'));
     }
 }
