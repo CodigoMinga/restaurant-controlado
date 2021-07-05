@@ -2,19 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
-
 //LOGIN
 Route::get('/',                                 'MainController@login')->name('login');
 Route::post('/app/checklogin',                  'MainController@checkLogin');
@@ -40,6 +27,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/clients/getdata',                          'ClientController@getdata');
     Route::post('/clients/store',                           'ClientController@store');
 
+    //pedidos del cliente
+    Route::get('/clients/{client_id}/history',             'ClientController@history');
+
     //ORDENES
     Route::get('/orders/list',                              'OrderController@list');
     Route::get('/orders/start/{table_id}',                  'OrderController@start');
@@ -52,12 +42,15 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/orders/{order_id}/products',               'OrderController@products');
     Route::post('/orders/products/attach',                  'OrderController@productAttach');
     Route::post('/orders/products/detach',                  'OrderController@productDetach');
-    Route::post('/orders/command',                          'OrderController@command');
+    Route::get('/orders/{order_id}/command',                'OrderController@command');
+
+    //pedidos del cliente de la orden
+    Route::get('/orders/{order_id}/clienthistory',          'OrderController@history');
+    Route::get('/orders/{order_id}/repeat/{order_id_old}',  'OrderController@repeat');
 
 
     //ESTAS RUTAS NECESITAS SER COMPANY ADMIN
-    Route::group(['middleware' => ['admin:companyadmin,normaluser']], function() {
-        //Administrador
+    Route::group(['middleware' => ['admin:companyadmin|superadmin']], function() {
         Route::get('/dashboard',                'MainController@dashboard');
         Route::get('/settings',                 'MainController@settings');
     });
@@ -111,23 +104,29 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/prescriptiondetails/{prescriptiondetail_id}/delete',   'PrescriptiondetailController@delete');
 
     //COMPAÑIAS
-    route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
-    route::post('/companys/add/process',                'CompanyController@addProcess');
-    route::get('/companys/list',                        'CompanyController@list')->name('companys.list');
-    route::get('/companys/{company_id}',                'CompanyController@details');
-    route::post('/companys/{company_id}/edit/process',  'CompanyController@editprocess');
-    route::get('/companys/{company_id}/delete',         'CompanyController@delete');
+    Route::group(['middleware' => ['admin:superadmin']], function(){
+        route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
+        route::post('/companys/add/process',                'CompanyController@addProcess');
+        route::get('/companys/list',                        'CompanyController@list')->name('companys.list');
+        route::get('/companys/{company_id}',                'CompanyController@details');
+        route::post('/companys/{company_id}/edit/process',  'CompanyController@editprocess');
+        route::get('/companys/{company_id}/delete',         'CompanyController@delete');
+    });
 
     //LOGOUT
     route::get('/app/logout','MainController@logout');
+    route::post('set/company','MainController@setcompany');
 
+    //APERTURA Y CIERRE DE CAJA
+    route::get('/cashregister/form','CashregisterController@form');
+    route::post('/cashregister/open','CashregisterController@open');
+    route::post('/cashregister/close','CashregisterController@close');
 
-    Route::get('prueba',function(){
-        $orderdetail = App\Orderdetail::findOrFail(1);
-        $prescription= $orderdetail->product->prescriptions->last();
-        dd($prescription->prescriptiondetails);
+    route::get('test',function(){
+        $tabletypes = App\Tabletype::with(['tables'=>function($query){$query->where('tables.id',1);}])->get();
+        return $tabletypes;
     });
-
+    
 });
 
 //rutas ajax

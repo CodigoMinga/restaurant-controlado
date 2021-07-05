@@ -22,7 +22,6 @@ form{
     left:0px;
     transition: left 0.8s;
     z-index: 30;
-    overflow-y: overlay;
 }
 #sidebar-content{
     display: block;
@@ -31,6 +30,7 @@ form{
     width: 300px;
     background-color: #F4123D;
     z-index: 40;
+    overflow-y: overlay;
 }
 #sidebar-toggle{
     width: 2.5rem;
@@ -79,7 +79,34 @@ form{
     width: 1.5rem;
 }
 
-#main{
+#order-info{
+    color:white;
+    background-color: #151316;
+    border-radius: 50px 0 0 50px;
+    margin-top:-0.5rem;
+    margin-bottom:-0.5rem;
+    margin-left: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+#order-info h6{
+    font-size: 1.4rem;
+}
+
+#order-info a{
+    color:white;
+    border: 3px solid white;
+    font-size: 1.4rem;
+}
+
+#order-info a:hover{
+    color:#F4123D;
+    border-color: #F4123D;
+}
+
+#main{    
+    overflow: overlay;
     display: block;
     min-height: 100%;
     max-height: 100%;
@@ -135,9 +162,8 @@ h1 .material-icons{
 }
 
 .logo-circle{
-    border-radius: 50%;
+    margin-top: 8px;
     width: 80%;
-    padding:2rem;
 }
 
 .categoria{
@@ -154,6 +180,7 @@ h1 .material-icons{
     text-align: center;
     cursor:pointer;
 }
+
 .categoria:hover{
     margin: 0.4rem 0.8rem 1.2rem 0.8rem;
     color: #F4123D;
@@ -182,6 +209,34 @@ h1 .material-icons{
     text-align: center;
     cursor:pointer;
 }
+
+.my-tab{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    position: relative;
+    width: 200px;
+    border-width: 3px;
+    border-style: solid;
+    text-decoration: none;
+    color:white;
+    font-weight: 500;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    margin: 0px;
+    text-align: center;
+    cursor:pointer;
+}
+
+.my-tab:hover{
+    text-decoration: none;
+}
+
+.my-tab .active{
+    color:#03a9f4;
+}
+
 .mesa .ocupada{
     position: absolute;
     font-size: 2.5rem;
@@ -189,6 +244,7 @@ h1 .material-icons{
     bottom:0.2rem;
     right:0.2rem;
 }
+
 .mesa div{
     flex-grow: 1;
 }

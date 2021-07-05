@@ -3,11 +3,14 @@
 <style></style>
 
 @section('info')
-    <div>
+    <div id="order-info">
         <h6>{{$order->table->name}}</h6>
-        <h6 id="order_total">{{$order ? $order->Total : 0}}</h6>
-        <a href="{{url('/orders/'.$order->id)}}" class="btn btn-light">
-            ORDEN
+        <h6>$<span id="order_total">{{$order ? number_format($order->Total, 0, '', '.') : 0}}</span></h6>
+        <a href="{{url('/orders/'.$order->id)}}" class="btn">
+            <span class="material-icons">
+                receipt_long
+            </span>
+            Ver Orden
         </a>
     </div>    
 @endsection
@@ -143,7 +146,7 @@
                 }).done(function( data ) {
                     if(typeof(data)=='object'){
                         if(data.id){
-                            order_total.innerText=data.Total;
+                            order_total.innerText= miles(data.Total);
                             if(activate=="a-orden"){
                                 window.location.href = "{{url('/')}}/orders/" + data.id;
                             }else{
@@ -160,5 +163,9 @@
                 });
             });
         });
+
+        function miles(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
     </script>
 @stop

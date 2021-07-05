@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\Client;
 use App\Order;
 use App\Orderdetail;
 use App\Ordertype;
 use App\Table;
+use App\Tabletype;
 use App\Producttype;
 use App\Discount;
 use App\Delivery;
 use App\Product;
+use App\Cashregister;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,14 +21,29 @@ class OrderController extends Controller
 {
     public function tables()
     {
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $tables = Table::whereIn('company_id',$companies_id)->get();
-        return view('orders.tableselection', compact('tables'));
+        $company = session('company');
+        //busco ultima caja registrada de la compañia
+        $cashregister = Cashregister::where('company_id',$company->id)->orderBy('id', 'desc')->first();
+
+        if(!$cashregister){
+            $cashregister = new Cashregister;
+            $cashregister->closed = 'not null';
+        }
+        if($cashregister->closed==null){
+
+            $tabletypes = Tabletype::with(['tables'=>function($query) use($company){
+                $query->where('company_id',$company->id)->where('enabled',1);
+            }])->get();
+
+            return view('orders.tableselection', compact('tabletypes'));
+        }else{
+            return view('cashregister.notfound');
+        }
     }
     
     public function list(){
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $orders = Order::where('enabled','=',1)->whereIn('company_id',$companies_id)->get();
+        $company = session('company');
+        $orders = Order::where('enabled','=',1)->where('company_id',$company->id)->get();
         foreach ($orders as $key => $order) {
             $order->total=$order->Total;
             $order->ordertype;
@@ -54,6 +72,8 @@ class OrderController extends Controller
             $order->table_id = $table->id;
             $order->user_id = Auth::user()->id;
             $order->company_id = $table->company_id;
+            $cashregister = Cashregister::where('company_id',$table->company_id)->whereNull('closed')->orderBy('id', 'desc')->first();
+            $order->cashregister_id = $cashregister->id;
             //Añade el numero interno de la orden, si no hay ninguna la crea como primera
             $last_order = Order::latest('internal_id')->where('company_id','=',$table->company_id)->first();
             if(isset($last_order)){
@@ -91,8 +111,12 @@ class OrderController extends Controller
     public function products($order_id)
     {
         $order = Order::findOrFail($order_id);
-        $producttypes = Producttype::where('company_id',$order->company_id)->get();
-        return view('orders.products', compact('producttypes','order'));
+        if($order->dte_token==null){
+            $producttypes = Producttype::where('company_id',$order->company_id)->get();
+            return view('orders.products', compact('producttypes','order'));
+        }else{
+            return back()->with('error','No se puede agregar más productos, la boleta ya fue emitida');
+        }
     }
 
     public function productAttach(Request $request)
@@ -136,10 +160,12 @@ class OrderController extends Controller
 
     public function changetable($order_id)
     {
+        $company = session('company');
         $order = Order::findOrFail($order_id);
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $tables = Table::whereIn('company_id',$companies_id)->get();
-        return view('orders.changetable', compact('tables','order'));
+        $tabletypes = Tabletype::with(['tables'=>function($query) use($company){
+            $query->where('company_id',$company->id)->where('enabled',1);
+        }])->get();
+        return view('orders.changetable', compact('tabletypes','order'));
     }
     
     public function changetableProcess($order_id,$table_id)
@@ -151,15 +177,18 @@ class OrderController extends Controller
         return redirect('/orders/'.$order->id)->with('success', 'Mesa cambiada correctamente');
     }
 
-    public function command(Request $request)
+    public function command($order_id)
     {
-        $orderdetail_ids = $request->orderdetail_id;
-        foreach ($orderdetail_ids as $key => $orderdetail_id) {
-            $orderdetail = Orderdetail::findOrFail($orderdetail_id);
-            $orderdetail->command=1;
-            $orderdetail->save();
+        $order = Order::findOrFail($order_id);
+        $orderdetails = $order->orderdetails;
+        foreach ($orderdetails as $key => $orderdetail) {
+            $orderdetail->product;
+            if($orderdetail->command==0  && $orderdetail->enabled){
+                $orderdetail->command=1;
+                $orderdetail->save();
+            }
         }
-        return true;
+        return $orderdetails;
     }
 
     public function substock($orderdetail){
@@ -196,5 +225,43 @@ class OrderController extends Controller
         }
     }
 
+    
+    public function history($order_id)
+    {
+        $order = Order::findOrFail($order_id);
+        
+        if($order->client_id){
+            $client = Client::findOrFail($order->client_id);
+            foreach ($client->orders as $key => $order_item) {
+                foreach ($order_item->orderdetails as $key => $orderdetail) {
+                    $orderdetail->product;
+                }
+            }
+            return $client->orders;
+        }else{
+            return 'necesita seleccionar cliente';
+        }
+    }
 
+    
+    
+    public function repeat($order_id,$order_id_old)
+    {
+        $order      = Order::findOrFail($order_id);
+        $order_old  = Order::findOrFail($order_id_old);
+        foreach ($order_old->orderdetails as $key => $orderdetail_old) {
+
+            $product    = Product::findOrFail($orderdetail_old->product_id);
+            $orderdetail = new Orderdetail();
+            $orderdetail->product_id    = $product->id;
+            $orderdetail->order_id      = $order->id;
+            $orderdetail->quantity      = $orderdetail_old->quantity;
+            $orderdetail->description   = $orderdetail_old->description;
+            $orderdetail->unit_ammount  = $product->price;
+            $orderdetail->total_ammount = intval($orderdetail_old->quantity) * intval($product->price);
+            $orderdetail->save();
+            $this->substock($orderdetail);
+        }
+        return redirect('/orders/'.$order->id)->with('success', 'Orden Repetida');
+    }
 }

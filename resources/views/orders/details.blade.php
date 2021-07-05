@@ -65,6 +65,10 @@
         color:black;
         opacity: 1;
     }
+    .botones .btn{
+        width: 300px;
+        margin-bottom: 1rem;
+    }
 </style>
 @section('content')
     <div class="container p-3">
@@ -157,11 +161,17 @@
                         </tr>
                         @if($order->closed==0)
                         <tr>
-                            <td class="p-0 m-0" colspan="2">
-                                <a class="btn btn-block btn-primary btn-sm" id="clientButton">
-                                    <span class="material-icons">person</span>
-                                    Cliente
-                                </a>
+                            <td colspan="2" class="p-0 m-0">
+                                <div class="btn-group w-100" role="group">
+                                    <a class="btn btn-primary btn-sm" style="border:none" id="clientButton">
+                                        <span class="material-icons">person</span>
+                                        Clientes
+                                    </a>
+                                    <a class="btn btn-info btn-sm"  style="border:none" id="historyButton">
+                                        <span class="material-icons">folder</span>
+                                        Pedidos
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         @endif
@@ -173,12 +183,6 @@
                     <tr>
                         <th>
                             Producto
-                        </th>
-                        <th width=1>
-                            Comanda
-                        </th>
-                        <th width=1>
-                            Pagado
                         </th>
                         <th width=1>
                             Cant.
@@ -204,16 +208,6 @@
                                 {{ $orderdetail->product->name }}<br>
                                 <small>{{ $orderdetail->enabled==1 ? $orderdetail->description : "(eliminado)"}}</small>
                                 <input type="hidden" name="orderdetail_id[]" value="{{ $orderdetail->id }}">
-                            </td>
-                            <td align="center">
-                                @if ($orderdetail->command)
-                                    <span class="material-icons text-success">done</span>
-                                @endif
-                            </td>
-                            <td align="center">
-                                @if ($orderdetail->paid)
-                                    <span class="material-icons text-success">done</span>
-                                @endif
                             </td>
                             <td align="right">
                                 {{ number_format($orderdetail->quantity, 0, '', '.') }}
@@ -381,33 +375,47 @@
             </div>
         </form>
         <hr>
-        <div class="d-flex flex-wrap justify-content-between">
+        @if($order->closed==0)
+        <div class="d-flex flex-wrap justify-content-between botones">
+                <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
+                    <span class="material-icons">add_shopping_cart</span>
+                    Agregar
+                </a>
+                <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-danger btn-lg">
+                    <span class="material-icons">price_check</span>
+                    Cambiar Mesa
+                </a>
+        </div>
+        @endif
+        <div class="d-flex flex-wrap justify-content-between botones">
             @if($order->closed==0)
-            <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
-                <span class="material-icons">add_shopping_cart</span>
-                Agregar
-            </a>
-            <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-danger btn-lg">
-                Cambiar Mesa
-            </a>
-            <button onclick="paymentStore()" class="btn btn-info btn-lg">
-                <span class="material-icons">price_check</span>
-                Cerrar Venta
-            </button>
+                <button onclick="comanda(0)" class="btn btn-primary btn-lg">
+                    <span class="material-icons">receipt</span>
+                    Comanda Parcial
+                </button>
+            @else
+                <button onclick="PrintBoleta()" class="btn btn-danger btn-lg">
+                    <span class="material-icons">receipt_long</span>
+                    Anular Venta
+                </button>
             @endif
-            <button onclick="comanda()" class="btn btn-primary btn-lg">
+            <button onclick="comanda(1)" class="btn btn-primary btn-lg">
                 <span class="material-icons">receipt</span>
-                Comanda
+                Comanda Completa
             </button>
             <button onclick="PrintBoleta()" class="btn btn-warning btn-lg">
                 <span class="material-icons">receipt_long</span>
                 Boleta
             </button>
         </div>
-
+        @if($order->closed==0)
+        <button onclick="paymentStore()" class="btn btn-info btn-lg btn-block">
+            <span class="material-icons">price_check</span>
+            Cerrar Venta
+        </button>
+        @endif
         <!-- Modal -->
-        <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content  bg-dark">
                     <div class="modal-header">
@@ -469,7 +477,7 @@
                             </div>
                         </div>
                         <div style="display:block;width:100%;min-height:40vh" id='container'>
-                            <table id="tabla" class="table table-dark table-sm mb-0 table-hover">
+                            <table id="tabla" class="table objtable table-dark table-sm mb-0 table-hover">
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
@@ -518,15 +526,54 @@
                 </div>
             </div>
         </div>
+
+        
+        <!-- Modal -->
+        <div class="modal fade" id="historyModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Pedidos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" align="center">                        
+                        <div style="display:block;width:100%;min-height:50vh;max-height:90vh;overflow-y:overlay" id='container'>
+                            <table class="table objtable table-dark table-sm mb-0 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Orden
+                                        </th>
+                                        <th>
+                                            Detalle
+                                        </th>
+                                        <th>
+                                            Repetir
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="historyList">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
     </div>
 
     <div id="imprimir">
-        <h3 style="margin-bottom:0px">ORDEN: {{ $order->id }}</h3>
+        <h3 style="margin-bottom:0px">ORDEN: {{ $order->internal_id }}</h3>
         <h3 style="margin-top:0px">{{ $order->table->name }}</h3>
         <table style="margin-bottom:10mm;font-size:14px;width:100%">
             <thead>
                 <tr>
-                    <th>
+                    <th align="left">
                         Producto
                     </th>
                     <th width="1">
@@ -534,25 +581,13 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($order->orderdetails as $orderdetail)
-                    <tr>
-                        <td>
-                            {{ $orderdetail->product->name }}<br>
-                            <small>{{ $orderdetail->description }}</small>
-                        </td>
-                        <td align="right">
-                            {{ $orderdetail->quantity }}
-                        </td>
-                    </tr>
-                @endforeach
+            <tbody id="comandList">
             </tbody>
         </table>
         <hr>
     </div>
 
     <script src="{{ url('/') }}/js/pdf.js"></script>
-    <script src="{{ url('/') }}/js/pdf.worker.js"></script>
     <script type="text/javascript" src="https:////cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/responsive.bootstrap.min.js"></script>
@@ -562,58 +597,124 @@
         var imprimir = document.getElementById('imprimir');
         var orderForm = document.getElementById('orderForm');
 
+        var ua = navigator.userAgent.toLowerCase();
+        var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+
         function PrintComanda() {
+
+
             var mywindow = window.open('', 'PRINT', 'height=1,width=1');
 
-            mywindow.document.write('<html><head><title>Comanda</title>');
+            mywindow.document.write('<html><head></head><title>Comanda</title>');
             mywindow.document.write(
-                '<style>*{font-family:Arial, sans-serif;} @page{margin-left: 4mm;margin-right: 4mm;margin-top: 0px;margin-bottom: 0px;}</style>'
+                '<style>*{font-family:Arial, sans-serif;} body{max-width:58mm}</style><body>'
             );
             mywindow.document.write(imprimir.innerHTML);
             mywindow.document.write('</body></html>');
-
+            if(isAndroid) {
+                mywindow.onfocus = function(){mywindow.close();};
+            }else{
+                mywindow.onafterprint  = function(){mywindow.close();};
+            }
             mywindow.document.close(); // necessary for IE >= 10
-            mywindow.focus(); // necessary for IE >= 10*/
-            mywindow.onafterprint = function(event) {
-                mywindow.close()
-            };
-            mywindow.print();
 
+            mywindow.focus(); // necessary for IE >= 10*/
+            mywindow.print();
             return true;
         }
+        
+        function cancelBoleta() {
+            $.get("{{ url('/') }}/ajax/removeDte/{{ $order->id }}", function(data) {
 
-        function PrintBoleta() {
-            $.get("{{ url('/') }}/ajax/generateInvoice/{{ $order->id }}", function(data) {
-                var byteCharacters = window.atob(data.response.PDF);
-                var byteNumbers = new Array(byteCharacters.length);
-                for (var i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                var byteArray = new Uint8Array(byteNumbers);
-                var blob = new Blob([byteArray], {
-                    type: 'application/pdf'
-                });
-                var fileURL = URL.createObjectURL(blob);
-                //var mywindow = window.open(fileURL, 'PRINT', 'height=1,width=1');
-                showPDF(fileURL);
-                /*let pdfWindow = window.open("");
-                pdfWindow.document.write("<html<head><title>Boleta.pdf</title><style>body{margin: 0px;}iframe{border-width: 0px;} @media print {body {transform: scale(.7);}table {page-break-inside: avoid;}}</style></head>");
-                pdfWindow.document.write("<body><embed width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(data)+"#toolbar=0&navpanes=0&scrollbar=0'></embed></body></html>");*/
-                return true;
             });
         }
 
-        function comanda() {
-            var formData = new FormData(orderForm);
+        function PrintBoleta(){
+
+            $.get("{{ url('/') }}/ajax/generateInvoice/{{ $order->id }}", function(data) {
+                var pdfData = atob(data.response.PDF==null ? data.response.pdf : data.response.PDF);
+                var pdfjsLib = window['pdfjs-dist/build/pdf'];
+                pdfjsLib.GlobalWorkerOptions.workerSrc = "{{ url('/') }}/js/pdf.worker.js";
+
+                var loadingTask = pdfjsLib.getDocument({data: pdfData});
+                loadingTask.promise.then(function(pdf) {
+                    console.log('PDF loaded');
+
+                    var pageNumber = 1;
+                    pdf.getPage(pageNumber).then(function(page) {
+                        console.log('Page loaded');
+                        
+                        var scale = 2;
+                        var viewport = page.getViewport({scale: scale});
+
+                        // Prepare canvas using PDF page dimensions
+                        //var canvas = document.getElementById('the-canvas');
+                        var canvas = document.createElement("canvas");
+                        var context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+
+                        // Render PDF page into canvas context
+                        var renderContext = {
+                            canvasContext: context,
+                            viewport: viewport
+                        };
+                        var renderTask = page.render(renderContext);
+
+                        renderTask.promise.then(function () {
+                            console.log('Page rendered');
+                            var mywindow2 = window.open('', 'PRINT', 'height=1,width=1');
+                            mywindow2.document.write('<html><head><title>Boleta</title>');
+                            mywindow2.document.write(
+                                '<style>@page{margin-left: 0px;margin-right: 0px;margin-top: 0px;margin-bottom: 0px;} canvas{width:100%}</style>'
+                                );
+                            mywindow2.document.write('</head><body></body></html>');
+                            mywindow2.document.body.appendChild(canvas);
+                            mywindow2.document.close();
+                            if(isAndroid) {
+                                mywindow2.onfocus = function(){mywindow2.close();};
+                            }else{
+                                mywindow2.onafterprint  = function(){mywindow2.close();};
+                            }
+                            mywindow2.focus();
+                            mywindow2.print();
+                        });
+                    });
+                }, function (reason) {
+                    // PDF loading error
+                    alert(reason);
+                });
+                
+            }).fail(function(xhr, status, error) {
+                alert(xhr.responseJSON.response);
+            });
+        }
+
+        function comanda(tipo) {
             $.ajax({
-                url: "{{ url('/orders/details/command') }}",
-                type: "POST",
-                data: formData,
+                url: "{{ url('/orders/'.$order->id.'/command') }}",
+                type: "GET",
                 processData: false, // tell jQuery not to process the data
                 contentType: false // tell jQuery not to set contentType
             }).done(function(data) {
                 if (typeof(data) == 'object') {
-
+                    var toprint = 0;
+                    $('#comandList').html('');
+                    data.forEach(element => {
+                        if( (tipo==1  || element.command==0) && element.enabled==1){
+                            $('#comandList').append("<tr><td>"+element.product.name+"</td><td>"+element.quantity+"</td></tr>");
+                            toprint++;
+                        }
+                    });
+                    if(toprint>0){
+                        PrintComanda();
+                    }else{
+                        if(tipo==1){
+                            alert("Sin Productos en la comanda");
+                        }else{                      
+                            alert("Todos los productos ya fueron impresos");
+                        }
+                    }
                 } else {
                     alert(data);
                 }
@@ -626,74 +727,6 @@
             __TOTAL_PAGES,
             __PAGE_RENDERING_IN_PROGRESS = 0;
         page_index = 0;
-
-        var mywindow2;
-
-        function showPDF(pdf_url) {
-            $("#pdf-loader").show();
-
-            PDFJS.getDocument({
-                url: pdf_url
-            }).then(function(pdf_doc) {
-                __PDF_DOC = pdf_doc;
-                __TOTAL_PAGES = __PDF_DOC.numPages;
-
-                mywindow2 = window.open('', 'PRINT', 'height=1,width=1');
-                mywindow2.document.write('<html><head><title>Comanda</title>');
-                mywindow2.document.write(
-                    '<style>@page{margin-left: 0px;margin-right: 0px;margin-top: 0px;margin-bottom: 0px;} canvas{width:100%}</style>'
-                    );
-                mywindow2.document.write('</body></html>');
-                showPage();
-                mywindow2.document.close();
-                mywindow2.focus();
-                mywindow2.onafterprint = function(event) {
-                    mywindow2.close()
-                };
-                //mywindow.print();
-            }).catch(function(error) {
-                alert(error.message);
-            });
-        }
-
-        function showPage() {
-            __PAGE_RENDERING_IN_PROGRESS = 1;
-
-            for (var page_no = 1; page_no <= __TOTAL_PAGES; page_no++) {
-
-                __PDF_DOC.getPage(page_no).then(function(page) {
-                    page_index++
-
-                    var new_canvas = document.createElement("canvas");
-                    new_canvas.width = 1080;
-                    new_canvas.id = 'canvas' + page_index;
-
-                    mywindow2.document.body.appendChild(new_canvas);
-
-                    // As the canvas is of a fixed width we need to set the scale of the viewport accordingly
-                    var scale_required = new_canvas.width / page.getViewport(1).width;
-
-                    // Get viewport of the page at required scale
-                    var viewport = page.getViewport(scale_required);
-
-                    // Set canvas height
-                    new_canvas.height = viewport.height;
-
-                    var renderContext = {
-                        canvasContext: new_canvas.getContext('2d'),
-                        viewport: viewport
-                    };
-
-
-                    // Render the page contents in the canvas
-                    page.render(renderContext).then(function() {
-                        __PAGE_RENDERING_IN_PROGRESS = 0;
-                        mywindow2.print();
-                    });
-                });
-
-            }
-        }
 
     </script>
 
@@ -721,6 +754,8 @@
         }
 
         var clienttable;
+        var historytable;
+
 
         function rowStore(data) {
             var fila = clienttable.row("#" + data.id);
@@ -812,6 +847,69 @@
             $('#clientList').modal('show');
         });
 
+        $('#historyButton').click(function() {
+            $.get("{{ url('orders/'.$order->id.'/clienthistory') }}", function(data) {
+                if(typeof data === 'object'){
+                    loadHistory(data);
+                }else{
+                    toastError(data);
+                }
+            });
+        });
+
+        function loadHistory(data){
+            $('#historyList').html('');
+
+            data.forEach(order => {
+                if(order.closed==1 && order.enabled==1){
+                    var ntr = document.createElement('tr');
+                    //agregar numero de orden
+                    var ntd = document.createElement('td');
+                    ntd.append(order.internal_id);
+                    ntr.append(ntd);
+
+                    //agregar detalle de 
+                    var nul = document.createElement('div');
+                    nul.classList.add('mb-0');
+                    order.orderdetails.forEach(orderdetail => {
+                        if(orderdetail.enabled==1){
+                            var nli = document.createElement('div');
+                            nli.classList.add('row');
+
+                            var ndiv = document.createElement('div');
+                            ndiv.classList.add('col-12','col-sm-8');
+                            ndiv.append(orderdetail.product.name+" X"+orderdetail.quantity);
+                            nli.append(ndiv);
+
+                            var nsmall = document.createElement('div');
+                            nsmall.classList.add('col-12','col-sm-4');
+                            nsmall.append("$" + miles(orderdetail.total_ammount*1) + " -> $" + miles(orderdetail.quantity*orderdetail.product.price));
+                            nli.append(nsmall);
+
+                            nul.append(nli);
+                        }
+                    });
+                    var ntd = document.createElement('td');
+                    ntd.append(nul);
+                    ntr.append(ntd);
+
+
+                    //agregar numero de orden
+                    var ntd = document.createElement('td');
+                    var na = document.createElement('a');
+                    na.classList.add("btn", "btn-primary","material-icons");
+                    na.innerText="refresh";
+                    na.href="{{url('orders/'.$order->id.'/repeat')}}/"+order.id;
+                    ntd.append(na);
+                    ntr.append(ntd);
+
+                    $('#historyList').append(ntr);
+                }
+            });
+
+            $('#historyModal').modal('show');
+        }
+
         $(document).ready(function() {
 
             $.get("{{ url('clients/getdata') }}", function(data) {
@@ -823,7 +921,6 @@
                 regionLoad();
                 region_select.value = 7;
                 comunaLoad();
-
                 clienttable = $('#tabla').DataTable({
                     scrollY: "35vh",
                     scrollCollapse: true,
@@ -850,21 +947,6 @@
                             "width": "15%"
                         },
                     ],
-                    language: {
-                        "lengthMenu": "Mostrar _MENU_ registros por pagina &nbsp;&nbsp;&nbsp;",
-                        "zeroRecords": "No se encuentra ningun registro",
-                        "info": "Pagina _PAGE_ de _PAGES_",
-                        "infoEmpty": "No hay registros",
-                        "infoFiltered": "(buscando entre _MAX_ registros)",
-                        "search": "Filtrar Registros : &nbsp",
-                        "processing": "Cargando...",
-                        paginate: {
-                            first: "Primera Pagina",
-                            previous: "Anterior",
-                            next: "Siguiente",
-                            last: "Ultima"
-                        },
-                    },
                     order: [
                         [0, "desc"]
                     ],
@@ -934,6 +1016,7 @@
     <script>        
         //TOTAL CONSUMO
         let TotalBase = parseFloat("{{ $order->Total }}");
+        var FaltaPagar = 0;
         
         //Adicionales
         var discount        = document.getElementById('discount');
@@ -999,9 +1082,13 @@
             ){
                 alert("Falta agregar razon del descuento");
             }else if(
-                orderForm['ordertype_id'].value=="2" && orderForm['client_id'].value==""
+                orderForm['ordertype_id'].value=="2" && (orderForm['client_id'].value=="" || orderForm['delivery'].value==0)
             ){
                 alert("para Entrega a domicilio debe ingresar la información del cliente y costo de Despacho");
+            }else if(
+                FaltaPagar !=0
+            ){
+                alert("Falta pagar: $"+miles(FaltaPagar));
             }else if(loadorderForm) {
                 loadorderForm = false;
                 var formData = new FormData(orderForm);
@@ -1014,6 +1101,7 @@
                 }).done(function(data) {
                     if (typeof(data) == 'object') {
                         console.log(data);
+                        location.reload();
                     } else {
                         alert(data);
                     }
@@ -1116,8 +1204,10 @@
             
             if(total_pay>0){
                 pay_left.innerHTML = '$'+miles(total_pay);
+                FaltaPagar=total_pay;
             }else{
                 pay_left.innerHTML = '$'+0;
+                FaltaPagar=0;
             }
         }
 

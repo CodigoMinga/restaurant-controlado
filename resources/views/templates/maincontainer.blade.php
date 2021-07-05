@@ -1,9 +1,20 @@
 <!DOCTYPE html>
+<?php 
+$company = session('company');
+$cashregister = \App\Cashregister::where('company_id',$company->id)->orderBy('id', 'desc')->first();
+if(!$cashregister){
+    $cashregister = new \App\Cashregister;
+    $cashregister->closed = 'not null';
+}
+?>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">  
+    <meta name="description" content="Restorant Controlado: Controla los pedidos, almacen, despachos y muchas cosas más de tu local" />
+    <meta property="og:image" content="{{url('/img/logo.svg')}}">
+    <link rel="shortcut icon" href="{{url('/img/favicon.png')}}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="{{url('/css/restorant.css')}}" rel="stylesheet">
@@ -18,7 +29,7 @@
     <nav>
 
     </nav>
-    <div aria-live="polite" aria-atomic="true" style="position: fixed; min-height: 200px;top:0px;right:0px;">
+    <div aria-live="polite" aria-atomic="true" style="position: fixed; min-height: 100px;top:0px;right:0px;z-index: 5000;">
         <div class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" id='toast-agregar'>
             <div class="toast-header ">
             <i class="rounded mr-2 material-icons text-success text-white">receipt</i>
@@ -103,14 +114,17 @@
     @endif
     <div id="sidebar" align="center">
         <div id="sidebar-content">
-            <img src="{{url('/img/logo.jpg')}}" class="logo-circle">
-            <div class="info-bar mb-3">
-                <p>DELIXIUS RESTOBAR</p>
-                <p>RUT: 77.012.555-3</p>
-                <p>DARUICHRODRIGUEZ SPA</p>
-            </div>
             <div>
+                <img src="{{url('/img/'.$company->id.'.png')}}" class="logo-circle">
+                <div class="info-bar mb-3">
+                    <p>{{$company->name}}</p>
+                    <p>RUT: {{$company->rut}}</p>
+                    <p>{{$company->direccion}}</p>
+                </div>
                 
+                <a class="sidebar-button {{(request()->is('cashregister/form')) ? 'active' : '' }}" href="{{ url('cashregister/form') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">point_of_sale</i>{{$cashregister->closed!=null ? 'Abrir' : 'Cerrar' }} Caja
+                </a>
                 <a class="sidebar-button {{(request()->is('tables')) ? 'active' : '' }}" href="{{ url('tables') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Sectores
                 </a>

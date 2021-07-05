@@ -142,14 +142,6 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Ganancias
-                                </td>
-                                <td>
-                                    ${{number_format($order_totals + $profit[0]->discount,0,",",".")}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
                                     Propinas
                                 </td>
                                 <td>
@@ -159,14 +151,6 @@
                             <tr>
                                 <td>
                                     Repartos
-                                </td>
-                                <td>
-                                    ${{number_format($profit[0]->delivery,0,",",".")}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Ganancias 
                                 </td>
                                 <td>
                                     ${{number_format($profit[0]->delivery,0,",",".")}}

@@ -1,242 +1,187 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="{{url('/css/restorant.css')}}" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <title>Restaurant Controlado</title>
+  <script src="{{url('/js/jquery.min.js')}}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+  <meta name="description" content="Restorant Controlado: Controla los pedidos, almacen, despachos y muchas cosas más de tu local" />
+  <meta property="og:image" content="{{url('/img/logo.svg')}}">
+  <link rel="shortcut icon" href="{{url('/img/favicon.png')}}">
+  <style>
+    html,body{
+      height: 100vh;
+      width:  100vw;
+    }
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<!-- Include the above in your HEAD tag -->
+    body{
+      background-image: url("{{url('/img/fondo.png')}}");
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-<style>
-    div.main{
-    background: #F4123D; /* Old browsers */
+    .glass-card{
+      max-width: 50rem;
+      box-shadow: 0 0 1rem 0 rgba(0,0,0,0.2);
+      position: relative;
+      background: inherit;
+      overflow: hidden;
+      z-index: 1;
+      border-radius: 5px;
+      color:white;
+    }
 
+    
+    .glass-card::before{
+      content: "";
+      position: absolute;
+      background: inherit;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      box-shadow: inset 0 0 2000px rgba(255,255,255,0.4);
+      filter: blur(5px);
+      margin: -20px;
+      z-index: -1;
+    }
 
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F4123D', endColorstr='#1c2b5a',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-height:calc(100vh);
-width:100%;
-}
+    
+    .glass-card.glass-red::before{
+      content: "";
+      position: absolute;
+      background: inherit;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      box-shadow: inset 0 0 2000px rgba(255,0,0,0.4);
+      filter: blur(5px);
+      margin: -20px;
+      z-index: -1;
+    }
 
-[class*="fontawesome-"]:before {
-  font-family: 'FontAwesome', sans-serif;
-}
+    .glass-btn{
+      box-shadow: 0 0 1rem 0 rgba(0,0,0,0.2);
+      position: relative;
+      background: inherit;
+      overflow: hidden;
+      z-index: 1;
+      border-radius: 5px;
+      color:white;
+    }
 
-/* ---------- GENERAL ---------- */
+    
+    .glass-btn:hover::before{
+      box-shadow: inset 0 0 2000px rgba(255,255,255,0.6);
+    }
 
-* {
-  box-sizing: border-box;
-    margin:0px auto;
+    .glass-btn::before{
+      content: "";
+      position: absolute;
+      background: inherit;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      box-shadow: inset 0 0 2000px rgba(255,255,255,0.4);
+      filter: blur(5px);
+      margin: -20px;
+      z-index: -1;
+    }
 
-  &:before,
-  &:after {
-    box-sizing: border-box;
-  }
+    #passwordHelp a{
+      color:white;
+    }
 
-}
+    footer{
+      background: black;
+      position: absolute;
+      bottom: 0px;
+      left: 0px;
+      right: 0px;
+      color:white;
+      text-align: center;
+      padding: 5px;
+    }
 
-body {
-   
-    color: #606468;
-  font: 87.5%/1.5em 'Open Sans', sans-serif;
-  margin: 0;
-}
+    
+    footer a{
+      color:orange;
+    }
 
-a {
-	color: #eee;
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
-input {
-	border: none;
-	font-family: 'Open Sans', Arial, sans-serif;
-	font-size: 14px;
-	line-height: 1.5em;
-	padding: 0;
-	-webkit-appearance: none;
-}
-
-p {
-	line-height: 1.5em;
-}
-
-.clearfix {
-  *zoom: 1;
-
-  &:before,
-  &:after {
-    content: ' ';
-    display: table;
-  }
-
-  &:after {
-    clear: both;
-  }
-
-}
-
-.container {
-  left: 50%;
-  position: fixed;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-/* ---------- LOGIN ---------- */
-
-#login form{
-	width: 250px;
-}
-#login, .logo{
-    display:inline-block;
-    width:40%;
-}
-#login{
-border-right:1px solid #fff;
-  padding: 0px 22px;
-  width: 59%;
-}
-.logo{
-color:#fff;
-font-size:50px;
-border-radius: 60%;
-width: 80%;
-padding: 0.7rem;
-line-height: 120px;
-
-}
-
-#login form span.fa {
-	background-color: #fff;
-	border-radius: 3px 0px 0px 3px;
-	color: #000;
-	display: block;
-	float: left;
-	height: 50px;
-    font-size:24px;
-	line-height: 50px;
-	text-align: center;
-	width: 50px;
-}
-
-#login form input {
-	height: 50px;
-}
-fieldset{
-    padding:0;
-    border:0;
-    margin: 0;
-
-}
-#login form input[type="text"], input[type="password"] {
-	background-color: #fff;
-	border-radius: 0px 3px 3px 0px;
-	color: #000;
-	margin-bottom: 1em;
-	padding: 0 16px;
-	width: 200px;
-}
-
-#login form input[type="submit"] {
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  background-color: #000000;
-  color: #eee;
-  font-weight: bold;
-  /* margin-bottom: 2em; */
-  text-transform: uppercase;
-  padding: 5px 10px;
-  height: 30px;
-}
-
-#login form input[type="submit"]:hover {
-	background-color: #F4123D;
-}
-
-#login > p {
-	text-align: center;
-}
-
-#login > p span {
-	padding-left: 5px;
-}
-.middle {
-  display: flex;
-  width: 600px;
-}
-</style>
+    footer a:hover{
+      color:crimson;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-<div class="main">
-    
-    
-<div class="container">
-
-
-<div class="middle">
-  
-  
-      <div id="login">
-        <h3 style="color:white; text-align:center">Inicie Sesion</h3>
-        <br>
-        @if ($message = Session::get('error'))
-        <div class="alert alert-danger alert-block">
-          <button type="button" class="close" data-dismiss="alert">×</button>
-          <strong>{{ $message }}</strong>
+  <div class="glass-card mb-5">
+    <div class="row p-sm-5 p-2">
+      <div class="logo col-12 col-sm-6" align="center">
+        <div style="background: rgba(255,255,255,0.0);border-radius:50%;padding:15px;" class="pb-sm-0 pb-3">
+          <img  src="{{url('/img/logo.svg')}}" class="logo" width="210">
+        </div>
       </div>
-@endif
-@if (count($errors) > 0)
-  <div class="alert alert-danger">
-      <ul>
-          @foreach($errors->all() as $error)
-              <li>{{$error}}</li>
-          @endforeach
-      </ul>
-  </div>
-@endif
+      <div id="login"  class="col-12 col-sm-6">
+        <h3 style="color:white; text-align:center" class="mb-4">Iniciar Sesión</h3>
         <form action="{{url('/app/checklogin')}}" method="post">
           {{csrf_field()}}
-          <fieldset class="clearfix">
-
-            <p ><span class="fa fa-envelope"></span><input type="text"  Placeholder="Email" name="email" required></p> 
-            <p><span class="fa fa-lock"></span><input type="password"  Placeholder="Password" name="password" required></p> 
-            
-             <div style="text-align: center">
-             <span style="width:50%; text-align:center; display: inline-block;"><input type="submit" value="Ingresar"></span>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text material-icons" id="basic-addon1">email</span>
+              </div>
+              <input type="text" class="form-control" placeholder="Email" aria-label="email" aria-describedby="basic-addon1" name="email" required>
             </div>
-
-          </fieldset>
-<div class="clearfix"></div>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text material-icons" id="basic-addon1">password</span>
+                </div>
+                <input type="password" class="form-control" placeholder="Password" aria-label="password" aria-describedby="basic-addon1" name="password" required>
+              </div>
+              <small id="passwordHelp" class="form-text"><a href="{{url('/app/login/passwordlost')}}">Recuperar Contraseña</a></small>
+            </div>
+            <div style="text-align: center">
+              <button type="submit" class="btn btn-block glass-btn btn-lg">
+                <span class="material-icons">
+                  send
+                </span>
+                Ingresar
+              </button>
+            </div>
         </form>
-
-        <div class="clearfix"></div>
-
-      </div> <!-- end login -->
-      <div class="logo">
-            <img  src="{{url('/img/logo.jpg')}}" class="logo" width="200" height="150">
-          <div class="clearfix"></div>
-      </div>
-      
-      </div>
-      <br>
-      <div style="text-align: center">
-        <h6><b> <a href="https://www.codigominga.cl">Desarrollo: www.codigominga.cl</a></b>
-
-        <br/><br/>
-        <b> <a href="{{url('/app/login/passwordlost')}}">Recuperar Contraseña</a></b>
-      </h6>
       </div>
     </div>
-
-</div>
+  </div>
+  @if ($message = Session::get('error'))
+  <div class="glass-card glass-red w-100">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <strong>{{ $message }}</strong>
+  </div>
+  @endif
+  @if (count($errors) > 0)
+    <div class="glass-card glass-red  w-100">
+        <ul>
+            @foreach($errors->all() as $error)
+                <li>{{$error}}</li>
+            @endforeach
+        </ul>
+    </div>
+  @endif
+  <footer>
+    Desarrollado por: <a href="https://www.codigominga.cl"><img src="{{url('/img/logo-cm.png')}}" width="25" > Código Minga</a>
+  </footer>
 </body>
 </html>

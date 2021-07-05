@@ -15,9 +15,9 @@ class UserController extends Controller
     
     public function list(){
         //1 Compañias a la que pertenece el usuario
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+        $company = session('company');
         //Consultar a la tabla company_user las id de los usuarios que pertenecen a las compañias dichas
-        $users_id= DB::table('company_user')->whereIn('company_id',$companies_id)->pluck('user_id')->toArray();
+        $users_id= DB::table('company_user')->where('company_id',$company->id)->pluck('user_id')->toArray();
         //buscar los usuarios con las id obtenidas
         $users = User::WhereIn('id',$users_id)->get();
         return view('users.list',compact('users'));
@@ -25,10 +25,11 @@ class UserController extends Controller
 
     public function add(){
         $role_ids=[1,2];
+        $companies = Auth::user()->companies;
         if(Auth::user()->hasRole('superadmin')){
             $role_ids=[1,2,3];
+            $companies = Company::All();
         }
-        $companies = Auth::user()->companies;
         $roles = Role::whereIn("id",$role_ids)->get();
         $user = new User;
         return view('users.form',compact('roles','companies','user'));
@@ -36,10 +37,11 @@ class UserController extends Controller
 
     public function details($user_id){
         $role_ids=[1,2];
+        $companies = Auth::user()->companies;
         if(Auth::user()->hasRole('superadmin')){
             $role_ids=[1,2,3];
+            $companies = Company::All();
         }
-        $companies = Auth::user()->companies;
         $roles = Role::whereIn("id",$role_ids)->get();
         $user = User::findOrFail($user_id);
         return view('users.form',compact('roles','companies','user'));

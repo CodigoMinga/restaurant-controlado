@@ -28,7 +28,10 @@ class AddDtefolioToOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            //
+            
+            $table->dropColumn('dte_folio');
+            $table->dropColumn('fecha_resolucion_sii');
+            $table->dropColumn('empotency_key');
         });
     }
 }

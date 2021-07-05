@@ -13,17 +13,15 @@ class ItemController extends Controller
     public function add()
     {
         $measureunits = Measureunit::all();
-        $companys = Auth::user()->companies;
         $item = new Item;
-        return view('items.form', compact('measureunits', 'companys','item'));
+        return view('items.form', compact('measureunits','item'));
     }
 
     public function details($item_id)
     {
         $measureunits = Measureunit::all();
-        $companys = Auth::user()->companies;
         $item = Item::find($item_id);
-        return view('items.form', compact('measureunits', 'companys','item'));
+        return view('items.form', compact('measureunits','item'));
     }
 
     public function delete($item_id)
@@ -51,9 +49,8 @@ class ItemController extends Controller
 
     public function list()
     {   
-        //Array de las Compañias del Usuario
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
-        $items = Item::where('enabled',1)->whereIn('company_id',$companies_id)->get();
+        $company = session('company');
+        $items = Item::where('company_id',$company->id)->get();
         foreach ($items as $key => $item) {
             $item->measureunit;
         }
