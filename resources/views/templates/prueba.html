@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p id="nombres">Click the button to get your coordinates.</p>
+
+
+<script>
+var texto = [
+	"Se trabaja día a día aprendiendo e investigando.",
+	"Es abierto y colaborativo.",
+	"Requiere tiempo y constancia.",
+	"Sale de mentes inquietas y humildes.",
+	"Es innovador."
+];
+
+let cambia = document.getElementById("nombres");
+
+document.addEventListener('DOMContentLoaded', function(){
+    fetch('http://localhost/iansacalidad0k/php/usuario/LISTA.php')
+    .then(response => console.log(response.json()))
+    .then(data => console.log(data));
+
+	var iteracion=0;
+	window.setInterval(function(){
+		cambia.innerHTML= texto[iteracion];
+		iteracion++;
+		if(iteracion==texto.length){
+			iteracion=0;
+		}
+	},1000);
+}, false);
+</script>
+
+</body>
+</html>

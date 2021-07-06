@@ -1,9 +1,5 @@
 @extends('templates.maincontainer')
 <style>
-    .nav-pills{
-
-    }
-
 </style>
 @section('content')
     <div class="d-flex flex-column h-100">
@@ -30,9 +26,17 @@
                         @foreach ($tabletype->tables as $table)
                             <a class="mesa" href="{{url('/')}}/tables/{{$table->id}}/orders">
                                 <img src="{{url('/img/icons/'.$tabletype->name.'.svg')}}">
-                                <div>{{$table->name}}</div>
+                                <div>
+                                    <div>{{$table->name}}</div>
+                                    @if($table->hasOrder())
+                                        <div class="h7 mb-0">{{$table->hasOrder()->Client ? $table->hasOrder()->Client->name : ''}}</div>
+                                    @endif
+                                </div>
                                 @if($table->hasOrder())
-                                    <span class="material-icons ocupada">receipt_long</span>
+                                    <div class="ocupada">
+                                        <span  style="font-size:1rem">${{$table->hasOrder()->Total}}</span>
+                                        <span class="material-icons mb-0" style="font-size:1.8rem;vertical-align:-6px;">receipt_long</span>
+                                    </div>
                                 @endif
                             </a>
                         @endforeach
