@@ -64,7 +64,17 @@
         background-color:white;
         color:black;
         opacity: 1;
+        border-color: rgb(133, 133, 133);
     }
+
+    input:disabled{
+        background-color:white;
+        color:black;
+        opacity: 1;
+        border-color: rgb(133, 133, 133);
+    }
+
+
     .botones .btn{
         width: 300px;
         margin-bottom: 1rem;
@@ -207,7 +217,6 @@
                             <td>
                                 {{ $orderdetail->product->name }}<br>
                                 <small>{{ $orderdetail->enabled==1 ? $orderdetail->description : "(eliminado)"}}</small>
-                                <input type="hidden" name="orderdetail_id[]" value="{{ $orderdetail->id }}">
                             </td>
                             <td align="right">
                                 {{ number_format($orderdetail->quantity, 0, '', '.') }}
@@ -380,6 +389,10 @@
                 <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
                     <span class="material-icons">add_shopping_cart</span>
                     Agregar
+                </a>
+                <a onclick="prueba()" class="btn btn-light btn-lg">
+                    <span class="material-icons">send</span>
+                    Prueba
                 </a>
                 <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-danger btn-lg">
                     <span class="material-icons">price_check</span>
@@ -629,8 +642,22 @@
             });
         }
 
-        function PrintBoleta(){
+        function prueba(){
+            orderForm['ordertype_id'].disabled=true;
+            orderForm['discount'].disabled=true;
+            orderForm['discount_description'].disabled=true;
+            orderForm['tip_type'].disabled=true;
+            orderForm['tip'].disabled=true;
 
+            orderForm['delivery'].disabled=true;
+            orderForm['transfer'].disabled=true;
+            orderForm['debit_card'].disabled=true;
+            orderForm['credit_card'].disabled=true;
+            orderForm['efective'].disabled=true;
+        }
+
+        function PrintBoleta(){
+            paymentStore();
             $.get("{{ url('/') }}/ajax/generateInvoice/{{ $order->id }}", function(data) {
                 var pdfData = atob(data.response.PDF==null ? data.response.pdf : data.response.PDF);
                 var pdfjsLib = window['pdfjs-dist/build/pdf'];
