@@ -90,13 +90,25 @@ class OrderController extends Controller
         return redirect('/orders/'.$order->id)->with('success', 'Order Iniciada');;
     }
 
-    public function close($order_id, Request $request)
+    public function paymentStore($order_id, Request $request)
     {
         $order  = Order::findOrFail($order_id);
         $order->fill($request->all());
-        $order->closed = 1;
         $order->save();
         return $order;
+    }
+
+
+    public function close($order_id)
+    {
+        $order  = Order::findOrFail($order_id);
+        if($order->dte_token){
+            $order->closed=1;
+            $order->save();
+            return redirect('/orders/'.$order->id)->with('success','Orden cerrada con exito');
+        }else{
+            return back()->with('error','No se puede cerrar la venta, la boleta no ha sido emitida');
+        }
     }
 
     public function details($order_id){
@@ -166,10 +178,14 @@ class OrderController extends Controller
     {
         $company = session('company');
         $order = Order::findOrFail($order_id);
-        $tabletypes = Tabletype::with(['tables'=>function($query) use($company){
-            $query->where('company_id',$company->id)->where('enabled',1);
-        }])->get();
-        return view('orders.changetable', compact('tabletypes','order'));
+        if($order->dte_token==null){
+            $tabletypes = Tabletype::with(['tables'=>function($query) use($company){
+                $query->where('company_id',$company->id)->where('enabled',1);
+            }])->get();
+            return view('orders.changetable', compact('tabletypes','order'));
+        }else{
+            return back()->with('error','No se puede cambiar la mesa, la boleta ya fue emitida');
+        }
     }
 
     public function changetableProcess($order_id,$table_id)
@@ -190,6 +206,7 @@ class OrderController extends Controller
             if($orderdetail->command==0  && $orderdetail->enabled){
                 $orderdetail->command=1;
                 $orderdetail->save();
+                $orderdetail->recent=1;
             }
         }
         return $orderdetails;
@@ -211,12 +228,8 @@ class OrderController extends Controller
                     //$low_stock[]=$item->name;
                     $this->lowStockMail($item->id);
                 }
-
-
             }
         }
-
-
     }
 
     public function addstock($orderdetail){
@@ -237,7 +250,6 @@ class OrderController extends Controller
     public function history($order_id)
     {
         $order = Order::findOrFail($order_id);
-
         if($order->client_id){
             $client = Client::findOrFail($order->client_id);
             foreach ($client->orders as $key => $order_item) {
@@ -277,7 +289,6 @@ class OrderController extends Controller
     public function lowStockMail($item_id){
         $item = Item::findOrFail($item_id);
         $subject = "ALERTA - ".$item->name." con bajo Stock, fecha: ".date("m-d-Y H:i");;
-
 
         //busca solo los usuarios con permisos de SUPERADMIN y ADMIN asociados a la compañia del item a notificar
         $receivers = DB::table('company_user')

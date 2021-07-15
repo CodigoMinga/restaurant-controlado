@@ -25,24 +25,14 @@ class SalesHelper extends Controller
      * @param order_id $order_id
      */
     public function generateInvoice($order_id){
-
-
         //busca si existe la orden en la DB
         $order = Order::find($order_id);
-
         if(isset($order)){
-
             if($order->CommandComplete){
                 //valida si la boleta ya fue emitida, existe token no deja emitirla denuevo
                 if(isset($order->dte_token)){
                     $this->printAgainInvoice($order_id);
-                    /*
-                    return new Response([
-                        'response' => "Esta boleta ya fue emitida, existe token, puede re-imprimirla",
-                        'request' => ""
-                    ], 400);*/
                 }
-
                 $paramsArr = [];
                 $paramsArr['response'] = self::RESPONSES;
                 $paramsArr['dte'] = [];
@@ -50,7 +40,6 @@ class SalesHelper extends Controller
                     'TipoDTE' => self::BOLETA_ELECTRONICA,
                     'Folio' => 0,
                     'FchEmis' => date('Y-m-d'),
-
                     'IndServicio' => self::BOLETA_VENTA_SERVICIO
                 ];
 
@@ -61,10 +50,13 @@ class SalesHelper extends Controller
 
                 $orderdetails = $order->orderdetails;
 
-
                 $detalle = [];
+
+                $opcional = [];
+
                 $total = 0;
                 $ct = 0 ;
+
                 foreach($orderdetails as $detail) {
                     if($detail->enabled){
                         $ct = $ct + 1;
@@ -78,6 +70,21 @@ class SalesHelper extends Controller
                         $total += $detail->total_ammount;
                     }
                 }
+
+                $ct = 0 ;
+                if($order->discount!=null){
+                    $ct = $ct + 1;
+                    array_push($opcional, [
+                        "NroLinDR" => $ct,
+                        "TpoMov" => "D",
+                        "GlosaDR" => "Descuento",
+                        "TpoValor" => "$",
+                        "ValorDR" => $order->discount*-1
+                    ]);
+                    $total += $order->discount;
+                }
+
+
 
 
                 $emisor = [
@@ -93,12 +100,31 @@ class SalesHelper extends Controller
                 $paramsArr['dte']['Encabezado']['Receptor'] = ["RUTRecep" => "66666666-6"];
                 $totales = [
                     "MntTotal" => $total ,
-                    "VlrPagar" => $total ,
+                    "VlrPagar" => $total + $order->tip,
                     "IVA" => round($total - ($total  / 1.19)),
                     "MntNeto" => round(($total  / 1.19))
                 ];
+
+                if($order->tip!=null){
+                    $ct = $ct + 1;
+                    array_push($opcional, [
+                        "NroLinDR" => $ct,
+                        "TpoMov" => "R",
+                        "GlosaDR" => "Propina",
+                        "TpoValor" => "$",
+                        "IndExeDR" => 2,
+                        "ValorDR" => $order->tip
+                    ]);
+                    
+                    $totales["MontoNF"]=$order->tip;
+                }
+
                 $paramsArr['dte']['Encabezado']['Totales'] = $totales;
                 $paramsArr['dte']['Detalle'] = $detalle;
+
+                if(COUNT($opcional)>0){
+                    $paramsArr['dte']['DscRcgGlobal'] = $opcional;
+                }
 
                 $curl = curl_init();
 
@@ -133,8 +159,7 @@ class SalesHelper extends Controller
                 $err = curl_error($curl);
 
                 $response = json_decode($response);
-                $err = json_decode($err);
-
+                $error = json_decode($err);
 
                 curl_close($curl);
 
@@ -142,9 +167,9 @@ class SalesHelper extends Controller
                 $paramsArr['adicionales_datos_empresa'] = "prueba de texto adicional2";
 
                 //return json_encode($paramsArr,JSON_UNESCAPED_SLASHES);
-                if ($err) {
+                if ($error) {
                     return new Response([
-                        'response' => $err,
+                        'response' => $error->message,
                         'request' => $paramsArr
                     ], 400);
                 } else {
@@ -168,7 +193,6 @@ class SalesHelper extends Controller
                 'response' => "Error la orden enviada no existe en la DB",
                 'request' => ""
             ], 400);
-
         }
     }
 
