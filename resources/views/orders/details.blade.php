@@ -64,7 +64,17 @@
         background-color:white;
         color:black;
         opacity: 1;
+        border-color: rgb(133, 133, 133);
     }
+
+    input:disabled{
+        background-color:white;
+        color:black;
+        opacity: 1;
+        border-color: rgb(133, 133, 133);
+    }
+
+
     .botones .btn{
         width: 300px;
         margin-bottom: 1rem;
@@ -116,7 +126,7 @@
                                 Tipo
                             </th>
                             <td style="padding:0px">
-                                <select name="ordertype_id" class="inputtable w-100" id="ordertype" {{$order->closed==1 ? "disabled" :""}}>
+                                <select name="ordertype_id" class="inputtable w-100" id="ordertype" {{$order->dte_token!=null ? "disabled" :""}}>
                                     @foreach ($ordertypes as $ordertype)
                                         <option value="{{ $ordertype->id }}" {{$ordertype->id==$order->ordertype_id ? "selected":""}}>{{ $ordertype->name }}</option>
                                     @endforeach
@@ -185,6 +195,9 @@
                             Producto
                         </th>
                         <th width=1>
+                            Comanda
+                        </th>
+                        <th width=1>
                             Cant.
                         </th>
                         <th width=1>
@@ -202,12 +215,18 @@
                 </thead>
                 <tbody>
                     @foreach ($order->orderdetails as $orderdetail)
-                        @if($order->closed==0 && $orderdetail->enabled==1 || $order->closed==1)
+                        @if($order->closed==0 && $orderdetail->enabled==1 || $order->dte_token!=null)
                         <tr {{$orderdetail->enabled==0 ? "class=text-danger" : ""}}>
                             <td>
                                 {{ $orderdetail->product->name }}<br>
                                 <small>{{ $orderdetail->enabled==1 ? $orderdetail->description : "(eliminado)"}}</small>
-                                <input type="hidden" name="orderdetail_id[]" value="{{ $orderdetail->id }}">
+                            </td>
+                            <td align="center" id="command_{{$orderdetail->id}}">
+                                @if($orderdetail->command)
+                                    <i class="text-success material-icons">done</i>
+                                @else
+                                    <i class="text-muted material-icons">more_horiz</i>
+                                @endif
                             </td>
                             <td align="right">
                                 {{ number_format($orderdetail->quantity, 0, '', '.') }}
@@ -241,7 +260,7 @@
                                 Transferencia
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="transfer" name="transfer" class="dinero inputtable" value="{{$order->transfer}}" {{$order->closed==1 ? "readonly " :""}}>
+                                <input type="number" size="6" id="transfer" name="transfer" class="dinero inputtable" value="{{$order->transfer}}" {{$order->dte_token!=null ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -249,7 +268,7 @@
                                 T. de Débito
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="debit_card" name="debit_card" class="dinero inputtable" value="{{$order->debit_card}}" {{$order->closed==1 ? "readonly " :""}}>
+                                <input type="number" size="6" id="debit_card" name="debit_card" class="dinero inputtable" value="{{$order->debit_card}}" {{$order->dte_token!=null ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -257,7 +276,7 @@
                                 T. de Crédito
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="credit_card" name="credit_card" class="dinero inputtable" value="{{$order->credit_card}}" {{$order->closed==1 ? "readonly " :""}}>
+                                <input type="number" size="6" id="credit_card" name="credit_card" class="dinero inputtable" value="{{$order->credit_card}}" {{$order->dte_token!=null ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -265,7 +284,7 @@
                                 Efectivo
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="efective" name="efective" class="dinero inputtable" value="{{$order->efective}}" {{$order->closed==1 ? "readonly " :""}}>
+                                <input type="number" size="6" id="efective" name="efective" class="dinero inputtable" value="{{$order->efective}}" {{$order->dte_token!=null ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -308,7 +327,7 @@
                                 Descuento
                             </th>
                             <td class="p-0 m-0" width=1>
-                                <select name="discount" id='discount' class="inputtable number dinero"  {{$order->closed==1 ? "disabled" :""}}>
+                                <select name="discount" id='discount' class="inputtable number dinero"  {{$order->dte_token!=null ? "disabled" :""}}>
                                     <option value="0">0</option>
                                     @foreach ($discounts as $discount)
                                         <option value="{{ $discount->ammount }}" {{$order->discount==$discount->ammount ? "selected": ""}}>{{ number_format($discount->ammount, 0, '', '.') }}</option>
@@ -316,7 +335,7 @@
                                 </select>
                             </td>
                             <td class="p-0 m-0">
-                                <input type="text" name="discount_description" class="inputtable number" placeholder="Razón del descuento" value="{{$order->discount_description}}"  {{$order->closed==1 ? "readonly " :""}}>
+                                <input type="text" name="discount_description" class="inputtable number" placeholder="Razón del descuento" value="{{$order->discount_description}}"  {{$order->dte_token!=null ? "readonly " :""}}>
                             </td>
                             <td id='discount_total'>
                                 0
@@ -328,7 +347,7 @@
                                 Propina
                             </th>
                             <td class="p-0 m-0" width=1>
-                                <select name="tip_type" id='tip_type' class="inputtable number dinero" {{$order->closed==1 ? "disabled" :""}}>
+                                <select name="tip_type" id='tip_type' class="inputtable number dinero" {{$order->dte_token!=null ? "disabled" :""}}>
                                     <option value="0"   {{$order->tip_type==0 ? "selected": ""}}>0</option>
                                     <option value="10"  {{$order->tip_type==10 ? "selected": ""}}>10%</option>
                                     <option value="-1"  {{$order->tip_type==-1 ? "selected": ""}}>Cantidad</option>
@@ -347,7 +366,7 @@
                                 Despacho
                             </th>
                             <td class="p-0 m-0" width=1>
-                                <select name="delivery" id="delivery" class="inputtable number dinero"  {{$order->closed==1 ? "disabled" :""}}>
+                                <select name="delivery" id="delivery" class="inputtable number dinero"  {{$order->dte_token!=null ? "disabled" :""}}>
                                     <option value="0" {{0 == $order->delivery ? "selected" : ""}}>0</option>
                                     @foreach ($deliveries as $delivery)
                                         <option value="{{$delivery->ammount}}" {{$order->delivery==$delivery->ammount ? "selected": ""}}>
@@ -377,14 +396,14 @@
         <hr>
         @if($order->closed==0)
         <div class="d-flex flex-wrap justify-content-between botones">
-                <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
-                    <span class="material-icons">add_shopping_cart</span>
-                    Agregar
-                </a>
-                <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-danger btn-lg">
-                    <span class="material-icons">price_check</span>
-                    Cambiar Mesa
-                </a>
+            <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
+                <span class="material-icons">add_shopping_cart</span>
+                Agregar
+            </a>
+            <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-danger btn-lg">
+                <span class="material-icons">price_check</span>
+                Cambiar Mesa
+            </a>
         </div>
         @endif
         <div class="d-flex flex-wrap justify-content-between botones">
@@ -403,16 +422,16 @@
                 <span class="material-icons">receipt</span>
                 Comanda Completa
             </button>
-            <button onclick="PrintBoleta()" class="btn btn-warning btn-lg">
+            <button onclick="paymentStore()" class="btn btn-warning btn-lg">
                 <span class="material-icons">receipt_long</span>
                 Boleta
             </button>
         </div>
         @if($order->closed==0)
-        <button onclick="paymentStore()" class="btn btn-info btn-lg btn-block">
+        <a href="{{url('/orders/'.$order->id.'/close')}}" class="btn btn-info btn-lg btn-block">
             <span class="material-icons">price_check</span>
             Cerrar Venta
-        </button>
+        </a>
         @endif
         <!-- Modal -->
         <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -629,8 +648,21 @@
             });
         }
 
-        function PrintBoleta(){
+        function disabledPaymend(){
+            orderForm['ordertype_id'].disabled=true;
+            orderForm['discount'].disabled=true;
+            orderForm['discount_description'].disabled=true;
+            orderForm['tip_type'].disabled=true;
+            orderForm['tip'].disabled=true;
 
+            orderForm['delivery'].disabled=true;
+            orderForm['transfer'].disabled=true;
+            orderForm['debit_card'].disabled=true;
+            orderForm['credit_card'].disabled=true;
+            orderForm['efective'].disabled=true;
+        }
+
+        function PrintBoleta(){
             $.get("{{ url('/') }}/ajax/generateInvoice/{{ $order->id }}", function(data) {
                 var pdfData = atob(data.response.PDF==null ? data.response.pdf : data.response.PDF);
                 var pdfjsLib = window['pdfjs-dist/build/pdf'];
@@ -701,7 +733,8 @@
                     var toprint = 0;
                     $('#comandList').html('');
                     data.forEach(element => {
-                        if( (tipo==1  || element.command==0) && element.enabled==1){
+                        if( (tipo==1  || element.recent==1) && element.enabled==1){
+                            $('#command_'+element.id).html('<i class="text-success material-icons">done</i>');
                             $('#comandList').append("<tr><td>"+element.product.name+"</td><td>"+element.quantity+"</td></tr>");
                             toprint++;
                         }
@@ -1081,32 +1114,38 @@
                 orderForm['discount'].value != 0
             ){
                 alert("Falta agregar razon del descuento");
+                return false;
             }else if(
                 orderForm['ordertype_id'].value=="2" && (orderForm['client_id'].value=="" || orderForm['delivery'].value==0)
             ){
                 alert("para Entrega a domicilio debe ingresar la información del cliente y costo de Despacho");
+                return false;
             }else if(
                 FaltaPagar !=0
             ){
                 alert("Falta pagar: $"+miles(FaltaPagar));
+                return false;
             }else if(loadorderForm) {
                 loadorderForm = false;
                 var formData = new FormData(orderForm);
                 $.ajax({
-                    url: "{{ url('/orders/'.$order->id.'/close') }}",
+                    url: "{{ url('/orders/'.$order->id.'/paymentStore') }}",
                     type: "POST",
                     data: formData,
                     processData: false, // tell jQuery not to process the data
                     contentType: false // tell jQuery not to set contentType
                 }).done(function(data) {
                     if (typeof(data) == 'object') {
-                        console.log(data);
-                        location.reload();
+                        disabledPaymend();
+                        PrintBoleta();
+                        return true;
                     } else {
                         alert(data);
+                        return false;
                     }
                 }).fail(function() {
                     alert("error al recibir respuesta del servidor");
+                    return false;
                 }).always(function() {
                     loadorderForm = true;
                 });

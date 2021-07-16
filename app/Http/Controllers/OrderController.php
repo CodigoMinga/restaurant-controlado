@@ -16,6 +16,10 @@ use App\Product;
 use App\Cashregister;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Mail;
+use App\Mail\LowStockMail;
+use App\Item;
+
 
 class OrderController extends Controller
 {
@@ -40,7 +44,7 @@ class OrderController extends Controller
             return view('cashregister.notfound');
         }
     }
-    
+
     public function list(){
         $company = session('company');
         $orders = Order::where('enabled','=',1)->where('company_id',$company->id)->get();
@@ -86,15 +90,27 @@ class OrderController extends Controller
         return redirect('/orders/'.$order->id)->with('success', 'Order Iniciada');;
     }
 
-    public function close($order_id, Request $request)
+    public function paymentStore($order_id, Request $request)
     {
         $order  = Order::findOrFail($order_id);
         $order->fill($request->all());
-        $order->closed = 1;
         $order->save();
         return $order;
     }
-    
+
+
+    public function close($order_id)
+    {
+        $order  = Order::findOrFail($order_id);
+        if($order->dte_token){
+            $order->closed=1;
+            $order->save();
+            return redirect('/orders/'.$order->id)->with('success','Orden cerrada con exito');
+        }else{
+            return back()->with('error','No se puede cerrar la venta, la boleta no ha sido emitida');
+        }
+    }
+
     public function details($order_id){
         $order = Order::findOrFail($order_id);
         if($order->table->tabletype_id==1){
@@ -162,12 +178,16 @@ class OrderController extends Controller
     {
         $company = session('company');
         $order = Order::findOrFail($order_id);
-        $tabletypes = Tabletype::with(['tables'=>function($query) use($company){
-            $query->where('company_id',$company->id)->where('enabled',1);
-        }])->get();
-        return view('orders.changetable', compact('tabletypes','order'));
+        if($order->dte_token==null){
+            $tabletypes = Tabletype::with(['tables'=>function($query) use($company){
+                $query->where('company_id',$company->id)->where('enabled',1);
+            }])->get();
+            return view('orders.changetable', compact('tabletypes','order'));
+        }else{
+            return back()->with('error','No se puede cambiar la mesa, la boleta ya fue emitida');
+        }
     }
-    
+
     public function changetableProcess($order_id,$table_id)
     {
         $order  = Order::findOrFail($order_id);
@@ -186,6 +206,7 @@ class OrderController extends Controller
             if($orderdetail->command==0  && $orderdetail->enabled){
                 $orderdetail->command=1;
                 $orderdetail->save();
+                $orderdetail->recent=1;
             }
         }
         return $orderdetails;
@@ -194,7 +215,7 @@ class OrderController extends Controller
     public function substock($orderdetail){
         //$low_stock=[];
         $prescription= $orderdetail->product->prescriptions->last();
-        if($prescription){                
+        if($prescription){
             $prescriptiondetails = $prescription->prescriptiondetails;
             foreach ($prescriptiondetails as $key => $prescriptiondetail) {
                 $item=$prescriptiondetail->item;
@@ -202,18 +223,18 @@ class OrderController extends Controller
                 $quantity =$prescriptiondetail->quantity * $orderdetail->quantity;
                 $item->stock = $stock - ($quantity);
                 $item->save();
-                /*
+
                 if($item->stock<=$item->warning){
-                    $low_stock[]=$item->name;
-                }*/
+                    //$low_stock[]=$item->name;
+                    $this->lowStockMail($item->id);
+                }
             }
         }
-        //return 
     }
 
     public function addstock($orderdetail){
         $prescription= $orderdetail->product->prescriptions->last();
-        if($prescription){                
+        if($prescription){
             $prescriptiondetails = $prescription->prescriptiondetails;
             foreach ($prescriptiondetails as $key => $prescriptiondetail) {
                 $item=$prescriptiondetail->item;
@@ -225,11 +246,10 @@ class OrderController extends Controller
         }
     }
 
-    
+
     public function history($order_id)
     {
         $order = Order::findOrFail($order_id);
-        
         if($order->client_id){
             $client = Client::findOrFail($order->client_id);
             foreach ($client->orders as $key => $order_item) {
@@ -243,8 +263,8 @@ class OrderController extends Controller
         }
     }
 
-    
-    
+
+
     public function repeat($order_id,$order_id_old)
     {
         $order      = Order::findOrFail($order_id);
@@ -263,5 +283,42 @@ class OrderController extends Controller
             $this->substock($orderdetail);
         }
         return redirect('/orders/'.$order->id)->with('success', 'Orden Repetida');
+    }
+
+
+    public function lowStockMail($item_id){
+        $item = Item::findOrFail($item_id);
+        $subject = "ALERTA - ".$item->name." con bajo Stock, fecha: ".date("m-d-Y H:i");;
+
+        //busca solo los usuarios con permisos de SUPERADMIN y ADMIN asociados a la compañia del item a notificar
+        $receivers = DB::table('company_user')
+            ->leftJoin('role_user','company_user.user_id','=','role_user.user_id')
+            ->leftJoin('users','company_user.user_id','users.id')
+            ->select('company_user.*','role.*')
+            ->where('company_id','=',$item->company_id)
+            ->whereIn('role_user.id',[1,2])
+        ->select('*')
+        ->get()
+        ->pluck('email');
+
+        //valida que la lista de correos sea valida
+        $filterd_emails = array();
+        foreach($receivers as $email) {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+            } else {
+                array_push($filterd_emails,$email);
+            }
+        }
+
+        //si el listado de correos no tiene elementos se los envia a valdo
+        if(count($filterd_emails) == 0){
+            array_push($filterd_emails,'osvaldo.alvarado.dev@gmail.com');
+            $subject = $subject." NO EXISTEN DESTINATARIOS";
+        }
+
+
+        $status = Mail::to($filterd_emails)->send(new LowStockMail($subject,$item));
+        return "CORREO ENVIADO ".$status;
     }
 }

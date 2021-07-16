@@ -34,7 +34,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/orders/list',                              'OrderController@list');
     Route::get('/orders/start/{table_id}',                  'OrderController@start');
     Route::get('/orders/{order_id}',                        'OrderController@details');
-    Route::post('/orders/{order_id}/close',                 'OrderController@close');
+    Route::post('/orders/{order_id}/paymentStore',          'OrderController@paymentStore');
+    Route::get('/orders/{order_id}/close',                  'OrderController@close');
     Route::get('/orders/{order_id}/changetable',            'OrderController@changetable');
     Route::get('/orders/{order_id}/changetable/{table_id}', 'OrderController@changetableProcess');
     Route::get('/tables',                                   'OrderController@tables');
@@ -126,7 +127,7 @@ Route::group(['middleware' => ['auth']], function() {
         $tabletypes = App\Tabletype::with(['tables'=>function($query){$query->where('tables.id',1);}])->get();
         return $tabletypes;
     });
-    
+
 });
 
 //rutas ajax
@@ -136,6 +137,6 @@ route::get('/ajax/removeDte/{order_id}','SalesHelper@removeDte');
 
 
 
-
+route::get('/testmail/{item_id}','OrderController@lowStockMail');
 
 
