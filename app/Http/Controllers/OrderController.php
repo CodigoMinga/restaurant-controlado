@@ -14,6 +14,7 @@ use App\Discount;
 use App\Delivery;
 use App\Product;
 use App\Cashregister;
+use App\Http\Controllers\SalesHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mail;
@@ -47,7 +48,7 @@ class OrderController extends Controller
 
     public function list(){
         $company = session('company');
-        $orders = Order::where('enabled','=',1)->where('company_id',$company->id)->get();
+        $orders = Order::where('company_id',$company->id)->get();
         foreach ($orders as $key => $order) {
             $order->total=$order->Total;
             $order->ordertype;
@@ -94,6 +95,12 @@ class OrderController extends Controller
     {
         $order  = Order::findOrFail($order_id);
         $order->fill($request->all());
+        if($request->delivery){                
+            $delivery = Delivery::where('company_id',$order->company_id)->where('ammount',$request->delivery)->first();
+            $order->delivery_commission =  $delivery->delivery_commission;
+        }else{
+            $order->delivery_commission = 0;
+        }
         $order->save();
         return $order;
     }
@@ -111,6 +118,36 @@ class OrderController extends Controller
         }
     }
 
+    public function disable(Request $request)
+    {
+        $input = $request->all();
+        $order = Order::findOrFail($input['order_id']);
+        if($order->dte_token==null){
+            $order->description = $input['description'];
+            $order->enabled = 0;
+            $order->closed=1;
+            $order->save();
+            return redirect('/orders/'.$order->id)->with('success','Orden Anulada con exito');
+        }else{
+            //$result = (new SalesHelper)->removeDte($order->id);
+            $order->description = $input['description'];
+            $order->enabled = 0;
+            $order->closed=1;
+            $order->save();
+            return redirect('/orders/'.$order->id)->with('success','Orden Anulada con exito');
+            return $result;
+        }
+    }
+
+    
+    public function ordertype($order_id,$ordertype_id)
+    {
+        $order  = Order::findOrFail($order_id);
+        $order->ordertype_id = $ordertype_id;
+        $order->save();
+        return true;
+    }
+
     public function details($order_id){
         $order = Order::findOrFail($order_id);
         if($order->table->tabletype_id==1){
@@ -120,7 +157,7 @@ class OrderController extends Controller
         }
 
         $discounts = Discount::all();
-        $deliveries = Delivery::all();
+        $deliveries = Delivery::where('company_id',$order->company_id)->get();
         return view('orders.details', compact('order','ordertypes','discounts','deliveries'));
     }
 
@@ -142,17 +179,21 @@ class OrderController extends Controller
         $order      = Order::findOrFail($input['order_id']);
         $product    = Product::findOrFail($input['product_id']);
 
-        $orderdetail = new Orderdetail();
-        $orderdetail->product_id    = $product->id;
-        $orderdetail->order_id      = $order->id;
-        $orderdetail->quantity      = $input['quantity'];
-        $orderdetail->description   = $input['description'];
-        $orderdetail->unit_ammount  = $product->price;
-        $orderdetail->total_ammount = intval($input['quantity']) * intval($product->price);
-        $orderdetail->save();
-        $this->substock($orderdetail);
-        $order->Total=$order->Total;
-        return $order;
+        if($order->dte_token==null){
+            $orderdetail = new Orderdetail();
+            $orderdetail->product_id    = $product->id;
+            $orderdetail->order_id      = $order->id;
+            $orderdetail->quantity      = $input['quantity'];
+            $orderdetail->description   = $input['description'];
+            $orderdetail->unit_ammount  = $product->price;
+            $orderdetail->total_ammount = intval($input['quantity']) * intval($product->price);
+            $orderdetail->save();
+            $this->substock($orderdetail);
+            $order->Total=$order->Total;
+            return $order;
+        }else{
+            return "La boleta ya fue emitida, Agregar productos";
+        }
     }
 
 
@@ -161,7 +202,7 @@ class OrderController extends Controller
         $input = $request->all();
         $orderdetail    = Orderdetail::findOrFail($input['orderdetail_id']);
         $order          = $orderdetail->order;
-        if($order->closed==0){
+        if($order->dte_token==null){
             if($orderdetail->enabled){
                 $orderdetail->enabled = 0;
                 $orderdetail->save();
@@ -170,7 +211,7 @@ class OrderController extends Controller
             }
             return $order;
         }else{
-            return "Orden Cerrada, no se puede eliminar";
+            return "La boleta ya fue emitida, no se puede eliminar";
         }
     }
 
@@ -268,21 +309,26 @@ class OrderController extends Controller
     public function repeat($order_id,$order_id_old)
     {
         $order      = Order::findOrFail($order_id);
-        $order_old  = Order::findOrFail($order_id_old);
-        foreach ($order_old->orderdetails as $key => $orderdetail_old) {
+        
+        if($order->dte_token==null){
+            $order_old  = Order::findOrFail($order_id_old);
+            foreach ($order_old->orderdetails as $key => $orderdetail_old) {
 
-            $product    = Product::findOrFail($orderdetail_old->product_id);
-            $orderdetail = new Orderdetail();
-            $orderdetail->product_id    = $product->id;
-            $orderdetail->order_id      = $order->id;
-            $orderdetail->quantity      = $orderdetail_old->quantity;
-            $orderdetail->description   = $orderdetail_old->description;
-            $orderdetail->unit_ammount  = $product->price;
-            $orderdetail->total_ammount = intval($orderdetail_old->quantity) * intval($product->price);
-            $orderdetail->save();
-            $this->substock($orderdetail);
+                $product    = Product::findOrFail($orderdetail_old->product_id);
+                $orderdetail = new Orderdetail();
+                $orderdetail->product_id    = $product->id;
+                $orderdetail->order_id      = $order->id;
+                $orderdetail->quantity      = $orderdetail_old->quantity;
+                $orderdetail->description   = $orderdetail_old->description;
+                $orderdetail->unit_ammount  = $product->price;
+                $orderdetail->total_ammount = intval($orderdetail_old->quantity) * intval($product->price);
+                $orderdetail->save();
+                $this->substock($orderdetail);
+            }
+            return redirect('/orders/'.$order->id)->with('success', 'Orden Repetida');
+        }else{
+            return redirect('/orders/'.$order->id)->with('error', 'La boleta ya fue emitida, no se puede repetir la orden');
         }
-        return redirect('/orders/'.$order->id)->with('success', 'Orden Repetida');
     }
 
 
@@ -316,7 +362,6 @@ class OrderController extends Controller
             array_push($filterd_emails,'osvaldo.alvarado.dev@gmail.com');
             $subject = $subject." NO EXISTEN DESTINATARIOS";
         }
-
 
         $status = Mail::to($filterd_emails)->send(new LowStockMail($subject,$item));
         return "CORREO ENVIADO ".$status;

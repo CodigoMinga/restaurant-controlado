@@ -52,6 +52,9 @@
             <a class="config-button" href="{{ url('items/list') }}">
                 <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">shopping_cart</i>Insumos
             </a>
+            <a class="config-button" href="{{ url('deliverys/list') }}">
+                <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">delivery_dining</i>Deliverys
+            </a>
         </div>
     </div>
  @stop

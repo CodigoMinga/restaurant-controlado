@@ -32,18 +32,20 @@ Route::group(['middleware' => ['auth']], function() {
 
     //ORDENES
     Route::get('/orders/list',                              'OrderController@list');
+    Route::post('/orders/disable',                          'OrderController@disable');
     Route::get('/orders/start/{table_id}',                  'OrderController@start');
     Route::get('/orders/{order_id}',                        'OrderController@details');
     Route::post('/orders/{order_id}/paymentStore',          'OrderController@paymentStore');
     Route::get('/orders/{order_id}/close',                  'OrderController@close');
     Route::get('/orders/{order_id}/changetable',            'OrderController@changetable');
     Route::get('/orders/{order_id}/changetable/{table_id}', 'OrderController@changetableProcess');
+    Route::get('/orders/{order_id}/products',               'OrderController@products');
+    Route::get('/orders/{order_id}/command',                'OrderController@command');
+    Route::get('/orders/{order_id}/ordertype_id/{ordertype_id}',  'OrderController@ordertype');
     Route::get('/tables',                                   'OrderController@tables');
     Route::get('/tables/{table_id}/orders',                 'OrderController@tableorder');
-    Route::get('/orders/{order_id}/products',               'OrderController@products');
     Route::post('/orders/products/attach',                  'OrderController@productAttach');
     Route::post('/orders/products/detach',                  'OrderController@productDetach');
-    Route::get('/orders/{order_id}/command',                'OrderController@command');
 
     //pedidos del cliente de la orden
     Route::get('/orders/{order_id}/clienthistory',          'OrderController@history');
@@ -94,6 +96,13 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/tables/{table_id}/delete',           'TableController@delete');
     Route::post('/tables/process',                    'TableController@process');
 
+    //MESAS
+    Route::get('/deliverys/list',                        'DeliveryController@list')->name('deliverys.list');
+    Route::get('/deliverys/add',                         'DeliveryController@add')->name('deliverys.add');
+    Route::get('/deliverys/{delivery_id}',               'DeliveryController@details')->name('deliverys.details');
+    Route::get('/deliverys/{delivery_id}/delete',        'DeliveryController@delete');
+    Route::post('/deliverys/process',                    'DeliveryController@process');
+
     //RECETA
     Route::post('/prescriptions/store',                     'PrescriptionController@store');
     Route::get('/prescriptions/{prescription_id}',          'PrescriptionController@details');
@@ -106,12 +115,13 @@ Route::group(['middleware' => ['auth']], function() {
 
     //COMPAÑIAS
     Route::group(['middleware' => ['admin:superadmin']], function(){
-        route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
-        route::post('/companys/add/process',                'CompanyController@addProcess');
         route::get('/companys/list',                        'CompanyController@list')->name('companys.list');
+
+        route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
         route::get('/companys/{company_id}',                'CompanyController@details');
-        route::post('/companys/{company_id}/edit/process',  'CompanyController@editprocess');
+        
         route::get('/companys/{company_id}/delete',         'CompanyController@delete');
+        route::post('/companys/store',                      'CompanyController@store');
     });
 
     //LOGOUT
@@ -122,6 +132,9 @@ Route::group(['middleware' => ['auth']], function() {
     route::get('/cashregister/form','CashregisterController@form');
     route::post('/cashregister/open','CashregisterController@open');
     route::post('/cashregister/close','CashregisterController@close');
+
+    route::get('/cashregister/list','CashregisterController@list');
+    route::get('/cashregister/{cashregister_id}','CashregisterController@details');
 
     route::get('test',function(){
         $tabletypes = App\Tabletype::with(['tables'=>function($query){$query->where('tables.id',1);}])->get();

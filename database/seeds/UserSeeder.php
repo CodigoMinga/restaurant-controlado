@@ -16,8 +16,9 @@ class UserSeeder extends Seeder
     {
         $roles  = Role::where('name', 'superadmin')->first();
         
-        $codigominga    = Company::where('name','CodigoMinga Bar')->first();
-        $delixius       = Company::where('name','Delixius')->first();
+        $codigominga    = Company::where('id',1)->first();
+        $delixius       = Company::where('id',2)->first();
+        $tiocheo        = Company::where('id',2)->first();
 
         $user = new User;
         $user->name = 'Osvaldo';
@@ -27,14 +28,8 @@ class UserSeeder extends Seeder
 
         $user->roles()->attach($roles);
         $user->companies()->attach($codigominga);
-
-        $user = new User;
-        $user->name = 'Nikotine';
-        $user->email = 'Nikotine991@gmail.com';
-        $user->password = bcrypt('password');
-        $user->save();
-        $user->roles()->attach($roles);
-        $user->companies()->attach($codigominga);
+        $user->companies()->attach($delixius);
+        $user->companies()->attach($tiocheo);
 
         $user = new User;
         $user->name = 'programador';
@@ -43,6 +38,8 @@ class UserSeeder extends Seeder
         $user->save();
         $user->roles()->attach($roles);
         $user->companies()->attach($codigominga);
+        $user->companies()->attach($delixius);
+        $user->companies()->attach($tiocheo);
 
         $user = new User;
         $user->name = 'Sebastian';
@@ -59,5 +56,13 @@ class UserSeeder extends Seeder
         $user->save();
         $user->roles()->attach($roles);
         $user->companies()->attach($delixius);
+
+        $user = new User;
+        $user->name = 'Nikotine';
+        $user->email = 'Nikotine991@gmail.com';
+        $user->password = bcrypt('password');
+        $user->save();
+        $user->roles()->attach($roles);
+        $user->companies()->attach($codigominga);
     }
 }

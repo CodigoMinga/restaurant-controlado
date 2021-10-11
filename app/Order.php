@@ -46,6 +46,7 @@ class Order extends Model
         'debit_card',
         'efective',
         'transfer',
+        'difference',
 
         'enabled',
         'created_at',

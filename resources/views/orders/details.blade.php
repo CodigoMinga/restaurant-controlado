@@ -74,6 +74,17 @@
         border-color: rgb(133, 133, 133);
     }
 
+    .btn-purple{
+        color: #fff;
+        background-color: #6f42c1;
+        border-color: #6f42c1;
+    }
+
+    .btn-purple:hover {
+        color: #fff;
+        background-color: #5f39a7;
+        border-color: #5f39a7;
+    }
 
     .botones .btn{
         width: 300px;
@@ -81,6 +92,43 @@
     }
 </style>
 @section('content')
+    <style>
+        .btn-purple{
+            color: #fff;
+            background-color: #6a1b9a;
+            border-color: #6a1b9a;
+        }
+
+        .btn-purple:hover {
+            color: #fff;
+            background-color: #4a148c;
+            border-color: #4a148c;
+        }
+
+        .btn-orange{
+            color: #fff;
+            background-color: #ef6c00;
+            border-color: #ef6c00;
+        }
+
+        .btn-orange:hover {
+            color: #fff;
+            background-color: #e65100;
+            border-color: #e65100;
+        }
+
+        .btn-indigo{
+            color: #fff;
+            background-color: #283593;
+            border-color: #283593;
+        }
+
+        .btn-indigo:hover {
+            color: #fff;
+            background-color: #1a237e;
+            border-color: #1a237e;
+        }
+    </style>
     <div class="container p-3">
         <h1>Orden: {{ $order->internal_id }}</h1>
         <form id="orderForm">
@@ -126,7 +174,7 @@
                                 Tipo
                             </th>
                             <td style="padding:0px">
-                                <select name="ordertype_id" class="inputtable w-100" id="ordertype" {{$order->dte_token!=null ? "disabled" :""}}>
+                                <select name="ordertype_id" class="inputtable w-100" id="ordertype" {{$order->dte_token!=null || $order->closed==1  ? "disabled" :""}}>
                                     @foreach ($ordertypes as $ordertype)
                                         <option value="{{ $ordertype->id }}" {{$ordertype->id==$order->ordertype_id ? "selected":""}}>{{ $ordertype->name }}</option>
                                     @endforeach
@@ -169,7 +217,7 @@
                                 {{ $order->client ? $order->client->address : '' }}
                             </td>
                         </tr>
-                        @if($order->closed==0)
+                        @if($order->dte_token==null && $order->closed!=1)
                         <tr>
                             <td colspan="2" class="p-0 m-0">
                                 <div class="btn-group w-100" role="group">
@@ -206,7 +254,7 @@
                         <th width=1 style="text-align: right">
                             P.Total.
                         </th>
-                        @if($order->closed==0)
+                        @if($order->dte_token==null && $order->closed!=1)
                         <th width=1 style="text-align: right">
                             
                         </th>
@@ -215,7 +263,7 @@
                 </thead>
                 <tbody>
                     @foreach ($order->orderdetails as $orderdetail)
-                        @if($order->closed==0 && $orderdetail->enabled==1 || $order->dte_token!=null)
+                        @if($order->closed==0 && $orderdetail->enabled==1 || $order->closed==1)
                         <tr {{$orderdetail->enabled==0 ? "class=text-danger" : ""}}>
                             <td>
                                 {{ $orderdetail->product->name }}<br>
@@ -237,7 +285,7 @@
                             <td align="right">
                                 {{ number_format($orderdetail->total_ammount, 0, '', '.') }}
                             </td>
-                            @if($order->closed==0)
+                            @if($order->dte_token==null && $order->closed!=1)
                             <td align="right" width="20">
                                 <a class="btn btn-sm btn-danger material-icons p-0"  onclick="eliminarModal('{{$orderdetail}}')">close</a>
                             </td>
@@ -260,7 +308,7 @@
                                 Transferencia
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="transfer" name="transfer" class="dinero inputtable" value="{{$order->transfer}}" {{$order->dte_token!=null ? "readonly " :""}}>
+                                <input type="number" size="6" id="transfer" name="transfer" class="dinero inputtable" value="{{$order->transfer}}" {{$order->dte_token!=null || $order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -268,7 +316,7 @@
                                 T. de Débito
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="debit_card" name="debit_card" class="dinero inputtable" value="{{$order->debit_card}}" {{$order->dte_token!=null ? "readonly " :""}}>
+                                <input type="number" size="6" id="debit_card" name="debit_card" class="dinero inputtable" value="{{$order->debit_card}}" {{$order->dte_token!=null || $order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -276,7 +324,7 @@
                                 T. de Crédito
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="credit_card" name="credit_card" class="dinero inputtable" value="{{$order->credit_card}}" {{$order->dte_token!=null ? "readonly " :""}}>
+                                <input type="number" size="6" id="credit_card" name="credit_card" class="dinero inputtable" value="{{$order->credit_card}}" {{$order->dte_token!=null || $order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -284,7 +332,7 @@
                                 Efectivo
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="efective" name="efective" class="dinero inputtable" value="{{$order->efective}}" {{$order->dte_token!=null ? "readonly " :""}}>
+                                <input type="number" size="6" id="efective" name="efective" class="dinero inputtable" value="{{$order->efective}}" {{$order->dte_token!=null || $order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -327,7 +375,7 @@
                                 Descuento
                             </th>
                             <td class="p-0 m-0" width=1>
-                                <select name="discount" id='discount' class="inputtable number dinero"  {{$order->dte_token!=null ? "disabled" :""}}>
+                                <select name="discount" id='discount' class="inputtable number dinero"  {{$order->dte_token!=null || $order->closed==1 ? "disabled" :""}}>
                                     <option value="0">0</option>
                                     @foreach ($discounts as $discount)
                                         <option value="{{ $discount->ammount }}" {{$order->discount==$discount->ammount ? "selected": ""}}>{{ number_format($discount->ammount, 0, '', '.') }}</option>
@@ -335,7 +383,7 @@
                                 </select>
                             </td>
                             <td class="p-0 m-0">
-                                <input type="text" name="discount_description" class="inputtable number" placeholder="Razón del descuento" value="{{$order->discount_description}}"  {{$order->dte_token!=null ? "readonly " :""}}>
+                                <input type="text" name="discount_description" class="inputtable number" placeholder="Razón del descuento" value="{{$order->discount_description}}"  {{$order->dte_token!=null || $order->closed==1 ? "readonly " :""}}>
                             </td>
                             <td id='discount_total'>
                                 0
@@ -347,7 +395,7 @@
                                 Propina
                             </th>
                             <td class="p-0 m-0" width=1>
-                                <select name="tip_type" id='tip_type' class="inputtable number dinero" {{$order->dte_token!=null ? "disabled" :""}}>
+                                <select name="tip_type" id='tip_type' class="inputtable number dinero" {{$order->dte_token!=null || $order->closed==1 ? "disabled" :""}}>
                                     <option value="0"   {{$order->tip_type==0 ? "selected": ""}}>0</option>
                                     <option value="10"  {{$order->tip_type==10 ? "selected": ""}}>10%</option>
                                     <option value="-1"  {{$order->tip_type==-1 ? "selected": ""}}>Cantidad</option>
@@ -366,7 +414,7 @@
                                 Despacho
                             </th>
                             <td class="p-0 m-0" width=1>
-                                <select name="delivery" id="delivery" class="inputtable number dinero"  {{$order->dte_token!=null ? "disabled" :""}}>
+                                <select name="delivery" id="delivery" class="inputtable number dinero"  {{$order->dte_token!=null || $order->closed==1 ? "disabled" :""}}>
                                     <option value="0" {{0 == $order->delivery ? "selected" : ""}}>0</option>
                                     @foreach ($deliveries as $delivery)
                                         <option value="{{$delivery->ammount}}" {{$order->delivery==$delivery->ammount ? "selected": ""}}>
@@ -394,44 +442,50 @@
             </div>
         </form>
         <hr>
-        @if($order->closed==0)
-        <div class="d-flex flex-wrap justify-content-between botones">
-            <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
-                <span class="material-icons">add_shopping_cart</span>
-                Agregar
-            </a>
-            <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-danger btn-lg">
-                <span class="material-icons">price_check</span>
-                Cambiar Mesa
-            </a>
-        </div>
-        @endif
-        <div class="d-flex flex-wrap justify-content-between botones">
+        @if($order->enabled==1)
             @if($order->closed==0)
-                <button onclick="comanda(0)" class="btn btn-primary btn-lg">
-                    <span class="material-icons">receipt</span>
-                    Comanda Parcial
-                </button>
-            @else
-                <button onclick="PrintBoleta()" class="btn btn-danger btn-lg">
-                    <span class="material-icons">receipt_long</span>
-                    Anular Venta
-                </button>
+            <div class="d-flex flex-wrap justify-content-between botones">
+                <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
+                    <span class="material-icons">add_shopping_cart</span>
+                    Agregar
+                </a>
+                <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-orange btn-lg">
+                    <span class="material-icons">deck</span>
+                    Cambiar Mesa
+                </a>
+            </div>
             @endif
-            <button onclick="comanda(1)" class="btn btn-primary btn-lg">
-                <span class="material-icons">receipt</span>
-                Comanda Completa
+            <div class="d-flex flex-wrap justify-content-between botones">
+                @if($order->closed==0)
+                    <button onclick="comanda(0)" class="btn btn-primary btn-lg">
+                        <span class="material-icons">receipt</span>
+                        Comanda Parcial
+                    </button>
+                @endif
+                <button onclick="comanda(1)" class="btn btn-info btn-lg">
+                    <span class="material-icons">receipt</span>
+                    Comanda Completa
+                </button>
+                <button onclick="paymentStore()" class="btn btn-purple btn-lg">
+                    <span class="material-icons">receipt_long</span>
+                    Boleta
+                </button>
+            </div>
+            @if($order->closed==0)
+            <a href="{{url('/orders/'.$order->id.'/close')}}" class="btn btn-lg btn-block btn-indigo">
+                <span class="material-icons">price_check</span>
+                Cerrar Venta
+            </a>
+            @endif
+            @if($order->enabled==1)
+            <button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#AnularModal">
+                <span class="material-icons">close</span>
+                Anular Venta
             </button>
-            <button onclick="paymentStore()" class="btn btn-warning btn-lg">
-                <span class="material-icons">receipt_long</span>
-                Boleta
-            </button>
-        </div>
-        @if($order->closed==0)
-        <a href="{{url('/orders/'.$order->id.'/close')}}" class="btn btn-info btn-lg btn-block">
-            <span class="material-icons">price_check</span>
-            Cerrar Venta
-        </a>
+            @endif
+        @else
+            <h3 class="text-danger">Razón de anulación:</h3>
+            <p>{{$order->description}}</p>
         @endif
         <!-- Modal -->
         <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -583,7 +637,40 @@
             </div>
         </div>
 
-
+        <!-- Modal -->
+        <div class="modal fade" id="AnularModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal">
+                <div class="modal-content  bg-dark">
+                    <form id="anularForm" method="POST" action="{{url('/orders/disable')}}">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Anular Venta</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        {{ csrf_field() }}
+                        <div class="modal-body" align="center">
+                            ¿Desea Anular de la Orden {{$order->internal_id}}?
+                            <input type="hidden" value="{{$order->id}}" name="order_id">
+                            <div class="form-group">
+                                <label>Razón de la anulación</label>
+                                <textarea class="form-control" name="description" required></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer p-0 justify-content-between">
+                            <button class="btn btn-danger" type="submit">
+                                <span class="material-icons">send</span>
+                                Anular
+                            </button>                     
+                            <a type="button" class="btn btn-secondary" data-dismiss="modal">
+                                <span class="material-icons">close</span>
+                                Cerrar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="imprimir">
@@ -811,8 +898,9 @@
             if (rowselect[0]) {
                 rowselect[0].classList.remove('bg-select');
             }
-            clientForm['region_id'].value = 7;
+            clientForm['region_id'].value = region_company;
             comunaLoad();
+            clientForm['commune_id'].value = commune_company;
             clientForm['name'].value = '';
             clientForm['phone'].value = '';
             clientForm['address'].value = '';
@@ -824,7 +912,7 @@
             if (
                 clientForm['name'].value == '' ||
                 clientForm['phone'].value == '' ||
-                clientForm['address'].value == ''
+                (clientForm['address'].value == '' & clientForm['address'].required==true)
             ) {
                 alert("Falta Agregar Información");
             } else if (loadclient) {
@@ -943,6 +1031,9 @@
             $('#historyModal').modal('show');
         }
 
+        var region_company = {!! $order->company->commune->region_id !!};
+        var commune_company = {!! $order->company->commune_id !!};
+
         $(document).ready(function() {
 
             $.get("{{ url('clients/getdata') }}", function(data) {
@@ -952,8 +1043,9 @@
                 regions = datos.regions;
                 communes = datos.communes;
                 regionLoad();
-                region_select.value = 7;
+                region_select.value = region_company;
                 comunaLoad();
+                commune_select.value = commune_company;
                 clienttable = $('#tabla').DataTable({
                     scrollY: "35vh",
                     scrollCollapse: true,
@@ -1050,6 +1142,7 @@
         //TOTAL CONSUMO
         let TotalBase = parseFloat("{{ $order->Total }}");
         var FaltaPagar = 0;
+        var difference = 0;
         
         //Adicionales
         var discount        = document.getElementById('discount');
@@ -1093,15 +1186,19 @@
         var deliveryTr = document.getElementById('deliveryTr');
 
         function motrarClientBox(){
+            $.get("{{url('orders/'.$order->id.'/ordertype_id')}}/"+ordertype.value, function(data) {
+                console.log(data);
+            });
             if(ordertype.value==2){
-                clientBox.style.display='table';
                 deliveryTr.style.display='table-row';
+                clientForm.address.required=true;
             }else{
-                clientBox.style.display='none';
                 deliveryTr.style.display='none';
+                clientForm.address.required=false;
                 delivery.value="0";
             }
         }
+
         motrarClientBox();
         ordertype.onchange = motrarClientBox;
         //
@@ -1121,6 +1218,11 @@
                 alert("para Entrega a domicilio debe ingresar la información del cliente y costo de Despacho");
                 return false;
             }else if(
+                orderForm['ordertype_id'].value=="3" && orderForm['client_id'].value==""
+            ){
+                alert("Es necesario ingresar información del cliente");
+                return false;
+            }else if(
                 FaltaPagar !=0
             ){
                 alert("Falta pagar: $"+miles(FaltaPagar));
@@ -1128,6 +1230,7 @@
             }else if(loadorderForm) {
                 loadorderForm = false;
                 var formData = new FormData(orderForm);
+                formData.append("difference", difference);
                 $.ajax({
                     url: "{{ url('/orders/'.$order->id.'/paymentStore') }}",
                     type: "POST",
@@ -1237,6 +1340,7 @@
 
             if(total_pay<0){
                 pay_back.innerHTML = '$'+miles(total_pay*-1);
+                difference=total_pay;
             }else{
                 pay_back.innerHTML = '$'+0;
             }

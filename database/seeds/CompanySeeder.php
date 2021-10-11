@@ -22,11 +22,19 @@ class CompanySeeder extends Seeder
             'api_key_openfactura' => '928e15a2d14d4a6292345f04960f4bd3'
         ]);
         Company::create(['name'=>'Delixius',
-            'rut'=>'77012555-3',
+            'rut'=>'76795561-8',
             'razon_social'=>'DARUICHRODRIGUEZ SPA',
             'giro' => 'Restaurant',
             'direccion' => 'Santiago S/N',
             'comuna' => 'Santiago',
+            'api_key_openfactura' => '928e15a2d14d4a6292345f04960f4bd3'
+        ]);
+        Company::create(['name'=>'Tio Cheo',
+            'rut'=>'76795561-8',
+            'razon_social'=>'HAULMER SPA',
+            'giro' => 'VENTA AL POR MENOR EN EMPRESAS DE VENTA A DISTANCIA VÍA INTERNET; COMERCIO ELEC',
+            'direccion' => 'ARTURO PRAT 527   CURICO',
+            'comuna' => 'Curicó',
             'api_key_openfactura' => '928e15a2d14d4a6292345f04960f4bd3'
         ]);
     }

@@ -1,6 +1,7 @@
 @extends('templates.maincontainer')
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.bootstrap.min.css"/>
+
 <style>
     #tabla_filter,#tabla_paginate{
         text-align: right;
@@ -8,23 +9,25 @@
 </style>
 
 @section('content')
-    <div class="pl-3 pr-3">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1>Lista de Compañias</h1>
-                <a  href="{{ url('/') }}/companys/add" class="btn btn-danger">Agregar Compañia</a>
-            </div>
-            <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
-                <thead>
-                    <tr>
-                        <th>Compañias</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+    <div class="container pt-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>Lista de Deliveries</h1>
+            <a  href="{{ url('deliverys/add')}}" class="btn btn-success">
+                <i class="material-icons">add</i>
+                Agregar Delivery
+            </a>
         </div>
+        <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
+            <thead>
+                <tr>
+                    <th>Delivery</th>
+                    <th>Comisión Chofer</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.18/af-2.3.3/fc-3.2.5/fh-3.1.4/sc-2.0.0/datatables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
@@ -33,11 +36,16 @@
         $(document).ready(function() {
             $('#tabla').DataTable({
                 responsive: true,
-                "data": {!! json_encode($companys->toArray()) !!},
+                "data": {!! json_encode($deliverys->toArray()) !!},
                 "columns": [
-                    { "data": "name","width":"90%"},
-                    { data: "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-success material-icons" href="{{ url("/")}}/companys/'+data+'" >description</a>';
+                    { "data": "ammount",render : function ( data){
+                        return "$"+miles(parseInt(data));
+                    },"width":"30%"},
+                    { "data": "delivery_commission",render : function ( data){
+                        return "$"+miles(data);
+                    },"width":"60%"},
+                    { data: "id", render : function ( data, type, row, meta ){
+                        return '<a class="btn btn-light material-icons" href="{{ url("deliverys")}}/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {
@@ -58,5 +66,9 @@
                 "order": [[ 0, "desc" ]]
             });
         });
+
+        function miles(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
     </script>
  @stop

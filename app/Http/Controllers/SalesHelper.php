@@ -260,10 +260,12 @@ class SalesHelper extends Controller
         }
     }
 
+
+
     public function removeDte($order_id){
 
         $order = Order::find($order_id);
-
+        
         if(isset($order)){
             if(isset($order->dte_token)){
                 if (app()->environment('production')){
