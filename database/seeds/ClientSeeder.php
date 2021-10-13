@@ -312,7 +312,7 @@ class ClientSeeder extends Seeder
                 'name'=>$cliente[0],
                 'phone'=>$cliente[1],
                 'address'=>$cliente[2],
-                'company_id' => 1,
+                'company_id' => 2,
                 'commune_id' => $i,
             ]);
         }

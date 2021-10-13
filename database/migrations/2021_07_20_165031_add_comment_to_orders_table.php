@@ -29,6 +29,7 @@ class AddCommentToOrdersTable extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('delivery_commission');
+            $table->dropColumn('difference');
             $table->dropColumn('description');
         });
     }
