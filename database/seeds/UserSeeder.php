@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         
         $codigominga    = Company::where('id',1)->first();
         $delixius       = Company::where('id',2)->first();
-        $tiocheo        = Company::where('id',2)->first();
+        $tiocheo        = Company::where('id',3)->first();
 
         $user = new User;
         $user->name = 'Osvaldo';

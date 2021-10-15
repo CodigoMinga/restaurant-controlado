@@ -713,7 +713,7 @@
 
             mywindow.document.write('<html><head></head><title>Comanda</title>');
             mywindow.document.write(
-                '<style>*{font-family:Arial, sans-serif;} body{max-width:58mm}</style><body>'
+                '<style>*{font-family:Arial, sans-serif;} body{max-width:80mm}</style><body>'
             );
             mywindow.document.write(imprimir.innerHTML);
             mywindow.document.write('</body></html>');
@@ -725,7 +725,7 @@
             mywindow.document.close(); // necessary for IE >= 10
 
             mywindow.focus(); // necessary for IE >= 10*/
-            mywindow.print();
+            //mywindow.print();
             return true;
         }
         
@@ -763,7 +763,7 @@
                     pdf.getPage(pageNumber).then(function(page) {
                         console.log('Page loaded');
                         
-                        var scale = 2;
+                        var scale = 3;
                         var viewport = page.getViewport({scale: scale});
 
                         // Prepare canvas using PDF page dimensions
