@@ -76,7 +76,7 @@ class CashregisterController extends Controller
 
         $orderdetails_data = Db::table('cashregisters')
         ->where('cashregister_id',$cashregister->id)
-        ->select(DB::raw('count(orderdetails.quantity) as quantity'), 'orderdetails.unit_ammount', 'products.name')
+        ->select(DB::raw('SUM(orderdetails.quantity) as quantity'), 'orderdetails.unit_ammount', 'products.name')
         ->leftJoin('orders','orders.cashregister_id','cashregisters.id')
         ->leftJoin('orderdetails','orderdetails.order_id','orders.id')
         ->leftJoin('products','products.id','orderdetails.product_id')

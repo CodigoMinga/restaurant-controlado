@@ -231,7 +231,6 @@ class SalesHelper extends Controller
                 $response = json_decode($response);
                 $err = json_decode($err);
 
-
                 curl_close($curl);
 
                 if ($err) {
@@ -252,6 +251,100 @@ class SalesHelper extends Controller
                 ], 400);
             }
 
+        }else{
+            return new Response([
+                'response' => "Error la orden enviada no existe en la DB",
+                'request' => ""
+            ], 400);
+        }
+    }
+
+    public function fakeDte($order_id){
+        //busca si existe la orden en la DB
+        $order = Order::find($order_id);
+        if(isset($order)){
+            if($order->CommandComplete){
+
+                $paramsArr = [];
+
+                $detalle = [];
+                $totales = [];
+
+                $empresa = $order->company->id;
+                $total = 0;
+
+                $orderdetails = $order->orderdetails;
+                foreach($orderdetails as $detail) {
+                    if($detail->enabled){
+                        array_push($detalle, [
+                            "producto" => $detail->product->name,
+                            "cantidad" => $detail->quantity,
+                            "unitario" => $detail->unit_ammount,
+                            "total" => $detail->total_ammount
+                        ]);
+                        $total += $detail->total_ammount;
+                    }
+                }
+
+                if($order->discount!=null){
+                    array_push($totales, [
+                        "name" => "DESCUENTO" ,
+                        "value" => $order->discount
+                    ]);
+                    $total += $order->discount;
+                }
+
+                array_push($totales, [
+                    "name" => "MONTO NETO" ,
+                    "value" => round(($total  / 1.19))
+                ]);
+                
+
+                array_push($totales, [
+                    "name" => "IVA" ,
+                    "value" => round($total - ($total  / 1.19))
+                ]);
+
+                array_push($totales, [
+                    "name" => "MONTO TOTAL" ,
+                    "value" => round($total)
+                ]);
+
+                array_push($totales, [
+                    "name" => "PROPINA" ,
+                    "value" => round($order->tip)
+                ]);
+
+                if($order->delivery!=null){
+                    array_push($totales, [
+                        "name" => "DELIVERY" ,
+                        "value" => round($order->delivery)
+                    ]);
+                }
+
+                array_push($totales, [
+                    "name" => "TOTAL A PAGAR" ,
+                    "value" => round($total + $order->tip + $order->delivery)
+                ]);
+
+                $paramsArr['Totales'] = $totales;
+                $paramsArr['Detalle'] = $detalle;
+                $random = Str::random(10);
+                $order->empotency_key = "MingaRulz-" . $random. '-' . $order->id;
+                $order->dte_token= $random. '-' . $order->id;
+                $order->dte_folio= 000000;
+                $order->save();
+
+                return new Response([
+                    'response' => $paramsArr,
+                ], 201);
+
+            }else{
+                return new Response([
+                    'response' => "Falta emitir Comanda o No tiene Productos",
+                    'request' => ""
+                ], 400);    
+            }
         }else{
             return new Response([
                 'response' => "Error la orden enviada no existe en la DB",

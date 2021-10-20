@@ -11,6 +11,16 @@
         right: -100%;
         color: black;
     }
+    
+    #fakeDte{
+        display: block;
+        width: 80mm;
+        background: white;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        color: black;
+    }
 
     input[type="checkbox"] {
         display: block;
@@ -184,6 +194,7 @@
                     </table>
                 </div>
                 <div class="col">
+                    @if($order->table->tabletype_id!=1)
                     <table class="table table-striped table-sm table-dark" id="clientBox">
                         <tr>
                             <th>
@@ -234,6 +245,7 @@
                         </tr>
                         @endif
                     </table>
+                    @endif
                 </div>
             </div>
             <table class="table table-striped table-sm table-dark">
@@ -693,6 +705,38 @@
         <hr>
     </div>
 
+    
+    <div id="fakeDte">
+        <h3 style="margin-bottom:0px;border-bottom:2px solid" align="center">*** CUENTA ***</h3>
+        <table style="margin-bottom:2mm;font-size:14px;width:100%;border-bottom:2px dashed">
+            <tbody>
+                <tr><th align="left">MESA</th><td>{{$order->table->name}}</td></tr>
+                <tr><th align="left">GÁRZON</th><td>{{ $order->user->name }}</td></tr>
+                <tr><th align="left">NUMERO</th><td>{{ $order->internal_id }}</td></tr>
+                <tr><th align="left">FECHA</th><td> {{ date('d/m/Y H:i:s', strtotime($order->created_at)) }}</td></tr>
+            </tbody>
+        </table>
+        <table style="margin-bottom:2mm;font-size:13px;width:100%;border-bottom:2px dashed">
+            <thead>
+                <tr>
+                    <th align="left">
+                        PRODUCTO
+                    </th>
+                    <th width="1">
+                        PRECIO
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="DteProducts">
+            </tbody>
+        </table>
+        <table style="margin-bottom:8mm;font-size:14px;width:100%">
+            <tbody id="DteTotals">
+            </tbody>
+        </table>
+        <hr>
+    </div>
+
     <script src="{{ url('/') }}/js/pdf.js"></script>
     <script type="text/javascript" src="https:////cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
@@ -702,6 +746,10 @@
     <script>
         var imprimir = document.getElementById('imprimir');
         var orderForm = document.getElementById('orderForm');
+
+        var fakeDte = document.getElementById('fakeDte');
+        var DteProducts = document.getElementById('DteProducts');
+        var DteTotals = document.getElementById('DteTotals');
 
         var ua = navigator.userAgent.toLowerCase();
         var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
@@ -725,8 +773,72 @@
             mywindow.document.close(); // necessary for IE >= 10
 
             mywindow.focus(); // necessary for IE >= 10*/
-            //mywindow.print();
+            mywindow.print();
             return true;
+        }
+
+        function PrintFakeDte() {
+            $.get("{{ url('/') }}/ajax/fakeDte/{{ $order->id }}", function(data) {
+                var respuesta = data.response;
+
+                DteProducts.innerHTML="";
+
+                respuesta.Detalle.forEach(el => {
+                    var newtr = document.createElement('tr');
+
+                    var newtd = document.createElement('td');      
+                    var newbr = document.createElement('br');
+                    newtd.innerText = el.producto +"\n" +el.cantidad+" X $"+miles(parseInt(el.unitario));   
+                    newtr.appendChild(newtd);
+
+                    var newtd2 = document.createElement('td');
+                    newtd2.innerText = "$"+miles(parseInt(el.total));                   
+                    newtr.appendChild(newtd2);
+                    DteProducts.appendChild(newtr);
+                });
+
+                
+
+                DteTotals.innerHTML="";
+
+                respuesta.Totales.forEach(el => {
+                    var newtr = document.createElement('tr');
+                    var newtd = document.createElement('th'); 
+                    newtd.align="left";
+                    newtd.innerText = el.name;   
+                    newtr.appendChild(newtd);
+
+                    var newtd2 = document.createElement('td');
+                    newtd2.width="1px"
+                    if( el.name  === "TOTAL A PAGAR"){
+                        newtd2.style.fontWeight ="bold"
+                        newtd2.style.fontSize ="16px"
+                    }
+                    newtd2.innerText = "$"+miles(el.value);                   
+                    newtr.appendChild(newtd2);
+                    DteTotals.appendChild(newtr);
+                });
+
+                var mywindow = window.open('', 'PRINT', 'height=1,width=1');
+                mywindow.document.write('<html><head></head><title>Boleta</title>');
+                mywindow.document.write(
+                    '<style>*{font-family:Arial, sans-serif;} body{max-width:80mm}</style><body>'
+                );
+                mywindow.document.write(fakeDte.innerHTML);
+                mywindow.document.write('</body></html>');
+                if(isAndroid) {
+                    mywindow.onfocus = function(){mywindow.close();};
+                }else{
+                    mywindow.onafterprint  = function(){mywindow.close();};
+                }
+                mywindow.document.close(); // necessary for IE >= 10
+
+                mywindow.focus(); // necessary for IE >= 10*/
+                mywindow.print();
+                return true;
+            }).fail(function(xhr, status, error) {
+                alert(xhr.responseJSON.response);
+            });
         }
         
         function cancelBoleta() {
@@ -1240,7 +1352,8 @@
                 }).done(function(data) {
                     if (typeof(data) == 'object') {
                         disabledPaymend();
-                        PrintBoleta();
+                        PrintFakeDte();
+                        //PrintBoleta();
                         return true;
                     } else {
                         alert(data);
