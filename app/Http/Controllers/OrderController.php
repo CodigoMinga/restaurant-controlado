@@ -254,23 +254,56 @@ class OrderController extends Controller
     }
 
     public function substock($orderdetail){
-        //$low_stock=[];
+        $item_ids=[];
         $prescription= $orderdetail->product->prescriptions->last();
         if($prescription){
             $prescriptiondetails = $prescription->prescriptiondetails;
+            $item_ids=[];
             foreach ($prescriptiondetails as $key => $prescriptiondetail) {
-                $item=$prescriptiondetail->item;
-                $stock = $item->stock;
-                $quantity =$prescriptiondetail->quantity * $orderdetail->quantity;
-                $item->stock = $stock - ($quantity);
-                $item->save();
+                if($prescriptiondetail->item_id){
+                    $item_ids[]=$this->subitem($prescriptiondetail->item ,($orderdetail->quantity * $prescriptiondetail->quantity));
+                }
+                if($prescriptiondetail->product_id){
+                    $sub = $this->subproduct($prescriptiondetail->product,($orderdetail->quantity * $prescriptiondetail->quantity));
+                    foreach ($sub as $keys => $item_id) {
+                        $item_ids[]=$item_id;
+                    }
+                }
+            }
+            $items = Item::whereIn('id',$item_ids)->where('stock','<','warning')->get();
+            if(COUNT($items)>0){
+                $this->lowStockMail($item->id);
+            }        
+        }
+    }
 
-                if($item->stock<=$item->warning){
-                    //$low_stock[]=$item->name;
-                    $this->lowStockMail($item->id);
+    public function subitem($item,$quantity){
+        $stock = $item->stock;
+        $item->stock = $stock - ($quantity);
+        $item->save();
+        return $item->id;
+    }
+
+    
+    public function subproduct($product,$cant){
+        $item_ids=[];
+        $prescription= $product->prescriptions->last();
+        if($prescription){
+            $prescriptiondetails = $prescription->prescriptiondetails;
+            $item_ids=[];
+            foreach ($prescriptiondetails as $key => $prescriptiondetail) {
+                if($prescriptiondetail->item_id){
+                    $item_ids[]=$this->subitem($prescriptiondetail->item,($cant * $prescriptiondetail->quantity));
+                }
+                if($prescriptiondetail->product_id){
+                    $sub = subproduct($prescriptiondetail->product,($cant * $prescriptiondetail->quantity));
+                    foreach ($sub as $keys => $item_id) {
+                        $item_ids[]=$item_id;
+                    }
                 }
             }
         }
+        return $item_ids;
     }
 
     public function addstock($orderdetail){
@@ -332,9 +365,8 @@ class OrderController extends Controller
     }
 
 
-    public function lowStockMail($item_id){
-        $item = Item::findOrFail($item_id);
-        $subject = "ALERTA - ".$item->name." con bajo Stock, fecha: ".date("m-d-Y H:i");;
+    public function lowStockMail($items){
+        $subject = "ALERTA - bajo Stock, fecha: ".date("m-d-Y H:i");;
 
         //busca solo los usuarios con permisos de SUPERADMIN y ADMIN asociados a la compañia del item a notificar
         $receivers = DB::table('company_user')
@@ -348,22 +380,24 @@ class OrderController extends Controller
         ->pluck('email');
 
         //valida que la lista de correos sea valida
+
         $filterd_emails = array();
+        /*
         foreach($receivers as $email) {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
             } else {
                 array_push($filterd_emails,$email);
             }
-        }
+        }*/
 
         //si el listado de correos no tiene elementos se los envia a valdo
         if(count($filterd_emails) == 0){
-            array_push($filterd_emails,'osvaldo.alvarado.dev@gmail.com');
+            array_push($filterd_emails,'roberto30589@gmail.com');
             $subject = $subject." NO EXISTEN DESTINATARIOS";
         }
 
-        $status = Mail::to($filterd_emails)->send(new LowStockMail($subject,$item));
+        $status = Mail::to($filterd_emails)->send(new LowStockMail($subject,$items));
         return "CORREO ENVIADO ".$status;
     }
 }

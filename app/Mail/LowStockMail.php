@@ -17,10 +17,10 @@ class LowStockMail extends Mailable
      *
      * @return void
      */
-    public function __construct($subject,$item)
+    public function __construct($subject,$items)
     {
         $this->subject = $subject;
-        $this->item = $item;
+        $this->items = $items;
     }
 
     /**
@@ -30,7 +30,7 @@ class LowStockMail extends Mailable
      */
     public function build()
     {
-        $item = $this->item;
-        return $this->view('mails.lowstock',compact('item'));
+        $items = $this->items;
+        return $this->view('mails.lowstock',compact('items'));
     }
 }

@@ -349,14 +349,10 @@
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td>
-
                                         <img src="{{url("/")}}/images/logo_2021.png" style="max-width: 100%">
-
-                                        <br/>
-                                        <hr/>
-
-                                        <p>El {{$item->name}} se encuentra con bajo stock.</p>
-
+                                        @foreach ($items as $item)
+                                            <p>Quedan {{$item->stock}} {{$item->measureunit->name}} de {{$item->name}}.</p>
+                                        @endforeach
                                     </td>
                                 </tr>
                             </table>
