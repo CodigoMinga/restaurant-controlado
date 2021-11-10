@@ -32,6 +32,8 @@ class UserController extends Controller
         }
         $roles = Role::whereIn("id",$role_ids)->get();
         $user = new User;
+        $user->fill(old());
+        //dd(old(),$user);
         return view('users.form',compact('roles','companies','user'));
     }
 
@@ -65,7 +67,7 @@ class UserController extends Controller
         $company_ids = $request->company_id;
         $role_ids = $request->role_id;
 
-        if(COUNT($company_ids)==0 || COUNT($role_ids)==0){
+        if(!$company_ids || !$role_ids){
             return back()->with('error','Falta seleccionar Rol')->withInput();
         }else if($id){
             //Si encuentra el ID edita
