@@ -59,7 +59,7 @@
                             {{$prescriptiondetail->item ? $prescriptiondetail->item->name : $prescriptiondetail->product->name}}
                         </td>
                         <td>
-                            {{$prescriptiondetail->quantity}} {{$prescriptiondetail->item ? $prescriptiondetail->item->measureunit->name : "Unds."}} 
+                            {{$prescriptiondetail->quantity}} {{$prescriptiondetail->item ? $prescriptiondetail->item->measureunit->name : "Und"}} 
                         </td>
                         <td>
                             <a onclick="prescriptiondetails({{$prescriptiondetail->id}})" class="btn btn-light material-icons">description</a>
@@ -93,7 +93,7 @@
                         <div class="form-group col-12 col-sm-6">
                             <label>Cantidad</label>
                             <div class="input-group">                 
-                                <input type="number" class="form-control" name="quantity" required>
+                                <input type="number" class="form-control" min="0" step="0.01" name="quantity" required>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="unidad"></span>
                                 </div>
@@ -147,9 +147,9 @@
                         <div class="form-group col-12 col-sm-3">
                             <label>Cantidad</label>
                             <div class="input-group">                 
-                                <input type="number" class="form-control" s name="quantity" required>
+                                <input type="number" class="form-control" min="0"  name="quantity" required>
                                 <div class="input-group-append">
-                                    <span class="input-group-text">Unds.</span>
+                                    <span class="input-group-text">Und</span>
                                 </div>
                             </div>
                         </div>
@@ -309,7 +309,7 @@
             newtr.appendChild(newtd);
 
             newtd = document.createElement('td');
-            newtd.innerText = parseFloat(prescriptiondetail.quantity).toFixed(2)+" "+ (prescriptiondetail.item ? prescriptiondetail.item.measureunit.name : "Unds.");
+            newtd.innerText = parseFloat(prescriptiondetail.quantity).toFixed(2)+" "+ (prescriptiondetail.item ? prescriptiondetail.item.measureunit.name : "Und");
             newtr.appendChild(newtd);
 
             newtd = document.createElement('td');

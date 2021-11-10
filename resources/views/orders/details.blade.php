@@ -276,7 +276,7 @@
                 <tbody>
                     @foreach ($order->orderdetails as $orderdetail)
                         @if($order->closed==0 && $orderdetail->enabled==1 || $order->closed==1)
-                        <tr {{$orderdetail->enabled==0 ? "class=text-danger" : ""}}>
+                        <tr {{$orderdetail->enabled==0 ? "class=text-danger" : ""}} id="orderdetail_{{$orderdetail->id}}">
                             <td>
                                 {{ $orderdetail->product->name }}<br>
                                 <small>{{ $orderdetail->enabled==1 ? $orderdetail->description : "(eliminado)"}}</small>
@@ -1385,12 +1385,14 @@
                 contentType: false // tell jQuery not to set contentType
             }).done(function(data) {
                 if (typeof(data) == 'object') {
-                    TotalBase=data.Total;                    
+                    TotalBase=data.Total;  
+                    $('#orderdetail_'+detachForm.orderdetail_id.value).remove();
+                    /*              
                     orderForm['orderdetail_id[]'].forEach(input =>{
                         if(input.value == detachForm['orderdetail_id'].value){
                             input.parentElement.parentElement.remove();
                         }
-                    });
+                    });*/
                     calcular();
                     $('#eliminarModal').modal('hide');
                 } else {

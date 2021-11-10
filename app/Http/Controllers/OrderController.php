@@ -270,9 +270,9 @@ class OrderController extends Controller
                     }
                 }
             }
-            $items = Item::whereIn('id',$item_ids)->where('stock','<','warning')->get();
+            $items = Item::whereIn('id',$item_ids)->whereRaw('stock < warning')->get();
             if(COUNT($items)>0){
-                $this->lowStockMail($item->id);
+                $this->lowStockMail($items);
             }        
         }
     }
@@ -296,7 +296,7 @@ class OrderController extends Controller
                     $item_ids[]=$this->subitem($prescriptiondetail->item,($cant * $prescriptiondetail->quantity));
                 }
                 if($prescriptiondetail->product_id){
-                    $sub = subproduct($prescriptiondetail->product,($cant * $prescriptiondetail->quantity));
+                    $sub = $this->subproduct($prescriptiondetail->product,($cant * $prescriptiondetail->quantity));
                     foreach ($sub as $keys => $item_id) {
                         $item_ids[]=$item_id;
                     }
@@ -311,11 +311,35 @@ class OrderController extends Controller
         if($prescription){
             $prescriptiondetails = $prescription->prescriptiondetails;
             foreach ($prescriptiondetails as $key => $prescriptiondetail) {
-                $item=$prescriptiondetail->item;
-                $stock = $item->stock;
-                $quantity =$prescriptiondetail->quantity * $orderdetail->quantity;
-                $item->stock = $stock + ($quantity);
-                $item->save();
+                if($prescriptiondetail->item_id){
+                    $this->additem($prescriptiondetail->item ,($orderdetail->quantity * $prescriptiondetail->quantity));
+                }
+                if($prescriptiondetail->product_id){
+                    $this->addproduct($prescriptiondetail->product,($orderdetail->quantity * $prescriptiondetail->quantity));
+                }
+            }
+        }
+    }
+
+    public function additem($item,$quantity){
+        $stock = $item->stock;
+        $item->stock = $stock + ($quantity);
+        $item->save();
+        return $item->id;
+    }
+
+    public function addproduct($product,$cant){
+        $prescription= $product->prescriptions->last();
+        if($prescription){
+            $prescriptiondetails = $prescription->prescriptiondetails;
+            $item_ids=[];
+            foreach ($prescriptiondetails as $key => $prescriptiondetail) {
+                if($prescriptiondetail->item_id){
+                    $this->additem($prescriptiondetail->item,($cant * $prescriptiondetail->quantity));
+                }
+                if($prescriptiondetail->product_id){
+                    $this->addproduct($prescriptiondetail->product,($cant * $prescriptiondetail->quantity));
+                }
             }
         }
     }
@@ -366,9 +390,11 @@ class OrderController extends Controller
 
 
     public function lowStockMail($items){
-        $subject = "ALERTA - bajo Stock, fecha: ".date("m-d-Y H:i");;
+        $subject = "ALERTA - bajo Stock, fecha: ".date("m-d-Y H:i");
+
 
         //busca solo los usuarios con permisos de SUPERADMIN y ADMIN asociados a la compañia del item a notificar
+        /*
         $receivers = DB::table('company_user')
             ->leftJoin('role_user','company_user.user_id','=','role_user.user_id')
             ->leftJoin('users','company_user.user_id','users.id')
@@ -378,7 +404,7 @@ class OrderController extends Controller
         ->select('*')
         ->get()
         ->pluck('email');
-
+*/
         //valida que la lista de correos sea valida
 
         $filterd_emails = array();
