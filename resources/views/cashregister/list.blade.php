@@ -11,13 +11,15 @@
     <div class="pl-3 pr-3">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <h1>Lista de Compañias</h1>
-                <a  href="{{ url('/') }}/companys/add" class="btn btn-danger">Agregar Compañia</a>
+                <h1>Cajas Registradas</h1>
             </div>
             <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
                 <thead>
                     <tr>
-                        <th>Compañias</th>
+                        <th>Fecha de Inicio</th>
+                        <th>Dinero Incio</th>
+                        <th>Fecha Termino</th>
+                        <th>Dinero Termino</th>
                         <th>Acción</th>
                     </tr>
                 </thead>
@@ -33,11 +35,26 @@
         $(document).ready(function() {
             $('#tabla').DataTable({
                 responsive: true,
-                "data": {!! json_encode($companys->toArray()) !!},
+                "data": {!! json_encode($cashregisters->toArray()) !!},
                 "columns": [
-                    { "data": "name","width":"90%"},
+                    { "data": "created_at", render : function (data) {
+                        var fecha = new Date(data);
+                        return fecha.toLocaleString();
+                    },"width":"20%"},
+                    { "data": "ammount_open", render : function (data) {
+                        var dinero = "$"+miles(data);
+                        return dinero;
+                    },"width":"20%"},
+                    { "data": "closed", render : function (data) {
+                        var fecha = new Date(data);
+                        return data ? fecha.toLocaleString() : 'Sin terminar';
+                    },"width":"20%"},
+                    { "data": "Breakdown.total", render : function (data) {
+                        var dinero = "$"+miles(data);
+                        return dinero;
+                    },"width":"20%"},
                     { data: "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-success material-icons" href="{{ url("/")}}/companys/'+data+'" >description</a>';
+                        return '<a class="btn btn-success material-icons" href="{{ url("/")}}/cashregister/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {
@@ -58,5 +75,9 @@
                 "order": [[ 0, "desc" ]]
             });
         });
+        
+        function miles(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
     </script>
  @stop

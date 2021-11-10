@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCashregisterToOrdersTable extends Migration
+class AddCommentToOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,9 @@ class AddCashregisterToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            //cashregister
-            $table->bigInteger('cashregister_id')->unsigned();
-            $table->foreign('cashregister_id')->references('id')->on('cashregisters')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+            $table->integer('delivery_commission')->default(0);
+            $table->integer('difference')->default(0);
+            $table->longText('description')->nullable();
         });
     }
 
@@ -28,8 +28,9 @@ class AddCashregisterToOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropForeign(['cashregister_id']);
-            $table->dropColumn('cashregister_id');
+            $table->dropColumn('delivery_commission');
+            $table->dropColumn('difference');
+            $table->dropColumn('description');
         });
     }
 }

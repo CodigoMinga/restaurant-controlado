@@ -26,7 +26,7 @@ class Prescriptiondetail extends Model
     /**
      * @var array
      */
-    protected $fillable = ['item_id', 'prescription_id', 'created_at', 'updated_at', 'quantity'];
+    protected $fillable = ['item_id', 'product_id', 'prescription_id', 'created_at', 'updated_at', 'quantity'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -34,6 +34,14 @@ class Prescriptiondetail extends Model
     public function item()
     {
         return $this->belongsTo('App\Item');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function product()
+    {
+        return $this->belongsTo('App\Product');
     }
 
     /**

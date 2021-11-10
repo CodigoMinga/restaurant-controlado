@@ -27,8 +27,8 @@
 @section('content')
     <div class="container pt-3">
         <div class="row">
-            <div class="col-12 col-sm-6"> 
-                <div  class="card bg-darker">
+            <div class="col-12 col-sm-6 mt-2 mb-2">
+                <div  class="card bg-darker h-100">
                     <div class="card-header pb-0">
                         <h5>
                             <span class="material-icons">
@@ -42,7 +42,8 @@
                     </div>
                 </div>                     
             </div>
-            <div class="col-12 col-sm-6"> 
+
+            <div class="col-12 col-sm-6 mt-2 mb-2">
                 <div  class="card bg-darker h-100">
                     <div class="card-header pb-0">
                         <h5>
@@ -53,7 +54,7 @@
                         </h5>
                     </div>
                     <div class="card-body" align="center">
-                        <table class="text-light w-100" id="topventas_table"> 
+                        <table class="text-light w-100 mb-2" id="topventas_table"> 
                             <tr>
                                 <th>
                                 </th>
@@ -66,14 +67,15 @@
                             </tr>
                         </table>
 
-                        <div style="max-height:16rem;max-width:16rem;padding-top:2rem">
+                        <div style="max-height:16rem;max-width:16rem;">
                             <canvas id="topventas" width="200" height="200"></canvas>
                         </div>
                     </div>
                 </div>                     
             </div>
-            <div class="col-12 col-sm-6"> 
-                <div  class="card bg-darker h-100 mt-4">
+            
+            <div class="col-12 col-sm-6 mt-2 mb-2">
+                <div  class="card bg-darker h-100">
                     <div class="card-header pb-0">
                         <h5>
                             <span class="material-icons">
@@ -112,8 +114,9 @@
                     </div>
                 </div>                     
             </div>
-            <div class="col-12 col-sm-6"> 
-                <div  class="card bg-darker h-100 mt-4">
+
+            <div class="col-12 col-sm-6 mt-2 mb-2">
+                <div  class="card bg-darker h-100">
                     <div class="card-header pb-0">
                         <h5>
                             <span class="material-icons">
@@ -192,9 +195,64 @@
                                     ${{number_format($profit[0]->efective,0,",",".")}}
                                 </td>
                             </tr>
+                            <tr>
+                                <td>
+                                    Local
+                                </td>
+                                <td>
+                                    {{$profit[0]->ordertype_1}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Retiro
+                                </td>
+                                <td>
+                                    {{$profit[0]->ordertype_2}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Delivery
+                                </td>
+                                <td>
+                                    {{$profit[0]->ordertype_3}}
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>
+            </div>
+            
+            <div class="col-12 col-sm-6 mt-2 mb-2">
+                <div  class="card bg-darker h-100">
+                    <div class="card-header pb-0">
+                        <h5>
+                            <span class="material-icons">
+                                trending_up
+                            </span>
+                            Medio de Pedido
+                        </h5>
+                    </div>
+                    <div class="card-body" align="center">
+                        <table class="text-light w-100 mb-2" id="tabletypes_table"> 
+                            <tr>
+                                <th>
+                                </th>
+                                <th style="width:70%">
+                                    Producto
+                                </th>
+                                <th>
+                                    Ventas
+                                </th>
+                            </tr>
+                        </table>
+
+                        <div style="max-height:16rem;max-width:16rem">
+                            <canvas id="tabletypes"></canvas>
+                        </div>
+                    </div>
+                </div>                     
             </div>
         </div>
     </div>
@@ -244,6 +302,7 @@
                 },
             }
         };
+
         var salesweek=@json($salesweek);
         var datos = [0, 0, 0, 0, 0, 0, 0];
         salesweek.forEach((el,index) => {
@@ -317,6 +376,60 @@
                 datasets: [{
                     label: 'Ventas Semana',
                     data: salesbest_data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(136, 14, 79, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(136, 14, 79, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options:opcionesPie,
+        });
+
+        var tabletypes=@json($tabletypes);
+        var tabletypes_labels=[];
+        var tabletypes_data=[];
+        var colors = [
+            "255, 99, 132",
+            "54, 162, 235",
+            "255, 206, 86",
+            "75, 192, 192",
+            "153, 102, 255",
+            "255, 159, 64",
+            "136, 14, 79"
+        ];
+
+        
+        var tabletypesCanvas = document.getElementById('tabletypes');
+        var tabletypesTabla = document.getElementById('tabletypes_table');
+
+        tabletypes.forEach((el,index) => {
+            tabletypes_labels.push(el.name);
+            tabletypes_data.push(el.cant);
+            tabletypesTabla.insertAdjacentHTML('beforeend', "<tr><td><div class='ind' style='background:rgba("+colors[index]+",0.2);border-color:rgba("+colors[index]+",1)'></div></td><td>"+el.name+"</td><td>"+el.cant+"</td></tr>");           
+        });
+        
+        var tabletypesGrafico = new Chart(tabletypesCanvas, {
+            type: 'pie',
+            data: {
+                labels: tabletypes_labels,
+                datasets: [{
+                    label: 'Ventas Semana',
+                    data: tabletypes_data,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',

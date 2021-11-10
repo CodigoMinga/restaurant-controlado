@@ -127,6 +127,7 @@ class MainController extends Controller
         $company = session('company');
 
         $desde = date('Y-m-d', strtotime('monday this week'));
+        //$desde = date('Y-m-d', strtotime('1990-01-01'));
         $hasta = date('Y-m-d', strtotime('monday next week'));
         
         //ventas de la semana
@@ -145,13 +146,14 @@ class MainController extends Controller
         WHERE 
         od.enabled = 1 AND 
         o.enabled = 1 AND 
-        o.company_id = $company->id 
+        o.company_id = $company->id AND 
+        od.created_at >= '$desde' AND od.created_at < '$hasta'
         GROUP BY od.product_id ORDER BY cant DESC LIMIT 7";
         $salesbest = DB::select($query);
 
         //Ganacia
         $order_totals = 0;
-        $orders = Order::where('enabled',1)->where('company_id',$company->id)->get();
+        $orders = Order::where('enabled',1)->where('company_id',$company->id)->where('created_at',">=",$desde)->where('created_at',"<",$hasta)->get();
         foreach ($orders as $key => $order) {
             $order_totals=$order_totals+$order->Total;
         }
@@ -160,19 +162,38 @@ class MainController extends Controller
         "SELECT 
         SUM(credit_card) AS credit_card, 
         SUM(debit_card) AS debit_card, 
-        SUM(efective) AS efective, 
+        SUM(efective) + SUM(difference) AS efective, 
         SUM(transfer) AS transfer, 
         SUM(discount) AS discount, 
         SUM(tip) AS tip, 
-        SUM(delivery) AS delivery 
+        SUM(delivery) AS delivery, 
+        SUM(ordertype_id=1) AS ordertype_1,
+        SUM(ordertype_id=2) AS ordertype_2,
+        SUM(ordertype_id=3) AS ordertype_3
         FROM orders
         WHERE 
         company_id = $company->id AND
         enabled = 1
+        AND created_at >= '$desde' AND created_at < '$hasta'
         ";
         $profit = DB::select($query);
 
-        return view('main.dashboard',compact('salesweek','lowstock','salesbest','profit','order_totals'));
+        $query = 
+        "SELECT 
+        tt.name, COUNT(r.id) as cant FROM tabletypes tt 
+        LEFT JOIN 
+        (
+            SELECT o.id,t.tabletype_id FROM orders AS o 
+            LEFT JOIN tables AS t 
+            ON o.table_id = t.id 
+            WHERE o.enabled=1
+            AND o.created_at >= '$desde' AND o.created_at < '$hasta'
+        ) AS r 
+        ON r.tabletype_id=tt.id
+        GROUP BY tt.id";
+        $tabletypes = DB::select($query);
+
+        return view('main.dashboard',compact('salesweek','lowstock','salesbest','profit','order_totals','tabletypes'));
     }
 
     

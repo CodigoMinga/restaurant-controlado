@@ -11,7 +11,14 @@ class PrescriptiondetailController extends Controller
 {    
     public function select($prescriptiondetail_id){
         $prescriptiondetail = Prescriptiondetail::findOrFail($prescriptiondetail_id);
-        $prescriptiondetail->item->measureunit;
+
+        if($prescriptiondetail->item){
+            $prescriptiondetail->item->measureunit;
+        }
+        if($prescriptiondetail->product){
+            $prescriptiondetail->product;
+        }
+        
         return $prescriptiondetail;
     }
 
@@ -20,11 +27,25 @@ class PrescriptiondetailController extends Controller
             $prescriptiondetail = Prescriptiondetail::findOrFail($request->id);
             $prescriptiondetail->fill($request->all());
             $prescriptiondetail->save();
-            $prescriptiondetail->item->measureunit;
+
+            if($prescriptiondetail->item){
+                $prescriptiondetail->item->measureunit;
+            }
+            if($prescriptiondetail->product){
+                $prescriptiondetail->product;
+            }
+
             return $prescriptiondetail;
         }else{                
             $prescriptiondetail = Prescriptiondetail::create($request->all());
-            $prescriptiondetail->item->measureunit;
+
+            if($prescriptiondetail->item){
+                $prescriptiondetail->item->measureunit;
+            }
+            if($prescriptiondetail->product){
+                $prescriptiondetail->product;
+            }
+
             return $prescriptiondetail;
         }        
     }

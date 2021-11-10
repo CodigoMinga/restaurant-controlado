@@ -40,6 +40,6 @@ class Prescription extends Model
      */
     public function prescriptiondetails()
     {
-        return $this->hasMany('App\Prescriptiondetail');
+        return $this->hasMany('App\Prescriptiondetail')->where("enabled",1);
     }
 }
