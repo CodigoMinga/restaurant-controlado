@@ -23,10 +23,10 @@ class DatabaseSeeder extends Seeder
         //POR TENNAT
         $this->call(CompanySeeder::class);
         $this->call(DeliverySeeder::class);
+        $this->call(ItemSeeder::class);
         $this->call(ProducttypeSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(TableSeeder::class);
-        $this->call(ItemSeeder::class);
         $this->call(ClientSeeder::class);
     }
 }
