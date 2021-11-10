@@ -62,7 +62,12 @@ class UserController extends Controller
 
     public function process(Request $request){
         $id = $request->id;
-        if($id){
+        $company_ids = $request->company_id;
+        $role_ids = $request->role_id;
+
+        if(COUNT($company_ids)==0 || COUNT($role_ids)==0){
+            return back()->with('error','Falta seleccionar Rol')->withInput();
+        }else if($id){
             //Si encuentra el ID edita
             $user = User::findOrFail($id);
             $user->name =  $request->name;
@@ -78,14 +83,12 @@ class UserController extends Controller
             DB::table('role_user')->where('user_id', $id)->delete();
 
             //RENUEVA COMPAÑIAS
-            $company_ids = $request->company_id;
             foreach ($company_ids as $key => $company_id) {
                 $company = Company::findOrFail($company_id);
                 $user->companies()->attach($company);
             }
 
             //RENUEVA ROLES
-            $role_ids = $request->role_id;
             foreach ($role_ids as $key => $role_id) {
                 $role = Role::findOrFail($role_id);
                 $user->roles()->attach($role);
@@ -102,14 +105,12 @@ class UserController extends Controller
             $user->save();
 
             //ADJUNTA ROLES
-            $role_ids = $request->role_id;
             foreach ($role_ids as $key => $role_id) {
                 $role = Role::findOrFail($role_id);
                 $user->roles()->attach($role);
             }
 
             //ADJUNTA COMPAÑIAS
-            $company_ids = $request->company_id;
             foreach ($company_ids as $key => $company_id) {
                 $company = Company::findOrFail($company_id);
                 $user->companies()->attach($company);
