@@ -53,7 +53,7 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($user_id);
-            $user->email=null;
+            $user->email=$user->id."@eliminado.com";
             $user->enabled=0;
             $user->save();
             return redirect()->route('users.list')->with('success', 'Usuario eliminado correctamente');
