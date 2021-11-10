@@ -132,7 +132,7 @@ if(!$cashregister){
                 @yield('info')
 
                 <!--SI ES ADMINISTRADOR-->
-                @if(Auth::user()->hasRole("companyadmin"))
+                @if(Auth::user()->hasRole(["companyadmin","superadmin"]))
                 <a class="sidebar-button {{(request()->is('orders/list')) ? 'active' : '' }}" href="{{ url('orders/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">paid</i>Ventas
                 </a>
