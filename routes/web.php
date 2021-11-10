@@ -108,6 +108,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/prescriptions/{prescription_id}',          'PrescriptionController@details');
     Route::get('/prescriptions/{prescription_id}/delete',   'PrescriptionController@delete');
 
+    Route::get('/prescriptions/{prescription_id}/avaibleproducts/{producttype_id}',   'PrescriptionController@avaibleproducts');
+
     //Detalle de Receta
     Route::post('/prescriptiondetails/store',                           'PrescriptiondetailController@store');
     Route::get('/prescriptiondetails/{prescriptiondetail_id}',          'PrescriptiondetailController@select');

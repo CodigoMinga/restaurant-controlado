@@ -46,6 +46,11 @@ class Company extends Model
     {
         return $this->hasMany('App\Product');
     }
+    
+    public function producttypes()
+    {
+        return $this->hasMany('App\Producttype');
+    }
 
 
     public function tables()
