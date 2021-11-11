@@ -357,17 +357,17 @@
             $('#efective_resto').html(pesos(efective_resto));
 
             
-            $('#Total').html(pesos(breakdown.credit_card + breakdown.debit_card + breakdown.transfer + breakdown.efective));
+            $('#Total').html(pesos(breakdown.credit_card + breakdown.debit_card + breakdown.transfer + breakdown.efective + parseInt(breakdown.ammount_open)));
             $('#Total_comision').html(pesos(breakdown.debit_card_comision + breakdown.credit_card_comision));
             $('#Total_iva').html(pesos(breakdown.efective_iva + breakdown.transfer_iva + breakdown.debit_card_iva + breakdown.credit_card_iva));
-            $('#Total_resto').html(pesos(efective_resto + transfer_resto + debit_card_resto + credit_card_resto));
+            $('#Total_resto').html(pesos(efective_resto + transfer_resto + debit_card_resto + credit_card_resto ));
 
             
             $('#discount').html(pesos(breakdown.discount));
             $('#tip').html(pesos(breakdown.tip));
             $('#delivery').html(pesos(breakdown.delivery));
             $('#consume').html(pesos(breakdown.consume));
-            $('#item_total').html(pesos(breakdown.consume + breakdown.delivery + breakdown.tip + breakdown.discount));
+            $('#item_total').html(pesos(breakdown.consume + breakdown.delivery + breakdown.tip + breakdown.discount + parseInt(breakdown.ammount_open)));
         });
         
         function pesos(x) {
