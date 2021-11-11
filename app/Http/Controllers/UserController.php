@@ -19,7 +19,7 @@ class UserController extends Controller
         //Consultar a la tabla company_user las id de los usuarios que pertenecen a las compañias dichas
         $users_id= DB::table('company_user')->where('company_id',$company->id)->pluck('user_id')->toArray();
         //buscar los usuarios con las id obtenidas
-        $users = User::WhereIn('id',$users_id)->get();
+        $users = User::WhereIn('id',$users_id)->where('enabled',1)->get();
         return view('users.list',compact('users'));
     }
 
@@ -53,7 +53,7 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($user_id);
-            $user->email=null;
+            $user->email=$user->id."@eliminado.com";
             $user->enabled=0;
             $user->save();
             return redirect()->route('users.list')->with('success', 'Usuario eliminado correctamente');

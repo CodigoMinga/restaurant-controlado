@@ -132,6 +132,7 @@ if(!$cashregister){
                 @yield('info')
 
                 <!--SI ES ADMINISTRADOR-->
+                @if(Auth::user()->hasRole(["companyadmin","superadmin"]))
                 <a class="sidebar-button {{(request()->is('orders/list')) ? 'active' : '' }}" href="{{ url('orders/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">paid</i>Ventas
                 </a>
@@ -153,11 +154,14 @@ if(!$cashregister){
                 <a class="sidebar-button {{(request()->is('app/logout')) ? 'active' : '' }}" href="{{ url('app/logout') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">logout</i>Logout
                 </a>
+                @endif
 
                 <!--SI ES CODIGOMINGA-->
+                @if(Auth::user()->hasRole("superadmin"))
                 <a class="sidebar-button {{(request()->is('companys/list')) ? 'active' : '' }}" href="{{ url('companys/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">apartment</i>Compañias
                 </a>
+                @endif
                 <!--FIN SI CODIGOMINGA-->
             </div>
         </div>

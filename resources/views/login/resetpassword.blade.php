@@ -30,13 +30,4 @@
             </div>
         </form>
     @endif
-
-
-
-
-    <!-- /.social-auth-links -->
-
-
-</div>
-<!-- /.login-box-body -->
 </div>

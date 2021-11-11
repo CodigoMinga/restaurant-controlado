@@ -272,7 +272,7 @@ class OrderController extends Controller
             }
             $items = Item::whereIn('id',$item_ids)->whereRaw('stock < warning')->get();
             if(COUNT($items)>0){
-                $this->lowStockMail($items);
+                //$this->lowStockMail($items);
             }        
         }
     }

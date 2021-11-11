@@ -62,10 +62,10 @@ class MainController extends Controller
     }
 
     function passwordLost(){
-        return view('passwordlost');
+        return view('login.passwordlost');
     }
 
-    public function passwordRessetToken($user_id,$token){
+    public function passwordResetToken($user_id,$token){
 
         $token_db = Db::table('password_resets')->where('token','=',$token)->first();
         $user = User::findOrFail($user_id);
@@ -78,7 +78,7 @@ class MainController extends Controller
 
     }
 
-    public function passwordRessetTokenProcess($user_id,$token,Request $request){
+    public function passwordResetTokenProcess($user_id,$token,Request $request){
 
         $user = User::findOrFail($user_id);
         $user->password = Hash::make($request->password);
@@ -95,7 +95,7 @@ class MainController extends Controller
 
     }
 
-    function passwordLostProcess(Request $request){
+    function resetpasswordProcess(Request $request){
 
         //dd($request->email);
         $user = User::where ('email', $request->email)->first();

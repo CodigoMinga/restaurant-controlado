@@ -46,7 +46,7 @@
             <a class="config-button" href="{{ url('users/list') }}">
                 <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">groups</i>Usuarios
             </a>
-            <a class="config-button" href="{{ url('app/clients/list') }}">
+            <a class="config-button" href="{{ url('clients/list') }}">
                 <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">people</i>Clientes
             </a>
             <a class="config-button" href="{{ url('items/list') }}">
