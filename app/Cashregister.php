@@ -36,6 +36,7 @@ class Cashregister extends Model
         $cal_credit = 2.95/100;
         $cal_debit  = 1.49/100;
 
+        $send['ammount_open']=$this->ammount_open;
         $send['credit_card']=0;
         $send['debit_card']=0;
         $send['efective']=0;
@@ -75,7 +76,7 @@ class Cashregister extends Model
         $send['efective_iva']       = round($send['efective']     * $cal_iva);
         $send['transfer_iva']       = round($send['transfer']     * $cal_iva);
 
-        $send['total'] = $send['delivery'] + $send['tip'] + $send['discount'] +  $send['transfer'] +  $send['efective'] + $send['debit_card'] + $send['credit_card'];
+        $send['total'] = /*$send['delivery'] + $send['tip'] + $send['discount'] +*/  $send['transfer'] +  $send['efective'] + $send['debit_card'] + $send['credit_card'];
 
         return (object) $send;
     }
