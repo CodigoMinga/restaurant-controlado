@@ -5,7 +5,7 @@
     <h1>
         <i class="material-icons">add_box</i>Agregar Cliente
     </h1>
-    <form method="post" action="{{url('app/clients/add/process')}}" id="form">
+    <form method="post" action="{{url('clients/add/process')}}" id="form">
     {{csrf_field()}}
     @if(count(Auth::user()->companies)>1)
     <div class="form-group">

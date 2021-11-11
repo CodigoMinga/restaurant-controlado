@@ -7,22 +7,22 @@ Route::get('/',                                 'MainController@login')->name('l
 Route::post('/app/checklogin',                  'MainController@checkLogin');
 Route::get('/app/register',                     'MainController@register');
 Route::post('/app/register/process',            'MainController@registerProcess');
-Route::get('/app/login/passwordlost',           'MainController@passwordLost');
-Route::post('/app/login/passwordlost/process',  'MainController@passwordLostProcess');
+Route::get('/login/password/lost',              'MainController@passwordLost');
+Route::post('/login/password/lost/process',     'MainController@passwordLostProcess');
 
-Route::get('/app/login/resetpassword/{user_id}/token/{token}',            'MainController@passwordRessetToken');
-Route::post('/app/login/resetpassword/{user_id}/token/{token}/process',   'MainController@passwordRessetTokenProcess');
+Route::get('/login/password/reset/{user_id}/token/{token}',            'MainController@passwordResetToken');
+Route::post('/login/password/reset/{user_id}/token/{token}/process',   'MainController@passwordResetTokenProcess');
 
 //ESTAS RUTAS NECESITAN ESTAR LOGUEADO
 Route::group(['middleware' => ['auth']], function() {
 
     //CLIENTE
-    Route::get('/app/clients/list',                         'ClientController@list')->name('clients.list');
-    Route::get('/app/clients/add',                          'ClientController@add')->name('clients.add');
-    Route::post('/app/clients/add/process',                 'ClientController@addProcess');
-    Route::get('/app/clients/{client_id}',                  'ClientController@details');
-    Route::post('/app/clients/{client_id}/edit/process',    'ClientController@editprocess');
-    Route::get('/app/clients/{client_id}/delete',           'ClientController@delete');
+    Route::get('/clients/list',                             'ClientController@list')->name('clients.list');
+    Route::get('/clients/add',                              'ClientController@add')->name('clients.add');
+    Route::post('/clients/add/process',                     'ClientController@addProcess');
+    Route::get('/clients/{client_id}',                      'ClientController@details');
+    Route::post('/clients/{client_id}/edit/process',        'ClientController@editprocess');
+    Route::get('/clients/{client_id}/delete',               'ClientController@delete');
 
     Route::get('/clients/getdata',                          'ClientController@getdata');
     Route::post('/clients/store',                           'ClientController@store');
