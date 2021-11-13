@@ -142,7 +142,8 @@ if(!$cashregister){
                 <a class="sidebar-button {{(request()->is('cashregister/list')) ? 'active' : '' }}" href="{{ url('cashregister/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">point_of_sale</i>Lista de Cajas
                 </a>
-
+                @endif
+                
                 <a class="sidebar-button {{(request()->is('settings')) ? 'active' : '' }}" href="{{ url('settings') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">settings</i>Configuración
                 </a>
@@ -154,7 +155,6 @@ if(!$cashregister){
                 <a class="sidebar-button {{(request()->is('app/logout')) ? 'active' : '' }}" href="{{ url('app/logout') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">logout</i>Logout
                 </a>
-                @endif
 
                 <!--SI ES CODIGOMINGA-->
                 @if(Auth::user()->hasRole("superadmin"))
