@@ -55,9 +55,10 @@ Route::group(['middleware' => ['auth']], function() {
     //ESTAS RUTAS NECESITAS SER COMPANY ADMIN
     Route::group(['middleware' => ['admin:companyadmin|superadmin']], function() {
         Route::get('/dashboard',                'MainController@dashboard');
-        Route::get('/settings',                 'MainController@settings');
     });
 
+    Route::get('/settings',                 'MainController@settings');
+    
     //ITEMS
     route::get('/items/list',               'ItemController@list')->name('items.list');
     route::get('/items/add',                'ItemController@add')->name('items.add');
