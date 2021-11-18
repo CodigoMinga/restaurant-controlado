@@ -136,7 +136,8 @@
             $('#productattach-form').on('submit', function(e){
                 e.preventDefault();
                 var formData = new FormData(productattachForm);
-                productattachForm.quantity.value=1;
+                productattachForm.quantity.value="";
+                productattachForm.description.value="";
                 var activate = document.activeElement.id;
                 $.ajax({
                     url: "{{url('/')}}/orders/products/attach",

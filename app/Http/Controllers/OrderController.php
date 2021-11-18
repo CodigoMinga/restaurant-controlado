@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Mail;
 use App\Mail\LowStockMail;
 use App\Item;
+use Illuminate\Http\Response;
 
 
 class OrderController extends Controller
@@ -94,29 +95,37 @@ class OrderController extends Controller
     public function paymentStore($order_id, Request $request)
     {
         $order  = Order::findOrFail($order_id);
-        $order->fill($request->all());
-        if($request->delivery){                
-            $delivery = Delivery::where('company_id',$order->company_id)->where('ammount',$request->delivery)->first();
-            $order->delivery_commission =  $delivery->delivery_commission;
-        }else{
-            $order->delivery_commission = 0;
-        }
-        $order->save();
-        return $order;
-    }
-
-
-    public function close($order_id)
-    {
-        $order  = Order::findOrFail($order_id);
         if($order->dte_token){
+            $order->fill($request->all());
             $order->closed=1;
             $order->save();
-            return redirect('/orders/'.$order->id)->with('success','Orden cerrada con exito');
+            return $order;
         }else{
-            return back()->with('error','No se puede cerrar la venta, la boleta no ha sido emitida');
+            return 'No se puede cerrar la venta, la boleta no ha sido emitida';
         }
     }
+
+    public function extraStore($order_id, Request $request)
+    {
+        $order  = Order::findOrFail($order_id);
+        if($order->CommandComplete){                
+            $order->fill($request->all());
+            if($request->delivery){                
+                $delivery = Delivery::where('company_id',$order->company_id)->where('ammount',$request->delivery)->first();
+                $order->delivery_commission =  $delivery->delivery_commission;
+            }else{
+                $order->delivery_commission = 0;
+            }
+            $order->save();
+            return $order;
+        }else{
+            return new Response([
+                'response' => "Falta emitir Comanda o No tiene Productos",
+                'request' => ""
+            ], 400); 
+        }
+    }
+
 
     public function disable(Request $request)
     {

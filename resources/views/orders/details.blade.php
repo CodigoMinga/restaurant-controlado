@@ -141,174 +141,173 @@
     </style>
     <div class="container p-3">
         <h1>Orden: {{ $order->internal_id }}</h1>
-        <form id="orderForm">
-            {{ csrf_field() }}
-            <input name="client_id" type="hidden" value="{{$order->client_id}}">
-            <div class="row">
-                <div class="col">
-                    <table class="table table-striped table-sm table-dark">
-                        <tr>
-                            <th>
-                                Apertura
-                            </th>
-                            <td>
-                                {{ date('d/m/Y H:i:s', strtotime($order->created_at)) }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Garzón
-                            </th>
-                            <td>
-                                {{ $order->user->name }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Selector
-                            </th>
-                            <td>
-                                {{ $order->table->tabletype->name }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Mesa
-                            </th>
-                            <td>
-                                {{ $order->table->name }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Tipo
-                            </th>
-                            <td style="padding:0px">
-                                <select name="ordertype_id" class="inputtable w-100" id="ordertype" {{$order->dte_token!=null || $order->closed==1  ? "disabled" :""}}>
-                                    @foreach ($ordertypes as $ordertype)
-                                        <option value="{{ $ordertype->id }}" {{$ordertype->id==$order->ordertype_id ? "selected":""}}>{{ $ordertype->name }}</option>
-                                    @endforeach
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col">
-                    @if($order->table->tabletype_id!=1)
-                    <table class="table table-striped table-sm table-dark" id="clientBox">
-                        <tr>
-                            <th>
-                                Nombre
-                            </th>
-                            <td id="client_name">
-                                {{ $order->client ? $order->client->name : '' }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Teléfono
-                            </th>
-                            <td id="client_phone">
-                                {{ $order->client ? $order->client->phone : '' }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Comuna
-                            </th>
-                            <td id="client_commune">
-                                {{ $order->client ? $order->client->commune->name : '' }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Dirección
-                            </th>
-                            <td id="client_address">
-                                {{ $order->client ? $order->client->address : '' }}
-                            </td>
-                        </tr>
-                        @if($order->dte_token==null && $order->closed!=1)
-                        <tr>
-                            <td colspan="2" class="p-0 m-0">
-                                <div class="btn-group w-100" role="group">
-                                    <a class="btn btn-primary btn-sm" style="border:none" id="clientButton">
-                                        <span class="material-icons">person</span>
-                                        Clientes
-                                    </a>
-                                    <a class="btn btn-info btn-sm"  style="border:none" id="historyButton">
-                                        <span class="material-icons">folder</span>
-                                        Pedidos
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        @endif
-                    </table>
-                    @endif
-                </div>
-            </div>
-            <table class="table table-striped table-sm table-dark">
-                <thead>
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped table-sm table-dark">
                     <tr>
                         <th>
-                            Producto
+                            Apertura
                         </th>
-                        <th width=1>
-                            Comanda
+                        <td>
+                            {{ date('d/m/Y H:i:s', strtotime($order->created_at)) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Garzón
                         </th>
-                        <th width=1>
-                            Cant.
+                        <td>
+                            {{ $order->user->name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Selector
                         </th>
-                        <th width=1>
-                            P.Unit.
+                        <td>
+                            {{ $order->table->tabletype->name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Mesa
                         </th>
-                        <th width=1 style="text-align: right">
-                            P.Total.
+                        <td>
+                            {{ $order->table->name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Tipo
                         </th>
+                        <td style="padding:0px">
+                            <select name="ordertype_id" class="inputtable w-100" id="ordertype" {{$order->dte_token!=null || $order->closed==1  ? "disabled" :""}}>
+                                @foreach ($ordertypes as $ordertype)
+                                    <option value="{{ $ordertype->id }}" {{$ordertype->id==$order->ordertype_id ? "selected":""}}>{{ $ordertype->name }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col">
+                @if($order->table->tabletype_id!=1)
+                <table class="table table-striped table-sm table-dark" id="clientBox">
+                    <tr>
+                        <th>
+                            Nombre
+                        </th>
+                        <td id="client_name">
+                            {{ $order->client ? $order->client->name : '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Teléfono
+                        </th>
+                        <td id="client_phone">
+                            {{ $order->client ? $order->client->phone : '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Comuna
+                        </th>
+                        <td id="client_commune">
+                            {{ $order->client ? $order->client->commune->name : '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Dirección
+                        </th>
+                        <td id="client_address">
+                            {{ $order->client ? $order->client->address : '' }}
+                        </td>
+                    </tr>
+                    @if($order->dte_token==null && $order->closed!=1)
+                    <tr>
+                        <td colspan="2" class="p-0 m-0">
+                            <div class="btn-group w-100" role="group">
+                                <a class="btn btn-primary btn-sm" style="border:none" id="clientButton">
+                                    <span class="material-icons">person</span>
+                                    Clientes
+                                </a>
+                                <a class="btn btn-info btn-sm"  style="border:none" id="historyButton">
+                                    <span class="material-icons">folder</span>
+                                    Pedidos
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    @endif
+                </table>
+                @endif
+            </div>
+        </div>
+        <table class="table table-striped table-sm table-dark">
+            <thead>
+                <tr>
+                    <th>
+                        Producto
+                    </th>
+                    <th width=1>
+                        Comanda
+                    </th>
+                    <th width=1>
+                        Cant.
+                    </th>
+                    <th width=1>
+                        P.Unit.
+                    </th>
+                    <th width=1 style="text-align: right">
+                        P.Total.
+                    </th>
+                    @if($order->dte_token==null && $order->closed!=1)
+                    <th width=1 style="text-align: right">
+                        
+                    </th>
+                    @endif
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($order->orderdetails as $orderdetail)
+                    @if($order->closed==0 && $orderdetail->enabled==1 || $order->closed==1)
+                    <tr {{$orderdetail->enabled==0 ? "class=text-danger" : ""}} id="orderdetail_{{$orderdetail->id}}">
+                        <td>
+                            {{ $orderdetail->product->name }}<br>
+                            <small>{{ $orderdetail->enabled==1 ? $orderdetail->description : "(eliminado)"}}</small>
+                        </td>
+                        <td align="center" id="command_{{$orderdetail->id}}">
+                            @if($orderdetail->command)
+                                <i class="text-success material-icons">done</i>
+                            @else
+                                <i class="text-muted material-icons">more_horiz</i>
+                            @endif
+                        </td>
+                        <td align="right">
+                            {{ number_format($orderdetail->quantity, 0, '', '.') }}
+                        </td>
+                        <td align="right">
+                            {{ number_format($orderdetail->unit_ammount, 0, '', '.') }}
+                        </td>
+                        <td align="right">
+                            {{ number_format($orderdetail->total_ammount, 0, '', '.') }}
+                        </td>
                         @if($order->dte_token==null && $order->closed!=1)
-                        <th width=1 style="text-align: right">
-                            
-                        </th>
+                        <td align="right" width="20">
+                            <a class="btn btn-sm btn-danger material-icons p-0"  onclick="eliminarModal('{{$orderdetail}}')">close</a>
+                        </td>
                         @endif
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach ($order->orderdetails as $orderdetail)
-                        @if($order->closed==0 && $orderdetail->enabled==1 || $order->closed==1)
-                        <tr {{$orderdetail->enabled==0 ? "class=text-danger" : ""}} id="orderdetail_{{$orderdetail->id}}">
-                            <td>
-                                {{ $orderdetail->product->name }}<br>
-                                <small>{{ $orderdetail->enabled==1 ? $orderdetail->description : "(eliminado)"}}</small>
-                            </td>
-                            <td align="center" id="command_{{$orderdetail->id}}">
-                                @if($orderdetail->command)
-                                    <i class="text-success material-icons">done</i>
-                                @else
-                                    <i class="text-muted material-icons">more_horiz</i>
-                                @endif
-                            </td>
-                            <td align="right">
-                                {{ number_format($orderdetail->quantity, 0, '', '.') }}
-                            </td>
-                            <td align="right">
-                                {{ number_format($orderdetail->unit_ammount, 0, '', '.') }}
-                            </td>
-                            <td align="right">
-                                {{ number_format($orderdetail->total_ammount, 0, '', '.') }}
-                            </td>
-                            @if($order->dte_token==null && $order->closed!=1)
-                            <td align="right" width="20">
-                                <a class="btn btn-sm btn-danger material-icons p-0"  onclick="eliminarModal('{{$orderdetail}}')">close</a>
-                            </td>
-                            @endif
-                        </tr>
-                        @endif
-                    @endforeach
-                </tbody>
-            </table>
-            <div class="d-flex flex-wrap justify-content-between">
-                <div>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
+        <div class="d-flex flex-wrap justify-content-between">
+            <div>
+                <form id="paymentForm">
+                    {{ csrf_field() }}
                     <table class="table table-striped table-sm table-dark">
                         <tr>
                             <th colspan="2" style="text-align: center">
@@ -320,7 +319,7 @@
                                 Transferencia
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="transfer" name="transfer" class="dinero inputtable" value="{{$order->transfer}}" {{$order->dte_token!=null || $order->closed==1 ? "readonly " :""}}>
+                                <input type="number" size="6" min="0" id="transfer" name="transfer" class="dinero inputtable" value="{{$order->transfer}}" {{$order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -328,7 +327,7 @@
                                 T. de Débito
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="debit_card" name="debit_card" class="dinero inputtable" value="{{$order->debit_card}}" {{$order->dte_token!=null || $order->closed==1 ? "readonly " :""}}>
+                                <input type="number" size="6" min="0" id="debit_card" name="debit_card" class="dinero inputtable" value="{{$order->debit_card}}" {{$order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -336,7 +335,7 @@
                                 T. de Crédito
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="credit_card" name="credit_card" class="dinero inputtable" value="{{$order->credit_card}}" {{$order->dte_token!=null || $order->closed==1 ? "readonly " :""}}>
+                                <input type="number" size="6" min="0" id="credit_card" name="credit_card" class="dinero inputtable" value="{{$order->credit_card}}" {{$order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -344,7 +343,7 @@
                                 Efectivo
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="efective" name="efective" class="dinero inputtable" value="{{$order->efective}}" {{$order->dte_token!=null || $order->closed==1 ? "readonly " :""}}>
+                                <input type="number" size="6" min="0" id="efective" name="efective" class="dinero inputtable" value="{{$order->efective}}" {{$order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -364,8 +363,12 @@
                             </td>
                         </tr>
                     </table>
-                </div>
-                <div>
+                </form>
+            </div>
+            <div>
+                <form id="extraForm">
+                    {{ csrf_field() }}
+                    <input name="client_id" type="hidden" value="{{$order->client_id}}">
                     <table class="table table-striped table-sm table-dark">
                         <tr>
                             <th colspan="4" style="text-align: center">
@@ -377,7 +380,7 @@
                             <th colspan="3">
                                 Consumo total
                             </th>
-                            <td>
+                            <td id="order_total">
                                 ${{ number_format($order->Total, 0, '', '.') }}
                             </td>
                         </tr>
@@ -450,9 +453,9 @@
                         </tr>
 
                     </table>
-                </div>
+                </form>
             </div>
-        </form>
+        </div>
         <hr>
         @if($order->enabled==1)
             @if($order->closed==0)
@@ -478,16 +481,16 @@
                     <span class="material-icons">receipt</span>
                     Comanda Completa
                 </button>
-                <button onclick="paymentStore()" class="btn btn-purple btn-lg">
+                <button onclick="extraStore()" class="btn btn-purple btn-lg">
                     <span class="material-icons">receipt_long</span>
                     Boleta
                 </button>
             </div>
             @if($order->closed==0)
-            <a href="{{url('/orders/'.$order->id.'/close')}}" class="btn btn-lg btn-block btn-indigo">
+            <button type="button" class="btn btn-lg btn-block btn-indigo" onclick="paymentStore()">
                 <span class="material-icons">price_check</span>
                 Cerrar Venta
-            </a>
+            </button>
             @endif
             @if($order->enabled==1)
             <button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#AnularModal">
@@ -499,188 +502,188 @@
             <h3 class="text-danger">Razón de anulación:</h3>
             <p>{{$order->description}}</p>
         @endif
-        <!-- Modal -->
-        <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-xl">
-                <div class="modal-content  bg-dark">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Clientes</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body p-0" id="modal-table">
-                        <div class="p-2">
-                            <form id="client-form" class="was-validated">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="id">
-                                <input type="hidden" name="company_id" value="{{ $order->company_id }}">
-                                <input type="hidden" name="order_id" value="{{ $order->id }}">
-                                <div class="form-row">
-                                    <div class="form-group col-12 col-sm-6 mb-2">
-                                        <label class="mb-1">Nombre</label>
-                                        <input type="text" class="form-control form-control-sm" name="name" id="client-name"
-                                            required>
-                                    </div>
-                                    <div class="form-group col-12 col-sm-6 mb-2">
-                                        <label class="mb-1">Teléfono</label>
-                                        <input type="text" class="form-control form-control-sm" name="phone"
-                                            id="client-phone" required>
-                                    </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content  bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Clientes</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0" id="modal-table">
+                    <div class="p-2">
+                        <form id="client-form" class="was-validated">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="id">
+                            <input type="hidden" name="company_id" value="{{ $order->company_id }}">
+                            <input type="hidden" name="order_id" value="{{ $order->id }}">
+                            <div class="form-row">
+                                <div class="form-group col-12 col-sm-6 mb-2">
+                                    <label class="mb-1">Nombre</label>
+                                    <input type="text" class="form-control form-control-sm" name="name" id="client-name"
+                                        required>
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group col-12 col-sm-6 mb-2">
-                                        <label class="mb-1">Región</label>
-                                        <select class="custom-select custom-select-sm" name="region_id" id="region_select">
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-12 col-sm-6 mb-2">
-                                        <label class="mb-1">Comuna</label>
-                                        <select class="custom-select custom-select-sm" name="commune_id"
-                                            id="commune_select">
-                                        </select>
-                                    </div>
+                                <div class="form-group col-12 col-sm-6 mb-2">
+                                    <label class="mb-1">Teléfono</label>
+                                    <input type="text" class="form-control form-control-sm" name="phone"
+                                        id="client-phone" required>
                                 </div>
-                                <div class="form-group mb-2">
-                                    <label class="mb-1">Dirección</label>
-                                    <input type="text" class="form-control form-control-sm" name="address" required>
-                                </div>
-                            </form>
-                            <div>
-                                <button type="button" class="btn btn-success" onclick="clientStore()">
-                                    <span class="material-icons">send</span>
-                                    Guardar
-                                </button>
-                                <button type="button" class="btn btn-primary" onclick="clientNew()">
-                                    <span class="material-icons">person_add</span>
-                                    Nuevo
-                                </button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                    <span class="material-icons">close</span>
-                                    Volver
-                                </button>
                             </div>
+                            <div class="form-row">
+                                <div class="form-group col-12 col-sm-6 mb-2">
+                                    <label class="mb-1">Región</label>
+                                    <select class="custom-select custom-select-sm" name="region_id" id="region_select">
+                                    </select>
+                                </div>
+                                <div class="form-group col-12 col-sm-6 mb-2">
+                                    <label class="mb-1">Comuna</label>
+                                    <select class="custom-select custom-select-sm" name="commune_id"
+                                        id="commune_select">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label class="mb-1">Dirección</label>
+                                <input type="text" class="form-control form-control-sm" name="address" required>
+                            </div>
+                        </form>
+                        <div>
+                            <button type="button" class="btn btn-success" onclick="clientStore()">
+                                <span class="material-icons">send</span>
+                                Guardar
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="clientNew()">
+                                <span class="material-icons">person_add</span>
+                                Nuevo
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                <span class="material-icons">close</span>
+                                Volver
+                            </button>
                         </div>
-                        <div style="display:block;width:100%;min-height:40vh" id='container'>
-                            <table id="tabla" class="table objtable table-dark table-sm mb-0 table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Comuna</th>
-                                        <th>Dirección</th>
-                                        <th>Teléfono</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
+                    </div>
+                    <div style="display:block;width:100%;min-height:40vh" id='container'>
+                        <table id="tabla" class="table objtable table-dark table-sm mb-0 table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Comuna</th>
+                                    <th>Dirección</th>
+                                    <th>Teléfono</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="eliminarModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal">
-                <div class="modal-content  bg-dark">
+    <!-- Modal -->
+    <div class="modal fade" id="eliminarModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal">
+            <div class="modal-content  bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Eliminar Producto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="detachForm">
+                    {{ csrf_field() }}
+                    <div class="modal-body" align="center">
+                        ¿Desea borrar <br>"<i class="text-danger font-weight-bold" id="product_name"></i>"<br>de la orden?
+                    </div>
+                    <input type="hidden" value="0" name="orderdetail_id">
+                </form>
+                <div class="modal-footer p-0 justify-content-between">
+                    <button type="button" class="btn btn-danger" onclick="eliminarProducto()">
+                        <span class="material-icons">send</span>
+                        Eliminar
+                    </button>                                
+                    <a type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span class="material-icons">close</span>
+                        Cerrar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="historyModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Pedidos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" align="center">                        
+                    <div style="display:block;width:100%;min-height:50vh;max-height:90vh;overflow-y:overlay" id='container'>
+                        <table class="table objtable table-dark table-sm mb-0 table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Orden
+                                    </th>
+                                    <th>
+                                        Detalle
+                                    </th>
+                                    <th>
+                                        Repetir
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyList">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="AnularModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal">
+            <div class="modal-content  bg-dark">
+                <form id="anularForm" method="POST" action="{{url('/orders/disable')}}">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Eliminar Producto</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel">Anular Venta</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="detachForm">
-                        {{ csrf_field() }}
-                        <div class="modal-body" align="center">
-                            ¿Desea borrar <br>"<i class="text-danger font-weight-bold" id="product_name"></i>"<br>de la orden?
+                    {{ csrf_field() }}
+                    <div class="modal-body" align="center">
+                        ¿Desea Anular de la Orden {{$order->internal_id}}?
+                        <input type="hidden" value="{{$order->id}}" name="order_id">
+                        <div class="form-group">
+                            <label>Razón de la anulación</label>
+                            <textarea class="form-control" name="description" required></textarea>
                         </div>
-                        <input type="hidden" value="0" name="orderdetail_id">
-                    </form>
+                    </div>
                     <div class="modal-footer p-0 justify-content-between">
-                        <button type="button" class="btn btn-danger" onclick="eliminarProducto()">
+                        <button class="btn btn-danger" type="submit">
                             <span class="material-icons">send</span>
-                            Eliminar
-                        </button>                                
+                            Anular
+                        </button>                     
                         <a type="button" class="btn btn-secondary" data-dismiss="modal">
                             <span class="material-icons">close</span>
                             Cerrar
                         </a>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        
-        <!-- Modal -->
-        <div class="modal fade" id="historyModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-xl">
-                <div class="modal-content bg-dark">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Pedidos</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" align="center">                        
-                        <div style="display:block;width:100%;min-height:50vh;max-height:90vh;overflow-y:overlay" id='container'>
-                            <table class="table objtable table-dark table-sm mb-0 table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            Orden
-                                        </th>
-                                        <th>
-                                            Detalle
-                                        </th>
-                                        <th>
-                                            Repetir
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="historyList">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="AnularModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal">
-                <div class="modal-content  bg-dark">
-                    <form id="anularForm" method="POST" action="{{url('/orders/disable')}}">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Anular Venta</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        {{ csrf_field() }}
-                        <div class="modal-body" align="center">
-                            ¿Desea Anular de la Orden {{$order->internal_id}}?
-                            <input type="hidden" value="{{$order->id}}" name="order_id">
-                            <div class="form-group">
-                                <label>Razón de la anulación</label>
-                                <textarea class="form-control" name="description" required></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer p-0 justify-content-between">
-                            <button class="btn btn-danger" type="submit">
-                                <span class="material-icons">send</span>
-                                Anular
-                            </button>                     
-                            <a type="button" class="btn btn-secondary" data-dismiss="modal">
-                                <span class="material-icons">close</span>
-                                Cerrar
-                            </a>
-                        </div>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -705,7 +708,6 @@
         <hr>
     </div>
 
-    
     <div id="fakeDte">
         <h3 style="margin-bottom:0px;border-bottom:2px solid" align="center">*** CUENTA ***</h3>
         <table style="margin-bottom:2mm;font-size:14px;width:100%;border-bottom:2px dashed">
@@ -745,7 +747,6 @@
     <!--SCRIPT DE COMANDA Y BOLETA-->
     <script>
         var imprimir = document.getElementById('imprimir');
-        var orderForm = document.getElementById('orderForm');
 
         var fakeDte = document.getElementById('fakeDte');
         var DteProducts = document.getElementById('DteProducts');
@@ -755,8 +756,6 @@
         var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
 
         function PrintComanda() {
-
-
             var mywindow = window.open('', 'PRINT', 'height=1,width=1');
 
             mywindow.document.write('<html><head></head><title>Comanda</title>');
@@ -796,8 +795,6 @@
                     newtr.appendChild(newtd2);
                     DteProducts.appendChild(newtr);
                 });
-
-                
 
                 DteTotals.innerHTML="";
 
@@ -841,26 +838,6 @@
             });
         }
         
-        function cancelBoleta() {
-            $.get("{{ url('/') }}/ajax/removeDte/{{ $order->id }}", function(data) {
-
-            });
-        }
-
-        function disabledPaymend(){
-            orderForm['ordertype_id'].disabled=true;
-            orderForm['discount'].disabled=true;
-            orderForm['discount_description'].disabled=true;
-            orderForm['tip_type'].disabled=true;
-            orderForm['tip'].disabled=true;
-
-            orderForm['delivery'].disabled=true;
-            orderForm['transfer'].disabled=true;
-            orderForm['debit_card'].disabled=true;
-            orderForm['credit_card'].disabled=true;
-            orderForm['efective'].disabled=true;
-        }
-
         function PrintBoleta(){
             $.get("{{ url('/') }}/ajax/generateInvoice/{{ $order->id }}", function(data) {
                 var pdfData = atob(data.response.PDF==null ? data.response.pdf : data.response.PDF);
@@ -988,7 +965,6 @@
         var clienttable;
         var historytable;
 
-
         function rowStore(data) {
             var fila = clienttable.row("#" + data.id);
             if (fila.id()) {
@@ -1038,7 +1014,7 @@
                     contentType: false // tell jQuery not to set contentType
                 }).done(function(data) {
                     if (typeof(data) == 'object') {
-                        orderForm['client_id'].value=data.id;
+                        extraForm['client_id'].value=data.id;
                         rowStore(data);
                     } else {
                         alert(data);
@@ -1250,7 +1226,11 @@
     </script>
 
     <!--SCRIPT DE ADICIONALES Y PAGOS-->
-    <script>        
+    <script>
+        var extraForm = document.getElementById('extraForm');
+        var paymentForm = document.getElementById('paymentForm');
+        var order_total = document.getElementById('order_total');
+
         //TOTAL CONSUMO
         let TotalBase = parseFloat("{{ $order->Total }}");
         var FaltaPagar = 0;
@@ -1279,15 +1259,38 @@
         var pay_left        = document.getElementById('pay_left');
         
         var detachForm      = document.getElementById('detachForm');
+
+        function disabledPaymend(){
+            paymentForm['transfer'].disabled=true;
+            paymentForm['debit_card'].disabled=true;
+            paymentForm['credit_card'].disabled=true;
+            paymentForm['efective'].disabled=true;
+        }
+
+        function disabledExtra(){
+            extraForm['delivery'].disabled=true;
+            ordertype.disabled=true;
+            extraForm['discount'].disabled=true;
+            extraForm['discount_description'].disabled=true;
+            extraForm['tip_type'].disabled=true;
+            extraForm['tip'].disabled=true;
+        }
         
         //TODOS LOS CAMPOS RELACIONADOS CON DINERO AL CAMBIAR EJECUTAN LA FUNCION CALCULAR
         var dinero = document.querySelectorAll(".dinero");
         dinero.forEach(input =>input.onchange = calcular);
+        
 
         calcular();
 
-        var orderForm = document.getElementById('orderForm');
-        orderForm.onsubmit = function(e) {
+        var extraForm = document.getElementById('extraForm');
+        extraForm.onsubmit = function(e) {
+            e.preventDefault();
+            return false;
+        }        
+        
+        var paymentForm = document.getElementById('paymentForm');
+        paymentForm.onsubmit = function(e) {
             e.preventDefault();
             return false;
         }
@@ -1315,33 +1318,17 @@
         ordertype.onchange = motrarClientBox;
         //
 
-        var loadorderForm=true;
+        var loadState=true;
 
         function paymentStore(){
             if(
-                orderForm['discount_description'].value == '' &&
-                orderForm['discount'].value != 0
-            ){
-                alert("Falta agregar razon del descuento");
-                return false;
-            }else if(
-                orderForm['ordertype_id'].value=="2" && (orderForm['client_id'].value=="" || orderForm['delivery'].value==0)
-            ){
-                alert("para Entrega a domicilio debe ingresar la información del cliente y costo de Despacho");
-                return false;
-            }else if(
-                orderForm['ordertype_id'].value=="3" && orderForm['client_id'].value==""
-            ){
-                alert("Es necesario ingresar información del cliente");
-                return false;
-            }else if(
                 FaltaPagar !=0
             ){
                 alert("Falta pagar: $"+miles(FaltaPagar));
                 return false;
-            }else if(loadorderForm) {
-                loadorderForm = false;
-                var formData = new FormData(orderForm);
+            }else if(loadState) {
+                loadState = false;
+                var formData = new FormData(paymentForm);
                 formData.append("difference", difference);
                 $.ajax({
                     url: "{{ url('/orders/'.$order->id.'/paymentStore') }}",
@@ -1352,18 +1339,60 @@
                 }).done(function(data) {
                     if (typeof(data) == 'object') {
                         disabledPaymend();
-                        PrintFakeDte();
-                        //PrintBoleta();
+                        location.reload();
                         return true;
                     } else {
                         alert(data);
                         return false;
                     }
-                }).fail(function() {
-                    alert("error al recibir respuesta del servidor");
-                    return false;
+                }).fail(function(xhr, status, error) {
+                    alert(xhr.responseJSON.response);
                 }).always(function() {
-                    loadorderForm = true;
+                    loadState = true;
+                });
+            }
+        }
+
+        
+        function extraStore(){
+            if(
+                extraForm['discount_description'].value == '' &&
+                extraForm['discount'].value != 0
+            ){
+                alert("Falta agregar razon del descuento");
+                return false;
+            }else if(
+                ordertype.value=="2" && (extraForm['client_id'].value=="" || extraForm['delivery'].value==0)
+            ){
+                alert("para Entrega a domicilio debe ingresar la información del cliente y costo de Despacho");
+                return false;
+            }else if(
+                ordertype.value=="3" && extraForm['client_id'].value==""
+            ){
+                alert("Es necesario ingresar información del cliente");
+                return false;
+            }else{
+                loadState = false;
+                var formData = new FormData(extraForm);
+                $.ajax({
+                    url: "{{ url('/orders/'.$order->id.'/extraStore') }}",
+                    type: "POST",
+                    data: formData,
+                    processData: false, // tell jQuery not to process the data
+                    contentType: false // tell jQuery not to set contentType
+                }).done(function(data) {
+                    if (typeof(data) == 'object') {
+                        console.log('entre');
+                        disabledExtra();
+                        PrintFakeDte();
+                        //PrintBoleta();
+                    } else {
+                        alert(data);
+                    }
+                }).fail(function(xhr, status, error) {
+                    alert(xhr.responseJSON.response);
+                }).always(function() {
+                    loadState = true;
                 });
             }
         }
@@ -1385,10 +1414,11 @@
                 contentType: false // tell jQuery not to set contentType
             }).done(function(data) {
                 if (typeof(data) == 'object') {
-                    TotalBase=data.Total;  
+                    TotalBase=data.Total; 
+                    order_total.innerHTML=miles(TotalBase);
                     $('#orderdetail_'+detachForm.orderdetail_id.value).remove();
                     /*              
-                    orderForm['orderdetail_id[]'].forEach(input =>{
+                    extraForm['orderdetail_id[]'].forEach(input =>{
                         if(input.value == detachForm['orderdetail_id'].value){
                             input.parentElement.parentElement.remove();
                         }
@@ -1401,11 +1431,17 @@
             }).fail(function() {
                 alert("error al recibir respuesta del servidor");
             }).always(function() {
-                loadorderForm = true;
+                loadState = true;
             });
         }
 
-        function calcular(){
+        function calcular(input){
+
+            if(input){
+                if(!input.target.value){
+                    input.target.value=0;
+                }
+            }
             //VALOR BASE
             var total_pay=TotalBase;
 
