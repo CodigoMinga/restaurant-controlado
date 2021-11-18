@@ -16,5 +16,6 @@ class DeliverySeeder extends Seeder
         Delivery::create(['ammount'=>2000,'delivery_commission'=>650,'company_id'=>2]);
         Delivery::create(['ammount'=>2300,'delivery_commission'=>800,'company_id'=>2]);
         Delivery::create(['ammount'=>2500,'delivery_commission'=>850,'company_id'=>2]);
+        Delivery::create(['ammount'=>3000,'delivery_commission'=>1000,'company_id'=>2]);
     }
 }

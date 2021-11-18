@@ -379,17 +379,18 @@ class OrderController extends Controller
         if($order->dte_token==null){
             $order_old  = Order::findOrFail($order_id_old);
             foreach ($order_old->orderdetails as $key => $orderdetail_old) {
-
-                $product    = Product::findOrFail($orderdetail_old->product_id);
-                $orderdetail = new Orderdetail();
-                $orderdetail->product_id    = $product->id;
-                $orderdetail->order_id      = $order->id;
-                $orderdetail->quantity      = $orderdetail_old->quantity;
-                $orderdetail->description   = $orderdetail_old->description;
-                $orderdetail->unit_ammount  = $product->price;
-                $orderdetail->total_ammount = intval($orderdetail_old->quantity) * intval($product->price);
-                $orderdetail->save();
-                $this->substock($orderdetail);
+                if($orderdetail_old->enabled){
+                    $product    = Product::findOrFail($orderdetail_old->product_id);
+                    $orderdetail = new Orderdetail();
+                    $orderdetail->product_id    = $product->id;
+                    $orderdetail->order_id      = $order->id;
+                    $orderdetail->quantity      = $orderdetail_old->quantity;
+                    $orderdetail->description   = $orderdetail_old->description;
+                    $orderdetail->unit_ammount  = $product->price;
+                    $orderdetail->total_ammount = intval($orderdetail_old->quantity) * intval($product->price);
+                    $orderdetail->save();
+                    $this->substock($orderdetail);
+                }
             }
             return redirect('/orders/'.$order->id)->with('success', 'Orden Repetida');
         }else{
