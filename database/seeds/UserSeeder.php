@@ -14,7 +14,9 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $roles  = Role::where('name', 'superadmin')->first();
+        $superadmin  = Role::where('name', 'superadmin')->first();
+        $companyadmin  = Role::where('name', 'companyadmin')->first();
+        $normaluser  = Role::where('name', 'normaluser')->first();
         
         $codigominga    = Company::where('id',1)->first();
         $delixius       = Company::where('id',2)->first();
@@ -26,7 +28,7 @@ class UserSeeder extends Seeder
         $user->password = bcrypt('password');
         $user->save();
 
-        $user->roles()->attach($roles);
+        $user->roles()->attach($superadmin);
         $user->companies()->attach($codigominga);
         $user->companies()->attach($delixius);
         $user->companies()->attach($tiocheo);
@@ -36,33 +38,33 @@ class UserSeeder extends Seeder
         $user->email = 'programador@microbesolutions.cl';
         $user->password = bcrypt('000000');
         $user->save();
-        $user->roles()->attach($roles);
+        $user->roles()->attach($superadmin);
         $user->companies()->attach($codigominga);
         $user->companies()->attach($delixius);
         $user->companies()->attach($tiocheo);
-
-        $user = new User;
-        $user->name = 'Sebastian';
-        $user->email = 'sebastian.vera.moll@gmail.com';
-        $user->password = bcrypt('password');
-        $user->save();
-        $user->roles()->attach($roles);
-        $user->companies()->attach($delixius);
 
         $user = new User;
         $user->name = 'Suki';
         $user->email = 'perronegro.cl@gmail.com';
         $user->password = bcrypt('password');
         $user->save();
-        $user->roles()->attach($roles);
+        $user->roles()->attach($superadmin);
+        $user->companies()->attach($codigominga);
+
+        $user = new User;
+        $user->name = 'Issa Daruich';
+        $user->email = 'issadaruich@gmail.com';
+        $user->password = bcrypt('clave123');
+        $user->save();
+        $user->roles()->attach($companyadmin);
         $user->companies()->attach($delixius);
 
         $user = new User;
-        $user->name = 'Nikotine';
-        $user->email = 'Nikotine991@gmail.com';
-        $user->password = bcrypt('password');
+        $user->name = 'Javiera';
+        $user->email = 'Javiera@restorant.cl';
+        $user->password = bcrypt('clave123');
         $user->save();
-        $user->roles()->attach($roles);
-        $user->companies()->attach($codigominga);
+        $user->roles()->attach($superadmin);
+        $user->companies()->attach($delixius);
     }
 }
