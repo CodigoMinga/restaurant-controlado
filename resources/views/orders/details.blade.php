@@ -712,11 +712,14 @@
         <h3 style="margin-bottom:0px;border-bottom:2px solid" align="center">*** CUENTA ***</h3>
         <table style="margin-bottom:2mm;font-size:14px;width:100%;border-bottom:2px dashed">
             <tbody>
-                <tr><th align="left">MESA</th><td>{{$order->table->name}}</td></tr>
-                <tr><th align="left">GÁRZON</th><td>{{ $order->user->name }}</td></tr>
-                <tr><th align="left">NUMERO</th><td>{{ $order->internal_id }}</td></tr>
-                <tr><th align="left">FECHA</th><td> {{ date('d/m/Y H:i:s', strtotime($order->created_at)) }}</td></tr>
+                <tr><th align="left">MESA</th><td align="right">{{$order->table->name}}</td></tr>
+                <tr><th align="left">GÁRZON</th><td align="right">{{ $order->user->name }}</td></tr>
+                <tr><th align="left">NUMERO</th><td align="right">{{ $order->internal_id }}</td></tr>
+                <tr><th align="left">FECHA</th><td align="right"> {{ date('d/m/Y H:i:s', strtotime($order->created_at)) }}</td></tr>
             </tbody>
+        </table>
+        <table style="margin-bottom:2mm;font-size:14px;width:100%;border-bottom:2px dashed;display:none" id="DteClient">
+
         </table>
         <table style="margin-bottom:2mm;font-size:13px;width:100%;border-bottom:2px dashed">
             <thead>
@@ -751,6 +754,7 @@
         var fakeDte = document.getElementById('fakeDte');
         var DteProducts = document.getElementById('DteProducts');
         var DteTotals = document.getElementById('DteTotals');
+        var DteClient = document.getElementById('DteClient');
 
         var ua = navigator.userAgent.toLowerCase();
         var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
@@ -790,7 +794,8 @@
                     newtd.innerText = el.producto +"\n" +el.cantidad+" X $"+miles(parseInt(el.unitario));   
                     newtr.appendChild(newtd);
 
-                    var newtd2 = document.createElement('td');
+                    var newtd2 = document.createElement('td');                    
+                    newtd2.align="right";
                     newtd2.innerText = "$"+miles(parseInt(el.total));                   
                     newtr.appendChild(newtd2);
                     DteProducts.appendChild(newtr);
@@ -807,6 +812,7 @@
 
                     var newtd2 = document.createElement('td');
                     newtd2.width="1px"
+                    newtd2.align="right";
                     if( el.name  === "TOTAL A PAGAR"){
                         newtd2.style.fontWeight ="bold"
                         newtd2.style.fontSize ="16px"
@@ -816,6 +822,30 @@
                     DteTotals.appendChild(newtr);
                 });
 
+                DteClient.innerHTML="";
+
+                if(respuesta.Cliente.legth>0){
+                    DteClient.style.display="block";
+                    respuesta.Cliente.forEach(el => {
+                        var newtr = document.createElement('tr');
+                        var newtd = document.createElement('th'); 
+                        newtd.align="left";
+                        newtd.width="1px"
+                        newtd.innerText = el.name;   
+                        newtr.appendChild(newtd);
+
+                        var newtd2 = document.createElement('td');
+                        newtd2.align="right";
+                        newtd2.width="100%";
+
+                        newtd2.innerText = el.value;                   
+                        newtr.appendChild(newtd2);
+                        DteClient.appendChild(newtr);
+                    });
+                }else{
+                    DteClient.style.display="none";
+                }
+
                 var mywindow = window.open('', 'PRINT', 'height=1,width=1');
                 mywindow.document.write('<html><head></head><title>Boleta</title>');
                 mywindow.document.write(
@@ -823,11 +853,13 @@
                 );
                 mywindow.document.write(fakeDte.innerHTML);
                 mywindow.document.write('</body></html>');
+                
                 if(isAndroid) {
                     mywindow.onfocus = function(){mywindow.close();};
                 }else{
                     mywindow.onafterprint  = function(){mywindow.close();};
                 }
+
                 mywindow.document.close(); // necessary for IE >= 10
 
                 mywindow.focus(); // necessary for IE >= 10*/
