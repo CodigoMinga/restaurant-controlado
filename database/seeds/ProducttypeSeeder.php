@@ -37,20 +37,20 @@ class ProducttypeSeeder extends Seeder
 
         $producttype = Producttype::create(['name'=>'Californias Sesamo','company_id'=>2]);
             $products = [
-                ['California salumado (Sésamo)','Salmon ahumado, queso crema, palta, envuelto en Sésamo',4500],
-                ['Tempura chesse rolls (Sésamo)','Camaron tempura, queso crema, palta, envuelto en Sésamo',4500],
-                ['Tory rolls (Sésamo)','Pollo apanados, queso crema, palta, envuelto en Sésamo',4200],
-                ['Maki rolls (Sésamo)','Kanikama, queso crema, palta, envuelto en Sésamo',4000],
-                ['Tako rolls (Sésamo)','Pulpo, queso crema, palta, envuelto en Sésamo',4500],
-                ['Crab cheese rolls (Sésamo)','Jaiba, queso crema, palta, envuelto en Sésamo',5000],
-                ['Teri cheese rolls (Sésamo)','Pollo teriyaki, queso crema, palta, envuelto en Sésamo',4000],
-                ['Ebi rolls (Sésamo)','Camaron, queso crema, palta, envuelto en Sésamo',4500],
-                ['Sake furay rolls (Sésamo)','Salmon apanado, queso crema, palta, envuelto en Sésamo',4500],
-                ['Avocado especial (Sésamo)','Salmon, queso crema, palta, envuelto en Sésamo',4500],
-                ['Spicy tempura (Sésamo)','Camaron apanado, salsa spicy, queso, cebollin, envuelto en Sésamo',4800],
-                ['Spicy tako (Sésamo)','Pulpo, salsa spicy, planta, envuelto en Sésamo',5000],
-                ['Beef rolls (Sésamo)','Carne, queso crema, cebollin, envuelto en Sésamo',5000 ],
-                ['Maguro rolls (Sésamo)','Atun, palta, envuelto en Sésamo',4500]            
+                ['1.-California salumado (Sésamo)','Salmon ahumado, queso crema, palta, envuelto en Sésamo',4500],
+                ['2.-Tempura chesse rolls (Sésamo)','Camaron tempura, queso crema, palta, envuelto en Sésamo',4500],
+                ['3.-Tory rolls (Sésamo)','Pollo apanados, queso crema, palta, envuelto en Sésamo',4200],
+                ['4.-Maki rolls (Sésamo)','Kanikama, queso crema, palta, envuelto en Sésamo',4000],
+                ['5.-Tako rolls (Sésamo)','Pulpo, queso crema, palta, envuelto en Sésamo',4500],
+                ['6.-Crab cheese rolls (Sésamo)','Jaiba, queso crema, palta, envuelto en Sésamo',5000],
+                ['7.-Teri cheese rolls (Sésamo)','Pollo teriyaki, queso crema, palta, envuelto en Sésamo',4000],
+                ['8.-Ebi rolls (Sésamo)','Camaron, queso crema, palta, envuelto en Sésamo',4500],
+                ['9.-Sake furay rolls (Sésamo)','Salmon apanado, queso crema, palta, envuelto en Sésamo',4500],
+                ['10.-Avocado especial (Sésamo)','Salmon, queso crema, palta, envuelto en Sésamo',4500],
+                ['11.-Spicy tempura (Sésamo)','Camaron apanado, salsa spicy, queso, cebollin, envuelto en Sésamo',4800],
+                ['12.-Spicy tako (Sésamo)','Pulpo, salsa spicy, planta, envuelto en Sésamo',5000],
+                ['13.-Beef rolls (Sésamo)','Carne, queso crema, cebollin, envuelto en Sésamo',5000 ],
+                ['14.-Maguro rolls (Sésamo)','Atun, palta, envuelto en Sésamo',4500]            
             ];
             foreach ($products as $key => $product) {
                 Product::create(['name'=>$product[0],'description'=>$product[1],'price'=>$product[2],'producttype_id'=>$producttype->id]);
@@ -58,20 +58,20 @@ class ProducttypeSeeder extends Seeder
 
         $producttype = Producttype::create(['name'=>'Californias Ciboulette','company_id'=>2]);
             $products = [
-                ['California salumado (Ciboulette)','Salmon ahumado, queso crema, palta, envuelto en Ciboulette',4500],
-                ['Tempura chesse rolls (Ciboulette)','Camaron tempura, queso crema, palta, envuelto en Ciboulette',4500],
-                ['Tory rolls (Ciboulette)','Pollo apanados, queso crema, palta, envuelto en Ciboulette',4200],
-                ['Maki rolls (Ciboulette)','Kanikama, queso crema, palta, envuelto en Ciboulette',4000],
-                ['Tako rolls (Ciboulette)','Pulpo, queso crema, palta, envuelto en Ciboulette',4500],
-                ['Crab cheese rolls (Ciboulette)','Jaiba, queso crema, palta, envuelto en Ciboulette',5000],
-                ['Teri cheese rolls (Ciboulette)','Pollo teriyaki, queso crema, palta, envuelto en Ciboulette',4000],
-                ['Ebi rolls (Ciboulette)','Camaron, queso crema, palta, envuelto en Ciboulette',4500],
-                ['Sake furay rolls (Ciboulette)','Salmon apanado, queso crema, palta, envuelto en Ciboulette',4500],
-                ['Avocado especial (Ciboulette)','Salmon, queso crema, palta, envuelto en Ciboulette',4500],
-                ['Spicy tempura (Ciboulette)','Camaron apanado, salsa spicy, queso, cebollin, envuelto en Ciboulette',4800],
-                ['Spicy tako (Ciboulette)','Pulpo, salsa spicy, planta, envuelto en Ciboulette',5000],
-                ['Beef rolls (Ciboulette)','Carne, queso crema, cebollin, envuelto en Ciboulette',5000 ],
-                ['Maguro rolls (Ciboulette)','Atun, palta, envuelto en Ciboulette',4500]                           
+                ['1.-California salumado (Ciboulette)','Salmon ahumado, queso crema, palta, envuelto en Ciboulette',4500],
+                ['2.-Tempura chesse rolls (Ciboulette)','Camaron tempura, queso crema, palta, envuelto en Ciboulette',4500],
+                ['3.-Tory rolls (Ciboulette)','Pollo apanados, queso crema, palta, envuelto en Ciboulette',4200],
+                ['4.-Maki rolls (Ciboulette)','Kanikama, queso crema, palta, envuelto en Ciboulette',4000],
+                ['5.-Tako rolls (Ciboulette)','Pulpo, queso crema, palta, envuelto en Ciboulette',4500],
+                ['6.-Crab cheese rolls (Ciboulette)','Jaiba, queso crema, palta, envuelto en Ciboulette',5000],
+                ['7.-Teri cheese rolls (Ciboulette)','Pollo teriyaki, queso crema, palta, envuelto en Ciboulette',4000],
+                ['8.-Ebi rolls (Ciboulette)','Camaron, queso crema, palta, envuelto en Ciboulette',4500],
+                ['9.-Sake furay rolls (Ciboulette)','Salmon apanado, queso crema, palta, envuelto en Ciboulette',4500],
+                ['10.-Avocado especial (Ciboulette)','Salmon, queso crema, palta, envuelto en Ciboulette',4500],
+                ['11.-Spicy tempura (Ciboulette)','Camaron apanado, salsa spicy, queso, cebollin, envuelto en Ciboulette',4800],
+                ['12.-Spicy tako (Ciboulette)','Pulpo, salsa spicy, planta, envuelto en Ciboulette',5000],
+                ['13.-Beef rolls (Ciboulette)','Carne, queso crema, cebollin, envuelto en Ciboulette',5000 ],
+                ['14.-Maguro rolls (Ciboulette)','Atun, palta, envuelto en Ciboulette',4500]                           
             ];
             foreach ($products as $key => $product) {
                 Product::create(['name'=>$product[0],'description'=>$product[1],'price'=>$product[2],'producttype_id'=>$producttype->id]);
@@ -79,20 +79,20 @@ class ProducttypeSeeder extends Seeder
         
         $producttype = Producttype::create(['name'=>'Californias Masago','company_id'=>2]);
             $products = [
-                ['California salumado (Masago)','Salmon ahumado, queso crema, palta, envuelto en Masago',4500],
-                ['Tempura chesse rolls (Masago)','Camaron tempura, queso crema, palta, envuelto en Masago',4500],
-                ['Tory rolls (Masago)','Pollo apanados, queso crema, palta, envuelto en Masago',4200],
-                ['Maki rolls (Masago)','Kanikama, queso crema, palta, envuelto en Masago',4000],
-                ['Tako rolls (Masago)','Pulpo, queso crema, palta, envuelto en Masago',4500],
-                ['Crab cheese rolls (Masago)','Jaiba, queso crema, palta, envuelto en Masago',5000],
-                ['Teri cheese rolls (Masago)','Pollo teriyaki, queso crema, palta, envuelto en Masago',4000],
-                ['Ebi rolls (Masago)','Camaron, queso crema, palta, envuelto en Masago',4500],
-                ['Sake furay rolls (Masago)','Salmon apanado, queso crema, palta, envuelto en Masago',4500],
-                ['Avocado especial (Masago)','Salmon, queso crema, palta, envuelto en Masago',4500],
-                ['Spicy tempura (Masago)','Camaron apanado, salsa spicy, queso, cebollin, envuelto en Masago',4800],
-                ['Spicy tako (Masago)','Pulpo, salsa spicy, planta, envuelto en Masago',5000],
-                ['Beef rolls (Masago)','Carne, queso crema, cebollin, envuelto en Masago',5000 ],
-                ['Maguro rolls (Masago)','Atun, palta, envuelto en Masago',4500]                                           
+                ['1.-California salumado (Masago)','Salmon ahumado, queso crema, palta, envuelto en Masago',4500],
+                ['2.-Tempura chesse rolls (Masago)','Camaron tempura, queso crema, palta, envuelto en Masago',4500],
+                ['3.-Tory rolls (Masago)','Pollo apanados, queso crema, palta, envuelto en Masago',4200],
+                ['4.-Maki rolls (Masago)','Kanikama, queso crema, palta, envuelto en Masago',4000],
+                ['5.-Tako rolls (Masago)','Pulpo, queso crema, palta, envuelto en Masago',4500],
+                ['6.-Crab cheese rolls (Masago)','Jaiba, queso crema, palta, envuelto en Masago',5000],
+                ['7.-Teri cheese rolls (Masago)','Pollo teriyaki, queso crema, palta, envuelto en Masago',4000],
+                ['8.-Ebi rolls (Masago)','Camaron, queso crema, palta, envuelto en Masago',4500],
+                ['9.-Sake furay rolls (Masago)','Salmon apanado, queso crema, palta, envuelto en Masago',4500],
+                ['10.-Avocado especial (Masago)','Salmon, queso crema, palta, envuelto en Masago',4500],
+                ['11.-Spicy tempura (Masago)','Camaron apanado, salsa spicy, queso, cebollin, envuelto en Masago',4800],
+                ['12.-Spicy tako (Masago)','Pulpo, salsa spicy, planta, envuelto en Masago',5000],
+                ['13.-Beef rolls (Masago)','Carne, queso crema, cebollin, envuelto en Masago',5000 ],
+                ['14.-Maguro rolls (Masago)','Atun, palta, envuelto en Masago',4500]                                           
             ];
             foreach ($products as $key => $product) {
                 Product::create(['name'=>$product[0],'description'=>$product[1],'price'=>$product[2],'producttype_id'=>$producttype->id]);
@@ -100,20 +100,20 @@ class ProducttypeSeeder extends Seeder
     
         $producttype = Producttype::create(['name'=>'Californias Avocado','company_id'=>2]);
             $products = [
-                ['California salumado (Palta)','Salmon ahumado, queso crema, palta, envuelto en Palta',5200],
-                ['Tempura chesse rolls (Palta)','Camaron tempura, queso crema, palta, envuelto en Palta',5200],
-                ['Tory rolls (Palta)','Pollo apanados, queso crema, palta, envuelto en Palta',5200],
-                ['Maki rolls (Palta)','Kanikama, queso crema, palta, envuelto en Palta',5000],
-                ['Tako rolls (Palta)','Pulpo, queso crema, palta, envuelto en Palta',5200],
-                ['Crab cheese rolls (Palta)','Jaiba, queso crema, palta, envuelto en Palta',5500],
-                ['Teri cheese rolls (Palta)','Pollo teriyaki, queso crema, palta, envuelto en Palta',5500],
-                ['Ebi rolls (Palta)','Camaron, queso crema, palta, envuelto en Palta',5000],
-                ['Sake furay rolls (Palta)','Salmon apanado, queso crema, palta, envuelto en Palta',5200],
-                ['Avocado especial (Palta)','Salmon, queso crema, palta, envuelto en Palta',5500],
-                ['Spicy tempura (Palta)','Camaron apanado, salsa spicy, queso, cebollin, envuelto en Palta',5500],
-                ['Spicy tako (Palta)','Pulpo, salsa spicy, planta, envuelto en Palta',5500],
-                ['Beef rolls (Palta)','Carne, queso crema, cebollin, envuelto en Palta',5500],
-                ['Maguro rolls (Palta)','Atun, palta, envuelto en Palta',5500]
+                ['1.-California salumado (Palta)','Salmon ahumado, queso crema, palta, envuelto en Palta',5200],
+                ['2.-Tempura chesse rolls (Palta)','Camaron tempura, queso crema, palta, envuelto en Palta',5200],
+                ['3.-Tory rolls (Palta)','Pollo apanados, queso crema, palta, envuelto en Palta',5200],
+                ['4.-Maki rolls (Palta)','Kanikama, queso crema, palta, envuelto en Palta',5000],
+                ['5.-Tako rolls (Palta)','Pulpo, queso crema, palta, envuelto en Palta',5200],
+                ['6.-Crab cheese rolls (Palta)','Jaiba, queso crema, palta, envuelto en Palta',5500],
+                ['7.-Teri cheese rolls (Palta)','Pollo teriyaki, queso crema, palta, envuelto en Palta',5500],
+                ['8.-Ebi rolls (Palta)','Camaron, queso crema, palta, envuelto en Palta',5000],
+                ['9.-Sake furay rolls (Palta)','Salmon apanado, queso crema, palta, envuelto en Palta',5200],
+                ['10.-Avocado especial (Palta)','Salmon, queso crema, palta, envuelto en Palta',5500],
+                ['11.-Spicy tempura (Palta)','Camaron apanado, salsa spicy, queso, cebollin, envuelto en Palta',5500],
+                ['12.-Spicy tako (Palta)','Pulpo, salsa spicy, planta, envuelto en Palta',5500],
+                ['13.-Beef rolls (Palta)','Carne, queso crema, cebollin, envuelto en Palta',5500],
+                ['14.-Maguro rolls (Palta)','Atun, palta, envuelto en Palta',5500]
             ];
             foreach ($products as $key => $product) {
                 Product::create(['name'=>$product[0],'description'=>$product[1],'price'=>$product[2],'producttype_id'=>$producttype->id]);
@@ -121,20 +121,20 @@ class ProducttypeSeeder extends Seeder
         
         $producttype = Producttype::create(['name'=>'Californias Salmon','company_id'=>2]);
             $products = [
-                ['California salumado (Salmon)','Salmon ahumado, queso crema, palta, envuelto en Salmon',5200],
-                ['Tempura chesse rolls (Salmon)','Camaron tempura, queso crema, palta, envuelto en Salmon',5200],
-                ['Tory rolls (Salmon)','Pollo apanados, queso crema, palta, envuelto en Salmon',5200],
-                ['Maki rolls (Salmon)','Kanikama, queso crema, palta, envuelto en Salmon',5000],
-                ['Tako rolls (Salmon)','Pulpo, queso crema, palta, envuelto en Salmon',5200],
-                ['Crab cheese rolls (Salmon)','Jaiba, queso crema, palta, envuelto en Salmon',5500],
-                ['Teri cheese rolls (Salmon)','Pollo teriyaki, queso crema, palta, envuelto en Salmon',5500],
-                ['Ebi rolls (Salmon)','Camaron, queso crema, palta, envuelto en Salmon',5000],
-                ['Sake furay rolls (Salmon)','Salmon apanado, queso crema, palta, envuelto en Salmon',5200],
-                ['Avocado especial (Salmon)','Salmon, queso crema, palta, envuelto en Salmon',5500],
-                ['Spicy tempura (Salmon)','Camaron apanado, salsa spicy, queso, cebollin, envuelto en Salmon',5500],
-                ['Spicy tako (Salmon)','Pulpo, salsa spicy, planta, envuelto en Salmon',5500],
-                ['Beef rolls (Salmon)','Carne, queso crema, cebollin, envuelto en Salmon',5500],
-                ['Maguro rolls (Salmon)','Atun, palta, envuelto en Salmon',5500]                
+                ['1.-California salumado (Salmon)','Salmon ahumado, queso crema, palta, envuelto en Salmon',5200],
+                ['2.-Tempura chesse rolls (Salmon)','Camaron tempura, queso crema, palta, envuelto en Salmon',5200],
+                ['3.-Tory rolls (Salmon)','Pollo apanados, queso crema, palta, envuelto en Salmon',5200],
+                ['4.-Maki rolls (Salmon)','Kanikama, queso crema, palta, envuelto en Salmon',5000],
+                ['5.-Tako rolls (Salmon)','Pulpo, queso crema, palta, envuelto en Salmon',5200],
+                ['6.-Crab cheese rolls (Salmon)','Jaiba, queso crema, palta, envuelto en Salmon',5500],
+                ['7.-Teri cheese rolls (Salmon)','Pollo teriyaki, queso crema, palta, envuelto en Salmon',5500],
+                ['8.-Ebi rolls (Salmon)','Camaron, queso crema, palta, envuelto en Salmon',5000],
+                ['9.-Sake furay rolls (Salmon)','Salmon apanado, queso crema, palta, envuelto en Salmon',5200],
+                ['10.-Avocado especial (Salmon)','Salmon, queso crema, palta, envuelto en Salmon',5500],
+                ['11.-Spicy tempura (Salmon)','Camaron apanado, salsa spicy, queso, cebollin, envuelto en Salmon',5500],
+                ['12.-Spicy tako (Salmon)','Pulpo, salsa spicy, planta, envuelto en Salmon',5500],
+                ['13.-Beef rolls (Salmon)','Carne, queso crema, cebollin, envuelto en Salmon',5500],
+                ['14.-Maguro rolls (Salmon)','Atun, palta, envuelto en Salmon',5500]                
             ];
             foreach ($products as $key => $product) {
                 Product::create(['name'=>$product[0],'description'=>$product[1],'price'=>$product[2],'producttype_id'=>$producttype->id]);
@@ -142,11 +142,11 @@ class ProducttypeSeeder extends Seeder
 
         $producttype = Producttype::create(['name'=>'Veggie rolls','company_id'=>2]);
             $products = [
-                ['California vegetariano (Sésamo)','Palmito, choclo enano, palta, envuelto en sésamo',4200],
-                ['Champi furay (Palta)','Champiñon furay, queso crema, cebollin, envuelto en palta',4500],
-                ['Vege rolls (Panko)','Champiñon, queso crema, ciboulette, frito en panko',4200],
-                ['Palmi White (Queso Crema)','Palmito, palta, envuelto en queso crema',4500],
-                ['Veggie furay (Panko)','Champiñon, queso, pimenton, almendras, frito en panko',4500]                                
+                ['34.-California vegetariano (Sésamo)','Palmito, choclo enano, palta, envuelto en sésamo',4200],
+                ['35.-Champi furay (Palta)','Champiñon furay, queso crema, cebollin, envuelto en palta',4500],
+                ['36.-Vege rolls (Panko)','Champiñon, queso crema, ciboulette, frito en panko',4200],
+                ['37.-Palmi White (Queso Crema)','Palmito, palta, envuelto en queso crema',4500],
+                ['38.-Veggie furay (Panko)','Champiñon, queso, pimenton, almendras, frito en panko',4500]                                
             ];
             foreach ($products as $key => $product) {
                 Product::create(['name'=>$product[0],'description'=>$product[1],'price'=>$product[2],'producttype_id'=>$producttype->id]);
@@ -154,20 +154,20 @@ class ProducttypeSeeder extends Seeder
 
         $producttype = Producttype::create(['name'=>'Panko','company_id'=>2]);
             $products = [
-                ['Hot rolls (Panko)','Salmon, queso crema, cebollin, Panko',5500],
-                ['Tempura sake (Panko)','Salmon ahumado, queso crema, palta, Panko',5500],
-                ['Tempura tako (Panko)','Pulpo, queso crema, ciboulette, masago, Panko',5300],
-                ['Tory furay salmon (Panko)','Camaron, queso crema, ciboulette envuelto salmon, Panko',5500],
-                ['Tory furay pollo (Panko)','Camaron, queso crema, ciboulette envuelto en pollo, Panko',5500],
-                ['Tempura tery roll ciboulette (Panko)','Pollo, queso crema, ciboulette, Panko',5500],
-                ['Tempura tery roll palta (Panko)','Pollo, queso crema, palta, Panko',5500],
-                ['Tempura especial (Panko)','Salmon, camaron, queso crema, cebollin, Panko',5500],
-                ['Crabs rolls (Panko)','Jaiba, queso crema, cebollin, Panko',5000],
-                ['Avocado tempura (Panko)','Camaron, queso crema, palta, Panko',5500],
-                ['Tory teriyaki furay (Panko)','Pollo teriyaki, cebollin, queso crema, pimenton, Panko',5000],
-                ['Beef furay (Panko)','Carne, queso crema, cebollin, Panko',5300],
-                ['Maki hot cebollin (Panko)','Kanikama, queso, cebollin, Panko',5000],
-                ['Maki hot palta (Panko)','Kanikama, queso, palta, Panko',5000]                                               
+                ['15.-Hot rolls (Panko)','Salmon, queso crema, cebollin, Panko',5500],
+                ['16.-Tempura sake (Panko)','Salmon ahumado, queso crema, palta, Panko',5500],
+                ['17.-Tempura tako (Panko)','Pulpo, queso crema, ciboulette, masago, Panko',5300],
+                ['18.-Tory furay salmon (Panko)','Camaron, queso crema, ciboulette envuelto salmon, Panko',5500],
+                ['18.-Tory furay pollo (Panko)','Camaron, queso crema, ciboulette envuelto en pollo, Panko',5500],
+                ['19.-Tempura tery roll ciboulette (Panko)','Pollo, queso crema, ciboulette, Panko',5500],
+                ['19.-Tempura tery roll palta (Panko)','Pollo, queso crema, palta, Panko',5500],
+                ['20.-Tempura especial (Panko)','Salmon, camaron, queso crema, cebollin, Panko',5500],
+                ['21.-Crabs rolls (Panko)','Jaiba, queso crema, cebollin, Panko',5000],
+                ['22.-Avocado tempura (Panko)','Camaron, queso crema, palta, Panko',5500],
+                ['23.-Tory teriyaki furay (Panko)','Pollo teriyaki, cebollin, queso crema, pimenton, Panko',5000],
+                ['24.-Beef furay (Panko)','Carne, queso crema, cebollin, Panko',5300],
+                ['25.-Maki hot cebollin (Panko)','Kanikama, queso, cebollin, Panko',5000],
+                ['25.-Maki hot palta (Panko)','Kanikama, queso, palta, Panko',5000]                                               
             ];
             foreach ($products as $key => $product) {
                 Product::create(['name'=>$product[0],'description'=>$product[1],'price'=>$product[2],'producttype_id'=>$producttype->id]);
@@ -175,20 +175,20 @@ class ProducttypeSeeder extends Seeder
 
         $producttype = Producttype::create(['name'=>'Tempura','company_id'=>2]);
             $products = [
-                ['Hot rolls (Tempura)','Salmon, queso crema, cebollin, Tempura',5500],
-                ['Tempura sake (Tempura)','Salmon ahumado, queso crema, palta, Tempura',5500],
-                ['Tempura tako (Tempura)','Pulpo, queso crema, ciboulette, masago, Tempura',5300],
-                ['Tory furay salmon (Tempura)','Camaron, queso crema, ciboulette envuelto salmon, Tempura',5500],
-                ['Tory furay pollo (Tempura)','Camaron, queso crema, ciboulette envuelto en pollo, Tempura',5500],
-                ['Tempura tery roll ciboulette (Tempura)','Pollo, queso crema, ciboulette, Tempura',5500],
-                ['Tempura tery roll palta (Tempura)','Pollo, queso crema, palta, Tempura',5500],
-                ['Tempura especial (Tempura)','Salmon, camaron, queso crema, cebollin, Tempura',5500],
-                ['Crabs rolls (Tempura)','Jaiba, queso crema, cebollin, Tempura',5000],
-                ['Avocado tempura (Tempura)','Camaron, queso crema, palta, Tempura',5500],
-                ['Tory teriyaki furay (Tempura)','Pollo teriyaki, cebollin, queso crema, pimenton, Tempura',5000],
-                ['Beef furay (Tempura)','Carne, queso crema, cebollin, Tempura',5300],
-                ['Maki hot cebollin (Tempura)','Kanikama, queso, cebollin, Tempura',5000],
-                ['Maki hot palta (Tempura)','Kanikama, queso, palta, Tempura',5000]                                           
+                ['15.-Hot rolls (Tempura)','Salmon, queso crema, cebollin, Tempura',5500],
+                ['16.-Tempura sake (Tempura)','Salmon ahumado, queso crema, palta, Tempura',5500],
+                ['17.-Tempura tako (Tempura)','Pulpo, queso crema, ciboulette, masago, Tempura',5300],
+                ['18.-Tory furay salmon (Tempura)','Camaron, queso crema, ciboulette envuelto salmon, Tempura',5500],
+                ['18.-Tory furay pollo (Tempura)','Camaron, queso crema, ciboulette envuelto en pollo, Tempura',5500],
+                ['19.-Tempura tery roll ciboulette (Tempura)','Pollo, queso crema, ciboulette, Tempura',5500],
+                ['19.-Tempura tery roll palta (Tempura)','Pollo, queso crema, palta, Tempura',5500],
+                ['20.-Tempura especial (Tempura)','Salmon, camaron, queso crema, cebollin, Tempura',5500],
+                ['21.-Crabs rolls (Tempura)','Jaiba, queso crema, cebollin, Tempura',5000],
+                ['22.-Avocado tempura (Tempura)','Camaron, queso crema, palta, Tempura',5500],
+                ['23.-Tory teriyaki furay (Tempura)','Pollo teriyaki, cebollin, queso crema, pimenton, Tempura',5000],
+                ['24.-Beef furay (Tempura)','Carne, queso crema, cebollin, Tempura',5300],
+                ['25.-Maki hot cebollin (Tempura)','Kanikama, queso, cebollin, Tempura',5000],
+                ['25.-Maki hot palta (Tempura)','Kanikama, queso, palta, Tempura',5000]                                           
             ];
             foreach ($products as $key => $product) {
                 Product::create(['name'=>$product[0],'description'=>$product[1],'price'=>$product[2],'producttype_id'=>$producttype->id]);
@@ -196,14 +196,14 @@ class ProducttypeSeeder extends Seeder
 
         $producttype = Producttype::create(['name'=>'Cheese rolls','company_id'=>2]);
             $products = [
-                ['Pollo apanado-palta','Pollo apanado, palta, envuelto en queso crema',5000],
-                ['Camaron-palta','Camaron, palta, envuelto en queso crema',5000],
-                ['Salmon-palta','Salmon, palta, envuelto en queso crema',5200],
-                ['Pulpo-palta','Pulpo, palta, envuelto en queso crema',5500],
-                ['Camaron tempura-palta','Camaron tempura, palta, envuelto en queso crema',5500],
-                ['Camaron-salmon-palta','Camaron, salmon, palta, envuelto en queso crema',5500],
-                ['Carne-palta','Carne, palta, envuelto en queso crema',5000],
-                ['Kanikama-palta','Kanikama, palta, envuelto en queso crema',4800]                                                          
+                ['26.-Pollo apanado-palta','Pollo apanado, palta, envuelto en queso crema',5000],
+                ['27.-Camaron-palta','Camaron, palta, envuelto en queso crema',5000],
+                ['28.-Salmon-palta','Salmon, palta, envuelto en queso crema',5200],
+                ['29.-Pulpo-palta','Pulpo, palta, envuelto en queso crema',5500],
+                ['30.-Camaron tempura-palta','Camaron tempura, palta, envuelto en queso crema',5500],
+                ['31.-Camaron-salmon-palta','Camaron, salmon, palta, envuelto en queso crema',5500],
+                ['32.-Carne-palta','Carne, palta, envuelto en queso crema',5000],
+                ['33.-Kanikama-palta','Kanikama, palta, envuelto en queso crema',4800]                                                          
             ];
             foreach ($products as $key => $product) {
                 Product::create(['name'=>$product[0],'description'=>$product[1],'price'=>$product[2],'producttype_id'=>$producttype->id]);
@@ -211,23 +211,23 @@ class ProducttypeSeeder extends Seeder
 
         $producttype = Producttype::create(['name'=>'Rolls Premium','company_id'=>2]);
             $products = [
-                ['Envuelto en pulpo ','Camaron, salmon, queso crema, cebollin, palta, envuelto en pulpo',8500],
-                ['Acevichado ebi (Palta)','Camaron apanado, queso crema, palta, Bañado en salsa acevichada, envuelto en palta',7000],
-                ['Acevichado ebi (Salmon)','Camaron apanado, queso crema, palta, Bañado en salsa acevichada, envuelto en salmon',7000],
-                ['Envuelto en mango ','Camaron, queso crema, palta, Bañado en salsa de maracuyá, envuelto en mango',6500],
-                ['Sake tartare ','Palta, fideos de wantan, cebolla morada, frito en panko, Bañado en salsa nikkei con trozos de salmon',6500],
-                ['Rolls sin arroz (Palta)','Camaron, salmon, queso crema, cebollin, envuelto en palta',6500],
-                ['Rolls sin arroz (Panko) ','Camaron, salmon, queso crema, cebollin, frito en panko',6500],
-                ['Rolls sin arroz (Salmon) ','Camaron, salmon, queso crema, cebollin, envuelto en Salmon',6500],
-                ['Oriental acevichado sin arroz ','Pescado apanado, queso crema, cebollin',6500],
-                ['Rolls sin arroz frito ','Carne, pollo, queso crema, cebollin, frito en panko',6500],
-                ['Rolls sin arroz (Queso crema) ','Camaron, salmon, queso crema, cebollin, envuelto en queso crema',6500],
-                ['Ceviche rolls ','Camaron apanado, palta, Bañado en ceviche',7500],
-                ['Lomo saltado ','Palta, queso crema, cebollin, cubierto por lomo saltado',7500],
-                ['Roll pil pil ','Roll apanado, pollo, queso crema, cebollin, palta, Cubierto con camarones al pil pil',7500],
-                ['Tuna sin arroz (Palta) ','Camaron apanado,queso crema, atun, bañado en salsa acevichada, envuelto en palta',7500],
-                ['Rolls envuelto en atun ','Pollo apanado, palta, bañado en salsa acevichada',8000],
-                ['Rolls a la huancaína ','Pollo, queso crema, palta, frito en panko, bañado en salsa huancaína',7500]                                                                         
+                ['43.-Envuelto en pulpo ','Camaron, salmon, queso crema, cebollin, palta, envuelto en pulpo',8500],
+                ['44.-Acevichado ebi (Palta)','Camaron apanado, queso crema, palta, Bañado en salsa acevichada, envuelto en palta',7000],
+                ['44.-Acevichado ebi (Salmon)','Camaron apanado, queso crema, palta, Bañado en salsa acevichada, envuelto en salmon',7000],
+                ['45.-Envuelto en mango ','Camaron, queso crema, palta, Bañado en salsa de maracuyá, envuelto en mango',6500],
+                ['46.-Sake tartare ','Palta, fideos de wantan, cebolla morada, frito en panko, Bañado en salsa nikkei con trozos de salmon',6500],
+                ['47.-Rolls sin arroz (Palta)','Camaron, salmon, queso crema, cebollin, envuelto en palta',6500],
+                ['47.-Rolls sin arroz (Panko) ','Camaron, salmon, queso crema, cebollin, frito en panko',6500],
+                ['48.-Rolls sin arroz (Salmon) ','Camaron, salmon, queso crema, cebollin, envuelto en Salmon',6500],
+                ['49.-Oriental acevichado sin arroz ','Pescado apanado, queso crema, cebollin',6500],
+                ['50.-Rolls sin arroz frito ','Carne, pollo, queso crema, cebollin, frito en panko',6500],
+                ['51.-Rolls sin arroz (Queso crema) ','Camaron, salmon, queso crema, cebollin, envuelto en queso crema',6500],
+                ['52.-Ceviche rolls ','Camaron apanado, palta, Bañado en ceviche',7500],
+                ['53.-Lomo saltado ','Palta, queso crema, cebollin, cubierto por lomo saltado',7500],
+                ['54.-Roll pil pil ','Roll apanado, pollo, queso crema, cebollin, palta, Cubierto con camarones al pil pil',7500],
+                ['55.-Tuna sin arroz (Palta) ','Camaron apanado,queso crema, atun, bañado en salsa acevichada, envuelto en palta',7500],
+                ['56.-Rolls envuelto en atun ','Pollo apanado, palta, bañado en salsa acevichada',8000],
+                ['57.-Rolls a la huancaína ','Pollo, queso crema, palta, frito en panko, bañado en salsa huancaína',7500]                                                                         
             ];
             foreach ($products as $key => $product) {
                 Product::create(['name'=>$product[0],'description'=>$product[1],'price'=>$product[2],'producttype_id'=>$producttype->id]);
@@ -235,10 +235,10 @@ class ProducttypeSeeder extends Seeder
             
         $producttype = Producttype::create(['name'=>'Hosomakis','company_id'=>2]);
             $products = [
-                ['Hosomakis sake','Salmon, queso',3500],
-                ['Hosomaki ebi','Camaron, queso',3500],
-                ['Hosomaki tory','Pollo, queso crema',3500],
-                ['Hosomaki maki','Kanikama, queso crema',3500]                                                                                     
+                ['39.-Hosomakis sake','Salmon, queso',3500],
+                ['40.-Hosomaki ebi','Camaron, queso',3500],
+                ['41.-Hosomaki tory','Pollo, queso crema',3500],
+                ['42.-Hosomaki maki','Kanikama, queso crema',3500]                                                                                     
             ];
             foreach ($products as $key => $product) {
                 Product::create(['name'=>$product[0],'description'=>$product[1],'price'=>$product[2],'producttype_id'=>$producttype->id]);
