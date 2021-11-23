@@ -267,8 +267,9 @@ class SalesHelper extends Controller
 
                 $paramsArr = [];
 
-                $detalle = [];
-                $totales = [];
+                $detalle    = [];
+                $totales    = [];
+                $cliente    = [];
 
                 $empresa = $order->company->id;
                 $total = 0;
@@ -322,6 +323,24 @@ class SalesHelper extends Controller
                     ]);
                 }
 
+                if($order->ordertype_id>1){
+                    array_push($cliente, [
+                        "name" => "CLIENTE" ,
+                        "value" => $order->client->name
+                    ]);
+                    array_push($cliente, [
+                        "name" => "TELEFONO" ,
+                        "value" => $order->client->phone
+                    ]);
+                    if($order->ordertype_id==2){
+                        array_push($cliente, [
+                            "name" => "DIRECCION" ,
+                            "value" => $order->client->address
+                        ]);
+                    }
+                }
+
+
                 array_push($totales, [
                     "name" => "TOTAL A PAGAR" ,
                     "value" => round($total + $order->tip + $order->delivery)
@@ -329,6 +348,7 @@ class SalesHelper extends Controller
 
                 $paramsArr['Totales'] = $totales;
                 $paramsArr['Detalle'] = $detalle;
+                $paramsArr['Cliente'] = $cliente;
                 $random = Str::random(10);
                 $order->empotency_key = "MingaRulz-" . $random. '-' . $order->id;
                 $order->dte_token= $random. '-' . $order->id;
