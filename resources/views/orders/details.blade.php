@@ -824,7 +824,7 @@
 
                 DteClient.innerHTML="";
 
-                if(respuesta.Cliente){
+                if(respuesta.Cliente.legth>0){
                     DteClient.style.display="block";
                     respuesta.Cliente.forEach(el => {
                         var newtr = document.createElement('tr');
@@ -853,11 +853,13 @@
                 );
                 mywindow.document.write(fakeDte.innerHTML);
                 mywindow.document.write('</body></html>');
+                
                 if(isAndroid) {
                     mywindow.onfocus = function(){mywindow.close();};
                 }else{
-                    //mywindow.onafterprint  = function(){mywindow.close();};
+                    mywindow.onafterprint  = function(){mywindow.close();};
                 }
+
                 mywindow.document.close(); // necessary for IE >= 10
 
                 mywindow.focus(); // necessary for IE >= 10*/
