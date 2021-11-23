@@ -824,7 +824,7 @@
 
                 DteClient.innerHTML="";
 
-                if(respuesta.Cliente.legth>0){
+                if(respuesta.Cliente){
                     DteClient.style.display="block";
                     respuesta.Cliente.forEach(el => {
                         var newtr = document.createElement('tr');
@@ -853,7 +853,7 @@
                 );
                 mywindow.document.write(fakeDte.innerHTML);
                 mywindow.document.write('</body></html>');
-                
+
                 if(isAndroid) {
                     mywindow.onfocus = function(){mywindow.close();};
                 }else{
