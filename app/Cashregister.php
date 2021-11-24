@@ -51,7 +51,7 @@ class Cashregister extends Model
         $send['ordertype_3']=0;
 
         foreach ($this->orders as $key => $order) {
-            if($order->enabled){
+            if($order->enabled==1){
                 $send['credit_card']+=$order->credit_card;
                 $send['debit_card']+=$order->debit_card;
                 $send['efective']+=$order->efective + $order->difference;
