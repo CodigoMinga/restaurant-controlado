@@ -110,12 +110,11 @@ class OrderController extends Controller
         $order  = Order::findOrFail($order_id);
         if($order->CommandComplete){                
             $order->fill($request->all());
-            if($request->delivery){                
-                $delivery = Delivery::where('company_id',$order->company_id)->where('ammount',$request->delivery)->first();
+            $delivery = Delivery::where('company_id',$order->company_id)->where('ammount',$request->delivery)->first();
+            if($delivery){
                 $order->delivery_commission =  $delivery->delivery_commission;
-            }else{
-                $order->delivery_commission = 0;
             }
+
             $order->save();
             return $order;
         }else{
