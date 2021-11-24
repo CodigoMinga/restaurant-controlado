@@ -267,7 +267,7 @@
                                         ${{number_format(($delivery_data->delivery_count * $delivery_data->delivery), 0, '', '.') }}
                                     </td>
                                     <td>
-                                        ${{number_format($delivery_data->delivery_commission, 0, '', '.') }}
+                                        ${{number_format($delivery_data->delivery_count * $delivery_data->delivery_commission, 0, '', '.') }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -327,7 +327,6 @@
         @endif
     </div>
     <script>
-        var orders ={!! json_encode($cashregister->orders) !!};
         var breakdown ={!! json_encode($cashregister->Breakdown) !!};
 
         $(document).ready(function() {
