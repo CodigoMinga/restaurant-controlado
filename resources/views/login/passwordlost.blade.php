@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -135,55 +136,47 @@
         </div>
       </div>
       <div id="login"  class="col-12 col-sm-6">
-        <h3 style="color:white; text-align:center" class="mb-4">Iniciar Sesión</h3>
-        <form action="{{url('/app/checklogin')}}" method="post">
+        <h3 style="color:white; text-align:center" class="mb-4">Recuperar clave</h3>
+        <form action="{{url('/login/passwordlost/process')}}" method="post">
           {{csrf_field()}}
-            <div class="form-group">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text material-icons" id="basic-addon1">email</span>
-                </div>
-                <input type="text" class="form-control" placeholder="Email" aria-label="email" aria-describedby="basic-addon1" name="email" required>
+          <div class="form-group">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text material-icons">email</span>
               </div>
+              <input type="text" class="form-control" placeholder="Email" name="email" required>
             </div>
-            <div class="form-group">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text material-icons" id="basic-addon1">password</span>
-                </div>
-                <input type="password" class="form-control" placeholder="Password" aria-label="password" aria-describedby="basic-addon1" name="password" required>
-              </div>
-              <small id="passwordHelp" class="form-text"><a href="{{url('/login/password/lost')}}">Recuperar Contraseña</a></small>
-            </div>
-            <div style="text-align: center">
-              <button type="submit" class="btn btn-block glass-btn btn-lg">
-                <span class="material-icons">
-                  send
-                </span>
-                Ingresar
-              </button>
-            </div>
-        </form>
-      </div>
+            <small class="form-text">Ingrese el correo con el que esta registrado en el sistema</small>
+          </div>
+          <div style="text-align: center">
+            <button type="submit" class="btn btn-block glass-btn btn-lg">
+              <span class="material-icons">
+                send
+              </span>
+              Ingresar
+            </button>
+          </div>
+      </form>
     </div>
   </div>
-  @if ($message = Session::get('error'))
-  <div class="glass-card glass-red w-100">
-    <button type="button" class="close" data-dismiss="alert">×</button>
-    <strong>{{ $message }}</strong>
+</div>
+@if ($message = Session::get('error'))
+<div class="glass-card glass-red w-100">
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  <strong>{{ $message }}</strong>
+</div>
+@endif
+@if (count($errors) > 0)
+  <div class="glass-card glass-red  w-100">
+      <ul>
+          @foreach($errors->all() as $error)
+              <li>{{$error}}</li>
+          @endforeach
+      </ul>
   </div>
-  @endif
-  @if (count($errors) > 0)
-    <div class="glass-card glass-red  w-100">
-        <ul>
-            @foreach($errors->all() as $error)
-                <li>{{$error}}</li>
-            @endforeach
-        </ul>
-    </div>
-  @endif
-  <footer>
-    Desarrollado por: <a href="https://www.codigominga.cl"><img src="{{url('/img/logo-cm.png')}}" width="25" > Código Minga</a>
-  </footer>
+@endif
+<footer>
+  Desarrollado por: <a href="https://www.codigominga.cl"><img src="{{url('/img/logo-cm.png')}}" width="25" > Código Minga</a>
+</footer>
 </body>
 </html>

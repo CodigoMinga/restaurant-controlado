@@ -31,7 +31,7 @@
         @else
           <div class="form-group">
               <label>Password</label>
-              <input type="text" class="form-control" name="password" length="6" required>
+              <input type="text" class="form-control" name="password" value="{{$user->password}}" length="6" required>
           </div>
         @endif
         @if(COUNT($companies)>1)

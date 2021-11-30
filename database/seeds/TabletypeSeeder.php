@@ -12,7 +12,10 @@ class TabletypeSeeder extends Seeder
      */
     public function run()
     {
-        Tabletype::create(['name'=>'Mesas']);
-        Tabletype::create(['name'=>'Internet']);
+        Tabletype::create(['name'=>'Local']);
+        Tabletype::create(['name'=>'Whatsapp']);
+        Tabletype::create(['name'=>'Facebook']);
+        Tabletype::create(['name'=>'Instagram']);
+        Tabletype::create(['name'=>'Otros']);
     }
 }

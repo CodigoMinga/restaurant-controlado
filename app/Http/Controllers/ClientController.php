@@ -74,29 +74,33 @@ class ClientController extends Controller
 
     public function store(Request $request){
         $id = $request->id;
-        if($id){
-            //Si encuentra el ID edita
-            $client = Client::findOrFail($request->id);
-            $client->update($request->all());
-            $client->commune->region;
+        $order = Order::findOrFail($request->order_id);
+        if($order->dte_token==null){
+            if($id){
+                //Si encuentra el ID edita
+                $client = Client::findOrFail($request->id);
+                $client->update($request->all());
+                $client->commune->region;
 
-            //AGREGA CLIENTE A ORDEN
-            $order = Order::findOrFail($request->order_id);
-            $order->client_id = $client->id;
-            $order->save();
+                //AGREGA CLIENTE A ORDEN
+                
+                $order->client_id = $client->id;
+                $order->save();
 
-            return $client;
+                return $client;
+            }else{
+                //Si no, Crea un Item
+                $client = Client::create($request->all());
+                $client->commune->region;
+                
+                //AGREGA CLIENTE A ORDEN
+                $order->client_id = $client->id;
+                $order->save();
+
+                return $client;
+            }
         }else{
-            //Si no, Crea un Item
-            $client = Client::create($request->all());
-            $client->commune->region;
-            
-            //AGREGA CLIENTE A ORDEN
-            $order = Order::findOrFail($request->order_id);
-            $order->client_id = $client->id;
-            $order->save();
-
-            return $client;
+            return 'La boleta ya fue emitida, no se puede cambiar al cliente';
         }
     }
 

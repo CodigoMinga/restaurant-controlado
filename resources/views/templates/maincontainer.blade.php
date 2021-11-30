@@ -132,13 +132,18 @@ if(!$cashregister){
                 @yield('info')
 
                 <!--SI ES ADMINISTRADOR-->
+                @if(Auth::user()->hasRole(["companyadmin","superadmin"]))
                 <a class="sidebar-button {{(request()->is('orders/list')) ? 'active' : '' }}" href="{{ url('orders/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">paid</i>Ventas
                 </a>
                 <a class="sidebar-button {{(request()->is('dashboard')) ? 'active' : '' }}" href="{{ url('dashboard') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">dashboard</i>Indicadores
                 </a>
-
+                <a class="sidebar-button {{(request()->is('cashregister/list')) ? 'active' : '' }}" href="{{ url('cashregister/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">point_of_sale</i>Lista de Cajas
+                </a>
+                @endif
+                
                 <a class="sidebar-button {{(request()->is('settings')) ? 'active' : '' }}" href="{{ url('settings') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">settings</i>Configuración
                 </a>
@@ -152,9 +157,11 @@ if(!$cashregister){
                 </a>
 
                 <!--SI ES CODIGOMINGA-->
+                @if(Auth::user()->hasRole("superadmin"))
                 <a class="sidebar-button {{(request()->is('companys/list')) ? 'active' : '' }}" href="{{ url('companys/list') }}">
                     <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">apartment</i>Compañias
                 </a>
+                @endif
                 <!--FIN SI CODIGOMINGA-->
             </div>
         </div>

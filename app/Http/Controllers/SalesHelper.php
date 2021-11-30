@@ -25,24 +25,14 @@ class SalesHelper extends Controller
      * @param order_id $order_id
      */
     public function generateInvoice($order_id){
-
-
         //busca si existe la orden en la DB
         $order = Order::find($order_id);
-
         if(isset($order)){
-
             if($order->CommandComplete){
                 //valida si la boleta ya fue emitida, existe token no deja emitirla denuevo
                 if(isset($order->dte_token)){
                     $this->printAgainInvoice($order_id);
-                    /*
-                    return new Response([
-                        'response' => "Esta boleta ya fue emitida, existe token, puede re-imprimirla",
-                        'request' => ""
-                    ], 400);*/
                 }
-
                 $paramsArr = [];
                 $paramsArr['response'] = self::RESPONSES;
                 $paramsArr['dte'] = [];
@@ -50,7 +40,6 @@ class SalesHelper extends Controller
                     'TipoDTE' => self::BOLETA_ELECTRONICA,
                     'Folio' => 0,
                     'FchEmis' => date('Y-m-d'),
-
                     'IndServicio' => self::BOLETA_VENTA_SERVICIO
                 ];
 
@@ -61,10 +50,13 @@ class SalesHelper extends Controller
 
                 $orderdetails = $order->orderdetails;
 
-
                 $detalle = [];
+
+                $opcional = [];
+
                 $total = 0;
                 $ct = 0 ;
+
                 foreach($orderdetails as $detail) {
                     if($detail->enabled){
                         $ct = $ct + 1;
@@ -78,6 +70,21 @@ class SalesHelper extends Controller
                         $total += $detail->total_ammount;
                     }
                 }
+
+                $ct = 0 ;
+                if($order->discount!=null){
+                    $ct = $ct + 1;
+                    array_push($opcional, [
+                        "NroLinDR" => $ct,
+                        "TpoMov" => "D",
+                        "GlosaDR" => "Descuento",
+                        "TpoValor" => "$",
+                        "ValorDR" => $order->discount*-1
+                    ]);
+                    $total += $order->discount;
+                }
+
+
 
 
                 $emisor = [
@@ -93,12 +100,31 @@ class SalesHelper extends Controller
                 $paramsArr['dte']['Encabezado']['Receptor'] = ["RUTRecep" => "66666666-6"];
                 $totales = [
                     "MntTotal" => $total ,
-                    "VlrPagar" => $total ,
+                    "VlrPagar" => $total + $order->tip,
                     "IVA" => round($total - ($total  / 1.19)),
                     "MntNeto" => round(($total  / 1.19))
                 ];
+
+                if($order->tip!=null){
+                    $ct = $ct + 1;
+                    array_push($opcional, [
+                        "NroLinDR" => $ct,
+                        "TpoMov" => "R",
+                        "GlosaDR" => "Propina",
+                        "TpoValor" => "$",
+                        "IndExeDR" => 2,
+                        "ValorDR" => $order->tip
+                    ]);
+                    
+                    $totales["MontoNF"]=$order->tip;
+                }
+
                 $paramsArr['dte']['Encabezado']['Totales'] = $totales;
                 $paramsArr['dte']['Detalle'] = $detalle;
+
+                if(COUNT($opcional)>0){
+                    $paramsArr['dte']['DscRcgGlobal'] = $opcional;
+                }
 
                 $curl = curl_init();
 
@@ -133,8 +159,7 @@ class SalesHelper extends Controller
                 $err = curl_error($curl);
 
                 $response = json_decode($response);
-                $err = json_decode($err);
-
+                $error = json_decode($err);
 
                 curl_close($curl);
 
@@ -142,9 +167,9 @@ class SalesHelper extends Controller
                 $paramsArr['adicionales_datos_empresa'] = "prueba de texto adicional2";
 
                 //return json_encode($paramsArr,JSON_UNESCAPED_SLASHES);
-                if ($err) {
+                if ($error) {
                     return new Response([
-                        'response' => $err,
+                        'response' => $error->message,
                         'request' => $paramsArr
                     ], 400);
                 } else {
@@ -168,7 +193,6 @@ class SalesHelper extends Controller
                 'response' => "Error la orden enviada no existe en la DB",
                 'request' => ""
             ], 400);
-
         }
     }
 
@@ -207,7 +231,6 @@ class SalesHelper extends Controller
                 $response = json_decode($response);
                 $err = json_decode($err);
 
-
                 curl_close($curl);
 
                 if ($err) {
@@ -236,10 +259,126 @@ class SalesHelper extends Controller
         }
     }
 
+    public function fakeDte($order_id){
+        //busca si existe la orden en la DB
+        $order = Order::find($order_id);
+        if(isset($order)){
+            if($order->CommandComplete){
+
+                $paramsArr = [];
+
+                $detalle    = [];
+                $totales    = [];
+                $cliente    = [];
+
+                $empresa = $order->company->id;
+                $total = 0;
+
+                $orderdetails = $order->orderdetails;
+                foreach($orderdetails as $detail) {
+                    if($detail->enabled){
+                        array_push($detalle, [
+                            "producto" => $detail->product->name,
+                            "cantidad" => $detail->quantity,
+                            "unitario" => $detail->unit_ammount,
+                            "total" => $detail->total_ammount
+                        ]);
+                        $total += $detail->total_ammount;
+                    }
+                }
+
+                if($order->discount!=null){
+                    array_push($totales, [
+                        "name" => "DESCUENTO" ,
+                        "value" => $order->discount
+                    ]);
+                    $total += $order->discount;
+                }
+
+                array_push($totales, [
+                    "name" => "MONTO NETO" ,
+                    "value" => round(($total  / 1.19))
+                ]);
+                
+
+                array_push($totales, [
+                    "name" => "IVA" ,
+                    "value" => round($total - ($total  / 1.19))
+                ]);
+
+                array_push($totales, [
+                    "name" => "MONTO TOTAL" ,
+                    "value" => round($total)
+                ]);
+
+                array_push($totales, [
+                    "name" => "PROPINA" ,
+                    "value" => round($order->tip)
+                ]);
+
+                if($order->delivery!=null){
+                    array_push($totales, [
+                        "name" => "DELIVERY" ,
+                        "value" => round($order->delivery)
+                    ]);
+                }
+
+                if($order->ordertype_id>1){
+                    array_push($cliente, [
+                        "name" => "CLIENTE" ,
+                        "value" => $order->client->name
+                    ]);
+                    array_push($cliente, [
+                        "name" => "TELEFONO" ,
+                        "value" => $order->client->phone
+                    ]);
+                    if($order->ordertype_id==2){
+                        array_push($cliente, [
+                            "name" => "DIRECCION" ,
+                            "value" => $order->client->address
+                        ]);
+                    }
+                }
+
+
+                array_push($totales, [
+                    "name" => "TOTAL A PAGAR" ,
+                    "value" => round($total + $order->tip + $order->delivery)
+                ]);
+
+                $paramsArr['Totales'] = $totales;
+                $paramsArr['Detalle'] = $detalle;
+                $paramsArr['Cliente'] = $cliente;
+                $random = Str::random(10);
+                $order->empotency_key = "MingaRulz-" . $random. '-' . $order->id;
+                $order->dte_token= $random. '-' . $order->id;
+                $order->dte_folio= 000000;
+                $order->save();
+
+                return new Response([
+                    'response' => $paramsArr,
+                ], 201);
+
+            }else{
+                return new Response([
+                    'response' => "Falta emitir Comanda o No tiene Productos",
+                    'request' => ""
+                ], 400);    
+            }
+        }else{
+            return new Response([
+                'response' => "Error la orden enviada no existe en la DB",
+                'request' => ""
+            ], 400);
+        }
+    }
+
+
+
     public function removeDte($order_id){
 
         $order = Order::find($order_id);
-
+        
         if(isset($order)){
             if(isset($order->dte_token)){
                 if (app()->environment('production')){

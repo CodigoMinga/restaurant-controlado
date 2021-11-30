@@ -11,20 +11,17 @@
 @section('content')
     <div class="container pt-3">
         <div class="d-flex justify-content-between align-items-center">
-            <h1>Lista de Clientes</h1>
-            <a  href="{{ url('/') }}/clients/add" class="btn btn-success">
+            <h1>Lista de Deliveries</h1>
+            <a  href="{{ url('deliverys/add')}}" class="btn btn-success">
                 <i class="material-icons">add</i>
-                Agregar Cliente
+                Agregar Delivery
             </a>
         </div>
         <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Dirección</th>
-                    <th>Teléfono</th>
-                    <th>Region</th>
-                    <th>Comuna</th>
+                    <th>Delivery</th>
+                    <th>Comisión Chofer</th>
                     <th>Acción</th>
                 </tr>
             </thead>
@@ -39,15 +36,16 @@
         $(document).ready(function() {
             $('#tabla').DataTable({
                 responsive: true,
-                "data": {!! json_encode($clients->toArray()) !!},
+                "data": {!! json_encode($deliverys->toArray()) !!},
                 "columns": [
-                    { "data": "name","width":"20%"},
-                    { "data": "address","width":"20%"},
-                    { "data": "phone","width":"10%"},
-                    { "data": "commune.region.name","width":"20%"},
-                    { "data": "commune.name","width":"20%"},
-                    { data: "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/clients/'+data+'" >description</a>';
+                    { "data": "ammount",render : function ( data){
+                        return "$"+miles(parseInt(data));
+                    },"width":"30%"},
+                    { "data": "delivery_commission",render : function ( data){
+                        return "$"+miles(data);
+                    },"width":"60%"},
+                    { data: "id", render : function ( data, type, row, meta ){
+                        return '<a class="btn btn-light material-icons" href="{{ url("deliverys")}}/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {
@@ -68,5 +66,9 @@
                 "order": [[ 0, "desc" ]]
             });
         });
+
+        function miles(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
     </script>
  @stop

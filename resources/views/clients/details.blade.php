@@ -5,7 +5,7 @@
         <h1>
             <i class="material-icons">library_books</i>Detalles del Cliente
         </h1>
-        <form method="post" action="{{url('app/clients/'.$client->id.'/edit/process')}}">
+        <form method="post" action="{{url('clients/'.$client->id.'/edit/process')}}">
             {{csrf_field()}}               
             @if(count(Auth::user()->companies)>1)
             <div class="form-group">
@@ -48,7 +48,7 @@
                 <i class="material-icons">done</i>
                 Editar Cliente
             </button>
-            <a  href="{{ url('/') }}/app/clients/{{$client->id}}/delete" class="btn btn-danger">
+            <a  href="{{ url('/') }}/clients/{{$client->id}}/delete" class="btn btn-danger">
                 <i class="material-icons">clear</i>
                 Eliminar Cliente
             </a>

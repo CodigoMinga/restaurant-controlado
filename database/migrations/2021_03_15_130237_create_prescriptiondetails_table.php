@@ -16,8 +16,11 @@ class CreatePrescriptiondetailsTable extends Migration
         Schema::create('prescriptiondetails', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->bigInteger('item_id')->unsigned();
-            $table->foreign('item_id')->references('id')->on('items')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+            $table->bigInteger('item_id')->unsigned()->nullable();
+            $table->foreign('item_id')->references('id')->on('items');
+
+            $table->bigInteger('product_id')->unsigned()->nullable();
+            $table->foreign('product_id')->references('id')->on('products');
 
             $table->bigInteger('prescription_id')->unsigned();
             $table->foreign('prescription_id')->references('id')->on('prescriptions')->onUpdate('RESTRICT')->onDelete('RESTRICT');
