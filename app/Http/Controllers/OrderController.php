@@ -108,13 +108,12 @@ class OrderController extends Controller
     public function extraStore($order_id, Request $request)
     {
         $order  = Order::findOrFail($order_id);
-        if($order->CommandComplete){                
+        if($order->CommandComplete  || $order->company->closetype==1){                
             $order->fill($request->all());
             $delivery = Delivery::where('company_id',$order->company_id)->where('ammount',$request->delivery)->first();
             if($delivery){
                 $order->delivery_commission =  $delivery->delivery_commission;
             }
-
             $order->save();
             return $order;
         }else{
