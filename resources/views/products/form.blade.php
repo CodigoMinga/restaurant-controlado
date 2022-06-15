@@ -13,16 +13,15 @@
         <form method="post" action="{{url('products/process')}}">
             {{csrf_field()}}
             <input type="hidden" name="id" value="{{ $product->id }}">
-            @if (!$product->id)
-                <div class="form-group">
-                    <label for="producttype_id">Categoria:</label>
-                    <select name="producttype_id" id="producttype_id" class="form-control">
-                        @foreach($producttypes as $producttype)
-                            <option value="{{ $producttype->id }}" {{$product->producttype_id==$producttype->id ? 'selected' : ''}}>{{ $producttype->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            @endif
+
+            <div class="form-group">
+                <label for="producttype_id">Categoria:</label>
+                <select name="producttype_id" id="producttype_id" class="form-control">
+                    @foreach($producttypes as $producttype)
+                        <option value="{{ $producttype->id }}" {{$product->producttype_id==$producttype->id ? 'selected' : ''}}>{{ $producttype->name }}</option>
+                    @endforeach
+                </select>
+            </div>
             <div class="form-group">
                 <label>Nombre Producto</label>
                 <input type="text" class="form-control" name="name" value="{{$product->name}}" required>
