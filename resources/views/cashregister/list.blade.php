@@ -11,7 +11,7 @@
     <div class="pl-3 pr-3">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <h1>Cajas Registradas</h1>
+                <h1><i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">point_of_sale</i>Cajas Registradas</h1>
             </div>
             <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
                 <thead>
