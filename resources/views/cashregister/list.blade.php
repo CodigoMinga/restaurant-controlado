@@ -39,7 +39,7 @@
                 "columns": [
                     { "data": "created_at", render : function (data) {
                         var fecha = new Date(data);
-                        return fecha.toLocaleString();
+						return type === 'display' ? fecha.toLocaleString() : data;
                     },"width":"20%"},
                     { "data": "ammount_open", render : function (data) {
                         var dinero = "$"+miles(data);
@@ -47,7 +47,8 @@
                     },"width":"20%"},
                     { "data": "closed", render : function (data) {
                         var fecha = new Date(data);
-                        return data ? fecha.toLocaleString() : 'Sin terminar';
+                        var salida = data ? fecha.toLocaleString() : 'Sin terminar';
+						return type === 'display' ? salida : data;
                     },"width":"20%"},
                     { "data": "Breakdown.total", render : function (data) {
                         var dinero = "$"+miles(data);
