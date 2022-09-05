@@ -11,7 +11,7 @@
     <div class="pl-3 pr-3">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <h1>Cajas Registradas</h1>
+                <h1><i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">point_of_sale</i>Cajas Registradas</h1>
             </div>
             <table id="tabla" class="table table-striped table-dark table-sm" style="width:100%" >
                 <thead>
@@ -37,17 +37,18 @@
                 responsive: true,
                 "data": {!! json_encode($cashregisters->toArray()) !!},
                 "columns": [
-                    { "data": "created_at", render : function (data) {
+                    { "data": "created_at", render : function (data, type, row, meta ){
                         var fecha = new Date(data);
-                        return fecha.toLocaleString();
+						return type === 'display' ? fecha.toLocaleString() : data;
                     },"width":"20%"},
                     { "data": "ammount_open", render : function (data) {
                         var dinero = "$"+miles(data);
                         return dinero;
                     },"width":"20%"},
-                    { "data": "closed", render : function (data) {
+                    { "data": "closed", render : function (data, type, row, meta ) {
                         var fecha = new Date(data);
-                        return data ? fecha.toLocaleString() : 'Sin terminar';
+                        var salida = data ? fecha.toLocaleString() : 'Sin terminar';
+						return type === 'display' ? salida : data;
                     },"width":"20%"},
                     { "data": "Breakdown.total", render : function (data) {
                         var dinero = "$"+miles(data);
