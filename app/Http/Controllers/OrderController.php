@@ -97,6 +97,7 @@ class OrderController extends Controller
         $order  = Order::findOrFail($order_id);
         if($order->dte_token){
             $order->fill($request->all());
+            $order->difference= intval($order->total) - intval($request->transfer) - intval($request->debit_card) - intval($request->credit_card) - intval($request->efective);
             $order->closed=1;
             $order->save();
             return $order;

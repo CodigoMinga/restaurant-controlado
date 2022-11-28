@@ -1372,7 +1372,6 @@
             }else if(loadState) {
                 loadState = false;
                 var formData = new FormData(paymentForm);
-                formData.append("difference", difference);
                 $.ajax({
                     url: "{{ url('/orders/'.$order->id.'/paymentStore') }}",
                     type: "POST",
