@@ -35,7 +35,7 @@
         $(document).ready(function() {
             $('#tabla').DataTable({
                 responsive: true,
-                "data": {!! json_encode($cashregisters->toArray()) !!},
+                "ajax": "{{ url('/cashregister/getlist') }}",
                 "columns": [
                     { "data": "created_at", render : function (data, type, row, meta ){
                         var fecha = new Date(data);
@@ -50,7 +50,7 @@
                         var salida = data ? fecha.toLocaleString() : 'Sin terminar';
 						return type === 'display' ? salida : data;
                     },"width":"20%"},
-                    { "data": "Breakdown.total", render : function (data) {
+                    { "data": "Breakdown", render : function (data) {
                         var dinero = "$"+miles(data);
                         return dinero;
                     },"width":"20%"},
