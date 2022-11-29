@@ -10,6 +10,8 @@ use App\Cashregister;
 use App\Order;
 use Illuminate\Http\Request;
 
+use Yajra\DataTables\DataTables;
+
 class CashregisterController extends Controller
 {
     
@@ -58,10 +60,15 @@ class CashregisterController extends Controller
 
     public function list()
     {
+        return view('cashregister.list');
+    }
+
+    public function getlist(){
         $company = session('company');
         $cashregisters = Cashregister::where('company_id',$company->id)->get();
-        $cashregisters->each->append('Breakdown');
-        return view('cashregister.list',compact('cashregisters'));
+        return DataTables::of($cashregisters)->addColumn('Breakdown',function(Cashregister $cashregister) {
+            return $cashregister->Breakdown->total;
+        })->make(true);        
     }
 
     public function details($cashregister_id){
