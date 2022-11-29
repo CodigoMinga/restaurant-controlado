@@ -22,6 +22,7 @@ use App\Mail\LowStockMail;
 use App\Item;
 use Illuminate\Http\Response;
 
+use Yajra\DataTables\DataTables;
 
 class OrderController extends Controller
 {
@@ -48,15 +49,15 @@ class OrderController extends Controller
     }
 
     public function list(){
+        return view('orders.list');
+    }
+
+    public function getlist(){
         $company = session('company');
-        $orders = Order::where('company_id',$company->id)->get();
-        foreach ($orders as $key => $order) {
-            $order->total=$order->Total;
-            $order->ordertype;
-            $order->user;
-            $order->table;
-        }
-        return view('orders.list', compact('orders'));
+        $orders = Order::with('ordertype','user','table')->where('company_id',$company->id)->get();
+        return DataTables::of($orders)->addColumn('total',function(Order $order) {
+            return $order->Total;
+        })->make(true);
     }
 
     public function tableorder($table_id){
@@ -97,6 +98,7 @@ class OrderController extends Controller
         $order  = Order::findOrFail($order_id);
         if($order->dte_token){
             $order->fill($request->all());
+            $order->difference= intval($order->total) - intval($request->transfer) - intval($request->debit_card) - intval($request->credit_card) - intval($request->efective);
             $order->closed=1;
             $order->save();
             return $order;
@@ -108,13 +110,12 @@ class OrderController extends Controller
     public function extraStore($order_id, Request $request)
     {
         $order  = Order::findOrFail($order_id);
-        if($order->CommandComplete){                
+        if($order->CommandComplete  || $order->company->closetype==1){                
             $order->fill($request->all());
             $delivery = Delivery::where('company_id',$order->company_id)->where('ammount',$request->delivery)->first();
             if($delivery){
                 $order->delivery_commission =  $delivery->delivery_commission;
             }
-
             $order->save();
             return $order;
         }else{

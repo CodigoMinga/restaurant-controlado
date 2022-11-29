@@ -42,7 +42,7 @@
                 </div>
                 <div class="scrollselection pl-4 pr-4" id="producto-container">
                     @foreach ($producttypes as $producttype)
-                        @foreach ($producttype->product as $product)
+                        @foreach ($producttype->product->sortBy('name') as $product)
                         <div class="producto" obj="{{$product}}">
                             <div class="informacion">
                                 <div class="nombre">{{$product->name}}</div>

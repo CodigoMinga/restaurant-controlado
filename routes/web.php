@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     //ORDENES
     Route::get('/orders/list',                              'OrderController@list');
+    Route::get('/orders/getlist',                           'OrderController@getlist');
     Route::post('/orders/disable',                          'OrderController@disable');
     Route::get('/orders/start/{table_id}',                  'OrderController@start');
     Route::get('/orders/{order_id}',                        'OrderController@details');
@@ -137,6 +138,7 @@ Route::group(['middleware' => ['auth']], function() {
     route::post('/cashregister/close','CashregisterController@close');
 
     route::get('/cashregister/list','CashregisterController@list');
+    route::get('/cashregister/getlist','CashregisterController@getlist');
     route::get('/cashregister/{cashregister_id}','CashregisterController@details');
 
     route::get('test',function(){

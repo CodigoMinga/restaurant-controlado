@@ -251,9 +251,11 @@
                     <th>
                         Producto
                     </th>
+                    @if($order->company->closetype!=1)
                     <th width=1>
                         Comanda
                     </th>
+                    @endif
                     <th width=1>
                         Cant.
                     </th>
@@ -278,6 +280,8 @@
                             {{ $orderdetail->product->name }}<br>
                             <small>{{ $orderdetail->enabled==1 ? $orderdetail->description : "(eliminado)"}}</small>
                         </td>
+                        
+                        @if($order->company->closetype!=1)
                         <td align="center" id="command_{{$orderdetail->id}}">
                             @if($orderdetail->command)
                                 <i class="text-success material-icons">done</i>
@@ -285,6 +289,7 @@
                                 <i class="text-muted material-icons">more_horiz</i>
                             @endif
                         </td>
+                        @endif
                         <td align="right">
                             {{ number_format($orderdetail->quantity, 0, '', '.') }}
                         </td>
@@ -464,13 +469,16 @@
                     <span class="material-icons">add_shopping_cart</span>
                     Agregar
                 </a>
+                @if($order->company->closetype!=1)
                 <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-orange btn-lg">
                     <span class="material-icons">deck</span>
                     Cambiar Mesa
                 </a>
+                @endif
             </div>
             @endif
             <div class="d-flex flex-wrap justify-content-between botones">
+                @if($order->company->closetype!=1)
                 @if($order->closed==0)
                     <button onclick="comanda(0)" class="btn btn-primary btn-lg">
                         <span class="material-icons">receipt</span>
@@ -482,6 +490,9 @@
                     Comanda Completa
                 </button>
                 <button onclick="extraStore()" class="btn btn-purple btn-lg">
+                @else
+                <button onclick="extraStore()" class="btn btn-purple btn-lg w-100 ">
+                @endif
                     <span class="material-icons">receipt_long</span>
                     Boleta
                 </button>
@@ -1361,7 +1372,6 @@
             }else if(loadState) {
                 loadState = false;
                 var formData = new FormData(paymentForm);
-                formData.append("difference", difference);
                 $.ajax({
                     url: "{{ url('/orders/'.$order->id.'/paymentStore') }}",
                     type: "POST",

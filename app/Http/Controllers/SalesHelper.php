@@ -28,7 +28,8 @@ class SalesHelper extends Controller
         //busca si existe la orden en la DB
         $order = Order::find($order_id);
         if(isset($order)){
-            if($order->CommandComplete){
+
+            if($order->CommandComplete || $order->company->closetype==1){
                 //valida si la boleta ya fue emitida, existe token no deja emitirla denuevo
                 if(isset($order->dte_token)){
                     $this->printAgainInvoice($order_id);
@@ -263,7 +264,7 @@ class SalesHelper extends Controller
         //busca si existe la orden en la DB
         $order = Order::find($order_id);
         if(isset($order)){
-            if($order->CommandComplete){
+            if($order->CommandComplete || $order->company->closetype==1){
 
                 $paramsArr = [];
 
