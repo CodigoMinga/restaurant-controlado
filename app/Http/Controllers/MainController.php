@@ -62,10 +62,10 @@ class MainController extends Controller
     }
 
     function passwordLost(){
-        return view('passwordlost');
+        return view('login.passwordlost');
     }
 
-    public function passwordRessetToken($user_id,$token){
+    public function passwordResetToken($user_id,$token){
 
         $token_db = Db::table('password_resets')->where('token','=',$token)->first();
         $user = User::findOrFail($user_id);
@@ -78,7 +78,7 @@ class MainController extends Controller
 
     }
 
-    public function passwordRessetTokenProcess($user_id,$token,Request $request){
+    public function passwordResetTokenProcess($user_id,$token,Request $request){
 
         $user = User::findOrFail($user_id);
         $user->password = Hash::make($request->password);
@@ -95,7 +95,7 @@ class MainController extends Controller
 
     }
 
-    function passwordLostProcess(Request $request){
+    function resetpasswordProcess(Request $request){
 
         //dd($request->email);
         $user = User::where ('email', $request->email)->first();
@@ -124,17 +124,18 @@ class MainController extends Controller
 
     
     function dashboard(){
+        $company = session('company');
+
         $desde = date('Y-m-d', strtotime('monday this week'));
-        $hasta = date('Y-m-d', strtotime('monday next week'));        
-        $companies_id = Auth::user()->companies()->pluck('company_id');
-        $companiesString = $companies_id->implode(',');
+        //$desde = date('Y-m-d', strtotime('1990-01-01'));
+        $hasta = date('Y-m-d', strtotime('monday next week'));
         
         //ventas de la semana
-        $query = "SELECT COUNT(id) AS sales, DAYOFWEEK(created_at) AS dayweek FROM orders WHERE enabled = 1 AND company_id IN ($companiesString) AND created_at > '$desde' AND created_at < '$hasta' GROUP BY DATE(created_at)";       
+        $query = "SELECT COUNT(internal_id) AS sales, DAYOFWEEK(created_at) AS dayweek FROM orders WHERE enabled = 1 AND company_id = $company->id AND created_at > '$desde' AND created_at < '$hasta' GROUP BY DATE(created_at)";       
         $salesweek = DB::select($query);
 
         //bajo stock
-        $lowstock = Item::where('enabled',1)->whereIn('company_id',$companies_id->toArray())->orderByRaw('(stock - warning) ASC')->limit(10)->get();
+        $lowstock = Item::where('enabled',1)->where('company_id',$company->id)->orderByRaw('(stock - warning) ASC')->limit(10)->get();
 
         //Mas Vendidos
         $query = 
@@ -145,13 +146,14 @@ class MainController extends Controller
         WHERE 
         od.enabled = 1 AND 
         o.enabled = 1 AND 
-        o.company_id IN ($companiesString) 
+        o.company_id = $company->id AND 
+        od.created_at >= '$desde' AND od.created_at < '$hasta'
         GROUP BY od.product_id ORDER BY cant DESC LIMIT 7";
         $salesbest = DB::select($query);
 
         //Ganacia
         $order_totals = 0;
-        $orders = Order::where('enabled',1)->get();
+        $orders = Order::where('enabled',1)->where('company_id',$company->id)->where('created_at',">=",$desde)->where('created_at',"<",$hasta)->get();
         foreach ($orders as $key => $order) {
             $order_totals=$order_totals+$order->Total;
         }
@@ -160,17 +162,38 @@ class MainController extends Controller
         "SELECT 
         SUM(credit_card) AS credit_card, 
         SUM(debit_card) AS debit_card, 
-        SUM(efective) AS efective, 
+        SUM(efective) + SUM(difference) AS efective, 
         SUM(transfer) AS transfer, 
         SUM(discount) AS discount, 
         SUM(tip) AS tip, 
-        SUM(delivery) AS delivery 
-        FROM orders";
+        SUM(delivery) AS delivery, 
+        SUM(ordertype_id=1) AS ordertype_1,
+        SUM(ordertype_id=2) AS ordertype_2,
+        SUM(ordertype_id=3) AS ordertype_3
+        FROM orders
+        WHERE 
+        company_id = $company->id AND
+        enabled = 1
+        AND created_at >= '$desde' AND created_at < '$hasta'
+        ";
         $profit = DB::select($query);
-        
-        //dd($profit);
 
-        return view('main.dashboard',compact('salesweek','lowstock','salesbest','profit','order_totals'));
+        $query = 
+        "SELECT 
+        tt.name, COUNT(r.id) as cant FROM tabletypes tt 
+        LEFT JOIN 
+        (
+            SELECT o.id,t.tabletype_id FROM orders AS o 
+            LEFT JOIN tables AS t 
+            ON o.table_id = t.id 
+            WHERE o.enabled=1
+            AND o.created_at >= '$desde' AND o.created_at < '$hasta'
+        ) AS r 
+        ON r.tabletype_id=tt.id
+        GROUP BY tt.id";
+        $tabletypes = DB::select($query);
+
+        return view('main.dashboard',compact('salesweek','lowstock','salesbest','profit','order_totals','tabletypes'));
     }
 
     

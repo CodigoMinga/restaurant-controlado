@@ -28,8 +28,8 @@ class AddCashregisterToOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
+            $table->dropForeign(['cashregister_id']);
             $table->dropColumn('cashregister_id');
-            $table->dropForeign('cashregister_id');
         });
     }
 }

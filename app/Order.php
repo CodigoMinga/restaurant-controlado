@@ -46,6 +46,7 @@ class Order extends Model
         'debit_card',
         'efective',
         'transfer',
+        'difference',
 
         'enabled',
         'created_at',
@@ -93,6 +94,21 @@ class Order extends Model
             }
         }
         return $total;
+    }
+
+    
+    public function getCommandCompleteAttribute(){
+        $reps = true;
+        $cant = 0;
+        foreach ($this->orderdetails as $key => $orderdetail) {
+            if($orderdetail->enabled){
+                if($orderdetail->command==0){
+                    $reps = false;
+                }
+                $cant++;
+            }
+        }
+        return $cant>0 && $reps;
     }
 
     public function cashregister()

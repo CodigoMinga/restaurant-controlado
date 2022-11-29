@@ -22,8 +22,6 @@ class CreateUsersTable extends Migration
             $table->boolean('enabled')->default(1);
             $table->rememberToken();
             $table->timestamps();
-
-
         });
     }
 

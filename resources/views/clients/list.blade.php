@@ -12,7 +12,7 @@
     <div class="container pt-3">
         <div class="d-flex justify-content-between align-items-center">
             <h1>Lista de Clientes</h1>
-            <a  href="{{ url('/') }}/app/clients/add" class="btn btn-success">
+            <a  href="{{ url('/') }}/clients/add" class="btn btn-success">
                 <i class="material-icons">add</i>
                 Agregar Cliente
             </a>
@@ -47,7 +47,7 @@
                     { "data": "commune.region.name","width":"20%"},
                     { "data": "commune.name","width":"20%"},
                     { data: "id", render : function ( data, type, row, meta ) {
-                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/app/clients/'+data+'" >description</a>';
+                        return '<a class="btn btn-light material-icons" href="{{ url("/")}}/clients/'+data+'" >description</a>';
                     },"width":"1%"},
                 ],
                 language: {

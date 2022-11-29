@@ -33,25 +33,31 @@
         <h1>
             <i class="material-icons pr-2">settings</i>Configuración
         </h1>
-        <div class="d-flex flex-row justify-content-between p-4 flex-wrap">                
-            <a class="config-button" href="{{ url('products/list') }}">
-                <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">fastfood</i>Productos
-            </a>
-            <a class="config-button" href="{{ url('producttypes/list') }}">
-                <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Categorias
-            </a>
-            <a class="config-button" href="{{ url('tables/list') }}">
-                <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">deck</i>Mesas
-            </a>
-            <a class="config-button" href="{{ url('users/list') }}">
-                <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">groups</i>Usuarios
-            </a>
-            <a class="config-button" href="{{ url('app/clients/list') }}">
-                <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">people</i>Clientes
-            </a>
+        <div class="d-flex flex-row justify-content-between p-4 flex-wrap">             
             <a class="config-button" href="{{ url('items/list') }}">
                 <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">shopping_cart</i>Insumos
-            </a>
+            </a>   
+            
+            @if(Auth::user()->hasRole(["companyadmin","superadmin"]))
+                <a class="config-button" href="{{ url('producttypes/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">layers</i>Categorias
+                </a>
+                <a class="config-button" href="{{ url('products/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">fastfood</i>Productos
+                </a>
+                <a class="config-button" href="{{ url('deliverys/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">delivery_dining</i>Deliverys
+                </a>
+                <a class="config-button" href="{{ url('tables/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">deck</i>Mesas
+                </a>
+                <a class="config-button" href="{{ url('users/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">groups</i>Usuarios
+                </a>
+                <a class="config-button" href="{{ url('clients/list') }}">
+                    <i class="material-icons" style="font-size:2rem;vertical-align:-0.5rem">people</i>Clientes
+                </a>
+            @endif
         </div>
     </div>
  @stop

@@ -15,11 +15,11 @@ class UserController extends Controller
     
     public function list(){
         //1 Compañias a la que pertenece el usuario
-        $companies_id = Auth::user()->companies()->pluck('company_id')->toArray();
+        $company = session('company');
         //Consultar a la tabla company_user las id de los usuarios que pertenecen a las compañias dichas
-        $users_id= DB::table('company_user')->whereIn('company_id',$companies_id)->pluck('user_id')->toArray();
+        $users_id= DB::table('company_user')->where('company_id',$company->id)->pluck('user_id')->toArray();
         //buscar los usuarios con las id obtenidas
-        $users = User::WhereIn('id',$users_id)->get();
+        $users = User::WhereIn('id',$users_id)->where('enabled',1)->get();
         return view('users.list',compact('users'));
     }
 
@@ -32,6 +32,8 @@ class UserController extends Controller
         }
         $roles = Role::whereIn("id",$role_ids)->get();
         $user = new User;
+        $user->fill(old());
+        //dd(old(),$user);
         return view('users.form',compact('roles','companies','user'));
     }
 
@@ -51,7 +53,7 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($user_id);
-            $user->email=null;
+            $user->email=$user->id."@eliminado.com";
             $user->enabled=0;
             $user->save();
             return redirect()->route('users.list')->with('success', 'Usuario eliminado correctamente');
@@ -62,7 +64,12 @@ class UserController extends Controller
 
     public function process(Request $request){
         $id = $request->id;
-        if($id){
+        $company_ids = $request->company_id;
+        $role_ids = $request->role_id;
+
+        if(!$company_ids || !$role_ids){
+            return back()->with('error','Falta seleccionar Rol')->withInput();
+        }else if($id){
             //Si encuentra el ID edita
             $user = User::findOrFail($id);
             $user->name =  $request->name;
@@ -78,14 +85,12 @@ class UserController extends Controller
             DB::table('role_user')->where('user_id', $id)->delete();
 
             //RENUEVA COMPAÑIAS
-            $company_ids = $request->company_id;
             foreach ($company_ids as $key => $company_id) {
                 $company = Company::findOrFail($company_id);
                 $user->companies()->attach($company);
             }
 
             //RENUEVA ROLES
-            $role_ids = $request->role_id;
             foreach ($role_ids as $key => $role_id) {
                 $role = Role::findOrFail($role_id);
                 $user->roles()->attach($role);
@@ -102,14 +107,12 @@ class UserController extends Controller
             $user->save();
 
             //ADJUNTA ROLES
-            $role_ids = $request->role_id;
             foreach ($role_ids as $key => $role_id) {
                 $role = Role::findOrFail($role_id);
                 $user->roles()->attach($role);
             }
 
             //ADJUNTA COMPAÑIAS
-            $company_ids = $request->company_id;
             foreach ($company_ids as $key => $company_id) {
                 $company = Company::findOrFail($company_id);
                 $user->companies()->attach($company);

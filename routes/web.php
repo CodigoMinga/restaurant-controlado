@@ -7,24 +7,24 @@ Route::get('/',                                 'MainController@login')->name('l
 Route::post('/app/checklogin',                  'MainController@checkLogin');
 Route::get('/app/register',                     'MainController@register');
 Route::post('/app/register/process',            'MainController@registerProcess');
-Route::get('/app/login/passwordlost',           'MainController@passwordLost');
-Route::post('/app/login/passwordlost/process',  'MainController@passwordLostProcess');
+Route::get('/login/password/lost',              'MainController@passwordLost');
+Route::post('/login/password/lost/process',     'MainController@passwordLostProcess');
 
-Route::get('/app/login/resetpassword/{user_id}/token/{token}',            'MainController@passwordRessetToken');
-Route::post('/app/login/resetpassword/{user_id}/token/{token}/process',   'MainController@passwordRessetTokenProcess');
+Route::get('/login/password/reset/{user_id}/token/{token}',            'MainController@passwordResetToken');
+Route::post('/login/password/reset/{user_id}/token/{token}/process',   'MainController@passwordResetTokenProcess');
 
 //ESTAS RUTAS NECESITAN ESTAR LOGUEADO
 Route::group(['middleware' => ['auth']], function() {
 
     //CLIENTE
-    Route::get('/app/clients/list',                         'ClientController@list')->name('clients.list');
-    Route::get('/app/clients/add',                          'ClientController@add')->name('clients.add');
-    Route::post('/app/clients/add/process',                 'ClientController@addProcess');
-    Route::get('/app/clients/{client_id}',                  'ClientController@details');
-    Route::post('/app/clients/{client_id}/edit/process',    'ClientController@editprocess');
-    Route::get('/app/clients/{client_id}/delete',           'ClientController@delete');
-
+    Route::get('/clients/list',                             'ClientController@list')->name('clients.list');
     Route::get('/clients/getdata',                          'ClientController@getdata');
+    Route::get('/clients/add',                              'ClientController@add')->name('clients.add');
+    Route::post('/clients/add/process',                     'ClientController@addProcess');
+    Route::get('/clients/{client_id}',                      'ClientController@details');
+    Route::post('/clients/{client_id}/edit/process',        'ClientController@editprocess');
+    Route::get('/clients/{client_id}/delete',               'ClientController@delete');
+
     Route::post('/clients/store',                           'ClientController@store');
 
     //pedidos del cliente
@@ -32,17 +32,20 @@ Route::group(['middleware' => ['auth']], function() {
 
     //ORDENES
     Route::get('/orders/list',                              'OrderController@list');
+    Route::post('/orders/disable',                          'OrderController@disable');
     Route::get('/orders/start/{table_id}',                  'OrderController@start');
     Route::get('/orders/{order_id}',                        'OrderController@details');
-    Route::post('/orders/{order_id}/close',                 'OrderController@close');
+    Route::post('/orders/{order_id}/paymentStore',          'OrderController@paymentStore');
+    Route::post('/orders/{order_id}/extraStore',            'OrderController@extraStore');
     Route::get('/orders/{order_id}/changetable',            'OrderController@changetable');
     Route::get('/orders/{order_id}/changetable/{table_id}', 'OrderController@changetableProcess');
+    Route::get('/orders/{order_id}/products',               'OrderController@products');
+    Route::get('/orders/{order_id}/command',                'OrderController@command');
+    Route::get('/orders/{order_id}/ordertype_id/{ordertype_id}',  'OrderController@ordertype');
     Route::get('/tables',                                   'OrderController@tables');
     Route::get('/tables/{table_id}/orders',                 'OrderController@tableorder');
-    Route::get('/orders/{order_id}/products',               'OrderController@products');
     Route::post('/orders/products/attach',                  'OrderController@productAttach');
     Route::post('/orders/products/detach',                  'OrderController@productDetach');
-    Route::post('/orders/command',                          'OrderController@command');
 
     //pedidos del cliente de la orden
     Route::get('/orders/{order_id}/clienthistory',          'OrderController@history');
@@ -52,9 +55,10 @@ Route::group(['middleware' => ['auth']], function() {
     //ESTAS RUTAS NECESITAS SER COMPANY ADMIN
     Route::group(['middleware' => ['admin:companyadmin|superadmin']], function() {
         Route::get('/dashboard',                'MainController@dashboard');
-        Route::get('/settings',                 'MainController@settings');
     });
 
+    Route::get('/settings',                 'MainController@settings');
+    
     //ITEMS
     route::get('/items/list',               'ItemController@list')->name('items.list');
     route::get('/items/add',                'ItemController@add')->name('items.add');
@@ -93,10 +97,19 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/tables/{table_id}/delete',           'TableController@delete');
     Route::post('/tables/process',                    'TableController@process');
 
+    //MESAS
+    Route::get('/deliverys/list',                        'DeliveryController@list')->name('deliverys.list');
+    Route::get('/deliverys/add',                         'DeliveryController@add')->name('deliverys.add');
+    Route::get('/deliverys/{delivery_id}',               'DeliveryController@details')->name('deliverys.details');
+    Route::get('/deliverys/{delivery_id}/delete',        'DeliveryController@delete');
+    Route::post('/deliverys/process',                    'DeliveryController@process');
+
     //RECETA
     Route::post('/prescriptions/store',                     'PrescriptionController@store');
     Route::get('/prescriptions/{prescription_id}',          'PrescriptionController@details');
     Route::get('/prescriptions/{prescription_id}/delete',   'PrescriptionController@delete');
+
+    Route::get('/prescriptions/{prescription_id}/avaibleproducts/{producttype_id}',   'PrescriptionController@avaibleproducts');
 
     //Detalle de Receta
     Route::post('/prescriptiondetails/store',                           'PrescriptiondetailController@store');
@@ -105,12 +118,13 @@ Route::group(['middleware' => ['auth']], function() {
 
     //COMPAÑIAS
     Route::group(['middleware' => ['admin:superadmin']], function(){
-        route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
-        route::post('/companys/add/process',                'CompanyController@addProcess');
         route::get('/companys/list',                        'CompanyController@list')->name('companys.list');
+
+        route::get('/companys/add',                         'CompanyController@add')->name('companys.add');
         route::get('/companys/{company_id}',                'CompanyController@details');
-        route::post('/companys/{company_id}/edit/process',  'CompanyController@editprocess');
+        
         route::get('/companys/{company_id}/delete',         'CompanyController@delete');
+        route::post('/companys/store',                      'CompanyController@store');
     });
 
     //LOGOUT
@@ -121,16 +135,25 @@ Route::group(['middleware' => ['auth']], function() {
     route::get('/cashregister/form','CashregisterController@form');
     route::post('/cashregister/open','CashregisterController@open');
     route::post('/cashregister/close','CashregisterController@close');
-    
+
+    route::get('/cashregister/list','CashregisterController@list');
+    route::get('/cashregister/{cashregister_id}','CashregisterController@details');
+
+    route::get('test',function(){
+        $tabletypes = App\Tabletype::with(['tables'=>function($query){$query->where('tables.id',1);}])->get();
+        return $tabletypes;
+    });
+
 });
 
 //rutas ajax
 route::get('/ajax/generateInvoice/{order_id}','SalesHelper@generateInvoice');
+route::get('/ajax/fakeDte/{order_id}','SalesHelper@fakeDte');
 route::get('/ajax/printAgainInvoice/{order_id}','SalesHelper@printAgainInvoice');
 route::get('/ajax/removeDte/{order_id}','SalesHelper@removeDte');
 
 
 
-
+route::get('/testmail/{item_id}','OrderController@lowStockMail');
 
 

@@ -51,10 +51,18 @@
                         return type === 'display' ? returnString : data;
                     },"width":"1%"},
                     { "data": "total"           , render : function ( data, type, row, meta ){
-                        return '$'+(parseInt(row.total)+parseInt(row.discount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        var output = '$'+(parseInt(row.total)+parseInt(row.discount)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        if(row.enabled==0){
+                            output = output + '<span class="material-icons text-danger">close</span>';
+                        }
+                        return output;
                     },"width":"1%"},
                     { data: "id", render : function ( data, type, row, meta ){
-                        return '<a class="btn btn-light material-icons" href="{{ url("orders")}}/'+data+'" >description</a>';
+                        if(row.enabled==0){
+                            return '<a class="btn btn-danger material-icons" href="{{ url("orders")}}/'+data+'" >description</a>';
+                        }else{
+                            return '<a class="btn btn-light material-icons" href="{{ url("orders")}}/'+data+'" >description</a>';
+                        }
                     },"width":"1%"},
                 ],
                 language: {

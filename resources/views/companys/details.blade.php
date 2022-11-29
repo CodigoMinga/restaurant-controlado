@@ -23,13 +23,21 @@
                 <label>Giro</label>
                 <input type="text" class="form-control" name="giro"  value="{{$company->giro}}">
             </div>
+            <div class="form-row">
+                <div class="form-group col-12 col-sm-6 mb-2">
+                    <label class="mb-1">Región</label>
+                    <select class="custom-select custom-select-sm" name="region_id" id="region_select">
+                    </select>
+                </div>
+                <div class="form-group col-12 col-sm-6 mb-2">
+                    <label class="mb-1">Comuna</label>
+                    <select class="custom-select custom-select-sm" name="commune_id" id="commune_select">
+                    </select>
+                </div>
+            </div>
             <div class="form-group">
                 <label>Dirección</label>
                 <input type="text" class="form-control" name="direccion"  value="{{$company->direccion}}">
-            </div>
-            <div class="form-group">
-                <label>Comuna</label>
-                <input type="text" class="form-control" name="comuna"  value="{{$company->comuna}}">
             </div>
             <div class="form-group">
                 <label>Factura</label>

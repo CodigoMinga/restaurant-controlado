@@ -11,6 +11,16 @@
         right: -100%;
         color: black;
     }
+    
+    #fakeDte{
+        display: block;
+        width: 80mm;
+        background: white;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        color: black;
+    }
 
     input[type="checkbox"] {
         display: block;
@@ -64,168 +74,245 @@
         background-color:white;
         color:black;
         opacity: 1;
+        border-color: rgb(133, 133, 133);
+    }
+
+    input:disabled{
+        background-color:white;
+        color:black;
+        opacity: 1;
+        border-color: rgb(133, 133, 133);
+    }
+
+    .btn-purple{
+        color: #fff;
+        background-color: #6f42c1;
+        border-color: #6f42c1;
+    }
+
+    .btn-purple:hover {
+        color: #fff;
+        background-color: #5f39a7;
+        border-color: #5f39a7;
+    }
+
+    .botones .btn{
+        width: 300px;
+        margin-bottom: 1rem;
     }
 </style>
 @section('content')
+    <style>
+        .btn-purple{
+            color: #fff;
+            background-color: #6a1b9a;
+            border-color: #6a1b9a;
+        }
+
+        .btn-purple:hover {
+            color: #fff;
+            background-color: #4a148c;
+            border-color: #4a148c;
+        }
+
+        .btn-orange{
+            color: #fff;
+            background-color: #ef6c00;
+            border-color: #ef6c00;
+        }
+
+        .btn-orange:hover {
+            color: #fff;
+            background-color: #e65100;
+            border-color: #e65100;
+        }
+
+        .btn-indigo{
+            color: #fff;
+            background-color: #283593;
+            border-color: #283593;
+        }
+
+        .btn-indigo:hover {
+            color: #fff;
+            background-color: #1a237e;
+            border-color: #1a237e;
+        }
+    </style>
     <div class="container p-3">
         <h1>Orden: {{ $order->internal_id }}</h1>
-        <form id="orderForm">
-            {{ csrf_field() }}
-            <input name="client_id" type="hidden" value="{{$order->client_id}}">
-            <div class="row">
-                <div class="col">
-                    <table class="table table-striped table-sm table-dark">
-                        <tr>
-                            <th>
-                                Apertura
-                            </th>
-                            <td>
-                                {{ date('d/m/Y H:i:s', strtotime($order->created_at)) }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Garzón
-                            </th>
-                            <td>
-                                {{ $order->user->name }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Selector
-                            </th>
-                            <td>
-                                {{ $order->table->tabletype->name }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Mesa
-                            </th>
-                            <td>
-                                {{ $order->table->name }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Tipo
-                            </th>
-                            <td style="padding:0px">
-                                <select name="ordertype_id" class="inputtable w-100" id="ordertype" {{$order->closed==1 ? "disabled" :""}}>
-                                    @foreach ($ordertypes as $ordertype)
-                                        <option value="{{ $ordertype->id }}" {{$ordertype->id==$order->ordertype_id ? "selected":""}}>{{ $ordertype->name }}</option>
-                                    @endforeach
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col">
-                    <table class="table table-striped table-sm table-dark" id="clientBox">
-                        <tr>
-                            <th>
-                                Nombre
-                            </th>
-                            <td id="client_name">
-                                {{ $order->client ? $order->client->name : '' }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Teléfono
-                            </th>
-                            <td id="client_phone">
-                                {{ $order->client ? $order->client->phone : '' }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Comuna
-                            </th>
-                            <td id="client_commune">
-                                {{ $order->client ? $order->client->commune->name : '' }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Dirección
-                            </th>
-                            <td id="client_address">
-                                {{ $order->client ? $order->client->address : '' }}
-                            </td>
-                        </tr>
-                        @if($order->closed==0)
-                        <tr>
-                            <td colspan="2" class="p-0 m-0">
-                                <div class="btn-group w-100" role="group">
-                                    <a class="btn btn-primary btn-sm" style="border:none" id="clientButton">
-                                        <span class="material-icons">person</span>
-                                        Clientes
-                                    </a>
-                                    <a class="btn btn-info btn-sm"  style="border:none" id="historyButton">
-                                        <span class="material-icons">folder</span>
-                                        Pedidos
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        @endif
-                    </table>
-                </div>
-            </div>
-            <table class="table table-striped table-sm table-dark">
-                <thead>
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped table-sm table-dark">
                     <tr>
                         <th>
-                            Producto
+                            Apertura
                         </th>
-                        <th width=1>
-                            Cant.
+                        <td>
+                            {{ date('d/m/Y H:i:s', strtotime($order->created_at)) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Garzón
                         </th>
-                        <th width=1>
-                            P.Unit.
+                        <td>
+                            {{ $order->user->name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Selector
                         </th>
-                        <th width=1 style="text-align: right">
-                            P.Total.
+                        <td>
+                            {{ $order->table->tabletype->name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Mesa
                         </th>
-                        @if($order->closed==0)
-                        <th width=1 style="text-align: right">
-                            
+                        <td>
+                            {{ $order->table->name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Tipo
                         </th>
+                        <td style="padding:0px">
+                            <select name="ordertype_id" class="inputtable w-100" id="ordertype" {{$order->dte_token!=null || $order->closed==1  ? "disabled" :""}}>
+                                @foreach ($ordertypes as $ordertype)
+                                    <option value="{{ $ordertype->id }}" {{$ordertype->id==$order->ordertype_id ? "selected":""}}>{{ $ordertype->name }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col">
+                @if($order->table->tabletype_id!=1)
+                <table class="table table-striped table-sm table-dark" id="clientBox">
+                    <tr>
+                        <th>
+                            Nombre
+                        </th>
+                        <td id="client_name">
+                            {{ $order->client ? $order->client->name : '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Teléfono
+                        </th>
+                        <td id="client_phone">
+                            {{ $order->client ? $order->client->phone : '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Comuna
+                        </th>
+                        <td id="client_commune">
+                            {{ $order->client ? $order->client->commune->name : '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Dirección
+                        </th>
+                        <td id="client_address">
+                            {{ $order->client ? $order->client->address : '' }}
+                        </td>
+                    </tr>
+                    @if($order->dte_token==null && $order->closed!=1)
+                    <tr>
+                        <td colspan="2" class="p-0 m-0">
+                            <div class="btn-group w-100" role="group">
+                                <a class="btn btn-primary btn-sm" style="border:none" id="clientButton">
+                                    <span class="material-icons">person</span>
+                                    Clientes
+                                </a>
+                                <a class="btn btn-info btn-sm"  style="border:none" id="historyButton">
+                                    <span class="material-icons">folder</span>
+                                    Pedidos
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    @endif
+                </table>
+                @endif
+            </div>
+        </div>
+        <table class="table table-striped table-sm table-dark">
+            <thead>
+                <tr>
+                    <th>
+                        Producto
+                    </th>
+                    @if($order->company->closetype!=1)
+                    <th width=1>
+                        Comanda
+                    </th>
+                    @endif
+                    <th width=1>
+                        Cant.
+                    </th>
+                    <th width=1>
+                        P.Unit.
+                    </th>
+                    <th width=1 style="text-align: right">
+                        P.Total.
+                    </th>
+                    @if($order->dte_token==null && $order->closed!=1)
+                    <th width=1 style="text-align: right">
+                        
+                    </th>
+                    @endif
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($order->orderdetails as $orderdetail)
+                    @if($order->closed==0 && $orderdetail->enabled==1 || $order->closed==1)
+                    <tr {{$orderdetail->enabled==0 ? "class=text-danger" : ""}} id="orderdetail_{{$orderdetail->id}}">
+                        <td>
+                            {{ $orderdetail->product->name }}<br>
+                            <small>{{ $orderdetail->enabled==1 ? $orderdetail->description : "(eliminado)"}}</small>
+                        </td>
+                        
+                        @if($order->company->closetype!=1)
+                        <td align="center" id="command_{{$orderdetail->id}}">
+                            @if($orderdetail->command)
+                                <i class="text-success material-icons">done</i>
+                            @else
+                                <i class="text-muted material-icons">more_horiz</i>
+                            @endif
+                        </td>
+                        @endif
+                        <td align="right">
+                            {{ number_format($orderdetail->quantity, 0, '', '.') }}
+                        </td>
+                        <td align="right">
+                            {{ number_format($orderdetail->unit_ammount, 0, '', '.') }}
+                        </td>
+                        <td align="right">
+                            {{ number_format($orderdetail->total_ammount, 0, '', '.') }}
+                        </td>
+                        @if($order->dte_token==null && $order->closed!=1)
+                        <td align="right" width="20">
+                            <a class="btn btn-sm btn-danger material-icons p-0"  onclick="eliminarModal('{{$orderdetail}}')">close</a>
+                        </td>
                         @endif
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach ($order->orderdetails as $orderdetail)
-                        @if($order->closed==0 && $orderdetail->enabled==1 || $order->closed==1)
-                        <tr {{$orderdetail->enabled==0 ? "class=text-danger" : ""}}>
-                            <td>
-                                {{ $orderdetail->product->name }}<br>
-                                <small>{{ $orderdetail->enabled==1 ? $orderdetail->description : "(eliminado)"}}</small>
-                                <input type="hidden" name="orderdetail_id[]" value="{{ $orderdetail->id }}">
-                            </td>
-                            <td align="right">
-                                {{ number_format($orderdetail->quantity, 0, '', '.') }}
-                            </td>
-                            <td align="right">
-                                {{ number_format($orderdetail->unit_ammount, 0, '', '.') }}
-                            </td>
-                            <td align="right">
-                                {{ number_format($orderdetail->total_ammount, 0, '', '.') }}
-                            </td>
-                            @if($order->closed==0)
-                            <td align="right" width="20">
-                                <a class="btn btn-sm btn-danger material-icons p-0"  onclick="eliminarModal('{{$orderdetail}}')">close</a>
-                            </td>
-                            @endif
-                        </tr>
-                        @endif
-                    @endforeach
-                </tbody>
-            </table>
-            <div class="d-flex flex-wrap justify-content-between">
-                <div>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
+        <div class="d-flex flex-wrap justify-content-between">
+            <div>
+                <form id="paymentForm">
+                    {{ csrf_field() }}
                     <table class="table table-striped table-sm table-dark">
                         <tr>
                             <th colspan="2" style="text-align: center">
@@ -237,7 +324,7 @@
                                 Transferencia
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="transfer" name="transfer" class="dinero inputtable" value="{{$order->transfer}}" {{$order->closed==1 ? "readonly " :""}}>
+                                <input type="number" size="6" min="0" id="transfer" name="transfer" class="dinero inputtable" value="{{$order->transfer}}" {{$order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -245,7 +332,7 @@
                                 T. de Débito
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="debit_card" name="debit_card" class="dinero inputtable" value="{{$order->debit_card}}" {{$order->closed==1 ? "readonly " :""}}>
+                                <input type="number" size="6" min="0" id="debit_card" name="debit_card" class="dinero inputtable" value="{{$order->debit_card}}" {{$order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -253,7 +340,7 @@
                                 T. de Crédito
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="credit_card" name="credit_card" class="dinero inputtable" value="{{$order->credit_card}}" {{$order->closed==1 ? "readonly " :""}}>
+                                <input type="number" size="6" min="0" id="credit_card" name="credit_card" class="dinero inputtable" value="{{$order->credit_card}}" {{$order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -261,7 +348,7 @@
                                 Efectivo
                             </th>
                             <td class="p-0 m-0">
-                                <input type="number" size="6" id="efective" name="efective" class="dinero inputtable" value="{{$order->efective}}" {{$order->closed==1 ? "readonly " :""}}>
+                                <input type="number" size="6" min="0" id="efective" name="efective" class="dinero inputtable" value="{{$order->efective}}" {{$order->closed==1 ? "readonly " :""}}>
                             </td>
                         </tr>
                         <tr>
@@ -281,8 +368,12 @@
                             </td>
                         </tr>
                     </table>
-                </div>
-                <div>
+                </form>
+            </div>
+            <div>
+                <form id="extraForm">
+                    {{ csrf_field() }}
+                    <input name="client_id" type="hidden" value="{{$order->client_id}}">
                     <table class="table table-striped table-sm table-dark">
                         <tr>
                             <th colspan="4" style="text-align: center">
@@ -294,7 +385,7 @@
                             <th colspan="3">
                                 Consumo total
                             </th>
-                            <td>
+                            <td id="order_total">
                                 ${{ number_format($order->Total, 0, '', '.') }}
                             </td>
                         </tr>
@@ -304,7 +395,7 @@
                                 Descuento
                             </th>
                             <td class="p-0 m-0" width=1>
-                                <select name="discount" id='discount' class="inputtable number dinero"  {{$order->closed==1 ? "disabled" :""}}>
+                                <select name="discount" id='discount' class="inputtable number dinero"  {{$order->dte_token!=null || $order->closed==1 ? "disabled" :""}}>
                                     <option value="0">0</option>
                                     @foreach ($discounts as $discount)
                                         <option value="{{ $discount->ammount }}" {{$order->discount==$discount->ammount ? "selected": ""}}>{{ number_format($discount->ammount, 0, '', '.') }}</option>
@@ -312,7 +403,7 @@
                                 </select>
                             </td>
                             <td class="p-0 m-0">
-                                <input type="text" name="discount_description" class="inputtable number" placeholder="Razón del descuento" value="{{$order->discount_description}}"  {{$order->closed==1 ? "readonly " :""}}>
+                                <input type="text" name="discount_description" class="inputtable number" placeholder="Razón del descuento" value="{{$order->discount_description}}"  {{$order->dte_token!=null || $order->closed==1 ? "readonly " :""}}>
                             </td>
                             <td id='discount_total'>
                                 0
@@ -324,7 +415,7 @@
                                 Propina
                             </th>
                             <td class="p-0 m-0" width=1>
-                                <select name="tip_type" id='tip_type' class="inputtable number dinero" {{$order->closed==1 ? "disabled" :""}}>
+                                <select name="tip_type" id='tip_type' class="inputtable number dinero" {{$order->dte_token!=null || $order->closed==1 ? "disabled" :""}}>
                                     <option value="0"   {{$order->tip_type==0 ? "selected": ""}}>0</option>
                                     <option value="10"  {{$order->tip_type==10 ? "selected": ""}}>10%</option>
                                     <option value="-1"  {{$order->tip_type==-1 ? "selected": ""}}>Cantidad</option>
@@ -343,7 +434,7 @@
                                 Despacho
                             </th>
                             <td class="p-0 m-0" width=1>
-                                <select name="delivery" id="delivery" class="inputtable number dinero"  {{$order->closed==1 ? "disabled" :""}}>
+                                <select name="delivery" id="delivery" class="inputtable number dinero"  {{$order->dte_token!=null || $order->closed==1 ? "disabled" :""}}>
                                     <option value="0" {{0 == $order->delivery ? "selected" : ""}}>0</option>
                                     @foreach ($deliveries as $delivery)
                                         <option value="{{$delivery->ammount}}" {{$order->delivery==$delivery->ammount ? "selected": ""}}>
@@ -367,159 +458,189 @@
                         </tr>
 
                     </table>
-                </div>
+                </form>
             </div>
-        </form>
+        </div>
         <hr>
-        <div class="d-flex flex-wrap justify-content-between">
+        @if($order->enabled==1)
             @if($order->closed==0)
-            <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
-                <span class="material-icons">add_shopping_cart</span>
-                Agregar
-            </a>
-            <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-danger btn-lg">
-                Cambiar Mesa
-            </a>
-            <button onclick="paymentStore()" class="btn btn-info btn-lg">
+            <div class="d-flex flex-wrap justify-content-between botones">
+                <a href="{{ url('/orders/' . $order->id .'/products') }}" class="btn btn-success btn-lg">
+                    <span class="material-icons">add_shopping_cart</span>
+                    Agregar
+                </a>
+                @if($order->company->closetype!=1)
+                <a href="{{ url('/orders/'. $order->id.'/changetable') }}" class="btn btn-orange btn-lg">
+                    <span class="material-icons">deck</span>
+                    Cambiar Mesa
+                </a>
+                @endif
+            </div>
+            @endif
+            <div class="d-flex flex-wrap justify-content-between botones">
+                @if($order->company->closetype!=1)
+                @if($order->closed==0)
+                    <button onclick="comanda(0)" class="btn btn-primary btn-lg">
+                        <span class="material-icons">receipt</span>
+                        Comanda Parcial
+                    </button>
+                @endif
+                <button onclick="comanda(1)" class="btn btn-info btn-lg">
+                    <span class="material-icons">receipt</span>
+                    Comanda Completa
+                </button>
+                <button onclick="extraStore()" class="btn btn-purple btn-lg">
+                @else
+                <button onclick="extraStore()" class="btn btn-purple btn-lg w-100 ">
+                @endif
+                    <span class="material-icons">receipt_long</span>
+                    Boleta
+                </button>
+            </div>
+            @if($order->closed==0)
+            <button type="button" class="btn btn-lg btn-block btn-indigo" onclick="paymentStore()">
                 <span class="material-icons">price_check</span>
                 Cerrar Venta
             </button>
             @endif
-            <button onclick="PrintComanda()" class="btn btn-primary btn-lg">
-                <span class="material-icons">receipt</span>
-                Comanda
+            @if($order->enabled==1)
+            <button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#AnularModal">
+                <span class="material-icons">close</span>
+                Anular Venta
             </button>
-            <button onclick="PrintBoleta()" class="btn btn-warning btn-lg">
-                <span class="material-icons">receipt_long</span>
-                Boleta
-            </button>
-        </div>
-        <!-- Modal -->
-        <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-xl">
-                <div class="modal-content  bg-dark">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Clientes</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body p-0" id="modal-table">
-                        <div class="p-2">
-                            <form id="client-form" class="was-validated">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="id">
-                                <input type="hidden" name="company_id" value="{{ $order->company_id }}">
-                                <input type="hidden" name="order_id" value="{{ $order->id }}">
-                                <div class="form-row">
-                                    <div class="form-group col-12 col-sm-6 mb-2">
-                                        <label class="mb-1">Nombre</label>
-                                        <input type="text" class="form-control form-control-sm" name="name" id="client-name"
-                                            required>
-                                    </div>
-                                    <div class="form-group col-12 col-sm-6 mb-2">
-                                        <label class="mb-1">Teléfono</label>
-                                        <input type="text" class="form-control form-control-sm" name="phone"
-                                            id="client-phone" required>
-                                    </div>
+            @endif
+        @else
+            <h3 class="text-danger">Razón de anulación:</h3>
+            <p>{{$order->description}}</p>
+        @endif
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="clientList" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content  bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Clientes</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0" id="modal-table">
+                    <div class="p-2">
+                        <form id="client-form" class="was-validated">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="id">
+                            <input type="hidden" name="company_id" value="{{ $order->company_id }}">
+                            <input type="hidden" name="order_id" value="{{ $order->id }}">
+                            <div class="form-row">
+                                <div class="form-group col-12 col-sm-6 mb-2">
+                                    <label class="mb-1">Nombre</label>
+                                    <input type="text" class="form-control form-control-sm" name="name" id="client-name"
+                                        required>
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group col-12 col-sm-6 mb-2">
-                                        <label class="mb-1">Región</label>
-                                        <select class="custom-select custom-select-sm" name="region_id" id="region_select">
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-12 col-sm-6 mb-2">
-                                        <label class="mb-1">Comuna</label>
-                                        <select class="custom-select custom-select-sm" name="commune_id"
-                                            id="commune_select">
-                                        </select>
-                                    </div>
+                                <div class="form-group col-12 col-sm-6 mb-2">
+                                    <label class="mb-1">Teléfono</label>
+                                    <input type="text" class="form-control form-control-sm" name="phone"
+                                        id="client-phone" required>
                                 </div>
-                                <div class="form-group mb-2">
-                                    <label class="mb-1">Dirección</label>
-                                    <input type="text" class="form-control form-control-sm" name="address" required>
-                                </div>
-                            </form>
-                            <div>
-                                <button type="button" class="btn btn-success" onclick="clientStore()">
-                                    <span class="material-icons">send</span>
-                                    Guardar
-                                </button>
-                                <button type="button" class="btn btn-primary" onclick="clientNew()">
-                                    <span class="material-icons">person_add</span>
-                                    Nuevo
-                                </button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                    <span class="material-icons">close</span>
-                                    Volver
-                                </button>
                             </div>
+                            <div class="form-row">
+                                <div class="form-group col-12 col-sm-6 mb-2">
+                                    <label class="mb-1">Región</label>
+                                    <select class="custom-select custom-select-sm" name="region_id" id="region_select">
+                                    </select>
+                                </div>
+                                <div class="form-group col-12 col-sm-6 mb-2">
+                                    <label class="mb-1">Comuna</label>
+                                    <select class="custom-select custom-select-sm" name="commune_id"
+                                        id="commune_select">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label class="mb-1">Dirección</label>
+                                <input type="text" class="form-control form-control-sm" name="address" required>
+                            </div>
+                        </form>
+                        <div>
+                            <button type="button" class="btn btn-success" onclick="clientStore()">
+                                <span class="material-icons">send</span>
+                                Guardar
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="clientNew()">
+                                <span class="material-icons">person_add</span>
+                                Nuevo
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                <span class="material-icons">close</span>
+                                Volver
+                            </button>
                         </div>
-                        <div style="display:block;width:100%;min-height:40vh" id='container'>
-                            <table id="tabla" class="table table-dark table-sm mb-0 table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Comuna</th>
-                                        <th>Dirección</th>
-                                        <th>Teléfono</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
+                    </div>
+                    <div style="display:block;width:100%;min-height:40vh" id='container'>
+                        <table id="tabla" class="table objtable table-dark table-sm mb-0 table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Comuna</th>
+                                    <th>Dirección</th>
+                                    <th>Teléfono</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="eliminarModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal">
-                <div class="modal-content  bg-dark">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Eliminar Producto</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form id="detachForm">
-                        {{ csrf_field() }}
-                        <div class="modal-body" align="center">
-                            ¿Desea borrar <br>"<i class="text-danger font-weight-bold" id="product_name"></i>"<br>de la orden?
-                        </div>
-                        <input type="hidden" value="0" name="orderdetail_id">
-                    </form>
-                    <div class="modal-footer p-0 justify-content-between">
-                        <button type="button" class="btn btn-danger" onclick="eliminarProducto()">
-                            <span class="material-icons">send</span>
-                            Eliminar
-                        </button>                                
-                        <a type="button" class="btn btn-secondary" data-dismiss="modal">
-                            <span class="material-icons">close</span>
-                            Cerrar
-                        </a>
-                    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="eliminarModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal">
+            <div class="modal-content  bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Eliminar Producto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
-        </div>
-
-        
-        <!-- Modal -->
-        <div class="modal fade" id="historyModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-xl">
-                <div class="modal-content bg-dark">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Pedidos</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                <form id="detachForm">
+                    {{ csrf_field() }}
                     <div class="modal-body" align="center">
-                        <table class="table table-dark">
+                        ¿Desea borrar <br>"<i class="text-danger font-weight-bold" id="product_name"></i>"<br>de la orden?
+                    </div>
+                    <input type="hidden" value="0" name="orderdetail_id">
+                </form>
+                <div class="modal-footer p-0 justify-content-between">
+                    <button type="button" class="btn btn-danger" onclick="eliminarProducto()">
+                        <span class="material-icons">send</span>
+                        Eliminar
+                    </button>                                
+                    <a type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span class="material-icons">close</span>
+                        Cerrar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="historyModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Pedidos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" align="center">                        
+                    <div style="display:block;width:100%;min-height:50vh;max-height:90vh;overflow-y:overlay" id='container'>
+                        <table class="table objtable table-dark table-sm mb-0 table-hover">
                             <thead>
                                 <tr>
                                     <th>
@@ -534,20 +655,52 @@
                                 </tr>
                             </thead>
                             <tbody id="historyList">
-
                             </tbody>
                         </table>
                     </div>
-
                 </div>
+
             </div>
         </div>
+    </div>
 
-
+    <!-- Modal -->
+    <div class="modal fade" id="AnularModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal">
+            <div class="modal-content  bg-dark">
+                <form id="anularForm" method="POST" action="{{url('/orders/disable')}}">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Anular Venta</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {{ csrf_field() }}
+                    <div class="modal-body" align="center">
+                        ¿Desea Anular de la Orden {{$order->internal_id}}?
+                        <input type="hidden" value="{{$order->id}}" name="order_id">
+                        <div class="form-group">
+                            <label>Razón de la anulación</label>
+                            <textarea class="form-control" name="description" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer p-0 justify-content-between">
+                        <button class="btn btn-danger" type="submit">
+                            <span class="material-icons">send</span>
+                            Anular
+                        </button>                     
+                        <a type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <span class="material-icons">close</span>
+                            Cerrar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <div id="imprimir">
-        <h3 style="margin-bottom:0px">ORDEN: {{ $order->id }}</h3>
+        <h3 style="margin-bottom:0px">ORDEN: {{ $order->internal_id }}</h3>
         <h3 style="margin-top:0px">{{ $order->table->name }}</h3>
         <table style="margin-bottom:10mm;font-size:14px;width:100%">
             <thead>
@@ -560,18 +713,41 @@
                     </th>
                 </tr>
             </thead>
+            <tbody id="comandList">
+            </tbody>
+        </table>
+        <hr>
+    </div>
+
+    <div id="fakeDte">
+        <h3 style="margin-bottom:0px;border-bottom:2px solid" align="center">*** CUENTA ***</h3>
+        <table style="margin-bottom:2mm;font-size:14px;width:100%;border-bottom:2px dashed">
             <tbody>
-                @foreach ($order->orderdetails as $orderdetail)
-                    <tr>
-                        <td>
-                            {{ $orderdetail->product->name }}<br>
-                            <small>{{ $orderdetail->description }}</small>
-                        </td>
-                        <td align="right">
-                            {{ $orderdetail->quantity }}
-                        </td>
-                    </tr>
-                @endforeach
+                <tr><th align="left">MESA</th><td align="right">{{$order->table->name}}</td></tr>
+                <tr><th align="left">GÁRZON</th><td align="right">{{ $order->user->name }}</td></tr>
+                <tr><th align="left">NUMERO</th><td align="right">{{ $order->internal_id }}</td></tr>
+                <tr><th align="left">FECHA</th><td align="right"> {{ date('d/m/Y H:i:s', strtotime($order->created_at)) }}</td></tr>
+            </tbody>
+        </table>
+        <table style="margin-bottom:2mm;font-size:14px;width:100%;border-bottom:2px dashed;display:none" id="DteClient">
+
+        </table>
+        <table style="margin-bottom:2mm;font-size:13px;width:100%;border-bottom:2px dashed">
+            <thead>
+                <tr>
+                    <th align="left">
+                        PRODUCTO
+                    </th>
+                    <th width="1">
+                        PRECIO
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="DteProducts">
+            </tbody>
+        </table>
+        <table style="margin-bottom:8mm;font-size:14px;width:100%">
+            <tbody id="DteTotals">
             </tbody>
         </table>
         <hr>
@@ -585,7 +761,11 @@
     <!--SCRIPT DE COMANDA Y BOLETA-->
     <script>
         var imprimir = document.getElementById('imprimir');
-        var orderForm = document.getElementById('orderForm');
+
+        var fakeDte = document.getElementById('fakeDte');
+        var DteProducts = document.getElementById('DteProducts');
+        var DteTotals = document.getElementById('DteTotals');
+        var DteClient = document.getElementById('DteClient');
 
         var ua = navigator.userAgent.toLowerCase();
         var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
@@ -595,7 +775,7 @@
 
             mywindow.document.write('<html><head></head><title>Comanda</title>');
             mywindow.document.write(
-                '<style>*{font-family:Arial, sans-serif;} body{max-width:58mm}</style><body>'
+                '<style>*{font-family:Arial, sans-serif;} body{max-width:80mm}</style><body>'
             );
             mywindow.document.write(imprimir.innerHTML);
             mywindow.document.write('</body></html>');
@@ -605,19 +785,103 @@
                 mywindow.onafterprint  = function(){mywindow.close();};
             }
             mywindow.document.close(); // necessary for IE >= 10
+
             mywindow.focus(); // necessary for IE >= 10*/
             mywindow.print();
             return true;
         }
-        
-        function cancelBoleta() {
-            $.get("{{ url('/') }}/ajax/removeDte/{{ $order->id }}", function(data) {
 
+        function PrintFakeDte() {
+            $.get("{{ url('/') }}/ajax/fakeDte/{{ $order->id }}", function(data) {
+                var respuesta = data.response;
+
+                DteProducts.innerHTML="";
+
+                respuesta.Detalle.forEach(el => {
+                    var newtr = document.createElement('tr');
+
+                    var newtd = document.createElement('td');      
+                    var newbr = document.createElement('br');
+                    newtd.innerText = el.producto +"\n" +el.cantidad+" X $"+miles(parseInt(el.unitario));   
+                    newtr.appendChild(newtd);
+
+                    var newtd2 = document.createElement('td');                    
+                    newtd2.align="right";
+                    newtd2.innerText = "$"+miles(parseInt(el.total));                   
+                    newtr.appendChild(newtd2);
+                    DteProducts.appendChild(newtr);
+                });
+
+                DteTotals.innerHTML="";
+
+                respuesta.Totales.forEach(el => {
+                    var newtr = document.createElement('tr');
+                    var newtd = document.createElement('th'); 
+                    newtd.align="left";
+                    newtd.innerText = el.name;   
+                    newtr.appendChild(newtd);
+
+                    var newtd2 = document.createElement('td');
+                    newtd2.width="1px"
+                    newtd2.align="right";
+                    if( el.name  === "TOTAL A PAGAR"){
+                        newtd2.style.fontWeight ="bold"
+                        newtd2.style.fontSize ="16px"
+                    }
+                    newtd2.innerText = "$"+miles(el.value);                   
+                    newtr.appendChild(newtd2);
+                    DteTotals.appendChild(newtr);
+                });
+
+                DteClient.innerHTML="";
+
+                if(respuesta.Cliente){
+                    DteClient.style.display="block";
+                    respuesta.Cliente.forEach(el => {
+                        var newtr = document.createElement('tr');
+                        var newtd = document.createElement('th'); 
+                        newtd.align="left";
+                        newtd.width="1px"
+                        newtd.innerText = el.name;   
+                        newtr.appendChild(newtd);
+
+                        var newtd2 = document.createElement('td');
+                        newtd2.align="right";
+                        newtd2.width="100%";
+
+                        newtd2.innerText = el.value;                   
+                        newtr.appendChild(newtd2);
+                        DteClient.appendChild(newtr);
+                    });
+                }else{
+                    DteClient.style.display="none";
+                }
+
+                var mywindow = window.open('', 'PRINT', 'height=1,width=1');
+                mywindow.document.write('<html><head></head><title>Boleta</title>');
+                mywindow.document.write(
+                    '<style>*{font-family:Arial, sans-serif;} body{max-width:80mm}</style><body>'
+                );
+                mywindow.document.write(fakeDte.innerHTML);
+                mywindow.document.write('</body></html>');
+
+                if(isAndroid) {
+                    mywindow.onfocus = function(){mywindow.close();};
+                }else{
+                    mywindow.onafterprint  = function(){mywindow.close();};
+                }
+
+                mywindow.document.close(); // necessary for IE >= 10
+
+                mywindow.focus(); // necessary for IE >= 10*/
+                mywindow.print();
+                return true;
+            }).fail(function(xhr, status, error) {
+                alert(xhr.responseJSON.response);
             });
         }
-
+        
         function PrintBoleta(){
-
             $.get("{{ url('/') }}/ajax/generateInvoice/{{ $order->id }}", function(data) {
                 var pdfData = atob(data.response.PDF==null ? data.response.pdf : data.response.PDF);
                 var pdfjsLib = window['pdfjs-dist/build/pdf'];
@@ -631,7 +895,7 @@
                     pdf.getPage(pageNumber).then(function(page) {
                         console.log('Page loaded');
                         
-                        var scale = 2;
+                        var scale = 3;
                         var viewport = page.getViewport({scale: scale});
 
                         // Prepare canvas using PDF page dimensions
@@ -672,20 +936,37 @@
                     alert(reason);
                 });
                 
+            }).fail(function(xhr, status, error) {
+                alert(xhr.responseJSON.response);
             });
         }
 
-        function comanda() {
-            var formData = new FormData(orderForm);
+        function comanda(tipo) {
             $.ajax({
-                url: "{{ url('/orders/details/command') }}",
-                type: "POST",
-                data: formData,
+                url: "{{ url('/orders/'.$order->id.'/command') }}",
+                type: "GET",
                 processData: false, // tell jQuery not to process the data
                 contentType: false // tell jQuery not to set contentType
             }).done(function(data) {
                 if (typeof(data) == 'object') {
-
+                    var toprint = 0;
+                    $('#comandList').html('');
+                    data.forEach(element => {
+                        if( (tipo==1  || element.recent==1) && element.enabled==1){
+                            $('#command_'+element.id).html('<i class="text-success material-icons">done</i>');
+                            $('#comandList').append("<tr><td>"+element.product.name+"</td><td>"+element.quantity+"</td></tr>");
+                            toprint++;
+                        }
+                    });
+                    if(toprint>0){
+                        PrintComanda();
+                    }else{
+                        if(tipo==1){
+                            alert("Sin Productos en la comanda");
+                        }else{                      
+                            alert("Todos los productos ya fueron impresos");
+                        }
+                    }
                 } else {
                     alert(data);
                 }
@@ -725,6 +1006,7 @@
         }
 
         var clienttable;
+        var historytable;
 
         function rowStore(data) {
             var fila = clienttable.row("#" + data.id);
@@ -747,8 +1029,9 @@
             if (rowselect[0]) {
                 rowselect[0].classList.remove('bg-select');
             }
-            clientForm['region_id'].value = 7;
+            clientForm['region_id'].value = region_company;
             comunaLoad();
+            clientForm['commune_id'].value = commune_company;
             clientForm['name'].value = '';
             clientForm['phone'].value = '';
             clientForm['address'].value = '';
@@ -760,7 +1043,7 @@
             if (
                 clientForm['name'].value == '' ||
                 clientForm['phone'].value == '' ||
-                clientForm['address'].value == ''
+                (clientForm['address'].value == '' & clientForm['address'].required==true)
             ) {
                 alert("Falta Agregar Información");
             } else if (loadclient) {
@@ -774,7 +1057,7 @@
                     contentType: false // tell jQuery not to set contentType
                 }).done(function(data) {
                     if (typeof(data) == 'object') {
-                        orderForm['client_id'].value=data.id;
+                        extraForm['client_id'].value=data.id;
                         rowStore(data);
                     } else {
                         alert(data);
@@ -826,9 +1109,10 @@
             });
         });
 
-        function loadHistory(history){
+        function loadHistory(data){
             $('#historyList').html('');
-            history.forEach(order => {
+
+            data.forEach(order => {
                 if(order.closed==1 && order.enabled==1){
                     var ntr = document.createElement('tr');
                     //agregar numero de orden
@@ -837,11 +1121,23 @@
                     ntr.append(ntd);
 
                     //agregar detalle de 
-                    var nul = document.createElement('ul');
+                    var nul = document.createElement('div');
+                    nul.classList.add('mb-0');
                     order.orderdetails.forEach(orderdetail => {
                         if(orderdetail.enabled==1){
-                            var nli = document.createElement('li');
-                            nli.append(orderdetail.product.name+" X"+orderdetail.quantity);
+                            var nli = document.createElement('div');
+                            nli.classList.add('row');
+
+                            var ndiv = document.createElement('div');
+                            ndiv.classList.add('col-12','col-sm-8');
+                            ndiv.append(orderdetail.product.name+" X"+orderdetail.quantity);
+                            nli.append(ndiv);
+
+                            var nsmall = document.createElement('div');
+                            nsmall.classList.add('col-12','col-sm-4');
+                            nsmall.append("$" + miles(orderdetail.total_ammount*1) + " -> $" + miles(orderdetail.quantity*orderdetail.product.price));
+                            nli.append(nsmall);
+
                             nul.append(nli);
                         }
                     });
@@ -862,8 +1158,12 @@
                     $('#historyList').append(ntr);
                 }
             });
+
             $('#historyModal').modal('show');
         }
+
+        var region_company = {!! $order->company->commune->region_id !!};
+        var commune_company = {!! $order->company->commune_id !!};
 
         $(document).ready(function() {
 
@@ -874,9 +1174,9 @@
                 regions = datos.regions;
                 communes = datos.communes;
                 regionLoad();
-                region_select.value = 7;
+                region_select.value = region_company;
                 comunaLoad();
-
+                commune_select.value = commune_company;
                 clienttable = $('#tabla').DataTable({
                     scrollY: "35vh",
                     scrollCollapse: true,
@@ -903,21 +1203,6 @@
                             "width": "15%"
                         },
                     ],
-                    language: {
-                        "lengthMenu": "Mostrar _MENU_ registros por pagina &nbsp;&nbsp;&nbsp;",
-                        "zeroRecords": "No se encuentra ningun registro",
-                        "info": "Pagina _PAGE_ de _PAGES_",
-                        "infoEmpty": "No hay registros",
-                        "infoFiltered": "(buscando entre _MAX_ registros)",
-                        "search": "Filtrar Registros : &nbsp",
-                        "processing": "Cargando...",
-                        paginate: {
-                            first: "Primera Pagina",
-                            previous: "Anterior",
-                            next: "Siguiente",
-                            last: "Ultima"
-                        },
-                    },
                     order: [
                         [0, "desc"]
                     ],
@@ -984,10 +1269,15 @@
     </script>
 
     <!--SCRIPT DE ADICIONALES Y PAGOS-->
-    <script>        
+    <script>
+        var extraForm = document.getElementById('extraForm');
+        var paymentForm = document.getElementById('paymentForm');
+        var order_total = document.getElementById('order_total');
+
         //TOTAL CONSUMO
         let TotalBase = parseFloat("{{ $order->Total }}");
         var FaltaPagar = 0;
+        var difference = 0;
         
         //Adicionales
         var discount        = document.getElementById('discount');
@@ -1012,15 +1302,38 @@
         var pay_left        = document.getElementById('pay_left');
         
         var detachForm      = document.getElementById('detachForm');
+
+        function disabledPaymend(){
+            paymentForm['transfer'].disabled=true;
+            paymentForm['debit_card'].disabled=true;
+            paymentForm['credit_card'].disabled=true;
+            paymentForm['efective'].disabled=true;
+        }
+
+        function disabledExtra(){
+            extraForm['delivery'].disabled=true;
+            ordertype.disabled=true;
+            extraForm['discount'].disabled=true;
+            extraForm['discount_description'].disabled=true;
+            extraForm['tip_type'].disabled=true;
+            extraForm['tip'].disabled=true;
+        }
         
         //TODOS LOS CAMPOS RELACIONADOS CON DINERO AL CAMBIAR EJECUTAN LA FUNCION CALCULAR
         var dinero = document.querySelectorAll(".dinero");
         dinero.forEach(input =>input.onchange = calcular);
+        
 
         calcular();
 
-        var orderForm = document.getElementById('orderForm');
-        orderForm.onsubmit = function(e) {
+        var extraForm = document.getElementById('extraForm');
+        extraForm.onsubmit = function(e) {
+            e.preventDefault();
+            return false;
+        }        
+        
+        var paymentForm = document.getElementById('paymentForm');
+        paymentForm.onsubmit = function(e) {
             e.preventDefault();
             return false;
         }
@@ -1031,55 +1344,97 @@
         var deliveryTr = document.getElementById('deliveryTr');
 
         function motrarClientBox(){
+            $.get("{{url('orders/'.$order->id.'/ordertype_id')}}/"+ordertype.value, function(data) {
+                console.log(data);
+            });
             if(ordertype.value==2){
-                clientBox.style.display='table';
                 deliveryTr.style.display='table-row';
+                clientForm.address.required=true;
             }else{
-                clientBox.style.display='none';
                 deliveryTr.style.display='none';
+                clientForm.address.required=false;
                 delivery.value="0";
             }
         }
+
         motrarClientBox();
         ordertype.onchange = motrarClientBox;
         //
 
-        var loadorderForm=true;
+        var loadState=true;
 
         function paymentStore(){
             if(
-                orderForm['discount_description'].value == '' &&
-                orderForm['discount'].value != 0
-            ){
-                alert("Falta agregar razon del descuento");
-            }else if(
-                orderForm['ordertype_id'].value=="2" && (orderForm['client_id'].value=="" || orderForm['delivery'].value==0)
-            ){
-                alert("para Entrega a domicilio debe ingresar la información del cliente y costo de Despacho");
-            }else if(
                 FaltaPagar !=0
             ){
                 alert("Falta pagar: $"+miles(FaltaPagar));
-            }else if(loadorderForm) {
-                loadorderForm = false;
-                var formData = new FormData(orderForm);
+                return false;
+            }else if(loadState) {
+                loadState = false;
+                var formData = new FormData(paymentForm);
                 $.ajax({
-                    url: "{{ url('/orders/'.$order->id.'/close') }}",
+                    url: "{{ url('/orders/'.$order->id.'/paymentStore') }}",
                     type: "POST",
                     data: formData,
                     processData: false, // tell jQuery not to process the data
                     contentType: false // tell jQuery not to set contentType
                 }).done(function(data) {
                     if (typeof(data) == 'object') {
-                        console.log(data);
+                        disabledPaymend();
                         location.reload();
+                        return true;
+                    } else {
+                        alert(data);
+                        return false;
+                    }
+                }).fail(function(xhr, status, error) {
+                    alert(xhr.responseJSON.response);
+                }).always(function() {
+                    loadState = true;
+                });
+            }
+        }
+
+        
+        function extraStore(){
+            if(
+                extraForm['discount_description'].value == '' &&
+                extraForm['discount'].value != 0
+            ){
+                alert("Falta agregar razon del descuento");
+                return false;
+            }else if(
+                ordertype.value=="2" && (extraForm['client_id'].value=="" || extraForm['delivery'].value==0)
+            ){
+                alert("para Entrega a domicilio debe ingresar la información del cliente y costo de Despacho");
+                return false;
+            }else if(
+                ordertype.value=="3" && extraForm['client_id'].value==""
+            ){
+                alert("Es necesario ingresar información del cliente");
+                return false;
+            }else{
+                loadState = false;
+                var formData = new FormData(extraForm);
+                $.ajax({
+                    url: "{{ url('/orders/'.$order->id.'/extraStore') }}",
+                    type: "POST",
+                    data: formData,
+                    processData: false, // tell jQuery not to process the data
+                    contentType: false // tell jQuery not to set contentType
+                }).done(function(data) {
+                    if (typeof(data) == 'object') {
+                        console.log('entre');
+                        disabledExtra();
+                        PrintFakeDte();
+                        //PrintBoleta();
                     } else {
                         alert(data);
                     }
-                }).fail(function() {
-                    alert("error al recibir respuesta del servidor");
+                }).fail(function(xhr, status, error) {
+                    alert(xhr.responseJSON.response);
                 }).always(function() {
-                    loadorderForm = true;
+                    loadState = true;
                 });
             }
         }
@@ -1101,12 +1456,15 @@
                 contentType: false // tell jQuery not to set contentType
             }).done(function(data) {
                 if (typeof(data) == 'object') {
-                    TotalBase=data.Total;                    
-                    orderForm['orderdetail_id[]'].forEach(input =>{
+                    TotalBase=data.Total; 
+                    order_total.innerHTML=miles(TotalBase);
+                    $('#orderdetail_'+detachForm.orderdetail_id.value).remove();
+                    /*              
+                    extraForm['orderdetail_id[]'].forEach(input =>{
                         if(input.value == detachForm['orderdetail_id'].value){
                             input.parentElement.parentElement.remove();
                         }
-                    });
+                    });*/
                     calcular();
                     $('#eliminarModal').modal('hide');
                 } else {
@@ -1115,11 +1473,17 @@
             }).fail(function() {
                 alert("error al recibir respuesta del servidor");
             }).always(function() {
-                loadorderForm = true;
+                loadState = true;
             });
         }
 
-        function calcular(){
+        function calcular(input){
+
+            if(input){
+                if(!input.target.value){
+                    input.target.value=0;
+                }
+            }
             //VALOR BASE
             var total_pay=TotalBase;
 
@@ -1169,6 +1533,7 @@
 
             if(total_pay<0){
                 pay_back.innerHTML = '$'+miles(total_pay*-1);
+                difference=total_pay;
             }else{
                 pay_back.innerHTML = '$'+0;
             }
