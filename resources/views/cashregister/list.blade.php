@@ -35,6 +35,8 @@
         $(document).ready(function() {
             $('#tabla').DataTable({
                 responsive: true,
+                "processing" : true,
+                "serverSide" : true,
                 "ajax": "{{ url('/cashregister/getlist') }}",
                 "columns": [
                     { "data": "created_at", render : function (data, type, row, meta ){
@@ -76,7 +78,7 @@
                 "order": [[ 0, "desc" ]]
             });
         });
-        
+
         function miles(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
