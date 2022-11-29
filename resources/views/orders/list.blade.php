@@ -36,7 +36,9 @@
         $(document).ready(function() {
             $('#tabla').DataTable({
                 responsive: true,
-                "data": {!! json_encode($orders->toArray()) !!},
+                "processing" : true,
+                "serverSide" : true,
+                "ajax": "{{ url('/orders/getlist') }}",
                 "columns": [
                     { "data": "internal_id"     ,"width":"10%"},
                     { "data": "user.name"       ,"width":"20%"},
