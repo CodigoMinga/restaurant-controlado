@@ -116,7 +116,7 @@ class SalesHelper extends Controller
                         "IndExeDR" => 2,
                         "ValorDR" => $order->tip
                     ]);
-                    
+
                     $totales["MontoNF"]=$order->tip;
                 }
 
@@ -155,7 +155,7 @@ class SalesHelper extends Controller
                         "Idempotency-Key: " . $order->empotency_key
                     ],
                 ]);
-                
+
                 $response = curl_exec($curl);
                 $err = curl_error($curl);
 
@@ -187,7 +187,7 @@ class SalesHelper extends Controller
                 return new Response([
                     'response' => "Falta emitir Comanda o No tiene Productos",
                     'request' => ""
-                ], 400);    
+                ], 400);
             }
         }else{
             return new Response([
@@ -296,16 +296,17 @@ class SalesHelper extends Controller
                     $total += $order->discount;
                 }
 
-                array_push($totales, [
-                    "name" => "MONTO NETO" ,
-                    "value" => round(($total  / 1.19))
-                ]);
-                
 
-                array_push($totales, [
-                    "name" => "IVA" ,
-                    "value" => round($total - ($total  / 1.19))
-                ]);
+                //array_push($totales, [
+                //    "name" => "MONTO NETO" ,
+                //    "value" => round(($total  / 1.19))
+                //]);
+
+                //* REMOVEMOS EL IVA*//
+                //array_push($totales, [
+                //    "name" => "IVA" ,
+                //    "value" => round($total - ($total  / 1.19))
+                //]);
 
                 array_push($totales, [
                     "name" => "MONTO TOTAL" ,
@@ -364,7 +365,7 @@ class SalesHelper extends Controller
                 return new Response([
                     'response' => "Falta emitir Comanda o No tiene Productos",
                     'request' => ""
-                ], 400);    
+                ], 400);
             }
         }else{
             return new Response([
@@ -379,7 +380,7 @@ class SalesHelper extends Controller
     public function removeDte($order_id){
 
         $order = Order::find($order_id);
-        
+
         if(isset($order)){
             if(isset($order->dte_token)){
                 if (app()->environment('production')){
