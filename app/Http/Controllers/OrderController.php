@@ -64,7 +64,7 @@ class OrderController extends Controller
         ->select('orders.*') // CRUCIAL: Selecciona todas las columnas de 'orders' para que el modelo funcione
         ->selectRaw('COALESCE(SUM(orderdetails.total_ammount), 0) as total')
         ->groupBy('orders.id') // Agrupar por orden para que el SUM funcione correctamente
-        ->orderBy('orders.id'); // Añade un ordenamiento adecuado
+        ->orderBy('orders.id', 'desc'); // Añade un ordenamiento adecuado
         return DataTables::of($orders)
             ->make(true);
     }
