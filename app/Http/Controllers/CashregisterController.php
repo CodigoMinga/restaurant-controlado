@@ -65,7 +65,7 @@ class CashregisterController extends Controller
 
     public function getlist(){
         $company = session('company');
-        $cashregisters = Cashregister::where('company_id',$company->id)->get();
+        $cashregisters = Cashregister::where('company_id',$company->id);
         return DataTables::of($cashregisters)->addColumn('Breakdown',function(Cashregister $cashregister) {
             return $cashregister->Breakdown->total;
         })->make(true);        
