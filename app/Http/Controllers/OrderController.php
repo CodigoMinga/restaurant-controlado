@@ -22,7 +22,6 @@ use App\Mail\LowStockMail;
 use App\Item;
 use Illuminate\Http\Response;
 
-
 use Yajra\DataTables\DataTables;
 
 class OrderController extends Controller
@@ -55,19 +54,11 @@ class OrderController extends Controller
 
     public function getlist(){
         $company = session('company');
-        $orders = Order::with('ordertype', 'user', 'table') // Carga relaciones que necesites mostrar
-        ->where('company_id', $company->id)
-        ->leftJoin('order_details', function ($join) {
-            $join->on('orders.id', '=', 'order_details.order_id')
-                 // Asegúrate de incluir la misma condición de tu accesor
-                 ->where('order_details.enabled', true);
-        })
-        ->select('orders.*') // CRUCIAL: Selecciona todas las columnas de 'orders' para que el modelo funcione
-        ->selectRaw('COALESCE(SUM(order_details.total_ammount), 0) as total_calculado')
-        ->groupBy('orders.id') // Agrupar por orden para que el SUM funcione correctamente
-        ->orderBy('orders.id'); // Añade un ordenamiento adecuado
-        return DataTables::of($orders)
-            ->make(true);
+        $lastMonth = date('Y-m-d', strtotime('-60 days'));
+        $orders = Order::with('ordertype','user','table')->where('company_id',$company->id)->where('created_at', '>=', $lastMonth)->get();
+        return DataTables::of($orders)->addColumn('total',function(Order $order) {
+            return $order->Total;
+        })->make(true);
     }
 
     public function tableorder($table_id){
