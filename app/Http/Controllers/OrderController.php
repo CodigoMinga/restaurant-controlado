@@ -22,6 +22,7 @@ use App\Mail\LowStockMail;
 use App\Item;
 use Illuminate\Http\Response;
 
+
 use Yajra\DataTables\DataTables;
 
 class OrderController extends Controller
@@ -54,8 +55,7 @@ class OrderController extends Controller
 
     public function getlist(){
         $company = session('company');
-        $orders = Order::query()
-        ->with('ordertype', 'user', 'table') // Carga relaciones que necesites mostrar
+        $orders = Order::with('ordertype', 'user', 'table') // Carga relaciones que necesites mostrar
         ->where('company_id', $company->id)
         ->leftJoin('order_details', function ($join) {
             $join->on('orders.id', '=', 'order_details.order_id')
